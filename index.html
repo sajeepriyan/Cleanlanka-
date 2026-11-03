@@ -1,561 +1,71 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html class="scroll-smooth" lang="ta">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clean Lanka - Your Home. Your Help. | இலங்கை நம்பகமான வீட்டுச் சேவைகள்</title>
-  <meta name="description" content="Clean Lanka - Sri Lanka's Verified Trilingual On-Demand Home Services">
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <!-- Google Material Icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Clean Lanka - எங்கள் நாடு எங்கள் சேவை 🇱🇰 | Official Verified Domestic Services Portal</title>
+  <meta content="Clean Lanka - Official Verified Domestic & Trade Services Marketplace in Sri Lanka. 100% NIC & Police Clearance Verified. 2-Step OTP Security Gate." name="description"/>
+
+  <!-- Trilingual Google Fonts & Material Symbols -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+Sinhala:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN with Plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script>
     tailwind.config = {
+      darkMode: "class",
       theme: {
         extend: {
-          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
           colors: {
-            brand: {
-              blue: '#0056b3',
-              darkBlue: '#003875',
-              green: '#10b981',
-              darkGreen: '#047857',
-              emerald: '#059669'
-            }
+            "primary": "#003f87",
+            "primary-container": "#0056b3",
+            "on-primary": "#ffffff",
+            "secondary": "#006d42",
+            "secondary-container": "#8ff8ba",
+            "on-secondary": "#ffffff",
+            "tertiary": "#563d00",
+            "tertiary-container": "#745300",
+            "surface": "#f9f9ff",
+            "background": "#f9f9ff",
+            "on-surface": "#111c2d",
+            "on-surface-variant": "#424752",
+            "outline": "#727784",
+            "outline-variant": "#c2c6d4",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eeff",
+            "surface-container-high": "#dee8ff",
+            "surface-container-highest": "#d8e3fb",
+            "inverse-surface": "#111c2d",
+            "secondary-fixed": "#8ff8ba",
+            "error": "#ba1a1a",
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Tamil"', '"Noto Sans Sinhala"', '"Noto Sans"', 'sans-serif'],
+            tamil: ['"Noto Sans Tamil"', 'sans-serif'],
+            sinhala: ['"Noto Sans Sinhala"', 'sans-serif'],
+          },
+          boxShadow: {
+            'glow-emerald': '0 10px 30px -5px rgba(0, 109, 66, 0.25)',
+            'glow-blue': '0 10px 30px -5px rgba(0, 63, 135, 0.25)',
+            'card-lift': '0 20px 40px -15px rgba(17, 28, 45, 0.10)',
           }
         }
-      }
-    }
-  </script>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-blue selection:text-white">
-
-  <!-- TOP EMERGENCY & POLICE VERIFIED BAR -->
-  <div class="bg-[#002b5c] text-white text-xs py-2 px-4 border-b border-blue-900">
-    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-      <div class="flex items-center gap-2">
-        <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span data-i18n="topBarText">இலங்கை நாடு தழுவிய சேவை (All 25 Districts) | 100% NIC & Police Verified</span>
-      </div>
-      <div class="flex items-center gap-4 text-slate-200 font-medium">
-        <a href="tel:1990" class="hover:text-white flex items-center gap-1 font-bold text-rose-300">
-          <span class="material-symbols-outlined text-xs">emergency</span> <span data-i18n="suwaSeriya">சுவசரிய: 1990</span>
-        </a>
-        <a href="tel:0112345678" class="hover:text-white flex items-center gap-1">
-          <span class="material-symbols-outlined text-xs">call</span> <span data-i18n="hotline">உதவி: 011 234 5678</span>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- NAVIGATION HEADER -->
-  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
-      
-      <!-- BRAND LOGO WITH HIGH-FIDELITY VECTOR EMBLEM -->
-      <a href="#" class="flex items-center gap-3 group">
-        <div class="w-14 h-14 rounded-full bg-white p-0.5 shadow-md border border-emerald-100 flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform">
-          <!-- CLEAN LANKA OFFICIAL VECTOR LOGO -->
-          <svg viewBox="0 0 600 600" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="300" cy="300" r="285" fill="#f0fdf4" stroke="#10b981" stroke-width="6"/>
-            <!-- Leaf Wreath -->
-            <path d="M 300 560 A 250 250 0 0 1 65 240 A 250 250 0 0 1 290 45" fill="none" stroke="#10b981" stroke-width="8" stroke-linecap="round"/>
-            <path d="M 300 560 A 250 250 0 0 0 535 240 A 250 250 0 0 0 310 45" fill="none" stroke="#10b981" stroke-width="8" stroke-linecap="round"/>
-            <!-- Leaves Left -->
-            <path d="M 280 550 C 230 550 200 515 220 480 C 250 495 270 525 280 550 Z" fill="#047857"/>
-            <path d="M 160 460 C 120 430 95 385 125 355 C 150 380 160 420 160 460 Z" fill="#10b981"/>
-            <path d="M 85 305 C 50 260 55 210 90 190 C 105 220 105 265 85 305 Z" fill="#10b981"/>
-            <path d="M 110 150 C 95 105 135 65 175 70 C 170 105 145 135 110 150 Z" fill="#047857"/>
-            <!-- Leaves Right -->
-            <path d="M 320 550 C 370 550 400 515 380 480 C 350 495 330 525 320 550 Z" fill="#047857"/>
-            <path d="M 440 460 C 480 430 505 385 475 355 C 450 380 440 420 440 460 Z" fill="#10b981"/>
-            <path d="M 515 305 C 550 260 545 210 510 190 C 495 220 495 265 515 305 Z" fill="#10b981"/>
-            <path d="M 490 150 C 505 105 465 65 425 70 C 430 105 455 135 490 150 Z" fill="#047857"/>
-            <!-- Sri Lanka Silhouette Top -->
-            <path d="M 293 85 C 300 90 307 100 310 113 C 313 127 317 145 315 165 C 313 180 320 200 310 220 C 300 240 287 250 280 245 C 270 237 260 215 257 195 C 253 170 257 150 267 125 C 275 107 283 87 290 80 Z" fill="#059669"/>
-            <!-- Blue Orbit Swirl -->
-            <path d="M 185 225 C 190 175 340 140 405 180 C 430 195 435 225 390 235 C 330 250 210 245 185 225 Z" fill="none" stroke="#0284c7" stroke-width="14" stroke-linecap="round"/>
-            <circle cx="430" cy="190" r="10" fill="#38bdf8"/>
-            <!-- Roof House Outline -->
-            <path d="M 220 285 L 300 225 L 380 285" fill="none" stroke="#046a38" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-            <rect x="340" y="234" width="16" height="26" rx="3" fill="#046a38"/>
-            <rect x="287" y="255" width="11" height="11" rx="2" fill="#046a38"/>
-            <rect x="302" y="255" width="11" height="11" rx="2" fill="#046a38"/>
-            <rect x="287" y="270" width="11" height="11" rx="2" fill="#046a38"/>
-            <rect x="302" y="270" width="11" height="11" rx="2" fill="#046a38"/>
-            <!-- Text Clean Lanka -->
-            <text x="300" y="375" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="100" font-weight="900" fill="#046a38">Clean</text>
-            <path d="M 140 395 Q 300 425 460 395" stroke="#047857" stroke-width="6" fill="none"/>
-            <text x="300" y="475" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="88" font-weight="900" fill="#10b981">Lanka</text>
-            <path d="M 180 495 Q 300 525 420 495" stroke="#10b981" stroke-width="6" fill="none"/>
-          </svg>
-        </div>
-        <div>
-          <span class="text-2xl font-black text-brand-blue tracking-tight block leading-none">Clean Lanka</span>
-          <span class="text-[11px] font-bold tracking-wider text-emerald-600 uppercase" data-i18n="tagline">YOUR HOME. YOUR HELP.</span>
-        </div>
-      </a>
-
-      <!-- DESKTOP NAVIGATION -->
-      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-        <a href="#services" class="hover:text-brand-blue transition-colors" data-i18n="navServices">சேவைகள்</a>
-        <a href="#security" class="hover:text-brand-blue transition-colors" data-i18n="navSecurity">பாதுகாப்பு & OTP முறை</a>
-        <a href="#districts" class="hover:text-brand-blue transition-colors" data-i18n="navDistricts">மாவட்டங்கள்</a>
-        <a href="#contact" class="hover:text-brand-blue transition-colors" data-i18n="navContact">தொடர்புக்கு</a>
-      </nav>
-
-      <!-- TRILINGUAL LANGUAGE SELECTOR & WHATSAPP BUTTON -->
-      <div class="flex items-center gap-3">
-        <!-- Interactive 3-Language Toggle -->
-        <div class="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-bold text-slate-600 shadow-inner">
-          <button id="btn-ta" onclick="setLanguage('ta')" class="px-2.5 py-1 rounded-lg bg-brand-blue text-white shadow transition-all">தமிழ்</button>
-          <button id="btn-si" onclick="setLanguage('si')" class="px-2.5 py-1 rounded-lg hover:text-brand-blue transition-all">සිංහල</button>
-          <button id="btn-en" onclick="setLanguage('en')" class="px-2.5 py-1 rounded-lg hover:text-brand-blue transition-all">English</button>
-        </div>
-
-        <a href="https://wa.me/94770000000" target="_blank" class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold px-3.5 py-2.5 rounded-xl shadow-md transition-all active:scale-95">
-          <span class="material-symbols-outlined text-base">chat</span> <span class="hidden sm:inline" data-i18n="btnWhatsapp">WhatsApp முன்பதிவு</span>
-        </a>
-      </div>
-
-    </div>
-  </header>
-
-  <!-- HERO SECTION -->
-  <section class="relative bg-gradient-to-b from-blue-50/70 via-white to-slate-50 py-12 sm:py-20 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid lg:grid-cols-12 gap-10 items-center">
-        
-        <!-- LEFT: HERO HEADLINE & ACTIONS -->
-        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-200 shadow-sm">
-            <span class="material-symbols-outlined text-sm">verified_user</span>
-            <span data-i18n="heroBadge">100% NIC & பொலிஸ் சரிபார்க்கப்பட்ட தொழிலாளர்கள்</span>
-          </div>
-
-          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-[1.18] tracking-tight">
-            <span data-i18n="heroTitlePrefix">உங்கள் வீட்டிற்குத் தேவையான</span> 
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-emerald-600" data-i18n="heroTitleHighlight">நம்பகமான தொழிலாளர்கள்</span> 
-            <span data-i18n="heroTitleSuffix">உடனே!</span>
-          </h1>
-
-          <p class="text-sm sm:text-base lg:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-medium leading-relaxed" data-i18n="heroDescription">
-            எலக்ட்ரீசியன், பிளம்பர், மேசன், கிளீனிங், தச்சர் மற்றும் பெயிண்டிங் சேவைகள். இருதரப்பு இரட்டை OTP பாதுகாப்புடன், இலங்கை முழுவதும் LankaQR கட்டண வசதியுடன் கிடைக்கும்.
-          </p>
-
-          <!-- QUICK BOOKING SEARCH BAR -->
-          <div class="bg-white p-3 rounded-2xl shadow-xl border border-slate-100 max-w-xl mx-auto lg:mx-0 flex flex-col sm:flex-row gap-2">
-            <div class="flex-1 flex items-center gap-2 px-3 py-2.5 bg-slate-50 rounded-xl border border-slate-200">
-              <span class="material-symbols-outlined text-slate-400">search</span>
-              <input id="serviceSearchInput" type="text" placeholder="எந்த சேவை தேவை? (எ.கா: பிளம்பர், எலக்ட்ரீசியன்)" class="w-full bg-transparent text-sm font-medium focus:outline-none text-slate-800">
-            </div>
-            <div class="sm:w-44 flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-xl border border-slate-200">
-              <span class="material-symbols-outlined text-slate-400">location_on</span>
-              <select class="w-full bg-transparent text-xs sm:text-sm font-semibold focus:outline-none text-slate-800">
-                <option>கொழும்பு (Colombo)</option>
-                <option>யாழ்ப்பாணம் (Jaffna)</option>
-                <option>கண்டி (Kandy)</option>
-                <option>கம்பஹா (Gampaha)</option>
-                <option>மட்டக்களப்பு (Batticaloa)</option>
-                <option>காலி (Galle)</option>
-              </select>
-            </div>
-            <button class="bg-brand-blue hover:bg-brand-darkBlue text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-1">
-              <span data-i18n="btnSearch">தேடுக</span>
-            </button>
-          </div>
-
-          <!-- TRUST BADGES -->
-          <div class="pt-3 flex flex-wrap justify-center lg:justify-start items-center gap-5 text-xs font-bold text-slate-600">
-            <div class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl shadow-sm border border-slate-100">
-              <span class="material-symbols-outlined text-emerald-600 text-base">verified</span>
-              <span data-i18n="badgeNic">NIC Verified</span>
-            </div>
-            <div class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl shadow-sm border border-slate-100">
-              <span class="material-symbols-outlined text-emerald-600 text-base">shield</span>
-              <span data-i18n="badgeOtp">Double OTP Protected</span>
-            </div>
-            <div class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl shadow-sm border border-slate-100">
-              <span class="material-symbols-outlined text-emerald-600 text-base">qr_code_2</span>
-              <span data-i18n="badgeQr">LankaQR Payments</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: LIVE VERIFIED WORKER CARD -->
-        <div class="lg:col-span-5 flex justify-center">
-          <div class="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl border border-slate-100 relative">
-            <div class="absolute -top-3 right-6 bg-emerald-500 text-white text-[11px] font-extrabold uppercase px-3 py-1 rounded-full shadow-md flex items-center gap-1">
-              <span class="material-symbols-outlined text-xs">bolt</span> <span data-i18n="speed15min">15 நிமிடங்களில் உதவி</span>
-            </div>
-            <div class="flex items-center gap-4 mb-4">
-              <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-blue to-emerald-500 flex items-center justify-center text-white text-2xl font-black shadow-md">
-                SP
-              </div>
-              <div>
-                <div class="flex items-center gap-1.5">
-                  <h3 class="font-extrabold text-slate-900 text-lg">Sandhya Perera</h3>
-                  <span class="material-symbols-outlined text-emerald-600 text-base">verified</span>
-                </div>
-                <p class="text-xs text-slate-500 font-medium" data-i18n="cardRole">Professional Home Cleaner • Colombo</p>
-                <div class="flex items-center gap-1 mt-1 text-amber-500 text-xs font-bold">
-                  ★ 4.9 <span class="text-slate-400 font-normal" data-i18n="cardReviews">(120 மதிப்பீடுகள்)</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-slate-50 rounded-xl p-3 border border-slate-100 grid grid-cols-2 gap-2 text-xs mb-5">
-              <div class="flex items-center gap-1 text-slate-700 font-medium">
-                <span class="material-symbols-outlined text-emerald-600 text-sm">badge</span> <span data-i18n="cardNic">NIC சரிபார்க்கப்பட்டது</span>
-              </div>
-              <div class="flex items-center gap-1 text-slate-700 font-medium">
-                <span class="material-symbols-outlined text-emerald-600 text-sm">policy</span> <span data-i18n="cardPolice">பொலிஸ் அனுமதி</span>
-              </div>
-              <div class="flex items-center gap-1 text-slate-700 font-medium">
-                <span class="material-symbols-outlined text-emerald-600 text-sm">history_edu</span> <span data-i18n="cardExp">5+ வருட அனுபவம்</span>
-              </div>
-              <div class="flex items-center gap-1 text-slate-700 font-medium">
-                <span class="material-symbols-outlined text-emerald-600 text-sm">lock</span> <span data-i18n="cardOtp">OTP தொடக்கம்</span>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2">
-              <a href="tel:0112345678" class="flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold py-3 rounded-xl transition-all">
-                <span class="material-symbols-outlined text-sm">call</span> <span data-i18n="btnCall">நேரடி அழைப்பு</span>
-              </a>
-              <a href="https://wa.me/94770000000" class="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-3 rounded-xl transition-all shadow-md">
-                <span class="material-symbols-outlined text-sm">calendar_today</span> <span data-i18n="btnBook">முன்பதிவு செய்</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- SERVICES GRID -->
-  <section id="services" class="py-14 bg-white border-t border-slate-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-10">
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight" data-i18n="servicesHeading">எங்கள் முதன்மைச் சேவைகள்</h2>
-        <p class="text-slate-600 text-xs sm:text-sm font-medium mt-2" data-i18n="servicesSub">உங்களுக்குத் தேவையான திறமையான தொழிலாளர்களை ஒரே கிளிக்கில் தேர்ந்தெடுக்கவும்.</p>
-      </div>
-
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-        <div class="bg-slate-50 hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-100 text-center transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer">
-          <div class="w-12 h-12 mx-auto rounded-xl bg-blue-100 text-brand-blue flex items-center justify-center mb-2">
-            <span class="material-symbols-outlined text-2xl">cleaning_services</span>
-          </div>
-          <h3 class="font-bold text-slate-900 text-xs sm:text-sm" data-i18n="svcClean">சுத்தம் (Cleaning)</h3>
-        </div>
-
-        <div class="bg-slate-50 hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-100 text-center transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer">
-          <div class="w-12 h-12 mx-auto rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-2">
-            <span class="material-symbols-outlined text-2xl">bolt</span>
-          </div>
-          <h3 class="font-bold text-slate-900 text-xs sm:text-sm" data-i18n="svcElec">மின்சாரம் (Electrical)</h3>
-        </div>
-
-        <div class="bg-slate-50 hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-100 text-center transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer">
-          <div class="w-12 h-12 mx-auto rounded-xl bg-cyan-100 text-cyan-600 flex items-center justify-center mb-2">
-            <span class="material-symbols-outlined text-2xl">plumbing</span>
-          </div>
-          <h3 class="font-bold text-slate-900 text-xs sm:text-sm" data-i18n="svcPlumb">பிளம்பிங் (Plumbing)</h3>
-        </div>
-
-        <div class="bg-slate-50 hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-100 text-center transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer">
-          <div class="w-12 h-12 mx-auto rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-2">
-            <span class="material-symbols-outlined text-2xl">format_paint</span>
-          </div>
-          <h3 class="font-bold text-slate-900 text-xs sm:text-sm" data-i18n="svcPaint">வர்ணம் (Painting)</h3>
-        </div>
-
-        <div class="bg-slate-50 hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-100 text-center transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer">
-          <div class="w-12 h-12 mx-auto rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2">
-            <span class="material-symbols-outlined text-2xl">yard</span>
-          </div>
-          <h3 class="font-bold text-slate-900 text-xs sm:text-sm" data-i18n="svcGarden">தோட்டம் (Gardening)</h3>
-        </div>
-
-        <div class="bg-slate-50 hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-100 text-center transition-all hover:-translate-y-1 hover:shadow-md cursor-pointer">
-          <div class="w-12 h-12 mx-auto rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center mb-2">
-            <span class="material-symbols-outlined text-2xl">construction</span>
-          </div>
-          <h3 class="font-bold text-slate-900 text-xs sm:text-sm" data-i18n="svcMason">மேசன் & தச்சர்</h3>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DOUBLE OTP & SECURITY SECTION -->
-  <section id="security" class="py-14 bg-slate-50 border-t border-slate-200/60">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-3xl mx-auto mb-10">
-        <span class="text-xs font-black uppercase tracking-wider text-brand-blue bg-blue-100/70 px-3 py-1 rounded-full" data-i18n="secTag">உயர் பாதுகாப்பு நெறிமுறை</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-3" data-i18n="secTitle">எங்கள் இரட்டை OTP & பாதுகாப்பு முறை எவ்வாறு இயங்குகிறது?</h2>
-        <p class="text-slate-600 text-xs sm:text-sm font-medium mt-2" data-i18n="secSub">வீட்டின் உரிமையாளர் மற்றும் தொழிலாளி இருவரின் பாதுகாப்பையும் 100% உத்தரவாதம் செய்யும் நவீன முறை.</p>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-blue-100 text-brand-blue flex items-center justify-center font-bold text-lg">1</div>
-          <h3 class="text-base font-bold text-slate-900" data-i18n="step1Title">தொடக்க OTP (Arrival OTP)</h3>
-          <p class="text-slate-600 text-xs leading-relaxed" data-i18n="step1Desc">தொழிலாளி உங்கள் வீட்டை அடைந்ததும், உங்கள் மொபைலுக்கு வரும் 4-இலக்க OTP குறியீட்டைப் பெற்று உள்ளிட்ட பிறகே பணி நேரக் கணிப்பும் காப்பீடும் தொடங்கும்.</p>
-        </div>
-
-        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg">2</div>
-          <h3 class="text-base font-bold text-slate-900" data-i18n="step2Title">நெகிழ்வான பணி நிறைவு</h3>
-          <p class="text-slate-600 text-xs leading-relaxed" data-i18n="step2Desc">வேலை முழுமையாக முடிந்ததா அல்லது பகுதி வேலை மட்டுமே முடிந்ததா என்பதை பரஸ்பரம் பேசித் தீர்மானிக்கலாம். கட்டாயமில்லை, நியாயமான கட்டணம் மட்டுமே.</p>
-        </div>
-
-        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-lg">3</div>
-          <h3 class="text-base font-bold text-slate-900" data-i18n="step3Title">இறுதி OTP & LankaQR</h3>
-          <p class="text-slate-600 text-xs leading-relaxed" data-i18n="step3Desc">பணி திருப்திகரமாக முடிந்த பின்னர், மத்திய வங்கி அங்கீகாரம் பெற்ற LankaQR அல்லது ரொக்கமாகப் பணம் செலுத்தியதும் இறுதி OTP-ஐ வழங்கி முடிக்கலாம்.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer id="contact" class="bg-slate-900 text-slate-300 py-10 border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">
-      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-        <div>
-          <h4 class="text-white text-base font-bold mb-2">Clean Lanka</h4>
-          <p class="text-xs text-slate-400" data-i18n="footerAbout">இலங்கையின் மிகவும் பாதுகாப்பான, நம்பகமான வீட்டுச் சேவைகள் சந்தைத் தளம்.</p>
-          <p class="text-xs text-emerald-400 font-bold mt-2">🌐 cleanlanka.lk</p>
-        </div>
-        <div>
-          <h4 class="text-white text-sm font-bold mb-2" data-i18n="footerLinks">முக்கிய இணைப்புகள்</h4>
-          <ul class="text-xs space-y-1.5 text-slate-400">
-            <li><a href="#services" class="hover:text-white" data-i18n="navServices">சேவைகள் பட்டியல்</a></li>
-            <li><a href="#security" class="hover:text-white" data-i18n="navSecurity">பாதுகாப்பு & விதிமுறைகள்</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-white text-sm font-bold mb-2" data-i18n="footerEmerg">அவசர எண்கள்</h4>
-          <ul class="text-xs space-y-1.5 text-slate-400">
-            <li>🚑 1990 (Suwa Seriya)</li>
-            <li>🚓 119 (Sri Lanka Police)</li>
-            <li>☎️ 011 234 5678 (Help Desk)</li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-white text-sm font-bold mb-2" data-i18n="footerJoin">தொழிலாளராக இணைய</h4>
-          <p class="text-xs text-slate-400 mb-2" data-i18n="footerJoinSub">உங்கள் திறமையை வருமானமாக மாற்ற எங்களுடன் இணையுங்கள்.</p>
-          <a href="https://wa.me/94770000000" class="inline-block bg-brand-blue hover:bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded-xl transition-all">
-            <span data-i18n="btnRegister">இப்போதே பதிவு செய்க</span>
-          </a>
-        </div>
-      </div>
-      <div class="border-t border-slate-800 pt-6 text-center text-xs text-slate-500">
-        &copy; 2026 Clean Lanka (Your Home. Your Help.) Sri Lanka. All Rights Reserved.
-      </div>
-    </div>
-  </footer>
-
-  <!-- TRILINGUAL INTERACTIVE ENGINE (JAVASCRIPT) -->
-  <script>
-    const translations = {
-      ta: {
-        topBarText: "இலங்கை நாடு தழுவிய சேவை (All 25 Districts) | 100% NIC & Police Verified",
-        suwaSeriya: "சுவசரிய: 1990",
-        hotline: "உதவி: 011 234 5678",
-        tagline: "YOUR HOME. YOUR HELP.",
-        navServices: "சேவைகள்",
-        navSecurity: "பாதுகாப்பு & OTP முறை",
-        navDistricts: "மாவட்டங்கள்",
-        navContact: "தொடர்புக்கு",
-        btnWhatsapp: "WhatsApp முன்பதிவு",
-        heroBadge: "100% NIC & பொலிஸ் சரிபார்க்கப்பட்ட தொழிலாளர்கள்",
-        heroTitlePrefix: "உங்கள் வீட்டிற்குத் தேவையான",
-        heroTitleHighlight: "நம்பகமான தொழிலாளர்கள்",
-        heroTitleSuffix: "உடனே!",
-        heroDescription: "எலக்ட்ரீசியன், பிளம்பர், மேசன், கிளீனிங், தச்சர் மற்றும் பெயிண்டிங் சேவைகள். இருதரப்பு இரட்டை OTP பாதுகாப்புடன், இலங்கை முழுவதும் LankaQR கட்டண வசதியுடன் கிடைக்கும்.",
-        searchPlaceholder: "எந்த சேவை தேவை? (எ.கா: பிளம்பர், எலக்ட்ரீசியன்)",
-        btnSearch: "தேடுக",
-        badgeNic: "NIC Verified",
-        badgeOtp: "Double OTP Protected",
-        badgeQr: "LankaQR Payments",
-        speed15min: "15 நிமிடங்களில் உதவி",
-        cardRole: "Professional Home Cleaner • Colombo",
-        cardReviews: "(120 மதிப்பீடுகள்)",
-        cardNic: "NIC சரிபார்க்கப்பட்டது",
-        cardPolice: "பொலிஸ் அனுமதி",
-        cardExp: "5+ வருட அனுபவம்",
-        cardOtp: "OTP தொடக்கம்",
-        btnCall: "நேரடி அழைப்பு",
-        btnBook: "முன்பதிவு செய்",
-        servicesHeading: "எங்கள் முதன்மைச் சேவைகள்",
-        servicesSub: "உங்களுக்குத் தேவையான திறமையான தொழிலாளர்களை ஒரே கிளிக்கில் தேர்ந்தெடுக்கவும்.",
-        svcClean: "சுத்தம் (Cleaning)",
-        svcElec: "மின்சாரம் (Electrical)",
-        svcPlumb: "பிளம்பிங் (Plumbing)",
-        svcPaint: "வர்ணம் (Painting)",
-        svcGarden: "தோட்டம் (Gardening)",
-        svcMason: "மேசன் & தச்சர்",
-        secTag: "உயர் பாதுகாப்பு நெறிமுறை",
-        secTitle: "எங்கள் இரட்டை OTP & பாதுகாப்பு முறை எவ்வாறு இயங்குகிறது?",
-        secSub: "வீட்டின் உரிமையாளர் மற்றும் தொழிலாளி இருவரின் பாதுகாப்பையும் 100% உத்தரவாதம் செய்யும் நவீன முறை.",
-        step1Title: "தொடக்க OTP (Arrival OTP)",
-        step1Desc: "தொழிலாளி உங்கள் வீட்டை அடைந்ததும், உங்கள் மொபைலுக்கு வரும் 4-இலக்க OTP குறியீட்டைப் பெற்று உள்ளிட்ட பிறகே பணி நேரக் கணிப்பும் காப்பீடும் தொடங்கும்.",
-        step2Title: "நெகிழ்வான பணி நிறைவு",
-        step2Desc: "வேலை முழுமையாக முடிந்ததா அல்லது பகுதி வேலை மட்டுமே முடிந்ததா என்பதை பரஸ்பரம் பேசித் தீர்மானிக்கலாம். கட்டாயமில்லை, நியாயமான கட்டணம் மட்டுமே.",
-        step3Title: "இறுதி OTP & LankaQR",
-        step3Desc: "பணி திருப்திகரமாக முடிந்த பின்னர், மத்திய வங்கி அங்கீகாரம் பெற்ற LankaQR அல்லது ரொக்கமாகப் பணம் செலுத்தியதும் இறுதி OTP-ஐ வழங்கி முடிக்கலாம்.",
-        footerAbout: "இலங்கையின் மிகவும் பாதுகாப்பான, நம்பகமான வீட்டுச் சேவைகள் சந்தைத் தளம்.",
-        footerLinks: "முக்கிய இணைப்புகள்",
-        footerEmerg: "அவசர எண்கள்",
-        footerJoin: "தொழிலாளராக இணைய",
-        footerJoinSub: "உங்கள் திறமையை வருமானமாக மாற்ற எங்களுடன் இணையுங்கள்.",
-        btnRegister: "இப்போதே பதிவு செய்க"
-      },
-      si: {
-        topBarText: "ශ්‍රී ලංකාව පුරා සේවාව (දිස්ත්‍රික් 25ම) | 100% NIC සහ පොලිස් සහතික ලත්",
-        suwaSeriya: "සුවසැරිය: 1990",
-        hotline: "උදව්: 011 234 5678",
-        tagline: "ඔබේ නිවසට. ඔබේ සහයට.",
-        navServices: "සේවාවන්",
-        navSecurity: "ආරක්ෂාව සහ OTP ක්‍රමය",
-        navDistricts: "දිස්ත්‍රික්ක",
-        navContact: "සම්බන්ධ වන්න",
-        btnWhatsapp: "WhatsApp වෙන්කිරීම",
-        heroBadge: "100% NIC සහ පොලිස් සහතික ලත් සේවකයින්",
-        heroTitlePrefix: "ඔබේ නිවසට අවශ්‍ය",
-        heroTitleHighlight: "විශ්වාසවන්ත සේවකයින්",
-        heroTitleSuffix: "වහාම!",
-        heroDescription: "විදුලි කාර්මික, නල කාර්මික, මේසන්, පිරිසිදු කිරීම් සහ තීන්ත ආලේපන සේවාවන්. ද්විත්ව OTP ආරක්ෂාව සහ LankaQR ගෙවීම් පහසුකම සමඟින්.",
-        searchPlaceholder: "අවශ්‍ය සේවාව කුමක්ද? (උදා: ප්ලම්බර්, විදුලි කාර්මික)",
-        btnSearch: "සොයන්න",
-        badgeNic: "NIC තහවුරු කළ",
-        badgeOtp: "ද්විත්ව OTP ආරක්ෂිත",
-        badgeQr: "LankaQR ගෙවීම්",
-        speed15min: "විනාඩි 15කින් උදව්",
-        cardRole: "වෘත්තීය නිවාස පිරිසිදු කරන්නා • කොළඹ",
-        cardReviews: "(ඇගයීම් 120)",
-        cardNic: "NIC තහවුරු කළ",
-        cardPolice: "පොලිස් නිශ්කාශනය",
-        cardExp: "වසර 5+ පළපුරුද්ද",
-        cardOtp: "OTP ආරම්භය",
-        btnCall: "සෘජු ඇමතුම",
-        btnBook: "වෙන්කරවා ගන්න",
-        servicesHeading: "අපගේ ප්‍රධාන සේවාවන්",
-        servicesSub: "ඔබට අවශ්‍ය දක්ෂ සේවකයින් එකම ක්ලික් එකකින් තෝරාගන්න.",
-        svcClean: "පිරිසිදු කිරීම් (Cleaning)",
-        svcElec: "විදුලි කාර්මික (Electrical)",
-        svcPlumb: "නල කාර්මික (Plumbing)",
-        svcPaint: "තීන්ත ආලේපනය (Painting)",
-        svcGarden: "ගෙවතු නඩත්තුව (Gardening)",
-        svcMason: "මේසන් සහ වඩු වැඩ",
-        secTag: "උසස් ආරක්ෂක ප්‍රමිතිය",
-        secTitle: "අපගේ ද්විත්ව OTP ආරක්ෂණ ක්‍රමය ක්‍රියාත්මක වන්නේ කෙසේද?",
-        secSub: "නිවෙස් හිමියා සහ සේවකයා දෙපාර්ශවයේම ආරක්ෂාව 100%ක් සහතික කෙරේ.",
-        step1Title: "පැමිණීමේ ආරම්භක OTP",
-        step1Desc: "සේවකයා ඔබේ නිවසට පැමිණි පසු, ඔබේ දුරකථනයට ලැබෙන අංක 4ක OTP අංකය ඇතුළත් කිරීමෙන් පසු පමණක් සේවා කාලය හා රක්ෂණය ආරම්භ වේ.",
-        step2Title: "නම්‍යශීලී වැඩ අවසන් කිරීම",
-        step2Desc: "වැඩ සම්පූර්ණද නැතහොත් ඉතිරි වැඩ පසුදිනට අවශ්‍යද යන්න දෙදෙනාම එකඟතාවයෙන් තීරණය කළ හැක. සාධාරණ ගෙවීමක් පමණි.",
-        step3Title: "අවසන් OTP සහ LankaQR",
-        step3Desc: "සේවාව ගැන සෑහීමකට පත් වූ පසු, LankaQR හෝ මුදල් ගෙවා අවසන් OTP කේතය ලබා දී නිල වශයෙන් අවසන් කරන්න.",
-        footerAbout: "ශ්‍රී ලංකාවේ වඩාත්ම ආරක්ෂිත, විශ්වාසදායක ගෘහ සේවා වේදිකාව.",
-        footerLinks: "ප්‍රධාන සබැඳි",
-        footerEmerg: "හදිසි ඇමතුම්",
-        footerJoin: "සේවකයෙකු ලෙස එක්වන්න",
-        footerJoinSub: "ඔබේ දක්ෂතාවය ආදායමක් කරගන්න අප හා එක්වන්න.",
-        btnRegister: "දැන්ම ලියාපදිංචි වන්න"
-      },
-      en: {
-        topBarText: "Islandwide Service (All 25 Districts) | 100% NIC & Police Verified",
-        suwaSeriya: "Suwa Seriya: 1990",
-        hotline: "Help: 011 234 5678",
-        tagline: "YOUR HOME. YOUR HELP.",
-        navServices: "Services",
-        navSecurity: "Security & Double OTP",
-        navDistricts: "Districts",
-        navContact: "Contact",
-        btnWhatsapp: "Book via WhatsApp",
-        heroBadge: "100% Government NIC & Police Verified Tradespeople",
-        heroTitlePrefix: "Get Trusted & Verified",
-        heroTitleHighlight: "Home Workers",
-        heroTitleSuffix: "Instantly!",
-        heroDescription: "Electricians, Plumbers, Masons, Cleaners, Carpenters, and Painters. Protected by Mutual Double OTP and seamless LankaQR instant payments.",
-        searchPlaceholder: "Which service do you need? (e.g. Plumber, Electrician)",
-        btnSearch: "Search",
-        badgeNic: "NIC Verified",
-        badgeOtp: "Double OTP Protected",
-        badgeQr: "LankaQR Payments",
-        speed15min: "Help in 15 mins",
-        cardRole: "Professional Home Cleaner • Colombo",
-        cardReviews: "(120 Reviews)",
-        cardNic: "NIC Verified",
-        cardPolice: "Police Clearance",
-        cardExp: "5+ Years Exp",
-        cardOtp: "OTP Start",
-        btnCall: "Direct Call",
-        btnBook: "Book Now",
-        servicesHeading: "Our Core Services",
-        servicesSub: "Connect with verified skilled tradespeople with a single click.",
-        svcClean: "Cleaning Services",
-        svcElec: "Electrical Repairs",
-        svcPlumb: "Plumbing Services",
-        svcPaint: "Painting & Polish",
-        svcGarden: "Gardening & Lawn",
-        svcMason: "Mason & Carpentry",
-        secTag: "High Security Protocol",
-        secTitle: "How Does Our Double OTP Security Gate Work?",
-        secSub: "100% peace of mind and verified accountability for both homeowner and worker.",
-        step1Title: "1. Arrival & Start OTP",
-        step1Desc: "When the worker arrives at your doorstep, verify identity and provide the 4-digit start OTP from your phone to officially start the timer and insurance.",
-        step2Title: "2. Mutual Agreement",
-        step2Desc: "Flexible inspection. Complete full work or agree on partial settlement for another day without disputes.",
-        step3Title: "3. Final OTP & LankaQR",
-        step3Desc: "Once satisfied with the service, settle safely via official LankaQR or cash, then release the final settlement OTP.",
-        footerAbout: "Sri Lanka's safest and most trusted on-demand home services marketplace.",
-        footerLinks: "Quick Links",
-        footerEmerg: "Emergency Hotlines",
-        footerJoin: "Join as a Tradesperson",
-        footerJoinSub: "Turn your skills into steady earnings across Sri Lanka.",
-        btnRegister: "Register Now"
       }
     };
-
-    function setLanguage(lang) {
-      const data = translations[lang] || translations.ta;
-      document.documentElement.lang = lang;
-      
-      // Update all translatable elements
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (data[key]) {
-          el.innerText = data[key];
-        }
-      });
-
-      // Update input placeholder
-      const searchInput = document.getElementById('serviceSearchInput');
-      if (searchInput && data.searchPlaceholder) {
-        searchInput.placeholder = data.searchPlaceholder;
-      }
-
-      // Update Active Button styling
-      ['ta', 'si', 'en'].forEach(l => {
-        const btn = document.getElementById('btn-' + l);
-        if (btn) {
-          if (l === lang) {
-            btn.className = "px-2.5 py-1 rounded-lg bg-brand-blue text-white shadow transition-all";
-          } else {
-            btn.className = "px-2.5 py-1 rounded-lg hover:text-brand-blue text-slate-600 transition-all";
-          }
-        }
-      });
-    }
   </script>
-
-</body>
-</html>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-gradient-hero {
+      background: radial-gradient(circle at 50% 10%, rgba(215, 226, 255, 0.6) 0%, rgba(240, 243, 255, 0.7) 50%, #f9f9ff 100%);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-sans antialiased min-h-screen flex flex-col selection:bg-
