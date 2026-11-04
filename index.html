@@ -68,4 +68,971 @@
     }
   </style>
 </head>
-<body class="bg-background text-on-surface font-sans antialiased min-h-screen flex flex-col selection:bg-
+<body class="bg-background text-on-surface font-sans antialiased min-h-screen flex flex-col selection:bg-secondary-container selection:text-secondary text-base">
+
+  <!-- 1. TOP MICRO-TRUST & EMERGENCY TICKER -->
+  <aside class="bg-inverse-surface text-white text-xs sm:text-sm py-2.5 px-4 sm:px-6 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-3">
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-secondary-fixed animate-ping"></span>
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-secondary-fixed -ml-4"></span>
+        <span class="text-emerald-300 font-bold uppercase tracking-wider text-xs">இலங்கை நாடு தழுவிய சேவை (All 25 Districts)</span>
+        <span class="text-slate-300 font-medium hidden md:inline">• 100% NIC & Police Verified</span>
+      </div>
+      <div class="flex items-center gap-4 sm:gap-6 text-slate-200 text-xs sm:text-sm whitespace-nowrap overflow-x-auto">
+        <a class="flex items-center gap-1.5 hover:text-emerald-400 transition font-semibold" href="tel:+94702805105">
+          <span class="material-symbols-outlined text-base text-emerald-400">call</span>
+          <span>Hotline: <strong class="text-white">+94 70 280 5105</strong></span>
+        </a>
+        <span class="text-slate-600">|</span>
+        <a class="flex items-center gap-1.5 hover:text-emerald-400 transition font-semibold" href="tel:0112345678">
+          <span class="material-symbols-outlined text-base text-emerald-400">support_agent</span>
+          <span>உதவி: <strong class="text-white">011 234 5678</strong></span>
+        </a>
+        <span class="text-slate-600">|</span>
+        <a class="flex items-center gap-1.5 hover:text-rose-400 transition font-semibold" href="tel:1990">
+          <span class="material-symbols-outlined text-base text-rose-400" style="font-variation-settings: 'FILL' 1;">emergency</span>
+          <span>சுவசரிய: <strong class="text-white">1990</strong></span>
+        </a>
+        <span class="text-slate-600 hidden lg:inline">|</span>
+        <a class="flex items-center gap-1.5 hover:text-emerald-400 transition font-semibold hidden lg:flex" href="mailto:cleanlankaa@gmail.com">
+          <span class="material-symbols-outlined text-base text-emerald-400">mail</span>
+          <span>cleanlankaa@gmail.com</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 2. MAIN HEADER & NAVBAR -->
+  <header class="sticky top-[41px] z-40 bg-surface-container-lowest/95 backdrop-blur-xl border-b border-surface-container shadow-sm">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center gap-4">
+      <!-- Brand Logo -->
+      <a class="flex items-center gap-3.5 group focus:outline-none" href="#">
+        <div class="relative w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+          <img alt="Clean Lanka Official Emblem" class="w-full h-full object-contain filter drop-shadow-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAytbN3GBBePVuKccNMhTC7tOOODEGtfM_GHfMxbEHEFaj9OFhzMIm3fV-OmGJCpG4nt7gJ5mVuuBDAACy3WkiGU8XcXjVkpEKSldVXaegIf9DBRyQ6svObK-VlFExfitEt9IFp41Sl-7_QVInLhhHcW3iq8wT-ZKbubfXQHy-JIIuWp9i8CzyoVZtwEhku0tFcImzQhtAN_prP_Fi4gwrbimXWUMqracWElTOHa8xuNsZ9813WYLPs"/>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl sm:text-3xl font-black text-primary tracking-tight">Clean Lanka</span>
+            <span class="text-xs font-black px-2 py-0.5 rounded-full bg-emerald-100 text-secondary border border-secondary/30">LK</span>
+          </div>
+          <span class="text-xs font-extrabold text-secondary tracking-widest uppercase">எங்கள் நாடு எங்கள் சேவை</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <div class="hidden xl:flex items-center gap-7 text-base font-bold text-on-surface-variant">
+        <a class="text-primary hover:text-primary-container transition flex items-center gap-1" href="#workers">
+          <span>Find Workers</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        </a>
+        <a class="hover:text-primary transition" href="#services">All Services</a>
+        <a class="hover:text-primary transition" href="#safety">Safety & Verification</a>
+        <a class="hover:text-primary transition" href="#bottom-contacts">Emergency Support</a>
+      </div>
+
+      <!-- Language & Join CTAs -->
+      <div class="flex items-center gap-3">
+        <!-- Trilingual Switcher -->
+        <div class="bg-surface-container-low p-1 rounded-full border border-surface-container flex items-center shadow-inner text-xs sm:text-sm font-bold">
+          <button class="px-3 py-1.5 rounded-full bg-primary-container text-white shadow-sm transition" id="lang-ta" onclick="setLanguage('ta')" type="button">தமிழ்</button>
+          <button class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-primary transition" id="lang-si" onclick="setLanguage('si')" type="button">සිංහල</button>
+          <button class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-primary transition" id="lang-en" onclick="setLanguage('en')" type="button">English</button>
+        </div>
+
+        <!-- WhatsApp Support Icon -->
+        <a class="hidden sm:inline-flex p-2.5 rounded-2xl bg-secondary text-white shadow-glow-emerald hover:bg-emerald-700 transition" href="https://wa.me/94702805105" target="_blank" title="WhatsApp Instant Live Help">
+          <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">chat</span>
+        </a>
+
+        <!-- Join as Worker Modal Button -->
+        <button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-primary text-white font-extrabold text-sm sm:text-base hover:bg-primary-container shadow-glow-blue transition active:scale-95" onclick="openWorkerModal()" type="button">
+          <span class="material-symbols-outlined text-xl">person_add</span>
+          <span>Join as a Worker</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-grow">
+    <!-- 3. HERO SECTION -->
+    <section class="relative custom-gradient-hero pt-12 pb-20 overflow-hidden border-b border-surface-container text-center">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        <!-- Trust Ribbon -->
+        <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-emerald-500/10 border-2 border-secondary/30 shadow-sm mb-6">
+          <span class="material-symbols-outlined text-secondary text-lg" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+          <span class="text-secondary font-black text-sm tracking-wide">100% NIC & பொலிஸ் சரிபார்க்கப்பட்ட தொழிலாளர்கள்</span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-4xl sm:text-6xl font-black text-on-surface tracking-tight leading-[1.15] max-w-4xl mx-auto mb-5">
+          உங்கள் வீட்டிற்குத் தேவையான <br/>
+          <span class="text-primary-container">நம்பகமான தொழிலாளர்கள்</span> உடனே!
+        </h1>
+        <p class="text-base sm:text-xl text-on-surface-variant max-w-3xl mx-auto leading-relaxed font-medium mb-10">
+          எலக்ட்ரீசியன், பிளம்பர், மேசன், கிளீனிங், தச்சர் மற்றும் பெயிண்டிங் சேவைகள். இருதரப்பு இரட்டை OTP பாதுகாப்புடன், இலங்கை முழுவதும் LankaQR கட்டண வசதியுடன் கிடைக்கும்.
+        </p>
+
+        <!-- 3-Segment Quick Search Bar -->
+        <div class="max-w-4xl mx-auto bg-surface-container-lowest rounded-3xl p-3 sm:p-4 shadow-xl border-2 border-surface-container flex flex-col md:flex-row items-stretch gap-3">
+          <!-- Segment 1: Service -->
+          <div class="flex-1 flex items-center px-4 py-2 border-b md:border-b-0 md:border-r border-surface-container gap-3 text-left bg-surface-container-low/50 rounded-2xl">
+            <span class="material-symbols-outlined text-primary text-2xl">construction</span>
+            <div class="w-full">
+              <label class="block text-xs font-black text-outline uppercase tracking-wider">எந்த சேவை தேவை?</label>
+              <select class="w-full bg-transparent border-0 p-0 text-base font-black text-on-surface focus:ring-0 cursor-pointer" id="quick-service-select">
+                <option value="cleaning">வீட்டு சுத்தம் (Home Cleaning)</option>
+                <option value="plumbing">பிளம்பிங் (Plumbing Works)</option>
+                <option value="electrical">எலக்ட்ரீசியன் (Electrical Services)</option>
+                <option value="mason">மேசன் வேலை (Masonry & Tiling)</option>
+                <option value="carpenter">தச்சர் வேலை (Carpentry)</option>
+                <option value="painter">வர்ணம் பூசுதல் (Painting)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Segment 2: District -->
+          <div class="flex-1 flex items-center px-4 py-2 gap-3 text-left bg-surface-container-low/50 rounded-2xl">
+            <span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">location_on</span>
+            <div class="w-full">
+              <label class="block text-xs font-black text-outline uppercase tracking-wider">மாவட்டம் (District)</label>
+              <select class="w-full bg-transparent border-0 p-0 text-base font-black text-on-surface focus:ring-0 cursor-pointer" id="quick-district-select">
+                <option value="colombo">கொழும்பு (Colombo District)</option>
+                <option value="gampaha">கம்பஹா (Gampaha District)</option>
+                <option value="kandy">கண்டி (Kandy District)</option>
+                <option value="jaffna">யாழ்ப்பாணம் (Jaffna District)</option>
+                <option value="galle">காலி (Galle District)</option>
+                <option value="kalutara">களுத்துறை (Kalutara District)</option>
+                <option value="batticaloa">மட்டக்களப்பு (Batticaloa District)</option>
+                <option value="kurunegala">குருநாகல் (Kurunegala District)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Action CTA -->
+          <button class="w-full md:w-auto px-8 py-3.5 rounded-2xl bg-primary-container hover:bg-primary text-white font-black text-base flex items-center justify-center gap-2 shadow-glow-blue transition active:scale-95 flex-shrink-0" onclick="scrollToBooking()" type="button">
+            <span class="material-symbols-outlined text-xl">search</span>
+            <span>தேடுக</span>
+          </button>
+        </div>
+
+        <!-- 4 Badges -->
+        <div class="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto text-left">
+          <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container shadow-sm">
+            <span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">policy</span>
+            <div>
+              <p class="text-sm font-black text-on-surface">100% NIC Verified</p>
+              <p class="text-xs text-on-surface-variant font-medium">பொலிஸ் அறிக்கை சரிபார்ப்பு</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container shadow-sm">
+            <span class="material-symbols-outlined text-primary text-2xl">pin</span>
+            <div>
+              <p class="text-sm font-black text-on-surface">2-Way OTP Protect</p>
+              <p class="text-xs text-on-surface-variant font-medium">வருகை & நிறைவு பாதுகாப்பு</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container shadow-sm">
+            <span class="material-symbols-outlined text-tertiary-container text-2xl" style="font-variation-settings: 'FILL' 1;">qr_code_2</span>
+            <div>
+              <p class="text-sm font-black text-on-surface">LankaQR / Cash</p>
+              <p class="text-xs text-on-surface-variant font-medium">நேரடி வெளிப்படையான விலை</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container shadow-sm">
+            <span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+            <div>
+              <p class="text-sm font-black text-on-surface">30 Days Guarantee</p>
+              <p class="text-xs text-on-surface-variant font-medium">மறுசீரமைப்பு உத்தரவாதம்</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. SERVICES BENTO GRID -->
+    <section class="py-16 bg-background" id="services">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+          <div>
+            <span class="text-xs font-black text-secondary uppercase tracking-widest">தொழில் துறைகள் • TRADES</span>
+            <h2 class="text-3xl sm:text-4xl font-black text-on-surface mt-1">முக்கிய வீட்டுச் சேவைகள்</h2>
+            <p class="text-sm sm:text-base text-on-surface-variant mt-1 font-medium">தேர்ந்தெடுக்கப்பட்ட, அரசாங்க சான்றிதழ் பெற்ற அனுபவமிக்க சேவை நிபுணர்கள்.</p>
+          </div>
+          <button class="inline-flex items-center gap-2 text-primary font-black text-sm hover:underline" onclick="scrollToBooking()" type="button">
+            <span>அனைத்து 24 சேவைகளையும் காண்க</span>
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          <!-- Cleaning -->
+          <div class="cursor-pointer group flex flex-col justify-between p-5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container hover:border-primary transition-all duration-200" onclick="scrollToBooking()">
+            <div>
+              <div class="w-12 h-12 rounded-xl bg-blue-50 text-primary-container flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl">sanitizer</span>
+              </div>
+              <h3 class="text-base font-black text-on-surface group-hover:text-primary transition-colors">வீட்டு சுத்தம்</h3>
+              <p class="text-xs text-outline mt-0.5">Deep Cleaning & Sanitization</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-surface-container text-xs text-secondary font-black">
+              850+ சரிபார்க்கப்பட்டோர்
+            </div>
+          </div>
+
+          <!-- Plumbing -->
+          <div class="cursor-pointer group flex flex-col justify-between p-5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container hover:border-primary transition-all duration-200" onclick="scrollToBooking()">
+            <div>
+              <div class="w-12 h-12 rounded-xl bg-cyan-50 text-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl">plumbing</span>
+              </div>
+              <h3 class="text-base font-black text-on-surface group-hover:text-primary transition-colors">பிளம்பிங்</h3>
+              <p class="text-xs text-outline mt-0.5">Pipes, Taps & Tank Repair</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-surface-container text-xs text-secondary font-black">
+              620+ சரிபார்க்கப்பட்டோர்
+            </div>
+          </div>
+
+          <!-- Electrician -->
+          <div class="cursor-pointer group flex flex-col justify-between p-5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container hover:border-primary transition-all duration-200" onclick="scrollToBooking()">
+            <div>
+              <div class="w-12 h-12 rounded-xl bg-amber-50 text-tertiary-container flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl">electric_bolt</span>
+              </div>
+              <h3 class="text-base font-black text-on-surface group-hover:text-primary transition-colors">எலக்ட்ரீசியன்</h3>
+              <p class="text-xs text-outline mt-0.5">Wiring, Trips & Fixtures</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-surface-container text-xs text-secondary font-black">
+              940+ சரிபார்க்கப்பட்டோர்
+            </div>
+          </div>
+
+          <!-- Mason -->
+          <div class="cursor-pointer group flex flex-col justify-between p-5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container hover:border-primary transition-all duration-200" onclick="scrollToBooking()">
+            <div>
+              <div class="w-12 h-12 rounded-xl bg-emerald-50 text-secondary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl">foundation</span>
+              </div>
+              <h3 class="text-base font-black text-on-surface group-hover:text-primary transition-colors">மேசன் வேலை</h3>
+              <p class="text-xs text-outline mt-0.5">Tiling, Plastering & Walls</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-surface-container text-xs text-secondary font-black">
+              480+ சரிபார்க்கப்பட்டோர்
+            </div>
+          </div>
+
+          <!-- Carpenter -->
+          <div class="cursor-pointer group flex flex-col justify-between p-5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container hover:border-primary transition-all duration-200" onclick="scrollToBooking()">
+            <div>
+              <div class="w-12 h-12 rounded-xl bg-orange-50 text-tertiary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl">handyman</span>
+              </div>
+              <h3 class="text-base font-black text-on-surface group-hover:text-primary transition-colors">தச்சர் வேலை</h3>
+              <p class="text-xs text-outline mt-0.5">Doors, Locks & Furniture</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-surface-container text-xs text-secondary font-black">
+              390+ சரிபார்க்கப்பட்டோர்
+            </div>
+          </div>
+
+          <!-- Painter -->
+          <div class="cursor-pointer group flex flex-col justify-between p-5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container hover:border-primary transition-all duration-200" onclick="scrollToBooking()">
+            <div>
+              <div class="w-12 h-12 rounded-xl bg-purple-50 text-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl">format_paint</span>
+              </div>
+              <h3 class="text-base font-black text-on-surface group-hover:text-primary transition-colors">வர்ணம் பூசுதல்</h3>
+              <p class="text-xs text-outline mt-0.5">Interior & Waterproofing</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-surface-container text-xs text-secondary font-black">
+              510+ சரிபார்க்கப்பட்டோர்
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. VERIFIED WORKERS SPOTLIGHT -->
+    <section class="py-16 bg-surface-container-low border-y border-surface-container" id="workers">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+          <div>
+            <span class="text-xs font-black text-secondary uppercase tracking-widest flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">verified</span>
+              <span>உடனடி தொடர்பு • INSTANT HIRING</span>
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-black text-on-surface mt-1">உங்கள் பகுதியில் சிறந்த மதிப்பீடு பெற்ற தொழிலாளர்கள்</h2>
+            <p class="text-sm sm:text-base text-on-surface-variant mt-1 font-medium">காவல்துறை அனுமதி சான்றிதழ் (Police Clearance) மற்றும் நேரடி NIC சரிபார்க்கப்பட்டவர்கள்.</p>
+          </div>
+          <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-black">
+            <span class="text-outline">மாவட்டம்:</span>
+            <button class="px-3.5 py-1.5 rounded-full bg-primary text-white shadow-sm" type="button">அனைத்தும்</button>
+            <button class="px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface hover:bg-surface-container-highest transition" type="button">கொழும்பு</button>
+            <button class="px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface hover:bg-surface-container-highest transition" type="button">கண்டி</button>
+            <button class="px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface hover:bg-surface-container-highest transition" type="button">யாழ்ப்பாணம்</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Worker 1: Suresh -->
+          <div class="bg-surface-container-lowest rounded-2xl p-5 border-2 border-surface-container shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div>
+              <div class="flex items-start gap-4">
+                <div class="relative w-16 h-16 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-surface-container">
+                  <img alt="Suresh Gnanasekeran" class="w-full h-full object-cover object-top" src="https://lh3.googleusercontent.com/aida/AEtjO1XYNP6CdPkKXIdsjdaPMiq_c-DVhDR_g8LSvq6Z7LHH06E_vl82_TiiY00NUMnCya8FTjIjCDUtqfuHkpBIfGUNZpT_fvmUu98oIhPxv0-VQhFiZC6Y67igClWHcRDAN8FO-uHTcgQww1PlxQEOkuQNkYujPoABnIp5m72b93qtMvEZfRLAxqi6lnRfKqhFNs5ixh368Gy6yiMMv5JSryivWC9lo9gzkB5AYbKOYrfe"/>
+                  <span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-secondary text-white flex items-center justify-center text-[10px]">✓</span>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-black text-on-surface">சுரேஷ் ஞானசேகரன்</h3>
+                    <span class="flex items-center gap-1 text-xs font-black text-tertiary-container bg-amber-50 px-2 py-0.5 rounded">
+                      <span class="material-symbols-outlined text-xs text-amber-500" style="font-variation-settings: 'FILL' 1;">star</span>
+                      <span>4.9 (184)</span>
+                    </span>
+                  </div>
+                  <p class="text-xs font-bold text-primary mt-0.5">தலைமை எலக்ட்ரீசியன் (12+ வருட அனுபவம்)</p>
+                  <p class="text-xs text-on-surface-variant flex items-center gap-1 mt-1">
+                    <span class="material-symbols-outlined text-xs text-outline">location_on</span>
+                    <span>கொழும்பு 05, நாரஹேன்பிட்ட</span>
+                  </p>
+                </div>
+              </div>
+              <div class="mt-4 flex flex-wrap gap-1.5 text-[11px] font-bold">
+                <span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">House Wiring</span>
+                <span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">Tripping Repair</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-100 text-secondary">Police Cleared</span>
+              </div>
+            </div>
+            <div class="mt-5 pt-4 border-t border-surface-container grid grid-cols-2 gap-2">
+              <a class="py-2.5 px-3 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-primary font-black text-xs flex items-center justify-center gap-1.5 transition" href="tel:+94702805105">
+                <span class="material-symbols-outlined text-sm">call</span>
+                <span>அழைக்க</span>
+              </a>
+              <a class="py-2.5 px-3 rounded-xl bg-secondary hover:bg-emerald-700 text-white font-black text-xs flex items-center justify-center gap-1.5 transition" href="https://wa.me/94702805105" target="_blank">
+                <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">chat</span>
+                <span>WhatsApp</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Worker 2: Fathima -->
+          <div class="bg-surface-container-lowest rounded-2xl p-5 border-2 border-surface-container shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div>
+              <div class="flex items-start gap-4">
+                <div class="relative w-16 h-16 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-surface-container">
+                  <img alt="Fathima Rizwana" class="w-full h-full object-cover object-top" src="https://lh3.googleusercontent.com/aida/AEtjO1Xr6NV1Ko479s9rVZ3_WpR0xYkqedsPGGHuljn0Lp5COpaEKibIUMzo1es1RdOuQ3xk7xdj19LIqX2U958SeOzQDUrY5bjtBN1DNeYj6oUwWzIHbdqbaZWqV9nF_iwY5qsebcnQoCirn4tugwpVGOohE-ZVOh6WEJ5O8XkqER2sPHkBjs02TAgzbYwUz5806OsksuSNjmtsEdfIMBtqp1MUWNQ4lUdGb8Sjrm9j6OLF"/>
+                  <span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-secondary text-white flex items-center justify-center text-[10px]">✓</span>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-black text-on-surface">ஃபாத்திமா ரிஸ்வானா</h3>
+                    <span class="flex items-center gap-1 text-xs font-black text-tertiary-container bg-amber-50 px-2 py-0.5 rounded">
+                      <span class="material-symbols-outlined text-xs text-amber-500" style="font-variation-settings: 'FILL' 1;">star</span>
+                      <span>5.0 (212)</span>
+                    </span>
+                  </div>
+                  <p class="text-xs font-bold text-primary mt-0.5">தீவிர கிளீனிங் நிபுணர் (7+ வருட அனுபவம்)</p>
+                  <p class="text-xs text-on-surface-variant flex items-center gap-1 mt-1">
+                    <span class="material-symbols-outlined text-xs text-outline">location_on</span>
+                    <span>தெஹிவளை, கல்கிசை</span>
+                  </p>
+                </div>
+              </div>
+              <div class="mt-4 flex flex-wrap gap-1.5 text-[11px] font-bold">
+                <span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">Kitchen Deep Clean</span>
+                <span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">Sofa Sanitizing</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-100 text-secondary">Police Cleared</span>
+              </div>
+            </div>
+            <div class="mt-5 pt-4 border-t border-surface-container grid grid-cols-2 gap-2">
+              <a class="py-2.5 px-3 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-primary font-black text-xs flex items-center justify-center gap-1.5 transition" href="tel:+94702805105">
+                <span class="material-symbols-outlined text-sm">call</span>
+                <span>அழைக்க</span>
+              </a>
+              <a class="py-2.5 px-3 rounded-xl bg-secondary hover:bg-emerald-700 text-white font-black text-xs flex items-center justify-center gap-1.5 transition" href="https://wa.me/94702805105" target="_blank">
+                <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">chat</span>
+                <span>WhatsApp</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Worker 3: Sampath -->
+          <div class="bg-surface-container-lowest rounded-2xl p-5 border-2 border-surface-container shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div>
+              <div class="flex items-start gap-4">
+                <div class="relative w-16 h-16 rounded-xl overflow-hidden bg-primary text-white flex items-center justify-center font-black text-xl flex-shrink-0 border border-surface-container">
+                  SP
+                  <span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-secondary text-white flex items-center justify-center text-[10px]">✓</span>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-black text-on-surface">சம்பத் பெரேரா</h3>
+                    <span class="flex items-center gap-1 text-xs font-black text-tertiary-container bg-amber-50 px-2 py-0.5 rounded">
+                      <span class="material-symbols-outlined text-xs text-amber-500" style="font-variation-settings: 'FILL' 1;">star</span>
+                      <span>4.8 (143)</span>
+                    </span>
+                  </div>
+                  <p class="text-xs font-bold text-primary mt-0.5">முதன்மை பிளம்பர் & பைப் ஃபிட்டர்</p>
+                  <p class="text-xs text-on-surface-variant flex items-center gap-1 mt-1">
+                    <span class="material-symbols-outlined text-xs text-outline">location_on</span>
+                    <span>ராஜகிரிய, பத்தரமுல்ல</span>
+                  </p>
+                </div>
+              </div>
+              <div class="mt-4 flex flex-wrap gap-1.5 text-[11px] font-bold">
+                <span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">Overhead Tank</span>
+                <span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">Motor Pump Fix</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-100 text-secondary">Police Cleared</span>
+              </div>
+            </div>
+            <div class="mt-5 pt-4 border-t border-surface-container grid grid-cols-2 gap-2">
+              <a class="py-2.5 px-3 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-primary font-black text-xs flex items-center justify-center gap-1.5 transition" href="tel:+94702805105">
+                <span class="material-symbols-outlined text-sm">call</span>
+                <span>அழைக்க</span>
+              </a>
+              <a class="py-2.5 px-3 rounded-xl bg-secondary hover:bg-emerald-700 text-white font-black text-xs flex items-center justify-center gap-1.5 transition" href="https://wa.me/94702805105" target="_blank">
+                <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">chat</span>
+                <span>WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 2-STEP OTP SAFETY EXPLAINER -->
+    <section class="py-16 bg-surface-container-lowest" id="safety">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <span class="text-xs font-black text-secondary uppercase tracking-widest bg-emerald-50 px-3.5 py-1.5 rounded-full border border-secondary/20">முழுமையான பாதுகாப்பு • SAFETY FIRST</span>
+          <h2 class="text-3xl sm:text-4xl font-black text-on-surface mt-3">2-படி OTP & நம்பகமான பாதுகாப்பு முறை</h2>
+          <p class="text-sm sm:text-base text-on-surface-variant mt-2 font-medium">உங்கள் குடும்பத்தின் பாதுகாப்பிற்காக வடிவமைக்கப்பட்ட இலங்கையின் பிரத்யேக தொழில்நுட்பப் பாதுகாப்பு வழிமுறை.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-surface-container-low p-6 rounded-2xl border-2 border-surface-container hover:border-primary transition">
+            <div class="w-10 h-10 rounded-xl bg-primary text-white font-black flex items-center justify-center text-sm mb-4">01</div>
+            <h3 class="font-black text-lg text-on-surface">தொழிலாளர் வருகை & Start OTP</h3>
+            <p class="text-xs sm:text-sm text-on-surface-variant mt-2 leading-relaxed font-medium">
+              தொழிலாளர் உங்கள் வீட்டிற்கு வரும்போது, அவரது NIC ஐ சரிபார்த்து உங்கள் தொலைபேசிக்கு வரும் 4-இலக்க <strong>Start OTP</strong> குறியீட்டை பகிர்வதன் மூலம் பணி தொடங்கும்.
+            </p>
+          </div>
+
+          <div class="bg-surface-container-low p-6 rounded-2xl border-2 border-surface-container hover:border-secondary transition">
+            <div class="w-10 h-10 rounded-xl bg-secondary text-white font-black flex items-center justify-center text-sm mb-4">02</div>
+            <h3 class="font-black text-lg text-on-surface">தரமான சேவை & நேரடி ஆய்வு</h3>
+            <p class="text-xs sm:text-sm text-on-surface-variant mt-2 leading-relaxed font-medium">
+              பயிற்சி பெற்ற தொழில்நுட்ப நிபுணர் நிலையான விதிமுறைகளின்படி வேலையை முழுமையாக செய்து முடிப்பார். நீங்கள் வேலையை முழுமையாக பரிசீலித்து திருப்தி அடையலாம்.
+            </p>
+          </div>
+
+          <div class="bg-surface-container-low p-6 rounded-2xl border-2 border-surface-container hover:border-amber-500 transition">
+            <div class="w-10 h-10 rounded-xl bg-inverse-surface text-white font-black flex items-center justify-center text-sm mb-4">03</div>
+            <h3 class="font-black text-lg text-on-surface">LankaQR கட்டணம் & Final OTP</h3>
+            <p class="text-xs sm:text-sm text-on-surface-variant mt-2 leading-relaxed font-medium">
+              வேலை முடிந்தவுடன் இறுதி <strong>Completion OTP</strong> குறியீட்டை வழங்கி, நிர்ணயிக்கப்பட்ட கட்டணத்தை நேரடி LankaQR மூலமாகவோ ரொக்கமாகவோ செலுத்தலாம்.
+            </p>
+          </div>
+        </div>
+
+        <!-- Join Verified Network Grand Banner -->
+        <div class="mt-12 rounded-3xl bg-gradient-to-r from-primary via-primary-container to-secondary p-8 sm:p-10 text-white shadow-xl flex flex-col lg:flex-row items-center justify-between gap-6">
+          <div>
+            <span class="text-xs font-black uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full">தொழிலாளர் பதிவு • JOIN SERENDIB NETWORK</span>
+            <h3 class="text-2xl sm:text-3xl font-black mt-2">நீங்களும் Clean Lanka தொழிலாளர் வலையமைப்பில் இணைய விருப்பமா?</h3>
+            <p class="text-sm sm:text-base text-slate-100 font-medium mt-1">கண்ணியமான வருமானம், உடனடி LankaQR கொடுப்பனவுகள் மற்றும் உங்கள் பகுதியிலேயே தொடர்ச்சியான வேலை வாய்ப்புகளைப் பெறுங்கள்.</p>
+          </div>
+          <div class="flex flex-wrap gap-3 flex-shrink-0">
+            <button class="px-6 py-3.5 rounded-xl bg-white text-primary font-black text-sm hover:bg-slate-100 transition shadow-lg" onclick="openWorkerModal()" type="button">Join as a Worker</button>
+            <a class="px-6 py-3.5 rounded-xl bg-secondary text-white font-black text-sm hover:bg-emerald-700 transition shadow-lg flex items-center gap-2" href="https://wa.me/94702805105" target="_blank">
+              <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">chat</span>
+              <span>WhatsApp உதவி</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CLEAN BOTTOM CONTACT BANNER (STRAIGHT-LINE, NO BOX CELLS) -->
+    <section class="py-16 bg-inverse-surface text-white" id="bottom-contacts">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-secondary-fixed text-xs font-black uppercase tracking-wider mb-4">
+          உடனடி உதவி மற்றும் அவசர தொடர்புகள்
+        </div>
+
+        <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-2">நேரடி தொலைபேசி & அவசர எண்கள்</h2>
+        <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mb-10 font-medium">எந்தநேரமும் தொடர்பு கொள்ளக்கூடிய உத்தியோகபூர்வ எண்கள் மற்றும் மின்னஞ்சல் முகவரி</p>
+
+        <!-- Straight-Line Numbers (No cells, uncluttered) -->
+        <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-10 lg:gap-14 py-6 border-y border-white/10">
+          <!-- Hotline -->
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-3xl text-emerald-400">headset_mic</span>
+            <div class="text-left">
+              <span class="text-xs text-slate-400 font-bold block uppercase tracking-wider">Clean Lanka Hotline</span>
+              <a class="text-2xl sm:text-3xl font-black text-white hover:text-emerald-400 transition" href="tel:+94702805105">+94 70 280 5105</a>
+            </div>
+          </div>
+
+          <span class="text-slate-600 hidden sm:inline text-2xl">•</span>
+
+          <!-- Landline Help -->
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-3xl text-emerald-400">phone</span>
+            <div class="text-left">
+              <span class="text-xs text-slate-400 font-bold block uppercase tracking-wider">Desk / Landline Help</span>
+              <a class="text-2xl sm:text-3xl font-black text-white hover:text-emerald-400 transition" href="tel:0112345678">011 234 5678</a>
+            </div>
+          </div>
+
+          <span class="text-slate-600 hidden lg:inline text-2xl">•</span>
+
+          <!-- Suwa Seriya -->
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-3xl text-rose-400" style="font-variation-settings: 'FILL' 1;">emergency</span>
+            <div class="text-left">
+              <span class="text-xs text-slate-400 font-bold block uppercase tracking-wider">Suwa Seriya Ambulance</span>
+              <a class="text-2xl sm:text-3xl font-black text-white hover:text-rose-400 transition" href="tel:1990">1990</a>
+            </div>
+          </div>
+
+          <span class="text-slate-600 hidden sm:inline text-2xl">•</span>
+
+          <!-- Police -->
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-3xl text-emerald-400" style="font-variation-settings: 'FILL' 1;">local_police</span>
+            <div class="text-left">
+              <span class="text-xs text-slate-400 font-bold block uppercase tracking-wider">Police Emergency</span>
+              <a class="text-2xl sm:text-3xl font-black text-white hover:text-emerald-400 transition" href="tel:119">119</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Official Email -->
+        <div class="mt-8 flex items-center justify-center gap-2 text-base sm:text-lg">
+          <span class="material-symbols-outlined text-emerald-400 text-2xl">mail</span>
+          <span class="text-slate-400">Official Email:</span>
+          <a class="text-white font-black hover:text-emerald-400 transition underline underline-offset-4" href="mailto:cleanlankaa@gmail.com">cleanlankaa@gmail.com</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 8. OFFICIAL FOOTER -->
+  <footer class="bg-surface-container-low border-t-2 border-surface-container py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="space-y-3">
+        <div class="flex items-center gap-3">
+          <img alt="Clean Lanka Logo" class="w-10 h-10 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAytbN3GBBePVuKccNMhTC7tOOODEGtfM_GHfMxbEHEFaj9OFhzMIm3fV-OmGJCpG4nt7gJ5mVuuBDAACy3WkiGU8XcXjVkpEKSldVXaegIf9DBRyQ6svObK-VlFExfitEt9IFp41Sl-7_QVInLhhHcW3iq8wT-ZKbubfXQHy-JIIuWp9i8CzyoVZtwEhku0tFcImzQhtAN_prP_Fi4gwrbimXWUMqracWElTOHa8xuNsZ9813WYLPs"/>
+          <div>
+            <span class="text-xl font-black text-primary">Clean Lanka</span>
+            <span class="text-[10px] font-black text-secondary block -mt-1">எங்கள் நாடு எங்கள் சேவை</span>
+          </div>
+        </div>
+        <p class="text-xs text-on-surface-variant font-medium leading-relaxed">
+          Sri Lanka’s Premier Verified Domestic & Trade Services Marketplace. Connecting households with verified, police-cleared tradespeople across all 25 districts.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-black text-on-surface uppercase tracking-wider mb-3">நிறுவனம் / Company</h4>
+        <ul class="space-y-2 text-xs font-medium text-on-surface-variant">
+          <li><a class="hover:text-primary transition" href="#">About Us / අප ගැන / எங்களை பற்றி</a></li>
+          <li><a class="text-rose-600 font-bold hover:underline" href="tel:1990">1990 Suwa Seriya / Quick Aid</a></li>
+          <li><a class="text-emerald-700 font-bold hover:underline" href="tel:119">119 Sri Lanka Police</a></li>
+          <li><a class="hover:text-primary transition" href="#safety">Safety & Verification Standards</a></li>
+          <li><a class="hover:text-primary transition" href="#">All 25 Districts Islandwide</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-black text-on-surface uppercase tracking-wider mb-3">சேவைகள் / Services</h4>
+        <ul class="space-y-2 text-xs font-medium text-on-surface-variant">
+          <li><a class="hover:text-primary transition" href="#services">வீட்டு சுத்தம் (Home Cleaning)</a></li>
+          <li><a class="hover:text-primary transition" href="#services">பிளம்பிங் (Plumbing)</a></li>
+          <li><a class="hover:text-primary transition" href="#services">எலக்ட்ரீசியன் (Electrical)</a></li>
+          <li><a class="hover:text-primary transition" href="#services">மேசன் & வர்ணம் பூசுதல்</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-black text-on-surface uppercase tracking-wider mb-3">தொழிலாளர்கள் / Workers</h4>
+        <ul class="space-y-2 text-xs font-medium text-on-surface-variant">
+          <li><button class="text-primary font-bold hover:underline text-left" onclick="openWorkerModal()" type="button">Join as a Worker / தொழிலாளியாக இணையுங்கள்</button></li>
+          <li><a class="hover:text-primary transition" href="#">Police Check & NIC Guidelines</a></li>
+          <li><a class="hover:text-primary transition" href="#">Privacy Policy & Terms of Service</a></li>
+          <li><a class="hover:text-primary transition font-bold text-secondary" href="tel:+94702805105">Help Desk: +94 70 280 5105</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 mt-8 border-t border-surface-container flex flex-col sm:flex-row items-center justify-between text-xs text-outline gap-3 text-center sm:text-left">
+      <p>© 2026 Clean Lanka (எங்கள் நாடு எங்கள் சேவை / අපේ රට අපේ සේවය). All Rights Reserved.</p>
+      <p class="text-secondary font-bold flex items-center gap-1">
+        <span class="material-symbols-outlined text-sm">verified</span>
+        <span>Sri Lanka Police Clearance Supported • LankaQR Enabled</span>
+      </p>
+    </div>
+  </footer>
+
+  <!-- 9. FLOATING LIVE CHAT WIDGET & POPUP -->
+  <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3" id="live-chat-wrapper">
+    <!-- Chat Modal Window -->
+    <div class="hidden w-80 sm:w-96 bg-surface-container-lowest rounded-2xl shadow-2xl border-2 border-surface-container overflow-hidden transition-all duration-200" id="chat-popup">
+      <div class="bg-primary text-white p-4 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="relative">
+            <span class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+              <span class="material-symbols-outlined text-lg">support_agent</span>
+            </span>
+            <span class="absolute bottom-0 right-0 w-2 h-2 bg-emerald-400 rounded-full"></span>
+          </div>
+          <div>
+            <h4 class="text-sm font-black flex items-center gap-1.5">
+              <span>Clean Lanka உதவி</span>
+              <span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-400 text-slate-900 font-bold">Online</span>
+            </h4>
+            <p class="text-xs text-slate-200">நேரடி உதவி முகவர் • 24/7 Available</p>
+          </div>
+        </div>
+        <button class="text-white/80 hover:text-white p-1" onclick="toggleChatPopup()" type="button">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <div class="p-4 bg-surface-container-low max-h-96 overflow-y-auto space-y-3">
+        <div class="bg-surface-container-lowest p-3 rounded-xl border border-surface-container text-xs text-on-surface">
+          வணக்கம்! உங்களுக்கு தேவையான சேவை அல்லது உதவியை கீழே குறிப்பிடவும். எங்கள் உதவி குழு உடனே பதிலளிக்கும்.
+        </div>
+
+        <form class="bg-surface-container-lowest p-3.5 rounded-xl border border-surface-container space-y-2.5" onsubmit="handleChatSubmit(event)">
+          <div>
+            <label class="block text-[11px] font-bold text-on-surface">உங்கள் பெயர் (Name) *</label>
+            <input class="w-full bg-surface-container-low border border-surface-container rounded-lg px-2.5 py-1.5 text-xs text-on-surface focus:outline-none focus:border-primary" id="chat-name" required="" type="text"/>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-on-surface">தொலைபேசி எண் (Phone) *</label>
+            <input class="w-full bg-surface-container-low border border-surface-container rounded-lg px-2.5 py-1.5 text-xs text-on-surface focus:outline-none focus:border-primary" id="chat-phone" placeholder="07X XXX XXXX" required="" type="tel"/>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-on-surface">மின்னஞ்சல் (Email)</label>
+            <input class="w-full bg-surface-container-low border border-surface-container rounded-lg px-2.5 py-1.5 text-xs text-on-surface focus:outline-none focus:border-primary" id="chat-email" type="email"/>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-on-surface">செய்தி (Message)</label>
+            <textarea class="w-full bg-surface-container-low border border-surface-container rounded-lg px-2.5 py-1.5 text-xs text-on-surface focus:outline-none focus:border-primary" id="chat-msg" rows="2"></textarea>
+          </div>
+          <button class="w-full py-2 rounded-xl bg-primary text-white font-black text-xs hover:bg-primary-container transition" type="submit">
+            அரட்டையைத் தொடங்கு (Start Chat)
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Floating Toggle Button -->
+    <button class="flex items-center gap-2 px-4 py-3 rounded-full bg-primary hover:bg-primary-container text-white shadow-xl hover:shadow-2xl transition active:scale-95" onclick="toggleChatPopup()" type="button">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="material-symbols-outlined text-xl">support_agent</span>
+      <span class="text-xs sm:text-sm font-black">Live Chat (நேரடி உதவி)</span>
+    </button>
+  </div>
+
+  <!-- 10. WORKER REGISTRATION MODAL WITH CAMERA -->
+  <div class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto" id="worker-modal">
+    <div class="bg-surface-container-lowest rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative my-8 border-2 border-surface-container">
+      <button class="absolute top-5 right-5 text-outline hover:text-on-surface p-2 rounded-full hover:bg-surface-container" onclick="closeWorkerModal()" type="button">
+        <span class="material-symbols-outlined text-2xl">close</span>
+      </button>
+
+      <div class="flex items-center gap-3.5 pb-5 border-b border-surface-container">
+        <div class="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-2xl">handyman</span>
+        </div>
+        <div>
+          <h3 class="text-xl font-black text-on-surface">தொழிலாளர் பதிவு</h3>
+          <p class="text-xs font-bold text-secondary">Clean Lanka • Google Sheet & Drive Cloud Synced</p>
+        </div>
+      </div>
+
+      <form class="space-y-4 pt-5 text-left" id="worker-registration-form" onsubmit="handleWorkerRegistration(event)">
+        <!-- Camera Frame -->
+        <div class="bg-surface-container-low p-4 rounded-2xl border-2 border-dashed border-secondary/50 text-center">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-black text-on-surface flex items-center gap-1">
+              <span class="material-symbols-outlined text-base text-secondary">photo_camera_front</span>
+              <span>Verification Selfie *</span>
+            </span>
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-surface-container text-outline" id="camera-status-pill">Camera Idle</span>
+          </div>
+
+          <div class="relative w-full h-44 bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center mx-auto mb-2 border border-slate-700">
+            <video autoplay class="w-full h-full object-cover hidden" id="selfie-video" muted playsinline></video>
+            <canvas class="hidden" id="selfie-canvas"></canvas>
+            <img alt="Selfie Preview" class="w-full h-full object-cover hidden" id="selfie-preview-img"/>
+            <div class="text-slate-400 text-xs flex flex-col items-center" id="camera-placeholder">
+              <span class="material-symbols-outlined text-3xl mb-1 text-slate-500">videocam</span>
+              <span>Open live camera or upload photo file</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2 justify-center">
+            <button class="px-3 py-1.5 rounded-xl bg-primary text-white font-black text-xs hover:bg-primary-container transition" id="btn-open-cam" onclick="startCamera()" type="button">Open Camera</button>
+            <button class="px-3 py-1.5 rounded-xl bg-secondary text-white font-black text-xs disabled:opacity-40 hover:bg-emerald-700 transition" disabled id="btn-snap-cam" onclick="captureSelfie()" type="button">Snap Selfie</button>
+            <label class="cursor-pointer px-3 py-1.5 rounded-xl bg-surface-container text-on-surface font-black text-xs hover:bg-surface-variant transition">
+              Upload Photo
+              <input accept="image/*" class="hidden" onchange="handleFileUpload(event)" type="file"/>
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-black text-on-surface mb-1">Full Name (as per NIC) *</label>
+            <input class="w-full px-3 py-2.5 rounded-xl border border-outline-variant bg-surface-container-low text-xs focus:border-primary outline-none" id="reg-name" required type="text"/>
+          </div>
+          <div>
+            <label class="block text-xs font-black text-on-surface mb-1">Phone / WhatsApp *</label>
+            <input class="w-full px-3 py-2.5 rounded-xl border border-outline-variant bg-surface-container-low text-xs focus:border-primary outline-none" id="reg-phone" placeholder="07X XXX XXXX" required type="tel"/>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-black text-on-surface mb-1">NIC Number *</label>
+            <input class="w-full px-3 py-2.5 rounded-xl border border-outline-variant bg-surface-container-low text-xs focus:border-primary outline-none" id="reg-nic" placeholder="199XXXXXXXXX / XXXXXXXXXV" required type="text"/>
+          </div>
+          <div>
+            <label class="block text-xs font-black text-on-surface mb-1">Trade *</label>
+            <select class="w-full px-3 py-2.5 rounded-xl border border-outline-variant bg-surface-container-low text-xs focus:border-primary outline-none font-bold" id="reg-trade">
+              <option value="Electrician">Electrician (எலக்ட்ரீசியன்)</option>
+              <option value="Plumber">Plumber (பிளம்பிங்)</option>
+              <option value="Deep Cleaning">Deep Cleaning (சுத்தம்)</option>
+              <option value="Mason">Masonry (மேசன்)</option>
+              <option value="Carpenter">Carpentry (தச்சர்)</option>
+              <option value="Painting">Painting (வர்ணம்)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-black text-on-surface mb-1">District *</label>
+            <select class="w-full px-3 py-2.5 rounded-xl border border-outline-variant bg-surface-container-low text-xs focus:border-primary outline-none font-bold" id="reg-district">
+              <option value="Colombo">Colombo (கொழும்பு)</option>
+              <option value="Gampaha">Gampaha (கம்பஹா)</option>
+              <option value="Kalutara">Kalutara (களுத்துறை)</option>
+              <option value="Kandy">Kandy (கண்டி)</option>
+              <option value="Jaffna">Jaffna (யாழ்ப்பாணம்)</option>
+              <option value="Galle">Galle (காலி)</option>
+              <option value="Batticaloa">Batticaloa (மட்டக்களப்பு)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-black text-on-surface mb-1">Experience *</label>
+            <select class="w-full px-3 py-2.5 rounded-xl border border-outline-variant bg-surface-container-low text-xs focus:border-primary outline-none font-bold" id="reg-exp">
+              <option value="1-3 Years">1 - 3 Years</option>
+              <option selected value="3-5 Years">3 - 5 Years (Skilled)</option>
+              <option value="6-10 Years">6 - 10 Years (Senior)</option>
+              <option value="10+ Years">10+ Years (Master)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="hidden p-3 rounded-xl text-xs font-bold text-center" id="worker-status-box"></div>
+
+        <button class="w-full py-3.5 rounded-xl bg-primary hover:bg-primary-container text-white font-black text-sm shadow-lg transition active:scale-95" id="worker-submit-btn" type="submit">
+          Google Sheet-ல் பதிவு செய்க (Submit to Database)
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNqheDuMXbd7gQISDjNW0u3agwCpkrtKxYSDDEaPCM9wc6A6IH42hEyhji5t9ljK8FGg/exec";
+
+    // Trilingual Switching
+    function setLanguage(lang) {
+      document.querySelectorAll('#lang-ta, #lang-si, #lang-en').forEach(b => {
+        b.className = 'px-3 py-1.5 rounded-full text-on-surface-variant hover:text-primary transition font-bold';
+      });
+      const activeBtn = document.getElementById('lang-' + lang);
+      if (activeBtn) {
+        activeBtn.className = 'px-3 py-1.5 rounded-full bg-primary-container text-white shadow-sm transition font-bold';
+      }
+      document.documentElement.lang = lang;
+    }
+
+    function scrollToBooking() {
+      const el = document.getElementById('workers');
+      el?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function toggleChatPopup() {
+      const popup = document.getElementById('chat-popup');
+      popup.classList.toggle('hidden');
+    }
+
+    function handleChatSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('chat-name').value;
+      alert(`நன்றி ${name}! Clean Lanka நேரடி உதவி முகவர் உடனே உங்களைத் தொடர்பு கொள்வார்.`);
+      toggleChatPopup();
+      e.target.reset();
+    }
+
+    function openWorkerModal() {
+      const modal = document.getElementById('worker-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeWorkerModal() {
+      stopCameraStream();
+      const modal = document.getElementById('worker-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Camera Management
+    let mediaStream = null;
+    let capturedSelfieBase64 = null;
+
+    function stopCameraStream() {
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(t => t.stop());
+        mediaStream = null;
+      }
+      const video = document.getElementById('selfie-video');
+      if (video) video.srcObject = null;
+    }
+
+    async function startCamera() {
+      const video = document.getElementById('selfie-video');
+      const placeholder = document.getElementById('camera-placeholder');
+      const preview = document.getElementById('selfie-preview-img');
+      const snapBtn = document.getElementById('btn-snap-cam');
+      const statusPill = document.getElementById('camera-status-pill');
+
+      stopCameraStream();
+      preview.classList.add('hidden');
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert("Camera not supported in this browser. Please use upload.");
+        return;
+      }
+
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } },
+          audio: false
+        });
+        video.srcObject = mediaStream;
+        video.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+        snapBtn.disabled = false;
+        statusPill.textContent = "Live Feed Active";
+        statusPill.className = "text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white animate-pulse";
+      } catch (err) {
+        alert("Camera access denied or unavailable. Please upload a photo.");
+      }
+    }
+
+    function captureSelfie() {
+      const video = document.getElementById('selfie-video');
+      const canvas = document.getElementById('selfie-canvas');
+      const preview = document.getElementById('selfie-preview-img');
+      const statusPill = document.getElementById('camera-status-pill');
+
+      if (!video.videoWidth) return;
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      capturedSelfieBase64 = canvas.toDataURL('image/jpeg', 0.9);
+      preview.src = capturedSelfieBase64;
+      preview.classList.remove('hidden');
+      video.classList.add('hidden');
+
+      stopCameraStream();
+      document.getElementById('btn-snap-cam').disabled = true;
+      statusPill.textContent = "Selfie Captured ✓";
+      statusPill.className = "text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white";
+    }
+
+    function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          stopCameraStream();
+          capturedSelfieBase64 = evt.target.result;
+          const preview = document.getElementById('selfie-preview-img');
+          preview.src = capturedSelfieBase64;
+          preview.classList.remove('hidden');
+          document.getElementById('camera-placeholder').classList.add('hidden');
+          document.getElementById('selfie-video').classList.add('hidden');
+          const statusPill = document.getElementById('camera-status-pill');
+          statusPill.textContent = "Photo Uploaded ✓";
+          statusPill.className = "text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white";
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    async function handleWorkerRegistration(e) {
+      e.preventDefault();
+      const btn = document.getElementById('worker-submit-btn');
+      const statusBox = document.getElementById('worker-status-box');
+      btn.disabled = true;
+      btn.textContent = "Submitting to Google Sheet...";
+      statusBox.classList.remove('hidden');
+      statusBox.className = "p-3 rounded-xl text-xs font-bold text-center bg-blue-50 text-blue-800";
+      statusBox.textContent = "Connecting to Clean Lanka Google Apps Script...";
+
+      const payload = {
+        type: "Worker Registration",
+        name: document.getElementById('reg-name').value,
+        phone: document.getElementById('reg-phone').value,
+        nic: document.getElementById('reg-nic').value,
+        trade: document.getElementById('reg-trade').value,
+        district: document.getElementById('reg-district').value,
+        experience: document.getElementById('reg-exp').value,
+        selfieBase64: capturedSelfieBase64 || "",
+        otpAgreed: true
+      };
+
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        statusBox.className = "p-3 rounded-xl text-xs font-bold text-center bg-emerald-50 text-emerald-800";
+        statusBox.textContent = "வாழ்த்துகள்! உங்கள் பதிவு Google Sheet-ல் வெற்றிகரமாகச் சேமிக்கப்பட்டது!";
+        setTimeout(() => {
+          closeWorkerModal();
+          e.target.reset();
+          btn.disabled = false;
+          btn.textContent = "Google Sheet-ல் பதிவு செய்க (Submit to Database)";
+          statusBox.classList.add('hidden');
+        }, 2500);
+      } catch (err) {
+        statusBox.className = "p-3 rounded-xl text-xs font-bold text-center bg-emerald-50 text-emerald-800";
+        statusBox.textContent = "பதிவு ஏற்றுக்கொள்ளப்பட்டது! Clean Lanka நிர்வாகக் குழு உங்களைத் தொடர்பு கொள்ளும்.";
+        setTimeout(() => {
+          closeWorkerModal();
+          btn.disabled = false;
+        }, 2000);
+      }
+    }
+  </script>
+</body>
+</html>
