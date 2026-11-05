@@ -939,4 +939,42 @@
       class="text-center text-sm" aria-live="polite"></p>
   </form>
 </section>
+    <script>
+document.getElementById("customerRegisterForm")
+.addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("customerName").value.trim();
+  const email = document.getElementById("customerEmail").value.trim();
+  const password = document.getElementById("customerPassword").value;
+  const confirmPassword = document.getElementById("customerConfirmPassword").value;
+  const message = document.getElementById("customerRegisterMessage");
+
+  if (password !== confirmPassword) {
+    message.textContent = "Passwords do not match.";
+    return;
+  }
+
+  message.textContent = "Creating your account...";
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      data: {
+        full_name: name
+      },
+      emailRedirectTo: "https://cleanlanka.lk"
+    }
+  });
+
+  if (error) {
+    message.textContent = error.message;
+    return;
+  }
+
+  message.textContent =
+    "Registration successful! Please check your email to verify your account.";
+});
+                                        </script>
 </body></html>
