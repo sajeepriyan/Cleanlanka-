@@ -901,6 +901,26 @@
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 </script>
 
+
+<!-- CUSTOMER / WORKER LOGIN -->
+<section id="account-login" class="max-w-xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg scroll-mt-28">
+  <h2 class="text-2xl font-bold text-center text-emerald-700">Customer &amp; Worker Login</h2>
+  <p class="text-center text-gray-500 mt-2">Sign in after confirming your email address</p>
+  <form id="loginForm" class="mt-6 space-y-4">
+    <select id="loginRole" required class="w-full p-3 border rounded-lg">
+      <option value="">Select Account Type</option>
+      <option value="customer">Customer</option>
+      <option value="worker">Service Worker</option>
+    </select>
+    <input id="loginEmail" type="email" placeholder="Email Address" autocomplete="username" required class="w-full p-3 border rounded-lg">
+    <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" required class="w-full p-3 border rounded-lg">
+    <button id="loginSubmit" type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white p-3 rounded-lg font-bold">Sign In</button>
+    <p id="loginMessage" class="text-center text-sm" aria-live="polite"></p>
+  </form>
+  <button id="logoutButton" type="button" class="hidden w-full mt-3 border border-gray-300 text-gray-700 p-3 rounded-lg font-bold">Sign Out</button>
+  <p class="text-xs text-gray-500 mt-3 text-center">If you have not confirmed your email, open the confirmation email first.</p>
+</section>
+
 <!-- CUSTOMER REGISTRATION -->
 <section id="customer-register" class="max-w-xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg scroll-mt-28">
   <h2 class="text-2xl font-bold text-center text-emerald-700">Customer Registration</h2>
@@ -947,7 +967,7 @@
     element.classList.toggle('text-emerald-700', !isError);
   }
 
-  async function registerAccount({formId, nameId, emailId, passwordId, confirmId, messageId, role, extraData = {}}) {
+  async function registerAccount({formId, nameId, emailId, passwordId, confirmId, messageId, role}) {
     const form = document.getElementById(formId);
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -958,29 +978,33 @@
       const message = document.getElementById(messageId);
       const submit = form.querySelector('button[type="submit"]');
 
-      if (password !== confirmPassword) { showMessage(message, 'Passwords do not match.', true); return; }
-      if (password.length < 8) { showMessage(message, 'Password must contain at least 8 characters.', true); return; }
-      submit.disabled = true;
-      submit.classList.add('opacity-60', 'cursor-not-allowed');
-      showMessage(message, 'Creating your account...');
+      if (password !== confirmPassword) {
+        showMessage(message, 'Passwords do not match.', true);
+        return;
+      }
+      if (password.length < 8) {
+        showMessage(message, 'Password must contain at least 8 characters.', true);
+        return;
+      }
 
+      submit.disabled = true;
+      showMessage(message, 'Creating your account...');
       try {
-        const { data, error } = await supabaseClient.auth.signUp({
+        const { error } = await supabaseClient.auth.signUp({
           email,
           password,
           options: {
-            data: { full_name: name, account_type: role, ...extraData },
+            data: { full_name: name, account_type: role },
             emailRedirectTo: 'https://cleanlanka.lk'
           }
         });
         if (error) throw error;
-        showMessage(message, 'Registration submitted. Please open the confirmation email sent to ' + email + ' and confirm your email before signing in.');
+        showMessage(message, 'Registration submitted. Please confirm your email, then sign in using the Login section.');
         form.reset();
       } catch (error) {
         showMessage(message, error.message || 'Registration failed. Please try again.', true);
       } finally {
         submit.disabled = false;
-        submit.classList.remove('opacity-60', 'cursor-not-allowed');
       }
     });
   }
@@ -991,32 +1015,156 @@
     messageId: 'customerRegisterMessage', role: 'customer'
   });
 
-  // Worker details are submitted together with the worker's email signup.
+  // Worker details are stored in Auth metadata during sign-up.
+  // After email confirmation and sign-in, they are copied into worker_profiles.
   const workerFormClean = document.getElementById('workerRegisterForm');
   workerFormClean.addEventListener('submit', async (event) => {
     event.preventDefault();
     const val = id => document.getElementById(id).value.trim();
-    const name = val('workerName'), email = val('workerEmail');
+    const name = val('workerName');
+    const email = val('workerEmail');
     const password = document.getElementById('workerPassword').value;
     const confirmPassword = document.getElementById('workerConfirmPassword').value;
     const message = document.getElementById('workerRegisterMessage');
     const submit = workerFormClean.querySelector('button[type="submit"]');
-    if (password !== confirmPassword) { showMessage(message, 'Passwords do not match.', true); return; }
-    submit.disabled = true; showMessage(message, 'Creating your worker account...');
+
+    if (password !== confirmPassword) {
+      showMessage(message, 'Passwords do not match.', true);
+      return;
+    }
+    if (password.length < 8) {
+      showMessage(message, 'Password must contain at least 8 characters.', true);
+      return;
+    }
+
+    submit.disabled = true;
+    showMessage(message, 'Creating your worker account...');
     try {
       const { error } = await supabaseClient.auth.signUp({
-        email, password,
-        options: { data: {
-          full_name: name, account_type: 'worker', phone: val('workerPhone'),
-          district: val('workerDistrict'), address: val('workerAddress'), skills: val('workerSkills'),
-          experience: val('workerExperience'), expected_price_lkr: val('workerPrice'), verification_status: 'pending'
-        }, emailRedirectTo: 'https://cleanlanka.lk' }
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+            account_type: 'worker',
+            Phone: val('workerPhone'),
+            district: val('workerDistrict'),
+            address: val('workerAddress'),
+            skills: val('workerSkills'),
+            experience_years: Number(val('workerExperience')),
+            service_price_lkr: Number(val('workerPrice')),
+            availability: 'Available',
+            verification_status: 'pending'
+          },
+          emailRedirectTo: 'https://cleanlanka.lk'
+        }
       });
       if (error) throw error;
-      showMessage(message, 'Worker registration submitted. Please confirm your email. Your application will remain pending review.');
+      showMessage(message, 'Worker registration submitted. Confirm your email, then sign in from the Login section. Your application will remain pending review.');
       workerFormClean.reset();
-    } catch (error) { showMessage(message, error.message || 'Registration failed.', true); }
-    finally { submit.disabled = false; }
+    } catch (error) {
+      showMessage(message, error.message || 'Registration failed. Please try again.', true);
+    } finally {
+      submit.disabled = false;
+    }
+  });
+
+  // Create the worker profile once, after the user has confirmed email and signed in.
+  async function saveWorkerProfileAfterLogin(user) {
+    const metadata = user.user_metadata || {};
+    if (metadata.account_type !== 'worker') return;
+
+    const { data: existing, error: lookupError } = await supabaseClient
+      .from('worker_profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (lookupError) {
+      throw new Error('Signed in, but could not check the worker profile. Please contact Clean Lanka support.');
+    }
+    if (existing) return;
+
+    const skills = String(metadata.skills || '')
+      .split(',')
+      .map(skill => skill.trim())
+      .filter(Boolean);
+
+    const profile = {
+      user_id: user.id,
+      full_name: metadata.full_name || '',
+      email: user.email || '',
+      district: metadata.district || '',
+      address: metadata.address || '',
+      skills,
+      experience_years: Number(metadata.experience_years || 0),
+      service_price_lkr: Number(metadata.service_price_lkr || 0),
+      availability: metadata.availability || 'Available',
+      selfie_storage_path: null,
+      nic_storage_path: null,
+      verification_status: 'pending',
+      is_available: false,
+      Phone: metadata.Phone || ''
+    };
+
+    const { error: insertError } = await supabaseClient
+      .from('worker_profiles')
+      .insert(profile);
+
+    if (insertError) {
+      throw new Error('Login succeeded, but the worker profile could not be saved. Please check the worker_profiles insert policy and try again.');
+    }
+  }
+
+  const loginForm = document.getElementById('loginForm');
+  loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const role = document.getElementById('loginRole').value;
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const message = document.getElementById('loginMessage');
+    const submit = document.getElementById('loginSubmit');
+
+    if (!role) {
+      showMessage(message, 'Please select Customer or Service Worker.', true);
+      return;
+    }
+
+    submit.disabled = true;
+    showMessage(message, 'Signing in...');
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+
+      const actualRole = data.user?.user_metadata?.account_type;
+      if (actualRole !== role) {
+        await supabaseClient.auth.signOut();
+        throw new Error('This email is registered under a different account type. Please select the correct type.');
+      }
+
+      if (role === 'worker') {
+        await saveWorkerProfileAfterLogin(data.user);
+        showMessage(message, 'Signed in. Your worker profile is saved as Pending Review. You cannot receive bookings until approval.');
+      } else {
+        showMessage(message, 'Customer sign-in successful.');
+      }
+      document.getElementById('logoutButton').classList.remove('hidden');
+    } catch (error) {
+      showMessage(message, error.message || 'Sign-in failed. Check your email and password.', true);
+    } finally {
+      submit.disabled = false;
+    }
+  });
+
+  document.getElementById('logoutButton').addEventListener('click', async () => {
+    const message = document.getElementById('loginMessage');
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) {
+      showMessage(message, error.message || 'Could not sign out.', true);
+      return;
+    }
+    document.getElementById('logoutButton').classList.add('hidden');
+    showMessage(message, 'You have signed out successfully.');
   });
 </script>
 </body>
