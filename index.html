@@ -918,7 +918,33 @@
     <p id="loginMessage" class="text-center text-sm" aria-live="polite"></p>
   </form>
   <button id="logoutButton" type="button" class="hidden w-full mt-3 border border-gray-300 text-gray-700 p-3 rounded-lg font-bold">Sign Out</button>
-  <p class="text-xs text-gray-500 mt-3 text-center">If you have not confirmed your email, open the confirmation email first.</p>
+  <p id="emailConfirmationHint" class="text-xs text-gray-500 mt-3 text-center">Email confirmation is required only before your first sign-in.</p>
+</section>
+
+
+<!-- WORKER DASHBOARD -->
+<section id="workerDashboard" class="hidden max-w-3xl mx-auto my-8 p-6 bg-white rounded-2xl shadow-lg">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <p class="text-sm font-semibold text-emerald-700">CLEAN LANKA</p>
+      <h2 class="text-2xl font-bold text-gray-900">Worker Dashboard</h2>
+    </div>
+    <span id="workerVerificationBadge" class="px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold">Pending Review</span>
+  </div>
+  <p id="workerDashboardMessage" class="mt-4 text-sm text-gray-600" aria-live="polite"></p>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Full name</p><p id="workerDashName" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Email</p><p id="workerDashEmail" class="font-semibold text-gray-900 break-all">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Phone</p><p id="workerDashPhone" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">District</p><p id="workerDashDistrict" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50 sm:col-span-2"><p class="text-xs text-gray-500">Town / Area</p><p id="workerDashAddress" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50 sm:col-span-2"><p class="text-xs text-gray-500">Skills</p><p id="workerDashSkills" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Experience</p><p id="workerDashExperience" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Expected price (LKR)</p><p id="workerDashPrice" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Availability</p><p id="workerDashAvailability" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Booking access</p><p id="workerDashBookings" class="font-semibold text-gray-900">—</p></div>
+  </div>
+  <p class="mt-5 text-sm text-gray-500">Your application remains pending until an administrator reviews it. You cannot receive bookings before approval.</p>
 </section>
 
 <!-- CUSTOMER REGISTRATION -->
@@ -1130,6 +1156,59 @@
     }
   }
 
+
+  // Load the signed-in worker's own saved profile and show the dashboard.
+  async function loadWorkerDashboard(user) {
+    const dashboard = document.getElementById('workerDashboard');
+    const dashboardMessage = document.getElementById('workerDashboardMessage');
+    dashboard.classList.remove('hidden');
+    dashboardMessage.textContent = 'Loading your worker profile...';
+
+    const { data: profile, error } = await supabaseClient
+      .from('worker_profiles')
+      .select('full_name,email,district,address,skills,experience_years,service_price_lkr,availability,verification_status,is_available,Phone')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Worker dashboard profile lookup error:', error);
+      dashboardMessage.textContent = 'Your login worked, but the profile could not be displayed. Database message: ' + error.message;
+      return;
+    }
+
+    if (!profile) {
+      dashboardMessage.textContent = 'Your worker profile was not found. Please contact Clean Lanka support.';
+      return;
+    }
+
+    const put = (id, value) => {
+      document.getElementById(id).textContent =
+        value === null || value === undefined || value === '' ? '—' : String(value);
+    };
+
+    put('workerDashName', profile.full_name);
+    put('workerDashEmail', profile.email || user.email);
+    put('workerDashPhone', profile.Phone);
+    put('workerDashDistrict', profile.district);
+    put('workerDashAddress', profile.address);
+    put('workerDashSkills', Array.isArray(profile.skills) ? profile.skills.join(', ') : profile.skills);
+    put('workerDashExperience', profile.experience_years === null ? '—' : profile.experience_years + ' years');
+    put('workerDashPrice', profile.service_price_lkr === null ? '—' : Number(profile.service_price_lkr).toLocaleString('en-LK'));
+    put('workerDashAvailability', profile.availability);
+    put('workerDashBookings', profile.verification_status === 'approved' && profile.is_available ? 'Eligible after approval' : 'Not available until approval');
+
+    const badge = document.getElementById('workerVerificationBadge');
+    const status = profile.verification_status || 'pending';
+    badge.textContent = status.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    badge.className = status === 'approved'
+      ? 'px-4 py-2 rounded-full bg-green-100 text-green-800 text-sm font-bold'
+      : 'px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold';
+
+    dashboardMessage.textContent = status === 'approved'
+      ? 'Your worker profile is approved.'
+      : 'Your profile is saved and waiting for administrator review.';
+  }
+
   const loginForm = document.getElementById('loginForm');
   loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -1158,10 +1237,13 @@
 
       if (role === 'worker') {
         await saveWorkerProfileAfterLogin(data.user);
-        showMessage(message, 'Signed in. Your worker profile is saved as Pending Review. You cannot receive bookings until approval.');
+        showMessage(message, 'Worker sign-in successful.');
+        await loadWorkerDashboard(data.user);
       } else {
         showMessage(message, 'Customer sign-in successful.');
+        document.getElementById('workerDashboard').classList.add('hidden');
       }
+      document.getElementById('emailConfirmationHint').classList.add('hidden');
       document.getElementById('logoutButton').classList.remove('hidden');
     } catch (error) {
       showMessage(message, error.message || 'Sign-in failed. Check your email and password.', true);
@@ -1178,6 +1260,8 @@
       return;
     }
     document.getElementById('logoutButton').classList.add('hidden');
+    document.getElementById('workerDashboard').classList.add('hidden');
+    document.getElementById('emailConfirmationHint').classList.remove('hidden');
     showMessage(message, 'You have signed out successfully.');
   });
 </script>
