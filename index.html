@@ -17,7 +17,14 @@
         background-color: #ffffff;
       }
     }
-  </style>
+  
+  body.registration-mode > header,
+  body.registration-mode > main,
+  body.registration-mode > footer,
+  body.registration-mode > #account-login { display:none !important; }
+  #registration-screen { min-height:75vh; }
+  #registration-screen section { border:1px solid #d1fae5; }
+</style>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
     tailwind.config = {
@@ -158,10 +165,10 @@
 <div class="flex items-center justify-between h-24">
 <!-- OFFICIAL BRAND LOGO -->
 <a class="flex items-center gap-3.5 group" href="#">
-<img alt="Clean Lanka Official Logo" class="h-16 sm:h-[70px] w-auto object-contain transition-transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSh7GcRie2m5v1OiH4IUu5lxi4Qmpn6h_Pep3G-39-hWm7AbRMjRiSaW8SsexcB7a_7tX9SAvOol6H691xnReL6mdZRfnbYcd-7BNMTw7Gg4htwndima_BEOAvVMt9HiksX1Ri23atqe1GVO1CKI16GOVKspLITaWrltY2U16g_mM9bw1hqxe2nZo7REvfttd1v1-sltMDGf-rk3tCAAVbMLB9FiHnjPpY0SBgHgnSEQYH5v3C8xoNg"/>
+<img alt="Clean Lanka Official Logo" class="h-20 sm:h-24 w-auto object-contain transition-transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSh7GcRie2m5v1OiH4IUu5lxi4Qmpn6h_Pep3G-39-hWm7AbRMjRiSaW8SsexcB7a_7tX9SAvOol6H691xnReL6mdZRfnbYcd-7BNMTw7Gg4htwndima_BEOAvVMt9HiksX1Ri23atqe1GVO1CKI16GOVKspLITaWrltY2U16g_mM9bw1hqxe2nZo7REvfttd1v1-sltMDGf-rk3tCAAVbMLB9FiHnjPpY0SBgHgnSEQYH5v3C8xoNg"/>
 <div class="flex flex-col">
-<span class="text-2xl sm:text-[26px] font-extrabold text-primary tracking-tight leading-none">CLEAN LANKA</span>
-<span class="text-xs sm:text-[13px] font-bold text-secondary uppercase tracking-widest mt-1">Sri Lanka Domestic Services</span>
+<span class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-primary tracking-tight leading-none">CLEAN LANKA</span>
+<span class="text-xs sm:text-sm font-bold text-secondary uppercase tracking-widest mt-1.5">Sri Lanka Domestic Services</span>
 </div>
 </a>
 <!-- NAV LINKS (DESKTOP) -->
@@ -179,7 +186,7 @@
 <span class="text-gray-300">|</span>
 <span>English</span>
 </div>
-<a class="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-bold text-[16px] sm:text-[17px] px-6 py-3 rounded-xl transition-all shadow-md shadow-emerald-950/10" href="#customer-register">
+<a class="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-bold text-[16px] sm:text-[17px] px-6 py-3 rounded-xl transition-all shadow-md shadow-emerald-950/10" href="#" onclick="openRegistration('customer'); return false;">
             Book a Service
           </a>
 </div>
@@ -214,14 +221,29 @@
             </p>
 <!-- DUAL LARGE CTA BUTTONS (py-4 px-8, 18px font-bold) -->
 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-10">
-<a class="inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary-dark text-white font-bold text-[18px] py-4 px-8 rounded-xl transition-all shadow-lg shadow-emerald-950/20 text-center" href="#customer-register">
+<a class="inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary-dark text-white font-bold text-[18px] py-4 px-8 rounded-xl transition-all shadow-lg shadow-emerald-950/20 text-center" href="#" onclick="openRegistration('customer'); return false;">
 <span>Book a Service Now</span>
 <span class="material-symbols-outlined text-[22px]">calendar_today</span>
 </a>
-<a class="inline-flex items-center justify-center gap-2 bg-white hover:bg-emerald-50 text-primary border-2 border-primary font-bold text-[18px] py-4 px-8 rounded-xl transition-all text-center" href="#worker-register">
+<a class="inline-flex items-center justify-center gap-2 bg-white hover:bg-emerald-50 text-primary border-2 border-primary font-bold text-[18px] py-4 px-8 rounded-xl transition-all text-center" href="#" onclick="openRegistration('worker'); return false;">
 <span>Join as a Service Worker</span>
 <span class="material-symbols-outlined text-[20px]">badge</span>
 </a>
+</div>
+<!-- VISUAL REGISTRATION CHOICES: first screen -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 mb-10" id="registration-choices">
+  <button type="button" onclick="openRegistration('customer')" class="group text-left rounded-[28px] p-5 sm:p-7 bg-gradient-to-br from-emerald-500 via-green-600 to-emerald-900 text-white shadow-xl hover:-translate-y-1 transition-all border-4 border-white/70">
+    <div class="flex items-center gap-4">
+      <svg viewBox="0 0 180 150" role="img" aria-label="Cartoon family at home" class="w-28 h-28 sm:w-36 sm:h-36 shrink-0"><circle cx="90" cy="72" r="68" fill="#ffffff" opacity=".16"/><path d="M30 82 90 28l60 54v48H30Z" fill="#fff"/><path d="M20 84 90 20l70 64" fill="none" stroke="#facc15" stroke-width="9" stroke-linecap="round"/><rect x="72" y="91" width="36" height="39" rx="5" fill="#16a34a"/><circle cx="57" cy="72" r="19" fill="#f6c49b"/><path d="M38 70q3-25 23-20 13 4 15 20-12-8-38 0" fill="#243047"/><path d="M38 95q19-18 38 0v29H38Z" fill="#2563eb"/><circle cx="119" cy="76" r="17" fill="#f3bd8d"/><path d="M101 74q1-23 20-21 15 2 17 21-18-9-37 0" fill="#49352e"/><path d="M101 96q18-17 36 0v28h-36Z" fill="#ec4899"/><circle cx="88" cy="103" r="13" fill="#f6c49b"/><path d="M75 101q2-17 15-16 12 1 13 16-12-7-28 0" fill="#47352c"/></svg>
+      <div><span class="inline-flex rounded-full bg-white/20 px-3 py-1 text-xs font-extrabold uppercase tracking-wider">For homes & families</span><h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Customer Registration</h2><p class="text-white/90 mt-2">Book trusted help for your home.</p><span class="inline-flex mt-4 bg-white text-emerald-800 rounded-full px-5 py-3 font-extrabold shadow">Get Started →</span></div>
+    </div>
+  </button>
+  <button type="button" onclick="openRegistration('worker')" class="group text-left rounded-[28px] p-5 sm:p-7 bg-gradient-to-br from-sky-400 via-blue-600 to-blue-950 text-white shadow-xl hover:-translate-y-1 transition-all border-4 border-white/70">
+    <div class="flex items-center gap-4">
+      <svg viewBox="0 0 180 150" role="img" aria-label="Cartoon home service worker" class="w-28 h-28 sm:w-36 sm:h-36 shrink-0"><circle cx="90" cy="74" r="68" fill="#ffffff" opacity=".16"/><path d="M48 56q4-37 43-37 38 0 43 37Z" fill="#123b80"/><path d="M39 55h105q-4 13-17 13H54q-12 0-15-13" fill="#0b2c66"/><circle cx="91" cy="79" r="31" fill="#d99a6b"/><path d="M61 76q2-35 31-35 27 0 31 35-18-12-62 0" fill="#2b211d"/><circle cx="80" cy="80" r="3" fill="#172554"/><circle cx="102" cy="80" r="3" fill="#172554"/><path d="M81 94q10 10 20 0" fill="none" stroke="#7c2d12" stroke-width="3" stroke-linecap="round"/><path d="M43 145q5-47 48-47 43 0 48 47" fill="#f8fafc"/><path d="M67 108h48l12 37H55Z" fill="#2563eb"/><path d="m126 94 17-24 8 6-16 25" fill="none" stroke="#facc15" stroke-width="7" stroke-linecap="round"/><circle cx="148" cy="68" r="8" fill="#cbd5e1"/></svg>
+      <div><span class="inline-flex rounded-full bg-white/20 px-3 py-1 text-xs font-extrabold uppercase tracking-wider">For skilled workers</span><h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Work Registration</h2><p class="text-white/90 mt-2">Join our network and share your skills.</p><span class="inline-flex mt-4 bg-white text-blue-800 rounded-full px-5 py-3 font-extrabold shadow">Register Now →</span></div>
+    </div>
+  </button>
 </div>
 <!-- TACTICAL SEARCH & DISTRICT SELECTOR BAR -->
 <div class="bg-white p-4 sm:p-5 rounded-2xl border-2 border-emerald-600/30 shadow-xl max-w-3xl">
@@ -789,7 +811,7 @@
 </div>
 <div>
 <h3 class="text-2xl font-extrabold">Need custom commercial cleaning or multi-day tradesmen?</h3>
-<p class="text-[17px] text-emerald-100 mt-1 font-normal">Our Colombo Operations Desk will dispatch vetted teams anywhere across the island.</p>
+<p class="text-[17px] text-emerald-100 mt-1 font-normal">Based in Kallady, Batticaloa - 3000, serving customers across Sri Lanka.</p>
 </div>
 </div>
 <div class="flex items-center gap-3">
@@ -875,7 +897,7 @@
 </div>
 <div class="p-4 rounded-xl bg-white/10 flex items-center gap-3">
 <span class="material-symbols-outlined text-[24px] text-emerald-300">verified</span>
-<span class="text-[15px] font-medium text-white">Registered under Sri Lanka Company Act. Audited domestic operations hub in Colombo 03.</span>
+<span class="text-[15px] font-medium text-white">Clean Lanka home services • Kallady, Batticaloa - 3000.</span>
 </div>
 </div>
 </div>
@@ -927,7 +949,7 @@
 </div>
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-emerald-400 text-[20px]">location_on</span>
-<span>Colombo 03 Operations Hub, Western Province, Sri Lanka</span>
+<span>Kallady, Batticaloa - 3000, Sri Lanka</span>
 </div>
 </div>
 </div>
@@ -1095,6 +1117,9 @@
   </div>
 </section>
 
+<!-- SECOND SCREEN: selected registration form -->
+<div id="registration-screen" class="hidden max-w-4xl mx-auto my-8 px-4">
+  <button type="button" onclick="closeRegistration()" class="mb-5 inline-flex items-center gap-2 rounded-full bg-slate-100 hover:bg-slate-200 px-5 py-3 font-bold text-slate-700">← Back to Home</button>
 <!-- CUSTOMER REGISTRATION -->
 <section id="customer-register" class="max-w-xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg scroll-mt-28">
   <h2 class="text-2xl font-bold text-center text-emerald-700">Customer Registration</h2>
@@ -1133,8 +1158,25 @@
   </form>
   <p class="text-center text-sm text-gray-500 mt-4">After email confirmation, your worker application must be reviewed before you can receive bookings.</p>
 </section>
+</div>
 
 <script>
+  function openRegistration(role) {
+    document.body.classList.add('registration-mode');
+    const screen = document.getElementById('registration-screen');
+    screen.classList.remove('hidden');
+    document.getElementById('customer-register').classList.toggle('hidden', role !== 'customer');
+    document.getElementById('worker-register').classList.toggle('hidden', role !== 'worker');
+    screen.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  function closeRegistration() {
+    document.body.classList.remove('registration-mode');
+    document.getElementById('registration-screen').classList.add('hidden');
+    document.getElementById('customer-register').classList.remove('hidden');
+    document.getElementById('worker-register').classList.remove('hidden');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
   function showMessage(element, message, isError = false) {
     element.textContent = message;
     element.classList.toggle('text-red-600', isError);
