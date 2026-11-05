@@ -1081,7 +1081,14 @@
       .maybeSingle();
 
     if (lookupError) {
-      throw new Error('Signed in, but could not check the worker profile. Please contact Clean Lanka support.');
+      console.error('worker_profiles lookup error:', lookupError);
+      throw new Error(
+        'Worker profile check failed: ' +
+        (lookupError.message || 'Unknown database error') +
+        (lookupError.code ? ' (Code: ' + lookupError.code + ')' : '') +
+        (lookupError.details ? ' — ' + lookupError.details : '') +
+        (lookupError.hint ? ' — Hint: ' + lookupError.hint : '')
+      );
     }
     if (existing) return;
 
@@ -1112,7 +1119,14 @@
       .insert(profile);
 
     if (insertError) {
-      throw new Error('Login succeeded, but the worker profile could not be saved. Please check the worker_profiles insert policy and try again.');
+      console.error('worker_profiles insert error:', insertError);
+      throw new Error(
+        'Worker login succeeded, but profile save failed: ' +
+        (insertError.message || 'Unknown database error') +
+        (insertError.code ? ' (Code: ' + insertError.code + ')' : '') +
+        (insertError.details ? ' — ' + insertError.details : '') +
+        (insertError.hint ? ' — Hint: ' + insertError.hint : '')
+      );
     }
   }
 
