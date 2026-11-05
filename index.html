@@ -97,7 +97,7 @@
 <span class="text-gray-300">|</span>
 <span>English</span>
 </div>
-<a class="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-bold text-[16px] sm:text-[17px] px-6 py-3 rounded-xl transition-all shadow-md shadow-emerald-950/10" href="#customer-register"
+<a class="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-bold text-[16px] sm:text-[17px] px-6 py-3 rounded-xl transition-all shadow-md shadow-emerald-950/10" href="#customer-register">
             Book a Service
           </a>
 </div>
@@ -132,11 +132,11 @@
             </p>
 <!-- DUAL LARGE CTA BUTTONS (py-4 px-8, 18px font-bold) -->
 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-10">
-<a class="inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary-dark text-white font-bold text-[18px] py-4 px-8 rounded-xl transition-all shadow-lg shadow-emerald-950/20 text-center" href="#customer-register"
+<a class="inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary-dark text-white font-bold text-[18px] py-4 px-8 rounded-xl transition-all shadow-lg shadow-emerald-950/20 text-center" href="#customer-register">
 <span>Book a Service Now</span>
 <span class="material-symbols-outlined text-[22px]">calendar_today</span>
 </a>
-<a class="inline-flex items-center justify-center gap-2 bg-white hover:bg-emerald-50 text-primary border-2 border-primary font-bold text-[18px] py-4 px-8 rounded-xl transition-all text-center" href="#worker-register" target="_blank">
+<a class="inline-flex items-center justify-center gap-2 bg-white hover:bg-emerald-50 text-primary border-2 border-primary font-bold text-[18px] py-4 px-8 rounded-xl transition-all text-center" href="#worker-register">
 <span>Join as a Service Worker</span>
 <span class="material-symbols-outlined text-[20px]">badge</span>
 </a>
@@ -895,155 +895,129 @@
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "YOUR_PROJECT_URL="https://eudzypjjnoiboqzqrlin.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "YOUR_PUBLISHABLE_KEY="sb_publishable_2Yh_kmsE9Kj5rtcdDmh0Kg_ctV6Aesv";
-
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+  // Supabase browser configuration. Publishable keys are intended for frontend use.
+  const SUPABASE_URL = "https://eudzypjjnoiboqzqrlin.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2Yh_kmsE9Kj5rtcdDmh0Kg_ctV6Aesv";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 </script>
+
 <!-- CUSTOMER REGISTRATION -->
-<section id="customer-register" class="max-w-xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg">
-  <h2 class="text-2xl font-bold text-center text-emerald-700">
-    Customer Registration
-  </h2>
-
-  <p class="text-center text-gray-500 mt-2">
-    Create your Clean Lanka customer account
-  </p>
-
+<section id="customer-register" class="max-w-xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg scroll-mt-28">
+  <h2 class="text-2xl font-bold text-center text-emerald-700">Customer Registration</h2>
+  <p class="text-center text-gray-500 mt-2">Create your Clean Lanka customer account</p>
   <form id="customerRegisterForm" class="mt-6 space-y-4">
-    <input id="customerName" type="text"
-      placeholder="Full Name" required
-      class="w-full p-3 border rounded-lg">
-
-    <input id="customerEmail" type="email"
-      placeholder="Email Address" required
-      class="w-full p-3 border rounded-lg">
-
-    <input id="customerPassword" type="password"
-      placeholder="Password" minlength="8" required
-      class="w-full p-3 border rounded-lg">
-
-    <input id="customerConfirmPassword" type="password"
-      placeholder="Confirm Password" minlength="8" required
-      class="w-full p-3 border rounded-lg">
-
-    <button type="submit"
-      class="w-full bg-emerald-600 text-white p-3 rounded-lg font-bold">
-      Create Customer Account
-    </button>
-
-    <p id="customerRegisterMessage"
-      class="text-center text-sm" aria-live="polite"></p>
+    <input id="customerName" type="text" placeholder="Full Name" autocomplete="name" required class="w-full p-3 border rounded-lg">
+    <input id="customerEmail" type="email" placeholder="Email Address" autocomplete="email" required class="w-full p-3 border rounded-lg">
+    <input id="customerPassword" type="password" placeholder="Password (minimum 8 characters)" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
+    <input id="customerConfirmPassword" type="password" placeholder="Confirm Password" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
+    <button id="customerSubmit" type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white p-3 rounded-lg font-bold">Create Customer Account</button>
+    <p id="customerRegisterMessage" class="text-center text-sm" aria-live="polite"></p>
   </form>
+  <p class="text-xs text-gray-500 mt-3 text-center">Email confirmation is required before sign-in.</p>
 </section>
-    <script>
-document.getElementById("customerRegisterForm")
-.addEventListener("submit", async function(event) {
-  event.preventDefault();
 
-  const name = document.getElementById("customerName").value.trim();
-  const email = document.getElementById("customerEmail").value.trim();
-  const password = document.getElementById("customerPassword").value;
-  const confirmPassword = document.getElementById("customerConfirmPassword").value;
-  const message = document.getElementById("customerRegisterMessage");
+<!-- WORKER REGISTRATION -->
+<section id="worker-register" class="max-w-2xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg scroll-mt-28">
+  <h2 class="text-2xl font-bold text-center text-emerald-700">Worker Registration</h2>
+  <p class="text-center text-gray-500 mt-2">Join Clean Lanka as a Service Professional</p>
+  <form id="workerRegisterForm" class="mt-6 space-y-4">
+    <input id="workerName" type="text" placeholder="Full Name" autocomplete="name" required class="w-full p-3 border rounded-lg">
+    <input id="workerPhone" type="tel" placeholder="Mobile Number" autocomplete="tel" required class="w-full p-3 border rounded-lg">
+    <input id="workerEmail" type="email" placeholder="Email Address" autocomplete="email" required class="w-full p-3 border rounded-lg">
+    <select id="workerDistrict" required class="w-full p-3 border rounded-lg">
+      <option value="">Select District</option>
+      <option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option> Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option>
+    </select>
+    <textarea id="workerAddress" placeholder="Town / Area (do not enter sensitive identity details here)" required class="w-full p-3 border rounded-lg"></textarea>
+    <input id="workerSkills" type="text" placeholder="Your Skills (Cleaning, Plumbing, Electrical...)" required class="w-full p-3 border rounded-lg">
+    <input id="workerExperience" type="number" min="0" placeholder="Years of Experience" required class="w-full p-3 border rounded-lg">
+    <input id="workerPrice" type="number" min="0" placeholder="Expected Price (LKR)" required class="w-full p-3 border rounded-lg">
+    <input id="workerPassword" type="password" placeholder="Create Password (minimum 8 characters)" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
+    <input id="workerConfirmPassword" type="password" placeholder="Confirm Password" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
+    <button id="workerSubmit" type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white p-3 rounded-lg font-bold">Create Worker Account</button>
+    <p id="workerRegisterMessage" class="text-center text-sm" aria-live="polite"></p>
+  </form>
+  <p class="text-center text-sm text-gray-500 mt-4">After email confirmation, your worker application must be reviewed before you can receive bookings.</p>
+</section>
 
-  if (password !== confirmPassword) {
-    message.textContent = "Passwords do not match.";
-    return;
+<script>
+  function showMessage(element, message, isError = false) {
+    element.textContent = message;
+    element.classList.toggle('text-red-600', isError);
+    element.classList.toggle('text-emerald-700', !isError);
   }
 
-  message.textContent = "Creating your account...";
+  async function registerAccount({formId, nameId, emailId, passwordId, confirmId, messageId, role, extraData = {}}) {
+    const form = document.getElementById(formId);
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const name = document.getElementById(nameId).value.trim();
+      const email = document.getElementById(emailId).value.trim();
+      const password = document.getElementById(passwordId).value;
+      const confirmPassword = document.getElementById(confirmId).value;
+      const message = document.getElementById(messageId);
+      const submit = form.querySelector('button[type="submit"]');
 
-  const { data, error } = await supabaseClient.auth.signUp({
-    email: email,
-    password: password,
-    options: {
-      data: {
-        full_name: name
-      },
-      emailRedirectTo: "https://cleanlanka.lk"
-    }
+      if (password !== confirmPassword) { showMessage(message, 'Passwords do not match.', true); return; }
+      if (password.length < 8) { showMessage(message, 'Password must contain at least 8 characters.', true); return; }
+      submit.disabled = true;
+      submit.classList.add('opacity-60', 'cursor-not-allowed');
+      showMessage(message, 'Creating your account...');
+
+      try {
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { full_name: name, account_type: role, ...extraData },
+            emailRedirectTo: 'https://cleanlanka.lk'
+          }
+        });
+        if (error) throw error;
+        showMessage(message, 'Registration submitted. Please open the confirmation email sent to ' + email + ' and confirm your email before signing in.');
+        form.reset();
+      } catch (error) {
+        showMessage(message, error.message || 'Registration failed. Please try again.', true);
+      } finally {
+        submit.disabled = false;
+        submit.classList.remove('opacity-60', 'cursor-not-allowed');
+      }
+    });
+  }
+
+  registerAccount({
+    formId: 'customerRegisterForm', nameId: 'customerName', emailId: 'customerEmail',
+    passwordId: 'customerPassword', confirmId: 'customerConfirmPassword',
+    messageId: 'customerRegisterMessage', role: 'customer'
   });
 
-  if (error) {
-    message.textContent = error.message;
-    return;
-  }
-
-  message.textContent =
-    "Registration successful! Please check your email to verify your account.";
-});
-        <!-- WORKER REGISTRATION -->
-<section id="worker-register" class="max-w-2xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg">
-
-  <h2 class="text-2xl font-bold text-center text-emerald-700">
-    Worker Registration
-  </h2>
-
-  <p class="text-center text-gray-500 mt-2">
-    Join Clean Lanka as a Service Professional
-  </p>
-
-  <form id="workerRegisterForm" class="mt-6 space-y-4">
-
-    <input id="workerName" type="text"
-      placeholder="Full Name" required
-      class="w-full p-3 border rounded-lg">
-
-    <input id="workerPhone" type="tel"
-      placeholder="Mobile Number" required
-      class="w-full p-3 border rounded-lg">
-
-    <input id="workerEmail" type="email"
-      placeholder="Email Address" required
-      class="w-full p-3 border rounded-lg">
-
-    <select id="workerDistrict" required
-      class="w-full p-3 border rounded-lg">
-      <option value="">Select District</option>
-      <option>Colombo</option>
-      <option>Gampaha</option>
-      <option>Kalutara</option>
-      <option>Kandy</option>
-      <option>Galle</option>
-      <option>Matara</option>
-      <option>Jaffna</option>
-      <option>Other District</option>
-    </select>
-
-    <textarea id="workerAddress"
-      placeholder="Home Address" required
-      class="w-full p-3 border rounded-lg"></textarea>
-
-    <input id="workerSkills" type="text"
-      placeholder="Your Skills (Cleaning, Plumbing, Electrical...)"
-      required class="w-full p-3 border rounded-lg">
-
-    <input id="workerExperience" type="number"
-      min="0" placeholder="Years of Experience"
-      required class="w-full p-3 border rounded-lg">
-
-    <input id="workerPrice" type="number"
-      min="0" placeholder="Expected Price (LKR)"
-      required class="w-full p-3 border rounded-lg">
-
-    <button type="submit"
-      class="w-full bg-emerald-600 text-white p-3 rounded-lg font-bold">
-      Submit Worker Registration
-    </button>
-
-    <p id="workerRegisterMessage"
-      class="text-center text-sm" aria-live="polite"></p>
-
-  </form>
-
-  <p class="text-center text-sm text-gray-500 mt-4">
-    Your registration will be reviewed by Clean Lanka Admin.
-  </p>
-
-</section>
-                                        </script>
-</body></html>
+  // Worker details are submitted together with the worker's email signup.
+  const workerFormClean = document.getElementById('workerRegisterForm');
+  workerFormClean.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const val = id => document.getElementById(id).value.trim();
+    const name = val('workerName'), email = val('workerEmail');
+    const password = document.getElementById('workerPassword').value;
+    const confirmPassword = document.getElementById('workerConfirmPassword').value;
+    const message = document.getElementById('workerRegisterMessage');
+    const submit = workerFormClean.querySelector('button[type="submit"]');
+    if (password !== confirmPassword) { showMessage(message, 'Passwords do not match.', true); return; }
+    submit.disabled = true; showMessage(message, 'Creating your worker account...');
+    try {
+      const { error } = await supabaseClient.auth.signUp({
+        email, password,
+        options: { data: {
+          full_name: name, account_type: 'worker', phone: val('workerPhone'),
+          district: val('workerDistrict'), address: val('workerAddress'), skills: val('workerSkills'),
+          experience: val('workerExperience'), expected_price_lkr: val('workerPrice'), verification_status: 'pending'
+        }, emailRedirectTo: 'https://cleanlanka.lk' }
+      });
+      if (error) throw error;
+      showMessage(message, 'Worker registration submitted. Please confirm your email. Your application will remain pending review.');
+      workerFormClean.reset();
+    } catch (error) { showMessage(message, error.message || 'Registration failed.', true); }
+    finally { submit.disabled = false; }
+  });
+</script>
+</body>
+</html>
