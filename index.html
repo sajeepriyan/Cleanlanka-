@@ -976,5 +976,74 @@ document.getElementById("customerRegisterForm")
   message.textContent =
     "Registration successful! Please check your email to verify your account.";
 });
+        <!-- WORKER REGISTRATION -->
+<section id="worker-register" class="max-w-2xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg">
+
+  <h2 class="text-2xl font-bold text-center text-emerald-700">
+    Worker Registration
+  </h2>
+
+  <p class="text-center text-gray-500 mt-2">
+    Join Clean Lanka as a Service Professional
+  </p>
+
+  <form id="workerRegisterForm" class="mt-6 space-y-4">
+
+    <input id="workerName" type="text"
+      placeholder="Full Name" required
+      class="w-full p-3 border rounded-lg">
+
+    <input id="workerPhone" type="tel"
+      placeholder="Mobile Number" required
+      class="w-full p-3 border rounded-lg">
+
+    <input id="workerEmail" type="email"
+      placeholder="Email Address" required
+      class="w-full p-3 border rounded-lg">
+
+    <select id="workerDistrict" required
+      class="w-full p-3 border rounded-lg">
+      <option value="">Select District</option>
+      <option>Colombo</option>
+      <option>Gampaha</option>
+      <option>Kalutara</option>
+      <option>Kandy</option>
+      <option>Galle</option>
+      <option>Matara</option>
+      <option>Jaffna</option>
+      <option>Other District</option>
+    </select>
+
+    <textarea id="workerAddress"
+      placeholder="Home Address" required
+      class="w-full p-3 border rounded-lg"></textarea>
+
+    <input id="workerSkills" type="text"
+      placeholder="Your Skills (Cleaning, Plumbing, Electrical...)"
+      required class="w-full p-3 border rounded-lg">
+
+    <input id="workerExperience" type="number"
+      min="0" placeholder="Years of Experience"
+      required class="w-full p-3 border rounded-lg">
+
+    <input id="workerPrice" type="number"
+      min="0" placeholder="Expected Price (LKR)"
+      required class="w-full p-3 border rounded-lg">
+
+    <button type="submit"
+      class="w-full bg-emerald-600 text-white p-3 rounded-lg font-bold">
+      Submit Worker Registration
+    </button>
+
+    <p id="workerRegisterMessage"
+      class="text-center text-sm" aria-live="polite"></p>
+
+  </form>
+
+  <p class="text-center text-sm text-gray-500 mt-4">
+    Your registration will be reviewed by Clean Lanka Admin.
+  </p>
+
+</section>
                                         </script>
 </body></html>
