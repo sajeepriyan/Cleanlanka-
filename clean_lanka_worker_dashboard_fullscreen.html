@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clean Lanka - Sri Lanka's #1 Trusted Home &amp; Domestic Services</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        color: #131b2e;
+        background-color: #ffffff;
+      }
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0F5132",
+            "primary-dark": "#0A3B24",
+            "primary-light": "#E8F5EE",
+            "secondary": "#16A34A",
+            "secondary-light": "#DCFCE7",
+            "surface": "#FAFDFB",
+            "surface-card": "#FFFFFF",
+            "on-surface": "#131B2E",
+            "on-surface-variant": "#475569",
+            "border-subtle": "#E2E8F0"
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+<style>
+  body.worker-dashboard-mode > *:not(#workerDashboard) {
+    display: none !important;
+  }
+  body.worker-dashboard-mode #workerDashboard {
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
+    margin: 0;
+    border-radius: 0;
+    padding: 24px;
+    background: #f8fafc;
+  }
+</style>
+</head>
+<body class="bg-white text-on-surface antialiased font-sans">
+<!-- TOP EMERGENCY NOTIFICATION BAR -->
+<div class="bg-primary text-white py-2.5 px-4 sm:px-8 text-[15px] border-b border-primary-dark/30">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+<div class="flex items-center gap-3 flex-wrap justify-center sm:justify-start">
+<span class="inline-flex items-center gap-1 font-semibold text-emerald-200">
+<span class="material-symbols-outlined text-[18px]">phone_in_talk</span> Hotline:
+        </span>
+<a class="font-bold hover:text-emerald-200 underline tracking-wide" href="tel:+94702805105">+94 70 280 5105</a>
+<span class="hidden md:inline opacity-40">|</span>
+<span class="hidden md:inline text-emerald-100">Support: cleanlankaa@gmail.com</span>
+<span class="hidden md:inline opacity-40">|</span>
+<span class="inline-flex items-center gap-1 bg-white/10 px-2.5 py-0.5 rounded-full text-xs font-semibold text-emerald-100">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> 24/7 Island Dispatch Active
+        </span>
+</div>
+<div class="flex items-center gap-4 text-xs sm:text-[14px] text-emerald-100">
+<span class="flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[16px] text-emerald-300" style="font-variation-settings: 'FILL' 1;">verified</span>
+          100% Background Screened
+        </span>
+<span>Serving All 25 Districts</span>
+</div>
+</div>
+</div>
+<!-- NAVIGATION BAR (FEATURING PROMINENT OFFICIAL LOGO) -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-24">
+<!-- OFFICIAL BRAND LOGO -->
+<a class="flex items-center gap-3.5 group" href="#">
+<img alt="Clean Lanka Official Logo" class="h-16 sm:h-[70px] w-auto object-contain transition-transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSh7GcRie2m5v1OiH4IUu5lxi4Qmpn6h_Pep3G-39-hWm7AbRMjRiSaW8SsexcB7a_7tX9SAvOol6H691xnReL6mdZRfnbYcd-7BNMTw7Gg4htwndima_BEOAvVMt9HiksX1Ri23atqe1GVO1CKI16GOVKspLITaWrltY2U16g_mM9bw1hqxe2nZo7REvfttd1v1-sltMDGf-rk3tCAAVbMLB9FiHnjPpY0SBgHgnSEQYH5v3C8xoNg"/>
+<div class="flex flex-col">
+<span class="text-2xl sm:text-[26px] font-extrabold text-primary tracking-tight leading-none">CLEAN LANKA</span>
+<span class="text-xs sm:text-[13px] font-bold text-secondary uppercase tracking-widest mt-1">Sri Lanka Domestic Services</span>
+</div>
+</a>
+<!-- NAV LINKS (DESKTOP) -->
+<nav class="hidden lg:flex items-center gap-8 text-[17px] font-semibold text-gray-700">
+<a class="text-primary hover:text-secondary transition-colors font-bold" href="#services-section">Services</a>
+<a class="hover:text-primary transition-colors" href="#how-it-works">How It Works</a>
+<a class="hover:text-primary transition-colors" href="#verified-pros">Verified Professionals</a>
+<a class="hover:text-primary transition-colors" href="#why-choose-us">Safety Pledge</a>
+<a class="hover:text-primary transition-colors" href="tel:+94702805105">Contact</a>
+</nav>
+<!-- CTA & LANGUAGE SELECTOR -->
+<div class="flex items-center gap-3 sm:gap-4">
+<div class="hidden sm:flex items-center gap-1 bg-gray-50 border border-gray-200 px-3 py-2 rounded-lg text-sm font-semibold text-gray-700">
+<span class="text-primary font-bold">LKR</span>
+<span class="text-gray-300">|</span>
+<span>English</span>
+</div>
+<a class="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-bold text-[16px] sm:text-[17px] px-6 py-3 rounded-xl transition-all shadow-md shadow-emerald-950/10" href="#customer-register">
+            Book a Service
+          </a>
+</div>
+</div>
+</div>
+</header>
+<main>
+<!-- HERO SECTION: VISUAL-FIRST WITH BOLD HEADLINE & HERO DOMESTIC PHOTO -->
+<section class="relative bg-gradient-to-b from-emerald-50/70 via-white to-white pt-10 pb-16 lg:pt-16 lg:pb-24 overflow-hidden">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- LEFT COLUMN: HIGH CONTRAST TYPOGRAPHY & CTAS -->
+<div class="lg:col-span-7 flex flex-col text-left">
+<!-- TRUST PILL -->
+<div class="inline-flex items-center gap-2 self-start bg-emerald-100/80 text-primary border border-emerald-300 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6">
+<span class="material-symbols-outlined text-[18px] text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span>
+              NIC-Verified &amp; Police Cleared Island Trades
+            </div>
+<!-- 44px - 52px HERO HEADLINE -->
+<h1 class="text-4xl sm:text-5xl lg:text-[52px] font-extrabold text-on-surface leading-[1.15] tracking-tight">
+              Sri Lanka's #1 Trusted <br/>
+<span class="text-primary relative inline-block">
+                Home &amp; Domestic Services
+                <svg class="absolute -bottom-2 left-0 w-full h-3 text-secondary/30" fill="none" preserveaspectratio="none" viewbox="0 0 260 12">
+<path d="M3 9C60 3 190 3 257 9" stroke="currentColor" stroke-linecap="round" stroke-width="5"></path>
+</svg>
+</span>
+</h1>
+<!-- 19px SUBHEAD -->
+<p class="text-[19px] sm:text-[20px] text-gray-700 leading-relaxed mt-6 mb-8 max-w-2xl font-normal">
+              Book verified local professionals for cleaning, electrical repairs, plumbing, cooking, and complete household maintenance across Colombo, Kandy, Galle, and all 25 districts of Sri Lanka.
+            </p>
+<!-- DUAL LARGE CTA BUTTONS (py-4 px-8, 18px font-bold) -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-10">
+<a class="inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary-dark text-white font-bold text-[18px] py-4 px-8 rounded-xl transition-all shadow-lg shadow-emerald-950/20 text-center" href="#customer-register">
+<span>Book a Service Now</span>
+<span class="material-symbols-outlined text-[22px]">calendar_today</span>
+</a>
+<a class="inline-flex items-center justify-center gap-2 bg-white hover:bg-emerald-50 text-primary border-2 border-primary font-bold text-[18px] py-4 px-8 rounded-xl transition-all text-center" href="#worker-register">
+<span>Join as a Service Worker</span>
+<span class="material-symbols-outlined text-[20px]">badge</span>
+</a>
+</div>
+<!-- TACTICAL SEARCH & DISTRICT SELECTOR BAR -->
+<div class="bg-white p-4 sm:p-5 rounded-2xl border-2 border-emerald-600/30 shadow-xl max-w-3xl">
+<form class="grid grid-cols-1 md:grid-cols-12 gap-3" onsubmit="event.preventDefault(); document.getElementById('services-section').scrollIntoView({behavior: 'smooth'});">
+<!-- Service Selector -->
+<div class="md:col-span-5 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-left">
+<label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">
+                    Select Service Category
+                  </label>
+<select class="w-full bg-transparent font-bold text-gray-900 text-[17px] focus:outline-none cursor-pointer" id="hero-service-selector">
+<option value="cleaning">Home Cleaning</option>
+<option value="electrician">Electrician &amp; Wiring</option>
+<option value="plumbing">Plumbing &amp; Water Works</option>
+<option value="cooking">Home Cooking &amp; Chef</option>
+<option value="maintenance">Home Maintenance &amp; Carpentry</option>
+<option value="household">General Household &amp; Garden</option>
+</select>
+</div>
+<!-- District & City Selector -->
+<div class="md:col-span-4 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-left">
+<label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">
+                    District or City
+                  </label>
+<select class="w-full bg-transparent font-bold text-gray-900 text-[17px] focus:outline-none cursor-pointer" id="hero-district-selector">
+<option value="colombo">Colombo &amp; Suburbs</option>
+<option value="gampaha">Gampaha &amp; Negombo</option>
+<option value="kandy">Kandy District</option>
+<option value="galle">Galle &amp; Southern Coast</option>
+<option value="kurunegala">Kurunegala District</option>
+<option value="kalutara">Kalutara District</option>
+<option value="matara">Matara District</option>
+<option value="all">All 25 Districts</option>
+</select>
+</div>
+<!-- Search Button -->
+<div class="md:col-span-3">
+<button class="w-full h-full min-h-[54px] bg-secondary hover:bg-emerald-700 text-white font-bold text-[18px] rounded-xl flex items-center justify-center gap-2 transition-all shadow-md" type="submit">
+<span>Search</span>
+<span class="material-symbols-outlined text-[22px]">search</span>
+</button>
+</div>
+</form>
+<!-- Quick trending pill links -->
+<div class="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-gray-100 text-[14px] text-gray-600">
+<span class="font-bold text-primary">Popular:</span>
+<span class="bg-gray-100 px-2.5 py-0.5 rounded-full text-xs font-semibold">Colombo 07 Deep Clean</span>
+<span class="bg-gray-100 px-2.5 py-0.5 rounded-full text-xs font-semibold">Emergency Plumber</span>
+<span class="bg-gray-100 px-2.5 py-0.5 rounded-full text-xs font-semibold">CEB Certified Electrician</span>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: PROMINENT HERO FEATURE IMAGE & BADGES -->
+<div class="lg:col-span-5 relative">
+<div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+<img alt="Clean Lanka verified domestic cleaning specialists in emerald green aprons servicing a modern home interior" class="w-full h-[480px] lg:h-[560px] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAjzqKxdAox3eqmZOqvb-P20ajbGbGrhmK7F_AP9x9R36XBKoEPPhLaJN-StESJ9ry-9Qqcu9pB6Fr6scLS_Jz_m6hGDNVCRzdeWwfpGYiKaZJsfh69gczSzwcKhTnF5Gml1cWUZZ4USUjTyVy4-9VVnW-KAEqGUXxGrDhbpFmba_uQ6z6mhyG6W7jJQFQQI3SGUvNefx_j6lMuctsF9KDQhplff5U4uXqIiUM8PpN"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+<!-- Overlaid Bottom Trust Badges -->
+<div class="absolute bottom-6 left-6 right-6 flex flex-col gap-3">
+<div class="flex items-center gap-2 bg-white/95 backdrop-blur-md p-3 rounded-xl shadow-lg border border-emerald-100">
+<span class="w-10 h-10 rounded-lg bg-primary text-white flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</span>
+<div>
+<h4 class="text-[16px] font-extrabold text-gray-900 leading-tight">100% Sri Lanka NIC Verified</h4>
+<p class="text-[13px] text-gray-600 font-medium">Full background &amp; police clearance on file</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-primary/95 text-white p-2.5 rounded-xl text-center">
+<span class="text-xs font-semibold uppercase tracking-wider block text-emerald-200">Rate Policy</span>
+<span class="text-[15px] font-bold">Zero Platform Markup</span>
+</div>
+<div class="bg-secondary/95 text-white p-2.5 rounded-xl text-center">
+<span class="text-xs font-semibold uppercase tracking-wider block text-emerald-100">Coverage</span>
+<span class="text-[15px] font-bold">Island-Wide 25 Districts</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating verification badge decoration -->
+<div class="absolute -top-4 -right-4 bg-white p-3 rounded-2xl shadow-xl border-2 border-emerald-500 hidden sm:flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-emerald-100 text-primary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div class="text-left">
+<div class="text-[17px] font-extrabold text-gray-900">4.95 / 5.0</div>
+<div class="text-xs font-semibold text-emerald-700">12,400+ Island Jobs Completed</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: THE 6 SERVICE CATEGORIES (LARGE PHOTOGRAPHIC IMAGE CARDS) -->
+<section class="py-20 bg-gray-50/60 border-y border-gray-100" id="services-section">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center max-w-3xl mx-auto mb-16">
+<span class="text-sm font-extrabold text-secondary uppercase tracking-widest bg-emerald-100 px-4 py-1.5 rounded-full inline-block mb-3">
+            Sri Lanka's Core Domestic Trades
+          </span>
+<h2 class="text-3xl sm:text-4xl lg:text-[36px] font-extrabold text-on-surface tracking-tight">
+            Our 6 Verified Service Categories
+          </h2>
+<p class="text-[19px] text-gray-600 mt-4 leading-relaxed font-normal">
+            Transparent pricing in Sri Lankan Rupees (LKR), zero hidden broker fees, and direct booking with screened local specialists.
+          </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- CARD 1: HOME CLEANING -->
+<div class="bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="relative h-64 overflow-hidden">
+<img alt="Home Cleaning Service by Clean Lanka" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAjzqKxdAox3eqmZOqvb-P20ajbGbGrhmK7F_AP9x9R36XBKoEPPhLaJN-StESJ9ry-9Qqcu9pB6Fr6scLS_Jz_m6hGDNVCRzdeWwfpGYiKaZJsfh69gczSzwcKhTnF5Gml1cWUZZ4USUjTyVy4-9VVnW-KAEqGUXxGrDhbpFmba_uQ6z6mhyG6W7jJQFQQI3SGUvNefx_j6lMuctsF9KDQhplff5U4uXqIiUM8PpN"/>
+<span class="absolute top-4 left-4 bg-primary text-white text-xs font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider shadow">
+                  Most Popular
+                </span>
+<span class="absolute bottom-3 right-3 bg-white/95 text-gray-900 text-xs font-bold px-2.5 py-1 rounded-md shadow-sm">
+                  Island-Wide
+                </span>
+</div>
+<div class="p-6 sm:p-7">
+<h3 class="text-2xl sm:text-[25px] font-extrabold text-gray-900 group-hover:text-primary transition-colors">
+                  1. Home Cleaning
+                </h3>
+<p class="text-[17px] text-gray-600 mt-3 leading-relaxed">
+                  Deep residential scrub, sofa sanitization, post-construction rubble removal, and complete villa refreshes across Sri Lanka.
+                </p>
+<div class="mt-4 pt-3 border-t border-gray-100 space-y-1.5 text-sm text-gray-600 font-medium">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span> Eco-safe detergents &amp; advanced machines
+                  </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span> Background-screened Lankan teams
+                  </div>
+</div>
+</div>
+</div>
+<div class="p-6 sm:p-7 pt-0 flex items-center justify-between mt-auto">
+<div>
+<span class="text-xs uppercase font-bold text-gray-500 block">Starting Rate</span>
+<span class="text-2xl font-extrabold text-primary">LKR 3,500</span>
+</div>
+<a class="bg-primary hover:bg-primary-dark text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20would%20like%20to%20book%20Home%20Cleaning%20service." target="_blank">
+                Book Service
+              </a>
+</div>
+</div>
+<!-- CARD 2: ELECTRICIAN & WIRING -->
+<div class="bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="relative h-64 overflow-hidden">
+<img alt="Electrician and Wiring technician safely repairing panel" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGvmTuMvnQB3iDQpVT75dxeIRKtlE7yZuCrpW0SxJWKB_oZmtw7qnpOazP-iXvl-6MATAVAbU007kytKzBnOWjpS8lCmU3IE9MvFdqyaqtTjOk3DopF-t5nQEVylH_roOVlwESnrlMiq8K87DXQDwTWaweqQbzXHxo6dWdp6hOzolNJOOrClMWC5pP4D2TEoJkIaZJf7qajeBe-jvm0ytzkxa9ZrdYo6k_KE-AuQcj"/>
+<span class="absolute top-4 left-4 bg-emerald-800 text-white text-xs font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider shadow">
+                  CEB Standards
+                </span>
+<span class="absolute bottom-3 right-3 bg-white/95 text-gray-900 text-xs font-bold px-2.5 py-1 rounded-md shadow-sm">
+                  Rapid Arrival
+                </span>
+</div>
+<div class="p-6 sm:p-7">
+<h3 class="text-2xl sm:text-[25px] font-extrabold text-gray-900 group-hover:text-primary transition-colors">
+                  2. Electrician &amp; Wiring
+                </h3>
+<p class="text-[17px] text-gray-600 mt-3 leading-relaxed">
+                  Full home wiring, circuit tripping diagnostics, solar inverter repair, surge protection, ceiling fans, and appliance care.
+                </p>
+<div class="mt-4 pt-3 border-t border-gray-100 space-y-1.5 text-sm text-gray-600 font-medium">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span> NVQ-certified electrical tradesmen
+                  </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span> 45-min rapid response in urban hubs
+                  </div>
+</div>
+</div>
+</div>
+<div class="p-6 sm:p-7 pt-0 flex items-center justify-between mt-auto">
+<div>
+<span class="text-xs uppercase font-bold text-gray-500 block">Starting Rate</span>
+<span class="text-2xl font-extrabold text-primary">LKR 2,000</span>
+</div>
+<a class="bg-primary hover:bg-primary-dark text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20would%20like%20to%20book%20an%20Electrician." target="_blank">
+                Book Service
+              </a>
+</div>
+</div>
+<!-- CARD 3: PLUMBING & WATER WORKS -->
+<div class="bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="relative h-64 overflow-hidden">
+<img alt="Plumbing and Water Works technician fixing sink pipes" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7S-z906FtUng-nzUNGH_YK6kPtueE6xBXoyxRl-eSW1d-bJZTEd4sB--eFrE9twDO3G-n08frC8DigP9p79ZXHiM7aiLvlOBkiWHKGAWrzmJ7L2CBtdbGhr1W9blv_kC9uqGO5iBM_SyPOBd_Cn1fVDpJxZxSr7lGZ0SbJTL4VokxD0y1X8EXF4Er7-vOT2oVogUFvKlxmkRtNXHzZ8EqYmKDdyyRwbKIdJTg9EFD"/>
+<span class="absolute top-4 left-4 bg-blue-700 text-white text-xs font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider shadow">
+                  Emergency Help
+                </span>
+<span class="absolute bottom-3 right-3 bg-white/95 text-gray-900 text-xs font-bold px-2.5 py-1 rounded-md shadow-sm">
+                  30-Day Warranty
+                </span>
+</div>
+<div class="p-6 sm:p-7">
+<h3 class="text-2xl sm:text-[25px] font-extrabold text-gray-900 group-hover:text-primary transition-colors">
+                  3. Plumbing &amp; Water Works
+                </h3>
+<p class="text-[17px] text-gray-600 mt-3 leading-relaxed">
+                  Concealed pipe leaks, water pump motor overhauls, high-pressure tank cleaning, drainage unblocking, and sanitary fittings.
+                </p>
+<div class="mt-4 pt-3 border-t border-gray-100 space-y-1.5 text-sm text-gray-600 font-medium">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span> Accurate water pressure diagnostic
+                  </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span> 100% genuine replacement fittings
+                  </div>
+</div>
+</div>
+</div>
+<div class="p-6 sm:p-7 pt-0 flex items-center justify-between mt-auto">
+<div>
+<span class="text-xs uppercase font-bold text-gray-500 block">Starting Rate</span>
+<span class="text-2xl font-extrabold text-primary">LKR 2,200</span>
+</div>
+<a class="bg-primary hover:bg-primary-dark text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20would%20like%20to%20book%20a%20Plumber." target="_blank">
+                Book Service
+              </a>
+</div>
+</div>
+<!-- CARD 4: HOME COOKING & CHEF -->
+<div class="bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="relative h-64 overflow-hidden">
+<img alt="Sri Lankan home cook preparing meal in modern kitchen" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARYZzk1ztE9if3KsHcpJjGquStCNRXgGi9NGI2CkT_Z7dL2raqaKuM-zywEkJBIKrXo14zZfXLL_vnaMu-4IW-SXRZVRUnTDOfPBW_ugWE5EQ06lK1ATBGeMJFJlhV2XdpasyDmQ_WvpqUMcERZdwirtugyEAtncF9e50Ce5Tiu1TR9GVdoIpOontq5qXkQW_mYzoVlr2eJNjwM_-D7esxVO23iWTPgfHKthHreE5a"/>
+<span class="absolute top-4 left-4 bg-amber-700 text-white text-xs font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider shadow">
+                  Daily or Events
+                </span>
+<span class="absolute bottom-3 right-3 bg-white/95 text-gray-900 text-xs font-bold px-2.5 py-1 rounded-md shadow-sm">
+                  Hygiene Verified
+                </span>
+</div>
+<div class="p-6 sm:p-7">
+<h3 class="text-2xl sm:text-[25px] font-extrabold text-gray-900 group-hover:text-primary transition-colors">
+                  4. Home Cooking &amp; Chef
+                </h3>
+<p class="text-[17px] text-gray-600 mt-3 leading-relaxed">
+                  Daily authentic Sri Lankan rice &amp; curry prep, dietary health meal planning, weekend celebration cooks, and villa culinary support.
+                </p>
+<div class="mt-4 pt-3 border-t border-gray-100 space-y-1.5 text-sm text-gray-600 font-medium">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span> Strict personal &amp; kitchen hygiene checks
+                  </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span> Flexible part-time or recurring shifts
+                  </div>
+</div>
+</div>
+</div>
+<div class="p-6 sm:p-7 pt-0 flex items-center justify-between mt-auto">
+<div>
+<span class="text-xs uppercase font-bold text-gray-500 block">Starting Rate</span>
+<span class="text-2xl font-extrabold text-primary">LKR 3,000</span>
+</div>
+<a class="bg-primary hover:bg-primary-dark text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20would%20like%20to%20book%20Home%20Cooking%20service." target="_blank">
+                Book Service
+              </a>
+</div>
+</div>
+<!-- CARD 5: HOME MAINTENANCE & CARPENTRY -->
+<div class="bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="relative h-64 overflow-hidden">
+<img alt="Sri Lankan carpenter repairing exterior house fittings and wood" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHTZvmGPOs9DsDa3oj5AWD1JLcYoke6Vm7nhZX9rdTNbOUGp6jKc7ex1xumic36BR0sKH1gpMeu3o2yoy8Vjb4PEvGnHRrw5xrGtkfuOebrIbbLThPWinhPMU6UnWN3MRfVXcQOVyq66m4imq-JEAuUrngYqdW5m-46GgBZ8K9JT_XdTwRmOYKom4FiOWA9f4fBawD5xyi6QRZ_yQguFfvVu54JrqQqq4JKaEHH1Xe"/>
+<span class="absolute top-4 left-4 bg-orange-800 text-white text-xs font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider shadow">
+                  Master Craftsmen
+                </span>
+<span class="absolute bottom-3 right-3 bg-white/95 text-gray-900 text-xs font-bold px-2.5 py-1 rounded-md shadow-sm">
+                  Free Site Check
+                </span>
+</div>
+<div class="p-6 sm:p-7">
+<h3 class="text-2xl sm:text-[25px] font-extrabold text-gray-900 group-hover:text-primary transition-colors">
+                  5. Home Maintenance &amp; Carpentry
+                </h3>
+<p class="text-[17px] text-gray-600 mt-3 leading-relaxed">
+                  Skilled teak &amp; mahogany carpentry, masonry tile repairs, exterior weatherproof painting, monsoon guttering, and roof maintenance.
+                </p>
+<div class="mt-4 pt-3 border-t border-gray-100 space-y-1.5 text-sm text-gray-600 font-medium">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span> Honest upfront quotes with zero markups
+                  </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span> High-grade Sri Lankan building materials
+                  </div>
+</div>
+</div>
+</div>
+<div class="p-6 sm:p-7 pt-0 flex items-center justify-between mt-auto">
+<div>
+<span class="text-xs uppercase font-bold text-gray-500 block">Starting Rate</span>
+<span class="text-2xl font-extrabold text-primary">LKR 2,800</span>
+</div>
+<a class="bg-primary hover:bg-primary-dark text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20would%20like%20to%20book%20Home%20Maintenance." target="_blank">
+                Book Service
+              </a>
+</div>
+</div>
+<!-- CARD 6: GENERAL HOUSEHOLD & GARDEN -->
+<div class="bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="relative h-64 overflow-hidden">
+<img alt="Sri Lankan gardener tending domestic yard and green landscape" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAk6nKM8LBn7W5c54fk2VkNKnqd6WGkJP6E-ob7eFp_klb384CgpWb_jJ2bFMDBE-vTZcfhZjYpt2OBrxZnc9qzUutdtSjM0e62O2BEzXk1EctIr89vAsvw0gswjfb4zgHg_eIh6cUQTZ50fhlefpaUyhgEvUoa8eE_PmIAYNiKHkJhOzkqLlkXChhywrbTyiShnroneJxWJEHVXk2pKhPRH625is5hIhgDyp8mblRA"/>
+<span class="absolute top-4 left-4 bg-emerald-700 text-white text-xs font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider shadow">
+                  Versatile Help
+                </span>
+<span class="absolute bottom-3 right-3 bg-white/95 text-gray-900 text-xs font-bold px-2.5 py-1 rounded-md shadow-sm">
+                  Full or Half Day
+                </span>
+</div>
+<div class="p-6 sm:p-7">
+<h3 class="text-2xl sm:text-[25px] font-extrabold text-gray-900 group-hover:text-primary transition-colors">
+                  6. General Household &amp; Garden
+                </h3>
+<p class="text-[17px] text-gray-600 mt-3 leading-relaxed">
+                  Lawn mowing, coconut tree clearing, garden landscaping, furniture relocation assistance, and compassionate domestic care.
+                </p>
+<div class="mt-4 pt-3 border-t border-gray-100 space-y-1.5 text-sm text-gray-600 font-medium">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span> Polite, vetted local caretakers
+                  </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span> Fully equipped with basic gardening gear
+                  </div>
+</div>
+</div>
+</div>
+<div class="p-6 sm:p-7 pt-0 flex items-center justify-between mt-auto">
+<div>
+<span class="text-xs uppercase font-bold text-gray-500 block">Starting Rate</span>
+<span class="text-2xl font-extrabold text-primary">LKR 1,800</span>
+</div>
+<a class="bg-primary hover:bg-primary-dark text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20would%20like%20to%20book%20Household%20or%20Garden%20help." target="_blank">
+                Book Service
+              </a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 5: HOW IT WORKS (3 CLEAR VISUAL STEPS WITH 22px HEADERS) -->
+<section class="py-20 bg-white" id="how-it-works">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center max-w-2xl mx-auto mb-16">
+<span class="text-sm font-extrabold text-secondary uppercase tracking-widest bg-emerald-100 px-4 py-1.5 rounded-full inline-block mb-3">
+            Simple 3-Step Process
+          </span>
+<h2 class="text-3xl sm:text-4xl lg:text-[36px] font-extrabold text-on-surface tracking-tight">
+            How Clean Lanka Works
+          </h2>
+<p class="text-[19px] text-gray-600 mt-4 leading-relaxed font-normal">
+            From Colombo apartments to hillside bungalows in Kandy, booking trusted help takes under 2 minutes.
+          </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+<!-- STEP 1 -->
+<div class="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-8 text-center flex flex-col items-center shadow-sm hover:shadow-md transition-shadow">
+<div class="w-16 h-16 rounded-2xl bg-primary text-white font-black text-2xl flex items-center justify-center mb-6 shadow-md">
+              1
+            </div>
+<h3 class="text-[22px] font-extrabold text-gray-900 leading-snug">
+              Select Service &amp; District
+            </h3>
+<p class="text-[18px] text-gray-600 mt-3 leading-relaxed">
+              Pick the required service and specify your location across Colombo, Kandy, Galle, or any Sri Lankan town.
+            </p>
+<div class="mt-6 bg-white px-4 py-2 rounded-full border border-emerald-200 text-sm font-bold text-primary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-secondary">pin_drop</span> Instant Local Matching
+            </div>
+</div>
+<!-- STEP 2 -->
+<div class="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-8 text-center flex flex-col items-center shadow-sm hover:shadow-md transition-shadow">
+<div class="w-16 h-16 rounded-2xl bg-secondary text-white font-black text-2xl flex items-center justify-center mb-6 shadow-md">
+              2
+            </div>
+<h3 class="text-[22px] font-extrabold text-gray-900 leading-snug">
+              Get an NIC-Verified Pro
+            </h3>
+<p class="text-[18px] text-gray-600 mt-3 leading-relaxed">
+              We dispatch a background-screened Sri Lankan tradesperson with verified identity badge and transparent LKR hourly rate.
+            </p>
+<div class="mt-6 bg-white px-4 py-2 rounded-full border border-emerald-200 text-sm font-bold text-secondary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-secondary">verified_user</span> 100% Police Cleared
+            </div>
+</div>
+<!-- STEP 3 -->
+<div class="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-8 text-center flex flex-col items-center shadow-sm hover:shadow-md transition-shadow">
+<div class="w-16 h-16 rounded-2xl bg-emerald-900 text-white font-black text-2xl flex items-center justify-center mb-6 shadow-md">
+              3
+            </div>
+<h3 class="text-[22px] font-extrabold text-gray-900 leading-snug">
+              Job Done &amp; Settle in LKR
+            </h3>
+<p class="text-[18px] text-gray-600 mt-3 leading-relaxed">
+              Inspect the completed work. Pay securely in Sri Lankan Rupees via cash, bank transfer, or LankaPay QR with full warranty.
+            </p>
+<div class="mt-6 bg-white px-4 py-2 rounded-full border border-emerald-200 text-sm font-bold text-emerald-800 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-emerald-600">thumb_up</span> Quality Guarantee
+            </div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 6: VERIFIED SRI LANKAN PROFESSIONALS SHOWCASE -->
+<section class="py-20 bg-gray-50/70 border-t border-gray-100" id="verified-pros">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+<div>
+<span class="text-sm font-extrabold text-secondary uppercase tracking-widest bg-emerald-100 px-4 py-1.5 rounded-full inline-block mb-3">
+              Direct Dispatch Directory
+            </span>
+<h2 class="text-3xl sm:text-4xl lg:text-[36px] font-extrabold text-on-surface tracking-tight">
+              Featured Verified Sri Lankan Specialists
+            </h2>
+</div>
+<div class="mt-4 md:mt-0 flex items-center gap-2 text-[17px] font-bold text-primary">
+<span class="w-3 h-3 rounded-full bg-secondary animate-pulse"></span>
+            1,200+ Available Across Sri Lanka
+          </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- PRO 1: KAMAL -->
+<div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
+<div>
+<div class="relative rounded-xl overflow-hidden mb-4">
+<img alt="Kamal Perera - Senior Deep Cleaning Pro" class="w-full h-48 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCugawuT-qy5F9brRFycSDK-IrsQ88lbM60uzKFoaoi43xYdr6cHkWfSNa2jRqoeoA1P-zPGSP7MxJd-A0YjmgqZ2jOxA9AP6LR5_6xWDOtFrCBZgufwJkeF7e9vOWCOub3kefDuGGCYd-xY3NilY8m0FRBIqhbYiC35aLXA7CHnohbgbncgOx-PzGL1pbXhIgu7bv84CeFOnbqeWKBwIaf9wTYEAYTuLNCVfy0ZclV"/>
+<div class="absolute top-2 right-2 bg-white/95 px-2 py-0.5 rounded-md text-xs font-extrabold text-primary flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span> NIC Cleared
+                </div>
+<div class="absolute bottom-2 left-2 bg-black/75 text-white px-2 py-0.5 rounded text-xs font-semibold">
+                  Colombo &amp; Suburbs
+                </div>
+</div>
+<div class="flex items-center justify-between">
+<h4 class="text-[20px] font-bold text-gray-900">Kamal Perera</h4>
+<div class="flex items-center gap-1 text-sm font-bold text-gray-900">
+<span class="material-symbols-outlined text-amber-500 text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.95
+                </div>
+</div>
+<p class="text-sm font-bold text-secondary mt-0.5">Senior Deep Cleaning Pro</p>
+<p class="text-[15px] text-gray-600 mt-2 line-clamp-2">
+                Specialist in Colombo residential deep scrub, sofa shampooing, and villa turnarounds.
+              </p>
+</div>
+<div class="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between">
+<div>
+<span class="text-xs text-gray-500 font-bold block">Rate</span>
+<span class="text-[19px] font-extrabold text-primary">LKR 1,200<span class="text-xs text-gray-500 font-normal">/hr</span></span>
+</div>
+<a class="bg-primary hover:bg-primary-dark text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors" href="https://wa.me/94702805105?text=Hello,%20I%20would%20like%20to%20book%20Kamal%20Perera." target="_blank">
+                Book Pro
+              </a>
+</div>
+</div>
+<!-- PRO 2: NIMAL -->
+<div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
+<div>
+<div class="relative rounded-xl overflow-hidden mb-4">
+<img alt="Nimal Jayasuriya - Electrician" class="w-full h-48 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyAvpyTel4ssXvSiRGeEeOwakUHTa_qn27t9e8dFhHcZnSn5WgFm7HHnsg22erxVocBsdHQQwROYP_ZVq-SCV07l6R9THONPShOtVDrtXRL_YKg7YuGnPICK7Yo9B5DtypNFdv5detiq0li0KQ4sDSRsQ27BmUw1eAUwqVqO_LxLWkgZzBVnwDFLQ9PDkV7GtOB9HCJIxgl64sygvAG8RqAWwzL3f8KhXAg4FFRjxM"/>
+<div class="absolute top-2 right-2 bg-white/95 px-2 py-0.5 rounded-md text-xs font-extrabold text-primary flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span> NIC Cleared
+                </div>
+<div class="absolute bottom-2 left-2 bg-black/75 text-white px-2 py-0.5 rounded text-xs font-semibold">
+                  Kandy &amp; Central
+                </div>
+</div>
+<div class="flex items-center justify-between">
+<h4 class="text-[20px] font-bold text-gray-900">Nimal Jayasuriya</h4>
+<div class="flex items-center gap-1 text-sm font-bold text-gray-900">
+<span class="material-symbols-outlined text-amber-500 text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.98
+                </div>
+</div>
+<p class="text-sm font-bold text-secondary mt-0.5">NVQ-4 Electrician</p>
+<p class="text-[15px] text-gray-600 mt-2 line-clamp-2">
+                Main switchboards, CEB meter connections, surge protectors, and solar diagnostics.
+              </p>
+</div>
+<div class="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between">
+<div>
+<span class="text-xs text-gray-500 font-bold block">Rate</span>
+<span class="text-[19px] font-extrabold text-primary">LKR 1,500<span class="text-xs text-gray-500 font-normal">/hr</span></span>
+</div>
+<a class="bg-primary hover:bg-primary-dark text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors" href="https://wa.me/94702805105?text=Hello,%20I%20would%20like%20to%20book%20Nimal%20Jayasuriya." target="_blank">
+                Book Pro
+              </a>
+</div>
+</div>
+<!-- PRO 3: SUNIL -->
+<div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
+<div>
+<div class="relative rounded-xl overflow-hidden mb-4">
+<img alt="Sunil Fernando - Master Plumber" class="w-full h-48 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDM1p4jtMwYmaRfjShR01vjf7bO52SNiXMyeO2h9pkr94IOF8G0BzzFN4SuXSgde-97qI6b9CS2aIKhWJBf12gVj5fFVvzNVxBnVyE4uBBMByds6BWL1jocDZqLAoqjl0iYmNccFAuhZI780Tj6Z0vw-NcvS9yVeb16BmbXhThwsYHvP_wtY47LjRp_WqVPagRP3QBz6qeId5SklBZqBU6w7b4PcFzSnBZ4cZcaV2N9"/>
+<div class="absolute top-2 right-2 bg-white/95 px-2 py-0.5 rounded-md text-xs font-extrabold text-primary flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span> NIC Cleared
+                </div>
+<div class="absolute bottom-2 left-2 bg-black/75 text-white px-2 py-0.5 rounded text-xs font-semibold">
+                  Gampaha &amp; Negombo
+                </div>
+</div>
+<div class="flex items-center justify-between">
+<h4 class="text-[20px] font-bold text-gray-900">Sunil Fernando</h4>
+<div class="flex items-center gap-1 text-sm font-bold text-gray-900">
+<span class="material-symbols-outlined text-amber-500 text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.91
+                </div>
+</div>
+<p class="text-sm font-bold text-secondary mt-0.5">Master Plumber &amp; Pipe Tech</p>
+<p class="text-[15px] text-gray-600 mt-2 line-clamp-2">
+                Concealed leaks, water tank automation, pressure pumps, and bathroom fittings.
+              </p>
+</div>
+<div class="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between">
+<div>
+<span class="text-xs text-gray-500 font-bold block">Rate</span>
+<span class="text-[19px] font-extrabold text-primary">LKR 1,400<span class="text-xs text-gray-500 font-normal">/hr</span></span>
+</div>
+<a class="bg-primary hover:bg-primary-dark text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors" href="https://wa.me/94702805105?text=Hello,%20I%20would%20like%20to%20book%20Sunil%20Fernando." target="_blank">
+                Book Pro
+              </a>
+</div>
+</div>
+<!-- PRO 4: ROHINI -->
+<div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
+<div>
+<div class="relative rounded-xl overflow-hidden mb-4">
+<img alt="Rohini Gunaratne - Chef" class="w-full h-48 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZtgNl0CeRU3uq8YkisMbv-zFg_gim4qAj6CoF5w8BHd39D1gQF5Z9tgxKRYEpRScbVDTNQvoLn8yFLy_4WlLZk6VYg40sBKxxAn-QMrNF8clRDkLYPGN7t3Nl1KZ2U0CsFX9fubx-9ylMzLVDHvRLyNl8Tp3Is2tBzhHirSOrKPRhD6u1yCwBK-xp7SwA2xmYoq9iq9jx-KDUJZrSwcQsRJcMxXMmonzkEHJM7bFd"/>
+<div class="absolute top-2 right-2 bg-white/95 px-2 py-0.5 rounded-md text-xs font-extrabold text-primary flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span> NIC Cleared
+                </div>
+<div class="absolute bottom-2 left-2 bg-black/75 text-white px-2 py-0.5 rounded text-xs font-semibold">
+                  Galle &amp; Southern Coast
+                </div>
+</div>
+<div class="flex items-center justify-between">
+<h4 class="text-[20px] font-bold text-gray-900">Rohini Gunaratne</h4>
+<div class="flex items-center gap-1 text-sm font-bold text-gray-900">
+<span class="material-symbols-outlined text-amber-500 text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.97
+                </div>
+</div>
+<p class="text-sm font-bold text-secondary mt-0.5">Authentic Lankan Cook</p>
+<p class="text-[15px] text-gray-600 mt-2 line-clamp-2">
+                Southern fish ambul thiyal, vegan curries, lamprais, and daily domestic kitchen assistance.
+              </p>
+</div>
+<div class="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between">
+<div>
+<span class="text-xs text-gray-500 font-bold block">Rate</span>
+<span class="text-[19px] font-extrabold text-primary">LKR 1,800<span class="text-xs text-gray-500 font-normal">/hr</span></span>
+</div>
+<a class="bg-primary hover:bg-primary-dark text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors" href="https://wa.me/94702805105?text=Hello,%20I%20would%20like%20to%20book%20Rohini%20Gunaratne." target="_blank">
+                Book Pro
+              </a>
+</div>
+</div>
+</div>
+<!-- CALLOUT BANNER -->
+<div class="mt-12 bg-primary text-white rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[32px] text-emerald-300">support_agent</span>
+</div>
+<div>
+<h3 class="text-2xl font-extrabold">Need custom commercial cleaning or multi-day tradesmen?</h3>
+<p class="text-[17px] text-emerald-100 mt-1 font-normal">Our Colombo Operations Desk will dispatch vetted teams anywhere across the island.</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<a class="bg-white text-primary font-bold text-[17px] py-3.5 px-6 rounded-xl hover:bg-emerald-50 transition-colors shadow" href="tel:+94702805105">
+              Call +94 70 280 5105
+            </a>
+<a class="bg-secondary text-white font-bold text-[17px] py-3.5 px-6 rounded-xl hover:bg-emerald-700 transition-colors shadow" href="https://wa.me/94702805105" target="_blank">
+              WhatsApp Desk
+            </a>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 7: WHY CHOOSE US & SAFETY PLEDGE -->
+<section class="py-20 bg-white" id="why-choose-us">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-6">
+<span class="text-sm font-extrabold text-secondary uppercase tracking-widest bg-emerald-100 px-4 py-1.5 rounded-full inline-block mb-3">
+              Safety &amp; Integrity Protocol
+            </span>
+<h2 class="text-3xl sm:text-4xl lg:text-[36px] font-extrabold text-on-surface tracking-tight leading-tight">
+              Why Sri Lankan Families Rely on Clean Lanka
+            </h2>
+<p class="text-[19px] text-gray-600 mt-4 mb-8 leading-relaxed font-normal">
+              Unlike unverified telephone directories or informal roadside hiring, Clean Lanka provides institutional security and fair wages.
+            </p>
+<div class="space-y-6">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-emerald-100 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[26px]">badge</span>
+</div>
+<div>
+<h4 class="text-[20px] font-bold text-gray-900">Sri Lanka NIC &amp; Police Cleared</h4>
+<p class="text-[17px] text-gray-600 mt-1">Every tradesperson submits their National Identity Card and Grama Niladhari residence certificate before entering customer homes.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-emerald-100 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[26px]">price_check</span>
+</div>
+<div>
+<h4 class="text-[20px] font-bold text-gray-900">Standardized Transparent LKR Rates</h4>
+<p class="text-[17px] text-gray-600 mt-1">No bargaining stress or inflated emergency charges. Upfront published rates with complete cost transparency.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-emerald-100 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[26px]">handshake</span>
+</div>
+<div>
+<h4 class="text-[20px] font-bold text-gray-900">Dignified Pay for Local Workers</h4>
+<p class="text-[17px] text-gray-600 mt-1">We respect Sri Lanka's domestic workforce with same-day digital payments and free technical upskilling.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-6 bg-gradient-to-br from-primary to-primary-dark text-white rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden">
+<div class="flex items-center justify-between pb-6 border-b border-white/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-light text-[28px]">shield</span>
+<span class="text-[20px] font-bold">National Safety Metrics</span>
+</div>
+<span class="bg-white/10 px-3 py-1 rounded-full text-xs font-bold text-emerald-200 uppercase">2025 Audit</span>
+</div>
+<div class="grid grid-cols-2 gap-6 my-8">
+<div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+<div class="text-4xl font-extrabold text-secondary-light">100%</div>
+<div class="text-[16px] text-emerald-100 mt-1">NIC Identity Screened</div>
+</div>
+<div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+<div class="text-4xl font-extrabold text-secondary-light">4.95 ★</div>
+<div class="text-[16px] text-emerald-100 mt-1">Average Customer Rating</div>
+</div>
+<div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+<div class="text-4xl font-extrabold text-secondary-light">12,400+</div>
+<div class="text-[16px] text-emerald-100 mt-1">Jobs Completed Island-wide</div>
+</div>
+<div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+<div class="text-4xl font-extrabold text-secondary-light">&lt; 40 Min</div>
+<div class="text-[16px] text-emerald-100 mt-1">Urban Response Time</div>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-white/10 flex items-center gap-3">
+<span class="material-symbols-outlined text-[24px] text-emerald-300">verified</span>
+<span class="text-[15px] font-medium text-white">Registered under Sri Lanka Company Act. Audited domestic operations hub in Colombo 03.</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FLOATING LIVE CHAT / WHATSAPP BUBBLE (FEATURE 7) -->
+<aside class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+<div class="flex items-center gap-3">
+<a class="hidden md:flex items-center gap-2 bg-white text-gray-900 border-2 border-primary px-4 py-3 rounded-full shadow-xl hover:bg-emerald-50 transition-all font-bold text-[16px]" href="tel:+94702805105">
+<span class="material-symbols-outlined text-primary text-[22px]">phone</span>
+<span>+94 70 280 5105</span>
+</a>
+<!-- Floating Green WhatsApp Bubble -->
+<a class="flex items-center justify-center w-16 h-16 rounded-full bg-secondary hover:bg-emerald-700 text-white shadow-2xl transition-transform hover:scale-110 relative" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20need%20assistance%20with%20booking%20a%20service." target="_blank" title="Live WhatsApp Support">
+<span class="material-symbols-outlined text-[34px]">chat</span>
+<span class="absolute top-1 right-1 w-4 h-4 rounded-full bg-white ring-2 ring-emerald-500 flex items-center justify-center">
+<span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping"></span>
+</span>
+</a>
+</div>
+</aside>
+<!-- OFFICIAL FOOTER (FEATURING PROMINENT LOGO, 25 DISTRICTS, CONTACTS) -->
+<footer class="bg-gray-900 text-gray-200 pt-20 pb-12 border-t-4 border-primary">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16 border-b border-gray-800">
+<!-- COLUMN 1 & 2: LOGO & CONTACT -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<div class="flex items-center gap-4">
+<img alt="Clean Lanka Official Logo" class="h-20 w-auto object-contain bg-white/10 p-1.5 rounded-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSh7GcRie2m5v1OiH4IUu5lxi4Qmpn6h_Pep3G-39-hWm7AbRMjRiSaW8SsexcB7a_7tX9SAvOol6H691xnReL6mdZRfnbYcd-7BNMTw7Gg4htwndima_BEOAvVMt9HiksX1Ri23atqe1GVO1CKI16GOVKspLITaWrltY2U16g_mM9bw1hqxe2nZo7REvfttd1v1-sltMDGf-rk3tCAAVbMLB9FiHnjPpY0SBgHgnSEQYH5v3C8xoNg"/>
+<div class="flex flex-col">
+<span class="text-3xl font-extrabold text-white tracking-tight leading-none">CLEAN LANKA</span>
+<span class="text-xs font-bold text-emerald-400 uppercase tracking-widest mt-1.5">Sri Lanka Domestic Services</span>
+</div>
+</div>
+<p class="text-[17px] text-gray-400 leading-relaxed max-w-sm">
+            Sri Lanka's premier network of background-cleared trade and household professionals. Connecting households and commercial facilities with certified technicians across the island.
+          </p>
+<div class="space-y-2 text-[16px] text-gray-300">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-400 text-[20px]">call</span>
+<span class="font-bold">Hotline:</span>
+<a class="hover:text-emerald-300 underline" href="tel:+94702805105">+94 70 280 5105</a>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-400 text-[20px]">mail</span>
+<span class="font-bold">Email:</span>
+<a class="hover:text-emerald-300 underline" href="mailto:cleanlankaa@gmail.com">cleanlankaa@gmail.com</a>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-400 text-[20px]">location_on</span>
+<span>Colombo 03 Operations Hub, Western Province, Sri Lanka</span>
+</div>
+</div>
+</div>
+<!-- COLUMN 3: SERVICES -->
+<div class="flex flex-col gap-3">
+<h4 class="text-lg font-bold text-white uppercase tracking-wider">Services</h4>
+<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#services-section">Home Cleaning</a>
+<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#services-section">Electrician &amp; Wiring</a>
+<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#services-section">Plumbing &amp; Water Works</a>
+<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#services-section">Home Cooking &amp; Chef</a>
+<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#services-section">Home Maintenance</a>
+<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#services-section">Household &amp; Garden</a>
+</div>
+<!-- COLUMN 4: PLATFORM -->
+<div class="flex flex-col gap-3">
+<h4 class="text-lg font-bold text-white uppercase tracking-wider">Platform</h4>
+<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#how-it-works">How It Works</a>
+<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#verified-pros">Verified Trades Directory</a>
+<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="https://wa.me/94702805105" target="_blank">Join as a Service Worker</a>
+<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#why-choose-us">NIC Safety Pledge</a>
+<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#">Emergency Protocol</a>
+</div>
+<!-- COLUMN 5: COVERAGE & STANDARDS -->
+<div class="flex flex-col gap-3">
+<h4 class="text-lg font-bold text-white uppercase tracking-wider">Coverage</h4>
+<p class="text-[15px] text-gray-400 leading-relaxed">
+            Active dispatch across all 25 Sri Lankan Districts: Colombo, Gampaha, Kalutara, Kandy, Galle, Matara, Kurunegala, Jaffna, Anuradhapura, Ratnapura, and beyond.
+          </p>
+<div class="mt-2 p-3 bg-gray-800 rounded-xl border border-gray-700 text-xs text-emerald-300 font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+            Secure LKR Cash &amp; LankaPay Settled
+          </div>
+</div>
+</div>
+<!-- COPYRIGHT -->
+<div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+<div>
+          © 2025 CLEAN LANKA. All rights reserved. Strictly Sri Lanka Domestic Network.
+        </div>
+<div class="flex items-center gap-6">
+<a class="hover:text-white" href="#">Privacy Policy</a>
+<a class="hover:text-white" href="#">Terms of Service</a>
+<a class="text-emerald-400 font-bold hover:underline" href="tel:+94702805105">+94 70 280 5105</a>
+</div>
+</div>
+</div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // Supabase browser configuration. Publishable keys are intended for frontend use.
+  const SUPABASE_URL = "https://eudzypjjnoiboqzqrlin.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2Yh_kmsE9Kj5rtcdDmh0Kg_ctV6Aesv";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+</script>
+
+
+<!-- CUSTOMER / WORKER LOGIN -->
+<section id="account-login" class="max-w-xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg scroll-mt-28">
+  <h2 class="text-2xl font-bold text-center text-emerald-700">Customer &amp; Worker Login</h2>
+  <p class="text-center text-gray-500 mt-2">Sign in after confirming your email address</p>
+  <form id="loginForm" class="mt-6 space-y-4">
+    <select id="loginRole" required class="w-full p-3 border rounded-lg">
+      <option value="">Select Account Type</option>
+      <option value="customer">Customer</option>
+      <option value="worker">Service Worker</option>
+    </select>
+    <input id="loginEmail" type="email" placeholder="Email Address" autocomplete="username" required class="w-full p-3 border rounded-lg">
+    <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" required class="w-full p-3 border rounded-lg">
+    <button id="loginSubmit" type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white p-3 rounded-lg font-bold">Sign In</button>
+    <p id="loginMessage" class="text-center text-sm" aria-live="polite"></p>
+  </form>
+  <button id="logoutButton" type="button" class="hidden w-full mt-3 border border-gray-300 text-gray-700 p-3 rounded-lg font-bold">Sign Out</button>
+  <p id="emailConfirmationHint" class="text-xs text-gray-500 mt-3 text-center">Email confirmation is required only before your first sign-in.</p>
+</section>
+
+
+<!-- WORKER DASHBOARD -->
+<section id="workerDashboard" class="hidden max-w-3xl mx-auto my-8 p-6 bg-white rounded-2xl shadow-lg">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <p class="text-sm font-semibold text-emerald-700">CLEAN LANKA</p>
+      <h2 class="text-2xl font-bold text-gray-900">Worker Dashboard</h2>
+    </div>
+    <span id="workerVerificationBadge" class="px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold">Pending Review</span>
+  </div>
+  <p id="workerDashboardMessage" class="mt-4 text-sm text-gray-600" aria-live="polite"></p>
+  <div class="flex justify-end mt-4">
+    <button id="workerDashboardLogoutButton" type="button" class="px-5 py-3 rounded-xl bg-primary text-white font-bold shadow">Sign Out</button>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Full name</p><p id="workerDashName" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Email</p><p id="workerDashEmail" class="font-semibold text-gray-900 break-all">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Phone</p><p id="workerDashPhone" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">District</p><p id="workerDashDistrict" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50 sm:col-span-2"><p class="text-xs text-gray-500">Town / Area</p><p id="workerDashAddress" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50 sm:col-span-2"><p class="text-xs text-gray-500">Skills</p><p id="workerDashSkills" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Experience</p><p id="workerDashExperience" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Expected price (LKR)</p><p id="workerDashPrice" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Availability</p><p id="workerDashAvailability" class="font-semibold text-gray-900">—</p></div>
+    <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Booking access</p><p id="workerDashBookings" class="font-semibold text-gray-900">—</p></div>
+  </div>
+  <p class="mt-5 text-sm text-gray-500">Your application remains pending until an administrator reviews it. You cannot receive bookings before approval.</p>
+</section>
+
+<!-- CUSTOMER REGISTRATION -->
+<section id="customer-register" class="max-w-xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg scroll-mt-28">
+  <h2 class="text-2xl font-bold text-center text-emerald-700">Customer Registration</h2>
+  <p class="text-center text-gray-500 mt-2">Create your Clean Lanka customer account</p>
+  <form id="customerRegisterForm" class="mt-6 space-y-4">
+    <input id="customerName" type="text" placeholder="Full Name" autocomplete="name" required class="w-full p-3 border rounded-lg">
+    <input id="customerEmail" type="email" placeholder="Email Address" autocomplete="email" required class="w-full p-3 border rounded-lg">
+    <input id="customerPassword" type="password" placeholder="Password (minimum 8 characters)" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
+    <input id="customerConfirmPassword" type="password" placeholder="Confirm Password" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
+    <button id="customerSubmit" type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white p-3 rounded-lg font-bold">Create Customer Account</button>
+    <p id="customerRegisterMessage" class="text-center text-sm" aria-live="polite"></p>
+  </form>
+  <p class="text-xs text-gray-500 mt-3 text-center">Email confirmation is required before sign-in.</p>
+</section>
+
+<!-- WORKER REGISTRATION -->
+<section id="worker-register" class="max-w-2xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg scroll-mt-28">
+  <h2 class="text-2xl font-bold text-center text-emerald-700">Worker Registration</h2>
+  <p class="text-center text-gray-500 mt-2">Join Clean Lanka as a Service Professional</p>
+  <form id="workerRegisterForm" class="mt-6 space-y-4">
+    <input id="workerName" type="text" placeholder="Full Name" autocomplete="name" required class="w-full p-3 border rounded-lg">
+    <input id="workerPhone" type="tel" placeholder="Mobile Number" autocomplete="tel" required class="w-full p-3 border rounded-lg">
+    <input id="workerEmail" type="email" placeholder="Email Address" autocomplete="email" required class="w-full p-3 border rounded-lg">
+    <select id="workerDistrict" required class="w-full p-3 border rounded-lg">
+      <option value="">Select District</option>
+      <option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option> Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option>
+    </select>
+    <textarea id="workerAddress" placeholder="Town / Area (do not enter sensitive identity details here)" required class="w-full p-3 border rounded-lg"></textarea>
+    <input id="workerSkills" type="text" placeholder="Your Skills (Cleaning, Plumbing, Electrical...)" required class="w-full p-3 border rounded-lg">
+    <input id="workerExperience" type="number" min="0" placeholder="Years of Experience" required class="w-full p-3 border rounded-lg">
+    <input id="workerPrice" type="number" min="0" placeholder="Expected Price (LKR)" required class="w-full p-3 border rounded-lg">
+    <input id="workerPassword" type="password" placeholder="Create Password (minimum 8 characters)" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
+    <input id="workerConfirmPassword" type="password" placeholder="Confirm Password" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
+    <button id="workerSubmit" type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white p-3 rounded-lg font-bold">Create Worker Account</button>
+    <p id="workerRegisterMessage" class="text-center text-sm" aria-live="polite"></p>
+  </form>
+  <p class="text-center text-sm text-gray-500 mt-4">After email confirmation, your worker application must be reviewed before you can receive bookings.</p>
+</section>
+
+<script>
+  function showMessage(element, message, isError = false) {
+    element.textContent = message;
+    element.classList.toggle('text-red-600', isError);
+    element.classList.toggle('text-emerald-700', !isError);
+  }
+
+  async function registerAccount({formId, nameId, emailId, passwordId, confirmId, messageId, role}) {
+    const form = document.getElementById(formId);
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const name = document.getElementById(nameId).value.trim();
+      const email = document.getElementById(emailId).value.trim();
+      const password = document.getElementById(passwordId).value;
+      const confirmPassword = document.getElementById(confirmId).value;
+      const message = document.getElementById(messageId);
+      const submit = form.querySelector('button[type="submit"]');
+
+      if (password !== confirmPassword) {
+        showMessage(message, 'Passwords do not match.', true);
+        return;
+      }
+      if (password.length < 8) {
+        showMessage(message, 'Password must contain at least 8 characters.', true);
+        return;
+      }
+
+      submit.disabled = true;
+      showMessage(message, 'Creating your account...');
+      try {
+        const { error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { full_name: name, account_type: role },
+            emailRedirectTo: 'https://cleanlanka.lk'
+          }
+        });
+        if (error) throw error;
+        showMessage(message, 'Registration submitted. Please confirm your email, then sign in using the Login section.');
+        form.reset();
+      } catch (error) {
+        showMessage(message, error.message || 'Registration failed. Please try again.', true);
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  }
+
+  registerAccount({
+    formId: 'customerRegisterForm', nameId: 'customerName', emailId: 'customerEmail',
+    passwordId: 'customerPassword', confirmId: 'customerConfirmPassword',
+    messageId: 'customerRegisterMessage', role: 'customer'
+  });
+
+  // Worker details are stored in Auth metadata during sign-up.
+  // After email confirmation and sign-in, they are copied into worker_profiles.
+  const workerFormClean = document.getElementById('workerRegisterForm');
+  workerFormClean.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const val = id => document.getElementById(id).value.trim();
+    const name = val('workerName');
+    const email = val('workerEmail');
+    const password = document.getElementById('workerPassword').value;
+    const confirmPassword = document.getElementById('workerConfirmPassword').value;
+    const message = document.getElementById('workerRegisterMessage');
+    const submit = workerFormClean.querySelector('button[type="submit"]');
+
+    if (password !== confirmPassword) {
+      showMessage(message, 'Passwords do not match.', true);
+      return;
+    }
+    if (password.length < 8) {
+      showMessage(message, 'Password must contain at least 8 characters.', true);
+      return;
+    }
+
+    submit.disabled = true;
+    showMessage(message, 'Creating your worker account...');
+    try {
+      const { error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+            account_type: 'worker',
+            Phone: val('workerPhone'),
+            district: val('workerDistrict'),
+            address: val('workerAddress'),
+            skills: val('workerSkills'),
+            experience_years: Number(val('workerExperience')),
+            service_price_lkr: Number(val('workerPrice')),
+            availability: 'Available',
+            verification_status: 'pending'
+          },
+          emailRedirectTo: 'https://cleanlanka.lk'
+        }
+      });
+      if (error) throw error;
+      showMessage(message, 'Worker registration submitted. Confirm your email, then sign in from the Login section. Your application will remain pending review.');
+      workerFormClean.reset();
+    } catch (error) {
+      showMessage(message, error.message || 'Registration failed. Please try again.', true);
+    } finally {
+      submit.disabled = false;
+    }
+  });
+
+  // Create the worker profile once, after the user has confirmed email and signed in.
+  async function saveWorkerProfileAfterLogin(user) {
+    const metadata = user.user_metadata || {};
+    if (metadata.account_type !== 'worker') return;
+
+    const { data: existing, error: lookupError } = await supabaseClient
+      .from('worker_profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (lookupError) {
+      console.error('worker_profiles lookup error:', lookupError);
+      throw new Error(
+        'Worker profile check failed: ' +
+        (lookupError.message || 'Unknown database error') +
+        (lookupError.code ? ' (Code: ' + lookupError.code + ')' : '') +
+        (lookupError.details ? ' — ' + lookupError.details : '') +
+        (lookupError.hint ? ' — Hint: ' + lookupError.hint : '')
+      );
+    }
+    if (existing) return;
+
+    const skills = String(metadata.skills || '')
+      .split(',')
+      .map(skill => skill.trim())
+      .filter(Boolean);
+
+    const profile = {
+      user_id: user.id,
+      full_name: metadata.full_name || '',
+      email: user.email || '',
+      district: metadata.district || '',
+      address: metadata.address || '',
+      skills,
+      experience_years: Number(metadata.experience_years || 0),
+      service_price_lkr: Number(metadata.service_price_lkr || 0),
+      availability: metadata.availability || 'Available',
+      selfie_storage_path: null,
+      nic_storage_path: null,
+      verification_status: 'pending',
+      is_available: false,
+      Phone: metadata.Phone || ''
+    };
+
+    const { error: insertError } = await supabaseClient
+      .from('worker_profiles')
+      .insert(profile);
+
+    if (insertError) {
+      console.error('worker_profiles insert error:', insertError);
+      throw new Error(
+        'Worker login succeeded, but profile save failed: ' +
+        (insertError.message || 'Unknown database error') +
+        (insertError.code ? ' (Code: ' + insertError.code + ')' : '') +
+        (insertError.details ? ' — ' + insertError.details : '') +
+        (insertError.hint ? ' — Hint: ' + insertError.hint : '')
+      );
+    }
+  }
+
+
+  // Load the signed-in worker's saved profile and show a full-screen dashboard.
+  async function loadWorkerDashboard(user) {
+    const dashboard = document.getElementById('workerDashboard');
+    const dashboardMessage = document.getElementById('workerDashboardMessage');
+    const metadata = user.user_metadata || {};
+
+    document.body.classList.add('worker-dashboard-mode');
+    dashboard.classList.remove('hidden');
+    dashboardMessage.textContent = 'Loading your worker profile...';
+
+    // Read the row if the current user's SELECT policy permits it.
+    const { data: profile, error } = await supabaseClient
+      .from('worker_profiles')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.warn('Worker profile read issue; displaying available sign-up details:', error);
+    }
+
+    // Auth metadata is used as a safe display fallback if a row cannot be read.
+    const p = profile || {};
+    const value = (...items) => {
+      for (const item of items) {
+        if (item !== null && item !== undefined && String(item).trim() !== '') return item;
+      }
+      return '—';
+    };
+    const put = (id, val) => {
+      document.getElementById(id).textContent = String(val);
+    };
+
+    put('workerDashName', value(p.full_name, metadata.full_name));
+    put('workerDashEmail', value(p.email, user.email, metadata.email));
+    put('workerDashPhone', value(p.Phone, p.phone, metadata.Phone, metadata.phone));
+    put('workerDashDistrict', value(p.district, metadata.district));
+    put('workerDashAddress', value(p.address, metadata.address));
+
+    const skills = value(p.skills, metadata.skills);
+    put('workerDashSkills', Array.isArray(skills) ? skills.join(', ') : skills);
+
+    const experience = value(p.experience_years, p.experience, metadata.experience_years, metadata.experience);
+    put('workerDashExperience', experience === '—' ? experience : experience + ' years');
+
+    const price = value(p.service_price_lkr, p.expected_price_lkr, metadata.service_price_lkr, metadata.expected_price_lkr);
+    put('workerDashPrice', price === '—' ? price : Number(price).toLocaleString('en-LK'));
+
+    put('workerDashAvailability', value(p.availability, metadata.availability, 'Available'));
+
+    const status = String(value(p.verification_status, metadata.verification_status, 'pending')).toLowerCase();
+    put('workerDashBookings', status === 'approved' && p.is_available === true
+      ? 'Available after approval'
+      : 'Not available until approval');
+
+    const badge = document.getElementById('workerVerificationBadge');
+    badge.textContent = status.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    badge.className = status === 'approved'
+      ? 'px-4 py-2 rounded-full bg-green-100 text-green-800 text-sm font-bold'
+      : 'px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold';
+
+    if (profile) {
+      dashboardMessage.textContent = error
+        ? 'Showing the registration details saved with your account. The database profile could not be read.'
+        : 'Your worker profile is loaded. Your application is waiting for administrator review.';
+    } else {
+      dashboardMessage.textContent = 'Showing the details saved during registration. Your application remains pending review.';
+    }
+  }
+
+  const loginForm = document.getElementById('loginForm');
+  loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const role = document.getElementById('loginRole').value;
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const message = document.getElementById('loginMessage');
+    const submit = document.getElementById('loginSubmit');
+
+    if (!role) {
+      showMessage(message, 'Please select Customer or Service Worker.', true);
+      return;
+    }
+
+    submit.disabled = true;
+    showMessage(message, 'Signing in...');
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+
+      const actualRole = data.user?.user_metadata?.account_type;
+      if (actualRole !== role) {
+        await supabaseClient.auth.signOut();
+        throw new Error('This email is registered under a different account type. Please select the correct type.');
+      }
+
+      if (role === 'worker') {
+        await saveWorkerProfileAfterLogin(data.user);
+        showMessage(message, 'Worker sign-in successful.');
+        await loadWorkerDashboard(data.user);
+      } else {
+        showMessage(message, 'Customer sign-in successful.');
+        document.getElementById('workerDashboard').classList.add('hidden');
+      }
+      document.getElementById('emailConfirmationHint').classList.add('hidden');
+      document.getElementById('logoutButton').classList.remove('hidden');
+    } catch (error) {
+      showMessage(message, error.message || 'Sign-in failed. Check your email and password.', true);
+    } finally {
+      submit.disabled = false;
+    }
+  });
+
+  async function cleanLankaSignOut() {
+    const message = document.getElementById('loginMessage');
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) {
+      showMessage(message, error.message || 'Could not sign out.', true);
+      return;
+    }
+    document.body.classList.remove('worker-dashboard-mode');
+    document.getElementById('logoutButton').classList.add('hidden');
+    document.getElementById('workerDashboard').classList.add('hidden');
+    document.getElementById('emailConfirmationHint').classList.remove('hidden');
+    showMessage(message, 'You have signed out successfully.');
+  }
+
+  document.getElementById('logoutButton').addEventListener('click', cleanLankaSignOut);
+  document.getElementById('workerDashboardLogoutButton').addEventListener('click', cleanLankaSignOut);
+</script>
+</body>
+</html>
