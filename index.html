@@ -44,6 +44,27 @@
       }
     }
   </script>
+
+<style>
+  body.worker-dashboard-mode > *:not(#workerDashboard) {
+    display: none !important;
+  }
+  body.worker-dashboard-mode #workerDashboard {
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
+    margin: 0;
+    border-radius: 0;
+    padding: 24px;
+    background: #f8fafc;
+  }
+</style>
 </head>
 <body class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -932,6 +953,9 @@
     <span id="workerVerificationBadge" class="px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold">Pending Review</span>
   </div>
   <p id="workerDashboardMessage" class="mt-4 text-sm text-gray-600" aria-live="polite"></p>
+  <div class="flex justify-end mt-4">
+    <button id="workerDashboardLogoutButton" type="button" class="px-5 py-3 rounded-xl bg-primary text-white font-bold shadow">Sign Out</button>
+  </div>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
     <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Full name</p><p id="workerDashName" class="font-semibold text-gray-900">—</p></div>
     <div class="p-4 rounded-xl bg-gray-50"><p class="text-xs text-gray-500">Email</p><p id="workerDashEmail" class="font-semibold text-gray-900 break-all">—</p></div>
@@ -1157,56 +1181,74 @@
   }
 
 
-  // Load the signed-in worker's own saved profile and show the dashboard.
+  // Load the signed-in worker's saved profile and show a full-screen dashboard.
   async function loadWorkerDashboard(user) {
     const dashboard = document.getElementById('workerDashboard');
     const dashboardMessage = document.getElementById('workerDashboardMessage');
+    const metadata = user.user_metadata || {};
+
+    document.body.classList.add('worker-dashboard-mode');
     dashboard.classList.remove('hidden');
     dashboardMessage.textContent = 'Loading your worker profile...';
 
+    // Read the row if the current user's SELECT policy permits it.
     const { data: profile, error } = await supabaseClient
       .from('worker_profiles')
-      .select('full_name,email,district,address,skills,experience_years,service_price_lkr,availability,verification_status,is_available,Phone')
+      .select('*')
       .eq('user_id', user.id)
       .maybeSingle();
 
     if (error) {
-      console.error('Worker dashboard profile lookup error:', error);
-      dashboardMessage.textContent = 'Your login worked, but the profile could not be displayed. Database message: ' + error.message;
-      return;
+      console.warn('Worker profile read issue; displaying available sign-up details:', error);
     }
 
-    if (!profile) {
-      dashboardMessage.textContent = 'Your worker profile was not found. Please contact Clean Lanka support.';
-      return;
-    }
-
-    const put = (id, value) => {
-      document.getElementById(id).textContent =
-        value === null || value === undefined || value === '' ? '—' : String(value);
+    // Auth metadata is used as a safe display fallback if a row cannot be read.
+    const p = profile || {};
+    const value = (...items) => {
+      for (const item of items) {
+        if (item !== null && item !== undefined && String(item).trim() !== '') return item;
+      }
+      return '—';
+    };
+    const put = (id, val) => {
+      document.getElementById(id).textContent = String(val);
     };
 
-    put('workerDashName', profile.full_name);
-    put('workerDashEmail', profile.email || user.email);
-    put('workerDashPhone', profile.Phone);
-    put('workerDashDistrict', profile.district);
-    put('workerDashAddress', profile.address);
-    put('workerDashSkills', Array.isArray(profile.skills) ? profile.skills.join(', ') : profile.skills);
-    put('workerDashExperience', profile.experience_years === null ? '—' : profile.experience_years + ' years');
-    put('workerDashPrice', profile.service_price_lkr === null ? '—' : Number(profile.service_price_lkr).toLocaleString('en-LK'));
-    put('workerDashAvailability', profile.availability);
-    put('workerDashBookings', profile.verification_status === 'approved' && profile.is_available ? 'Eligible after approval' : 'Not available until approval');
+    put('workerDashName', value(p.full_name, metadata.full_name));
+    put('workerDashEmail', value(p.email, user.email, metadata.email));
+    put('workerDashPhone', value(p.Phone, p.phone, metadata.Phone, metadata.phone));
+    put('workerDashDistrict', value(p.district, metadata.district));
+    put('workerDashAddress', value(p.address, metadata.address));
+
+    const skills = value(p.skills, metadata.skills);
+    put('workerDashSkills', Array.isArray(skills) ? skills.join(', ') : skills);
+
+    const experience = value(p.experience_years, p.experience, metadata.experience_years, metadata.experience);
+    put('workerDashExperience', experience === '—' ? experience : experience + ' years');
+
+    const price = value(p.service_price_lkr, p.expected_price_lkr, metadata.service_price_lkr, metadata.expected_price_lkr);
+    put('workerDashPrice', price === '—' ? price : Number(price).toLocaleString('en-LK'));
+
+    put('workerDashAvailability', value(p.availability, metadata.availability, 'Available'));
+
+    const status = String(value(p.verification_status, metadata.verification_status, 'pending')).toLowerCase();
+    put('workerDashBookings', status === 'approved' && p.is_available === true
+      ? 'Available after approval'
+      : 'Not available until approval');
 
     const badge = document.getElementById('workerVerificationBadge');
-    const status = profile.verification_status || 'pending';
     badge.textContent = status.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     badge.className = status === 'approved'
       ? 'px-4 py-2 rounded-full bg-green-100 text-green-800 text-sm font-bold'
       : 'px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold';
 
-    dashboardMessage.textContent = status === 'approved'
-      ? 'Your worker profile is approved.'
-      : 'Your profile is saved and waiting for administrator review.';
+    if (profile) {
+      dashboardMessage.textContent = error
+        ? 'Showing the registration details saved with your account. The database profile could not be read.'
+        : 'Your worker profile is loaded. Your application is waiting for administrator review.';
+    } else {
+      dashboardMessage.textContent = 'Showing the details saved during registration. Your application remains pending review.';
+    }
   }
 
   const loginForm = document.getElementById('loginForm');
@@ -1252,18 +1294,22 @@
     }
   });
 
-  document.getElementById('logoutButton').addEventListener('click', async () => {
+  async function cleanLankaSignOut() {
     const message = document.getElementById('loginMessage');
     const { error } = await supabaseClient.auth.signOut();
     if (error) {
       showMessage(message, error.message || 'Could not sign out.', true);
       return;
     }
+    document.body.classList.remove('worker-dashboard-mode');
     document.getElementById('logoutButton').classList.add('hidden');
     document.getElementById('workerDashboard').classList.add('hidden');
     document.getElementById('emailConfirmationHint').classList.remove('hidden');
     showMessage(message, 'You have signed out successfully.');
-  });
+  }
+
+  document.getElementById('logoutButton').addEventListener('click', cleanLankaSignOut);
+  document.getElementById('workerDashboardLogoutButton').addEventListener('click', cleanLankaSignOut);
 </script>
 </body>
 </html>
