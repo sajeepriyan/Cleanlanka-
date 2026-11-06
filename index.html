@@ -1,10 +1,10 @@
-<!-- CLEAN LANKA — FILE 08: PDF-only Verification Documents + Larger Upload Controls -->
+<!-- CLEAN LANKA — FILE 09: Admin Worker Management + Dashboard Summary + Sub Admin Permissions -->
 <!DOCTYPE html>
 
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>File 05 | Clean Lanka - Sri Lanka's #1 Trusted Home &amp; Domestic Services</title>
+<title>File 09 | Clean Lanka - Admin Worker Management</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -1164,14 +1164,31 @@
  <div class="max-w-7xl mx-auto">
   <div class="flex flex-wrap items-center justify-between gap-3 mb-7"><div><p class="text-xs font-black tracking-widest text-emerald-700">CLEAN LANKA CONTROL CENTRE</p><h1 class="text-3xl font-black text-slate-900">Admin Dashboard</h1><p id="adminDashboardEmail" class="text-sm text-slate-500 mt-1"></p></div><button id="adminDashboardLogoutButton" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold" type="button">Sign Out</button></div>
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+   <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Total Members</p><p id="adminTotalMembers" class="text-3xl font-black text-emerald-800 mt-2">—</p></div>
    <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Customer Profiles</p><p id="adminCustomerCount" class="text-3xl font-black text-emerald-800 mt-2">—</p></div>
    <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Worker Profiles</p><p id="adminWorkerCount" class="text-3xl font-black text-blue-800 mt-2">—</p></div>
-   <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Admin Access</p><p class="text-xl font-black text-emerald-800 mt-2">Verified</p></div>
+   <div class="rounded-2xl bg-white border border-amber-200 p-6"><p class="text-sm font-bold text-slate-500">Pending Workers</p><p id="adminPendingWorkerCount" class="text-3xl font-black text-amber-700 mt-2">—</p></div>
+   <div class="rounded-2xl bg-white border border-emerald-200 p-6"><p class="text-sm font-bold text-slate-500">Approved Workers</p><p id="adminApprovedWorkerCount" class="text-3xl font-black text-emerald-700 mt-2">—</p></div>
+   <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Admin Access</p><p id="adminAccessLabel" class="text-xl font-black text-emerald-800 mt-2">Verified</p></div>
   </div>
   <div class="rounded-2xl bg-white border border-slate-200 p-6 mb-6"><h2 class="text-xl font-black text-slate-900">Administration</h2><p class="text-slate-600 mt-2">Authorised administrator access verified. Worker information and private verification files are available below for review.</p><p id="adminDashboardMessage" class="text-sm mt-4 text-slate-600" role="status"></p></div>
+  <section id="adminCustomersSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminCustomersHeading">
+   <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminCustomersHeading" class="text-xl font-black text-slate-900">Customer Management</h2><p class="text-sm text-slate-500 mt-1">Customer ID, name, district and registration date.</p></div><button id="adminRefreshCustomers" type="button" class="rounded-xl bg-emerald-800 text-white px-5 py-3 font-bold">Refresh Customers</button></div>
+   <p id="adminCustomerListMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite"></p><div id="adminCustomerList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+  </section>
+  <section id="adminSubAdminsSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminSubAdminsHeading">
+   <div class="mb-4"><h2 id="adminSubAdminsHeading" class="text-xl font-black text-slate-900">Sub Admin Permission Management</h2><p class="text-sm text-slate-500 mt-1">Create Sub Admin access, control permissions and activate or deactivate accounts.</p></div>
+   <form id="adminCreateSubAdminForm" class="rounded-xl bg-slate-50 border border-slate-200 p-4 mb-5 space-y-3">
+    <label class="block text-sm font-bold text-slate-700" for="newSubAdminUserId">Sub Admin User ID (UUID from the registered account)</label><input id="newSubAdminUserId" required class="w-full rounded-xl border border-slate-300 px-3 py-3" placeholder="Paste the registered Supabase User ID">
+    <p class="text-sm font-bold text-slate-700">Permissions</p><div id="newSubAdminPermissions" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
+    <button id="createSubAdminButton" type="submit" class="rounded-xl bg-emerald-800 text-white px-5 py-3 font-bold">Create Sub Admin</button><p id="subAdminFormMessage" class="text-sm" role="status" aria-live="polite"></p>
+   </form>
+   <div class="flex items-center justify-between gap-3 mb-3"><h3 class="font-extrabold text-slate-900">Existing Sub Admins</h3><button id="adminRefreshSubAdmins" type="button" class="rounded-xl border border-slate-300 px-4 py-2 font-bold">Refresh List</button></div>
+   <p id="subAdminListMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite"></p><div id="subAdminList" class="space-y-3"></div>
+  </section>
   <section class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6" aria-labelledby="adminWorkersHeading">
    <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminWorkersHeading" class="text-xl font-black text-slate-900">Worker Management</h2><p class="text-sm text-slate-500 mt-1">View worker profiles and securely open submitted documents.</p></div><button id="adminRefreshWorkers" type="button" class="rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white px-5 py-3 font-bold">Refresh Workers</button></div>
-   <label class="block text-sm font-bold text-slate-700 mb-2" for="adminWorkerSearch">Search by name, email, phone, district or skill</label><input id="adminWorkerSearch" type="search" placeholder="Search workers..." class="w-full rounded-xl border border-slate-300 px-4 py-3 mb-4">
+   <div class="grid sm:grid-cols-[1fr_220px] gap-3 mb-4"><div><label class="block text-sm font-bold text-slate-700 mb-2" for="adminWorkerSearch">Search by Worker ID, name, email, phone, district or skill</label><input id="adminWorkerSearch" type="search" placeholder="Search workers..." class="w-full rounded-xl border border-slate-300 px-4 py-3"></div><div><label class="block text-sm font-bold text-slate-700 mb-2" for="adminWorkerStatusFilter">Profile Status</label><select id="adminWorkerStatusFilter" class="w-full rounded-xl border border-slate-300 px-4 py-3"><option value="all">All Workers</option><option value="pending">Pending Profiles</option><option value="approved">Approved Profiles</option></select></div></div>
    <p id="adminWorkerListMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite">Loading worker profiles...</p>
    <div id="adminWorkerList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
    <div id="adminWorkerDetail" class="hidden mt-6 border-t border-slate-200 pt-6"></div>
@@ -1846,6 +1863,33 @@
   const WORKER_PRIVATE_BUCKET = 'worker-private-documents';
   let currentWorkerProfile = null;
 
+  // Resize selfies on the device before upload to reduce private Storage transfer time.
+  async function prepareSelfieForUpload(file) {
+    if (typeof createImageBitmap !== 'function') return file;
+    let bitmap;
+    try {
+      bitmap = await createImageBitmap(file);
+      const maxSide = 1280;
+      const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+      const width = Math.max(1, Math.round(bitmap.width * scale));
+      const height = Math.max(1, Math.round(bitmap.height * scale));
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext('2d', { alpha: false });
+      if (!context) return file;
+      context.drawImage(bitmap, 0, 0, width, height);
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.78));
+      if (!blob) return file;
+      return new File([blob], 'worker-selfie.jpg', { type: 'image/jpeg', lastModified: Date.now() });
+    } catch (err) {
+      console.warn('Selfie compression unavailable; using original image:', err);
+      return file;
+    } finally {
+      if (bitmap) bitmap.close();
+    }
+  }
+
   async function showWorkerSelfie(path) {
     const preview = document.getElementById('workerSelfiePreview');
     const message = document.getElementById('workerSelfieMessage');
@@ -1859,6 +1903,7 @@
       if (label) label.style.display = '';
       return false;
     }
+    if (message) message.textContent = 'Loading your private selfie...';
     try {
       const { data, error } = await supabaseClient.storage
         .from(WORKER_PRIVATE_BUCKET).createSignedUrl(path, 3600);
@@ -1867,10 +1912,13 @@
       const img = document.createElement('img');
       img.alt = 'Your private worker selfie';
       img.dataset.selfiePreview = 'true';
+      img.decoding = 'async';
+      img.loading = 'eager';
       img.style.cssText = 'position:absolute;z-index:2;inset:0;width:100%;height:100%;min-height:240px;object-fit:cover;border-radius:20px;display:block;';
       img.onload = () => {
         if (placeholder) placeholder.style.display = 'none';
         if (label) label.style.display = 'none';
+        if (message) message.textContent = 'Private selfie loaded.';
       };
       img.onerror = () => {
         img.remove();
@@ -1900,11 +1948,11 @@
     const { data: authData, error: authError } = await supabaseClient.auth.getUser();
     const user = authData?.user;
     if (authError || !user || !activeWorkerProfileId) { message.textContent = 'Please sign in and load your Worker Profile first.'; return; }
-    button.disabled = true; message.textContent = 'Uploading securely...';
+    button.disabled = true; message.textContent = 'Preparing a faster, private selfie upload...';
     try {
-      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
-      const path = `${user.id}/selfie-${Date.now()}.${ext}`;
-      const { error: uploadError } = await supabaseClient.storage.from(WORKER_PRIVATE_BUCKET).upload(path, file, { upsert: false, contentType: file.type });
+      const uploadFile = await prepareSelfieForUpload(file);
+      const path = `${user.id}/selfie-${Date.now()}.jpg`;
+      const { error: uploadError } = await supabaseClient.storage.from(WORKER_PRIVATE_BUCKET).upload(path, uploadFile, { upsert: false, contentType: 'image/jpeg', cacheControl: '3600' });
       if (uploadError) throw uploadError;
       const { data: updated, error: updateError } = await supabaseClient.from('worker_profiles')
         .update({ selfie_storage_path: path }).eq('id', activeWorkerProfileId).eq('user_id', user.id).select('*').single();
@@ -2060,7 +2108,8 @@
     document.getElementById('workerEditToggle').disabled = !profile;
     const selfieButton = document.getElementById('workerSelfieUploadButton');
     if (selfieButton) selfieButton.disabled = !profile;
-    if (profile?.selfie_storage_path) await showWorkerSelfie(profile.selfie_storage_path);
+    // Do not block the rest of the dashboard while the private selfie preview loads.
+    if (profile?.selfie_storage_path) void showWorkerSelfie(profile.selfie_storage_path);
     updateWorkerDocumentStatuses(profile);
     const phonePrivacyToggle = document.getElementById('showPhonePublicly');
     if (phonePrivacyToggle) {
@@ -2183,7 +2232,18 @@
   const adminWorkerList = document.getElementById('adminWorkerList');
   const adminWorkerDetail = document.getElementById('adminWorkerDetail');
   const adminWorkerListMessage = document.getElementById('adminWorkerListMessage');
-
+  let currentAdminUser = null;
+  let currentAdminRole = '';
+  let currentAdminPermissions = {};
+  const ADMIN_PERMISSION_LABELS = {
+    workers_view:'View workers', workers_edit:'Edit worker profiles',
+    customers_view:'View customers', customers_edit:'Edit customer profiles',
+    approvals_view:'View approvals', approvals_approve:'Approve / reject workers',
+    bookings_view:'View bookings', bookings_manage:'Manage bookings', reports_view:'View reports'
+  };
+  function adminHasPermission(permission) {
+    return currentAdminRole === 'main_admin' || currentAdminPermissions?.all === true || currentAdminPermissions?.[permission] === true;
+  }
   function adminSafeText(value, fallback = 'Not provided') {
     if (value === null || value === undefined || value === '') return fallback;
     if (Array.isArray(value)) return value.length ? value.join(', ') : fallback;
@@ -2206,7 +2266,8 @@
   function renderAdminWorkerList() {
     if (!adminWorkerList) return;
     const term = (document.getElementById('adminWorkerSearch')?.value || '').trim().toLowerCase();
-    const filtered = adminWorkerCache.filter(w => [w.full_name,w.email,w.Phone,w.district,w.address,w.skills]
+    const statusFilter = document.getElementById('adminWorkerStatusFilter')?.value || 'all';
+    const filtered = adminWorkerCache.filter(w => (statusFilter === 'all' || w.verification_status === statusFilter) && [w.worker_code,w.full_name,w.email,w.Phone,w.district,w.address,w.skills]
       .map(v => Array.isArray(v) ? v.join(' ') : (v ?? '')).join(' ').toLowerCase().includes(term));
     adminWorkerList.replaceChildren();
     if (!filtered.length) {
@@ -2220,6 +2281,7 @@
       const name = document.createElement('h3');
       name.className = 'text-lg font-black text-slate-900';
       name.textContent = adminSafeText(w.full_name, 'Worker name unavailable');
+      const code = document.createElement('p'); code.className = 'text-xs font-extrabold tracking-wide text-blue-800 mt-1'; code.textContent = `Worker ID: ${adminSafeText(w.worker_code, 'Not available')}`;
       const skill = document.createElement('p');
       skill.className = 'text-sm text-emerald-800 font-bold mt-1';
       skill.textContent = adminSafeText(w.skills, 'Skills not provided');
@@ -2230,7 +2292,7 @@
       btn.type = 'button'; btn.className = 'mt-4 w-full rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white px-4 py-3 font-bold';
       btn.textContent = 'View Full Profile & Documents';
       btn.addEventListener('click', () => showAdminWorkerDetail(w));
-      card.append(name, skill, meta, btn);
+      card.append(name, code, skill, meta, btn);
       adminWorkerList.append(card);
     });
   }
@@ -2255,7 +2317,7 @@
     const grid = document.createElement('div');
     grid.className = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-3';
     [
-      ['Full Name',w.full_name],['Email',w.email],['Phone',w.Phone],['District',w.district],['Address',w.address],
+      ['Worker ID',w.worker_code],['Full Name',w.full_name],['Email',w.email],['Phone',w.Phone],['District',w.district],['Address',w.address],
       ['Skills / Trade',w.skills],['Experience (years)',w.experience_years],['Service Price (LKR)',w.service_price_lkr],
       ['Availability',w.availability],['Available for work',w.is_available ? 'Yes' : 'No'],
       ['Verification Status',w.verification_status],['Police Clearance Status',w.police_clearance_status],
@@ -2312,6 +2374,10 @@
     const actionButtons = document.createElement('div');
     actionButtons.className = 'flex flex-wrap gap-2';
     adminWorkerDetail.append(actionButtons);
+    if (currentAdminRole === 'sub_admin' || !adminHasPermission('workers_edit')) {
+      actionNote.textContent = 'You have view-only access. Worker approval and profile changes are restricted to an authorised administrator.';
+      actionButtons.classList.add('hidden');
+    }
 
     async function applyAdminWorkerDecision(label, changes, confirmText) {
       if (confirmText && !window.confirm(confirmText)) return;
@@ -2337,6 +2403,7 @@
     }
 
     function addAdminDecisionButton(text, style, handler) {
+      if (currentAdminRole === 'sub_admin' || !adminHasPermission('workers_edit')) return;
       const button = document.createElement('button');
       button.type = 'button';
       button.className = `rounded-xl px-4 py-3 text-sm font-bold text-white ${style}`;
@@ -2409,7 +2476,7 @@
   }
 
   async function loadAdminWorkers() {
-    if (!adminWorkerListMessage) return;
+    if (!adminWorkerListMessage || !adminHasPermission('workers_view')) return;
     adminWorkerListMessage.textContent = 'Loading worker profiles...';
     if (adminWorkerList) adminWorkerList.replaceChildren();
     try {
@@ -2418,12 +2485,103 @@
       adminWorkerCache = Array.isArray(data) ? data : [];
       renderAdminWorkerList();
     } catch (error) {
-      adminWorkerListMessage.textContent = `Could not load worker profiles: ${error.message || 'Check admin worker_profiles SELECT permission.'}`;
+      adminWorkerListMessage.textContent = `Could not load worker profiles: ${error.message || 'Check worker view permission.'}`;
     }
   }
 
+  async function loadAdminDashboardSummary() {
+    const { data, error } = await supabaseClient.rpc('get_admin_dashboard_summary');
+    if (error) throw error;
+    const summary = data || {};
+    const setCount = (id, value) => { const el=document.getElementById(id); if(el) el.textContent = value === null || value === undefined ? '—' : String(value); };
+    setCount('adminTotalMembers', summary.total_members);
+    setCount('adminCustomerCount', summary.total_customers);
+    setCount('adminWorkerCount', summary.total_workers);
+    setCount('adminPendingWorkerCount', summary.pending_workers);
+    setCount('adminApprovedWorkerCount', summary.approved_workers);
+  }
+
+  async function loadAdminCustomers() {
+    const section=document.getElementById('adminCustomersSection');
+    const list=document.getElementById('adminCustomerList');
+    const msg=document.getElementById('adminCustomerListMessage');
+    if (!adminHasPermission('customers_view')) { section?.classList.add('hidden'); return; }
+    section?.classList.remove('hidden'); msg.textContent='Loading customer profiles...'; list.replaceChildren();
+    try {
+      const {data,error}=await supabaseClient.rpc('get_admin_customer_profiles');
+      if(error) throw error;
+      const rows=Array.isArray(data)?data:[];
+      msg.textContent=`${rows.length} customer profile(s).`;
+      if(!rows.length){msg.textContent='No customer profiles found.';return;}
+      rows.forEach(c=>{
+        const card=document.createElement('article'); card.className='rounded-2xl border border-slate-200 p-4 bg-white';
+        const name=document.createElement('h3'); name.className='text-lg font-black text-slate-900'; name.textContent=adminSafeText(c.full_name);
+        const code=document.createElement('p'); code.className='text-xs font-extrabold text-blue-800 mt-1'; code.textContent=`Customer ID: ${adminSafeText(c.customer_code)}`;
+        const district=document.createElement('p'); district.className='text-sm text-slate-600 mt-2'; district.textContent=`District: ${adminSafeText(c.district)}`;
+        const date=document.createElement('p'); date.className='text-xs text-slate-500 mt-1'; date.textContent=`Registered: ${c.created_at?new Date(c.created_at).toLocaleString():'Not available'}`;
+        card.append(name,code,district,date); list.append(card);
+      });
+    } catch(error){msg.textContent=`Could not load customers: ${error.message||'Customer view permission required.'}`;}
+  }
+
+  function renderSubAdminPermissionInputs(container, selected={}) {
+    container.replaceChildren();
+    Object.entries(ADMIN_PERMISSION_LABELS).forEach(([key,label])=>{
+      const wrap=document.createElement('label'); wrap.className='flex items-center gap-2 rounded-lg border border-slate-200 bg-white p-3 text-sm font-semibold text-slate-700';
+      const input=document.createElement('input'); input.type='checkbox'; input.value=key; input.checked=selected[key]===true; input.className='h-4 w-4 accent-emerald-700';
+      const text=document.createElement('span'); text.textContent=label; wrap.append(input,text); container.append(wrap);
+    });
+  }
+  function readSubAdminPermissions(container) {
+    const result={}; container.querySelectorAll('input[type="checkbox"]').forEach(input=>{result[input.value]=input.checked;}); return result;
+  }
+  async function loadSubAdmins() {
+    const list=document.getElementById('subAdminList'); const msg=document.getElementById('subAdminListMessage');
+    if(!list||!msg||currentAdminRole!=='main_admin') return;
+    msg.textContent='Loading Sub Admins...'; list.replaceChildren();
+    try {
+      const {data,error}=await supabaseClient.rpc('get_sub_admin_list'); if(error) throw error;
+      const rows=Array.isArray(data)?data:[];
+      if(!rows.length){msg.textContent='No Sub Admin accounts found.';return;}
+      msg.textContent=`${rows.length} Sub Admin account(s).`;
+      rows.forEach(row=>{
+        const userId=row.user_id||row.sub_admin_id||row.id||'';
+        const card=document.createElement('article'); card.className='rounded-xl border border-slate-200 p-4';
+        const top=document.createElement('div'); top.className='flex flex-wrap items-center justify-between gap-2';
+        const title=document.createElement('p'); title.className='font-extrabold text-slate-900 break-all'; title.textContent=`Sub Admin: ${userId||'User ID unavailable'}`;
+        const status=document.createElement('span'); status.className='text-xs font-bold rounded-full px-3 py-1 '+(row.is_active?'bg-emerald-100 text-emerald-800':'bg-rose-100 text-rose-800'); status.textContent=row.is_active?'Active':'Inactive'; top.append(title,status); card.append(top);
+        const perms=document.createElement('p'); perms.className='text-xs text-slate-600 mt-2'; const p=row.permissions||{}; perms.textContent='Permissions: '+Object.keys(ADMIN_PERMISSION_LABELS).filter(k=>p[k]===true).map(k=>ADMIN_PERMISSION_LABELS[k]).join(', '); card.append(perms);
+        const controls=document.createElement('div'); controls.className='mt-3 flex flex-wrap gap-2';
+        const edit=document.createElement('button'); edit.type='button'; edit.className='rounded-lg bg-blue-700 text-white px-3 py-2 text-sm font-bold'; edit.textContent='Edit Permissions';
+        edit.addEventListener('click',async()=>{
+          const panel=document.createElement('div'); panel.className='mt-3 rounded-lg bg-slate-50 p-3'; const choices=document.createElement('div'); choices.className='grid sm:grid-cols-2 gap-2'; renderSubAdminPermissionInputs(choices,p); panel.append(choices);
+          const save=document.createElement('button'); save.type='button'; save.className='mt-3 rounded-lg bg-emerald-800 text-white px-4 py-2 text-sm font-bold'; save.textContent='Save Permissions';
+          save.addEventListener('click',async()=>{save.disabled=true;try{const {error}=await supabaseClient.rpc('update_sub_admin_permissions',{p_user_id:userId,p_permissions:readSubAdminPermissions(choices)});if(error)throw error;msg.textContent='Permissions updated.';await loadSubAdmins();}catch(e){msg.textContent=`Could not update permissions: ${e.message}`;save.disabled=false;}});
+          panel.append(save); card.querySelector('.subadmin-edit-panel')?.remove(); panel.classList.add('subadmin-edit-panel'); card.append(panel);
+        }); controls.append(edit);
+        const toggle=document.createElement('button'); toggle.type='button'; toggle.className='rounded-lg '+(row.is_active?'bg-rose-600':'bg-emerald-700')+' text-white px-3 py-2 text-sm font-bold'; toggle.textContent=row.is_active?'Deactivate':'Activate';
+        toggle.addEventListener('click',async()=>{if(!window.confirm(`${row.is_active?'Deactivate':'Activate'} this Sub Admin?`))return;toggle.disabled=true;try{const {error}=await supabaseClient.rpc('set_sub_admin_active',{p_user_id:userId,p_active:!row.is_active});if(error)throw error;await loadSubAdmins();}catch(e){msg.textContent=`Could not change Sub Admin status: ${e.message}`;toggle.disabled=false;}}); controls.append(toggle); card.append(controls); list.append(card);
+      });
+    }catch(error){msg.textContent=`Could not load Sub Admin list: ${error.message||'Check Main Admin access.'}`;}
+  }
+  const createSubAdminForm=document.getElementById('adminCreateSubAdminForm');
+  if(createSubAdminForm){
+    renderSubAdminPermissionInputs(document.getElementById('newSubAdminPermissions'));
+    createSubAdminForm.addEventListener('submit',async(event)=>{
+      event.preventDefault(); const msg=document.getElementById('subAdminFormMessage'); const button=document.getElementById('createSubAdminButton');
+      const userId=document.getElementById('newSubAdminUserId').value.trim();
+      if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(userId)){msg.textContent='Enter a valid registered Supabase User UUID.';return;}
+      button.disabled=true; msg.textContent='Creating Sub Admin...';
+      try{const {error}=await supabaseClient.rpc('create_sub_admin',{p_user_id:userId,p_permissions:readSubAdminPermissions(document.getElementById('newSubAdminPermissions'))});if(error)throw error;msg.textContent='Sub Admin created successfully.';createSubAdminForm.reset();renderSubAdminPermissionInputs(document.getElementById('newSubAdminPermissions'));await loadSubAdmins();}
+      catch(error){msg.textContent=`Could not create Sub Admin: ${error.message||'Please check the User ID and permissions.'}`;}
+      finally{button.disabled=false;}
+    });
+  }
+  document.getElementById('adminRefreshSubAdmins')?.addEventListener('click',loadSubAdmins);
+  document.getElementById('adminRefreshCustomers')?.addEventListener('click',loadAdminCustomers);
   document.getElementById('adminRefreshWorkers')?.addEventListener('click', loadAdminWorkers);
   document.getElementById('adminWorkerSearch')?.addEventListener('input', renderAdminWorkerList);
+  document.getElementById('adminWorkerStatusFilter')?.addEventListener('change', renderAdminWorkerList);
 
   document.getElementById('adminLoginForm').addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -2437,27 +2595,31 @@
       const { data, error } = await supabaseClient.auth.signInWithPassword({email, password});
       if (error) throw error;
       const { data: adminRow, error: adminError } = await supabaseClient
-        .from('admins').select('user_id').eq('user_id', data.user.id).maybeSingle();
+        .from('admins').select('user_id,role,is_active,permissions').eq('user_id', data.user.id).maybeSingle();
       if (adminError) throw new Error('Could not verify admin access. Check the admins table SELECT policy: ' + adminError.message);
-      if (!adminRow) {
+      if (!adminRow || adminRow.is_active !== true) {
         await supabaseClient.auth.signOut();
-        throw new Error('Access denied. This account is not registered as a Clean Lanka administrator.');
+        throw new Error('Access denied. This account is not an active Clean Lanka administrator.');
       }
+      currentAdminUser=data.user; currentAdminRole=adminRow.role||''; currentAdminPermissions=adminRow.permissions||{};
+      if(!['main_admin','admin','sub_admin'].includes(currentAdminRole)) { await supabaseClient.auth.signOut(); throw new Error('Access denied. Invalid administrator role.'); }
       document.body.classList.remove('admin-login-mode','login-page-mode','registration-mode','worker-dashboard-mode','customer-dashboard-mode');
       document.getElementById('admin-login').classList.add('hidden');
       document.getElementById('adminDashboard').classList.remove('hidden');
       document.body.classList.add('admin-dashboard-mode');
-      document.getElementById('adminDashboardEmail').textContent = data.user.email || '';
-      const [customers, workers] = await Promise.all([
-        supabaseClient.from('customer_profiles').select('id', {count:'exact', head:true}),
-        supabaseClient.from('worker_profiles').select('id', {count:'exact', head:true})
-      ]);
-      document.getElementById('adminCustomerCount').textContent = customers.error ? '—' : String(customers.count ?? 0);
-      document.getElementById('adminWorkerCount').textContent = workers.error ? '—' : String(workers.count ?? 0);
-      document.getElementById('adminDashboardMessage').textContent = customers.error || workers.error
-        ? 'Admin verified. Some summary counts are unavailable because of table permissions.'
-        : 'Admin verified. Dashboard summary loaded.';
-      await loadAdminWorkers();
+      document.getElementById('adminDashboardEmail').textContent = `${data.user.email || ''} • ${currentAdminRole.replace('_',' ').toUpperCase()}`;
+      document.getElementById('adminAccessLabel').textContent=currentAdminRole==='main_admin'?'Main Admin':currentAdminRole==='sub_admin'?'Sub Admin':'Admin';
+      document.getElementById('adminSubAdminsSection').classList.toggle('hidden',currentAdminRole!=='main_admin');
+      document.getElementById('adminWorkersHeading').closest('section').classList.toggle('hidden',!adminHasPermission('workers_view'));
+      document.getElementById('adminCustomersSection').classList.toggle('hidden',!adminHasPermission('customers_view'));
+      const dashboardMessage=document.getElementById('adminDashboardMessage');
+      try { await loadAdminDashboardSummary(); dashboardMessage.textContent='Admin verified. Dashboard summary loaded.'; }
+      catch(summaryError) { dashboardMessage.textContent=`Admin verified, but summary could not load: ${summaryError.message}`; }
+      const tasks=[];
+      if(adminHasPermission('workers_view')) tasks.push(loadAdminWorkers());
+      if(adminHasPermission('customers_view')) tasks.push(loadAdminCustomers());
+      if(currentAdminRole==='main_admin') tasks.push(loadSubAdmins());
+      await Promise.all(tasks);
       window.scrollTo(0,0);
     } catch (error) {
       showMessage(message, error.message || 'Admin sign-in failed.', true);
@@ -2539,6 +2701,7 @@
       return;
     }
     document.body.classList.remove('worker-dashboard-mode','customer-dashboard-mode','login-page-mode','admin-login-mode','admin-dashboard-mode');
+    currentAdminUser=null; currentAdminRole=''; currentAdminPermissions={}; adminWorkerCache=[];
     activeCustomerUserId = null;
     document.getElementById('logoutButton').classList.add('hidden');
     document.getElementById('manageEmailButton').classList.add('hidden');
