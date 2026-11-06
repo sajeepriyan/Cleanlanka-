@@ -1,4 +1,4 @@
-<!-- CLEAN LANKA — FILE 05: Worker Profile Edit + Private Selfie Upload -->
+<!-- CLEAN LANKA — FILE 08: PDF-only Verification Documents + Larger Upload Controls -->
 <!DOCTYPE html>
 
 <html lang="en"><head>
@@ -144,11 +144,11 @@
   #workerDashboard .cv-value {display:block;color:#142b43;font-size:14px;font-weight:800;overflow-wrap:anywhere}
   #workerDashboard .cv-status {display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:#fff2c7;color:#895400;font-size:12px;font-weight:900;border:1px solid #ffe08a}
   #workerDashboard .cv-status.approved {background:#dcfce7;color:#166534;border-color:#a7f3c0}
-  #workerDashboard .cv-doc-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-  #workerDashboard .cv-doc {padding:16px 12px;border-radius:17px;text-align:center;background:linear-gradient(145deg,#f2fbf6,#f1f7ff);border:1px dashed #a8cdbb}
+  #workerDashboard .cv-doc-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  #workerDashboard .cv-doc {padding:18px 14px;border-radius:18px;text-align:center;background:linear-gradient(145deg,#f2fbf6,#f1f7ff);border:1px dashed #a8cdbb;min-width:0}
   #workerDashboard .cv-doc .symbol {font-size:28px;margin-bottom:6px}
-  #workerDashboard .cv-doc strong {display:block;font-size:12px;color:#174536}
-  #workerDashboard .cv-doc small {display:block;margin-top:5px;color:#64748b;font-size:11px}
+  #workerDashboard .cv-doc strong {display:block;font-size:15px;line-height:1.35;color:#174536}
+  #workerDashboard .cv-doc small {display:block;margin-top:9px;color:#64748b;font-size:13px;overflow-wrap:anywhere}
   #workerDashboard .cv-note {padding:16px;border-radius:18px;background:linear-gradient(100deg,#fff8dc,#fff1c2);border:1px solid #f5d77c;color:#684c0a;font-size:13px;font-weight:700}
   #workerDashboard .cv-message {padding:12px 15px;border-radius:14px;background:#eef6ff;color:#285477;font-size:13px;font-weight:700;margin-bottom:15px}
   #workerDashboard .cv-bottom {display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
@@ -1168,7 +1168,14 @@
    <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Worker Profiles</p><p id="adminWorkerCount" class="text-3xl font-black text-blue-800 mt-2">—</p></div>
    <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Admin Access</p><p class="text-xl font-black text-emerald-800 mt-2">Verified</p></div>
   </div>
-  <div class="rounded-2xl bg-white border border-slate-200 p-6"><h2 class="text-xl font-black text-slate-900">Administration</h2><p class="text-slate-600 mt-2">Admin sign-in is separate from Customer and Service Worker sign-in. Worker review and approval tools can be connected here after confirming the current worker table and policy structure.</p><p id="adminDashboardMessage" class="text-sm mt-4 text-slate-600" role="status"></p></div>
+  <div class="rounded-2xl bg-white border border-slate-200 p-6 mb-6"><h2 class="text-xl font-black text-slate-900">Administration</h2><p class="text-slate-600 mt-2">Authorised administrator access verified. Worker information and private verification files are available below for review.</p><p id="adminDashboardMessage" class="text-sm mt-4 text-slate-600" role="status"></p></div>
+  <section class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6" aria-labelledby="adminWorkersHeading">
+   <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminWorkersHeading" class="text-xl font-black text-slate-900">Worker Management</h2><p class="text-sm text-slate-500 mt-1">View worker profiles and securely open submitted documents.</p></div><button id="adminRefreshWorkers" type="button" class="rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white px-5 py-3 font-bold">Refresh Workers</button></div>
+   <label class="block text-sm font-bold text-slate-700 mb-2" for="adminWorkerSearch">Search by name, email, phone, district or skill</label><input id="adminWorkerSearch" type="search" placeholder="Search workers..." class="w-full rounded-xl border border-slate-300 px-4 py-3 mb-4">
+   <p id="adminWorkerListMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite">Loading worker profiles...</p>
+   <div id="adminWorkerList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+   <div id="adminWorkerDetail" class="hidden mt-6 border-t border-slate-200 pt-6"></div>
+  </section>
  </div>
 </section>
 
@@ -1293,7 +1300,7 @@
           </div>
           <div class="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3">
             <label for="workerSelfieInput" class="block text-sm font-extrabold text-emerald-900">🤳 Upload / Change Selfie</label>
-            <input id="workerSelfieInput" type="file" accept="image/*" capture="user" class="mt-2 block w-full text-sm text-slate-700">
+            <input id="workerSelfieInput" type="file" accept="image/*" class="mt-2 block w-full text-base text-slate-700">
             <button id="workerSelfieUploadButton" type="button" class="mt-2 rounded-lg bg-emerald-700 px-4 py-2 text-sm font-bold text-white">Upload Selfie</button>
             <p id="workerSelfieMessage" class="mt-2 text-xs text-slate-600" role="status" aria-live="polite">Private upload. Only you and authorised administrators can access it.</p>
           </div>
@@ -1302,30 +1309,30 @@
             <div class="cv-doc-grid">
               <div class="cv-doc">
                 <div class="symbol">🪪</div><strong>ID – Front</strong>
-                <input id="workerNicFrontInput" type="file" accept=".pdf,image/jpeg,image/png,image/webp" class="mt-2 block w-full text-xs text-slate-700">
-                <button id="workerNicFrontUpload" type="button" class="mt-2 rounded-lg bg-emerald-700 px-3 py-2 text-xs font-bold text-white">Upload ID Front</button>
+                <input id="workerNicFrontInput" type="file" accept=".pdf,application/pdf" class="mt-3 block w-full text-base text-slate-700">
+                <button id="workerNicFrontUpload" type="button" class="mt-3 min-h-12 w-full rounded-xl bg-emerald-700 px-5 py-3 text-base font-extrabold text-white shadow-sm">Upload ID Front</button>
                 <small id="workerNicFrontStatus" role="status">Not uploaded</small>
               </div>
               <div class="cv-doc">
                 <div class="symbol">🪪</div><strong>ID – Back</strong>
-                <input id="workerNicBackInput" type="file" accept=".pdf,image/jpeg,image/png,image/webp" class="mt-2 block w-full text-xs text-slate-700">
-                <button id="workerNicBackUpload" type="button" class="mt-2 rounded-lg bg-emerald-700 px-3 py-2 text-xs font-bold text-white">Upload ID Back</button>
+                <input id="workerNicBackInput" type="file" accept=".pdf,application/pdf" class="mt-3 block w-full text-base text-slate-700">
+                <button id="workerNicBackUpload" type="button" class="mt-3 min-h-12 w-full rounded-xl bg-emerald-700 px-5 py-3 text-base font-extrabold text-white shadow-sm">Upload ID Back</button>
                 <small id="workerNicBackStatus" role="status">Not uploaded</small>
               </div>
               <div class="cv-doc">
                 <div class="symbol">📄</div><strong>Police Clearance</strong>
-                <input id="workerPoliceInput" type="file" accept=".pdf,image/jpeg,image/png,image/webp" class="mt-2 block w-full text-xs text-slate-700">
-                <button id="workerPoliceUpload" type="button" class="mt-2 rounded-lg bg-emerald-700 px-3 py-2 text-xs font-bold text-white">Upload Police Clearance</button>
+                <input id="workerPoliceInput" type="file" accept=".pdf,application/pdf" class="mt-3 block w-full text-base text-slate-700">
+                <button id="workerPoliceUpload" type="button" class="mt-3 min-h-12 w-full rounded-xl bg-emerald-700 px-5 py-3 text-base font-extrabold text-white shadow-sm">Upload Police Clearance</button>
                 <small id="workerPoliceStatus" role="status">Not uploaded</small>
               </div>
               <div class="cv-doc">
                 <div class="symbol">🏡</div><strong>Grama Niladhari Certificate</strong>
-                <input id="workerGnInput" type="file" accept=".pdf,image/jpeg,image/png,image/webp" class="mt-2 block w-full text-xs text-slate-700">
-                <button id="workerGnUpload" type="button" class="mt-2 rounded-lg bg-emerald-700 px-3 py-2 text-xs font-bold text-white">Upload GN Certificate</button>
+                <input id="workerGnInput" type="file" accept=".pdf,application/pdf" class="mt-3 block w-full text-base text-slate-700">
+                <button id="workerGnUpload" type="button" class="mt-3 min-h-12 w-full rounded-xl bg-emerald-700 px-5 py-3 text-base font-extrabold text-white shadow-sm">Upload GN Certificate</button>
                 <small id="workerGnStatus" role="status">Not uploaded</small>
               </div>
             </div>
-            <p class="text-xs text-slate-500 mt-3">PDF or image • Maximum 10 MB per document. Files are stored privately and are not shown on your public profile.</p>
+            <p class="text-xs text-slate-500 mt-3">PDF only • Maximum 10 MB per document. Files are stored privately and are not shown on your public profile.</p>
           </div>
         </section>
         <section class="cv-note">🔒 Your identity documents and verification selfie must remain private. They are not displayed on the public worker profile.</section>
@@ -1938,14 +1945,13 @@
       const status = document.getElementById(doc.status);
       const button = document.getElementById(doc.button);
       const file = input?.files?.[0];
-      if (!file) { if (status) status.textContent = 'Please choose a PDF or image file first.'; return; }
-      const allowedMime = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
+      if (!file) { if (status) status.textContent = 'Please choose a PDF file first.'; return; }
       const ext = (file.name.split('.').pop() || '').toLowerCase();
-      if (!allowedMime.includes(file.type) || !['pdf', 'jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
-        if (status) status.textContent = 'Use a PDF, JPG, PNG or WEBP file.';
+      if (ext !== 'pdf' || (file.type && file.type !== 'application/pdf')) {
+        if (status) status.textContent = 'PDF files only. Please choose a .pdf document.';
         return;
       }
-      if (file.size > 10 * 1024 * 1024) { if (status) status.textContent = 'File must be 10 MB or smaller.'; return; }
+      if (file.size > 10 * 1024 * 1024) { if (status) status.textContent = 'PDF must be 10 MB or smaller.'; return; }
       const { data: authData, error: authError } = await supabaseClient.auth.getUser();
       const user = authData?.user;
       if (authError || !user || !activeWorkerProfileId || !activeWorkerUserId || user.id !== activeWorkerUserId) {
@@ -1975,7 +1981,7 @@
           if (cleanupError) console.warn('Could not clean up an unlinked uploaded document:', cleanupError);
         }
         console.error(`${doc.label} upload failed:`, err);
-        if (status) status.textContent = 'Upload failed: ' + (err.message || 'Please check Storage and profile permissions.');
+        if (status) status.textContent = 'Upload failed: ' + (err.message || 'Please check the private Storage bucket and verification-path permission.');
       } finally {
         button.disabled = !currentWorkerProfile || !activeWorkerProfileId;
       }
@@ -2172,6 +2178,253 @@
     }
   });
 
+  // File 09 — Admin-only worker profile and private document viewer.
+  let adminWorkerCache = [];
+  const adminWorkerList = document.getElementById('adminWorkerList');
+  const adminWorkerDetail = document.getElementById('adminWorkerDetail');
+  const adminWorkerListMessage = document.getElementById('adminWorkerListMessage');
+
+  function adminSafeText(value, fallback = 'Not provided') {
+    if (value === null || value === undefined || value === '') return fallback;
+    if (Array.isArray(value)) return value.length ? value.join(', ') : fallback;
+    return String(value);
+  }
+
+  function adminField(label, value) {
+    const wrap = document.createElement('div');
+    wrap.className = 'rounded-xl bg-slate-50 border border-slate-200 p-3 min-w-0';
+    const title = document.createElement('p');
+    title.className = 'text-xs font-bold uppercase tracking-wide text-slate-500';
+    title.textContent = label;
+    const content = document.createElement('p');
+    content.className = 'text-sm font-semibold text-slate-900 mt-1 break-words';
+    content.textContent = adminSafeText(value);
+    wrap.append(title, content);
+    return wrap;
+  }
+
+  function renderAdminWorkerList() {
+    if (!adminWorkerList) return;
+    const term = (document.getElementById('adminWorkerSearch')?.value || '').trim().toLowerCase();
+    const filtered = adminWorkerCache.filter(w => [w.full_name,w.email,w.Phone,w.district,w.address,w.skills]
+      .map(v => Array.isArray(v) ? v.join(' ') : (v ?? '')).join(' ').toLowerCase().includes(term));
+    adminWorkerList.replaceChildren();
+    if (!filtered.length) {
+      adminWorkerListMessage.textContent = adminWorkerCache.length ? 'No workers match this search.' : 'No worker profiles found.';
+      return;
+    }
+    adminWorkerListMessage.textContent = `${filtered.length} worker profile(s) shown.`;
+    filtered.forEach(w => {
+      const card = document.createElement('article');
+      card.className = 'rounded-2xl border border-slate-200 p-4 bg-white shadow-sm';
+      const name = document.createElement('h3');
+      name.className = 'text-lg font-black text-slate-900';
+      name.textContent = adminSafeText(w.full_name, 'Worker name unavailable');
+      const skill = document.createElement('p');
+      skill.className = 'text-sm text-emerald-800 font-bold mt-1';
+      skill.textContent = adminSafeText(w.skills, 'Skills not provided');
+      const meta = document.createElement('p');
+      meta.className = 'text-sm text-slate-600 mt-2';
+      meta.textContent = `${adminSafeText(w.district)} • ${adminSafeText(w.verification_status, 'Pending')}`;
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'mt-4 w-full rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white px-4 py-3 font-bold';
+      btn.textContent = 'View Full Profile & Documents';
+      btn.addEventListener('click', () => showAdminWorkerDetail(w));
+      card.append(name, skill, meta, btn);
+      adminWorkerList.append(card);
+    });
+  }
+
+  async function openAdminPrivateDocument(path, label) {
+    if (!path) throw new Error(`${label} has not been uploaded.`);
+    const { data, error } = await supabaseClient.storage.from(WORKER_PRIVATE_BUCKET).createSignedUrl(path, 300);
+    if (error || !data?.signedUrl) throw new Error(error?.message || `Could not create a private link for ${label}.`);
+    const link = document.createElement('a');
+    link.href = data.signedUrl; link.target = '_blank'; link.rel = 'noopener noreferrer';
+    link.style.display = 'none'; document.body.append(link); link.click(); link.remove();
+  }
+
+  function showAdminWorkerDetail(w) {
+    if (!adminWorkerDetail) return;
+    adminWorkerDetail.replaceChildren();
+    adminWorkerDetail.classList.remove('hidden');
+    const heading = document.createElement('h3');
+    heading.className = 'text-xl font-black text-slate-900 mb-4';
+    heading.textContent = `Worker Profile: ${adminSafeText(w.full_name, 'Unnamed worker')}`;
+    adminWorkerDetail.append(heading);
+    const grid = document.createElement('div');
+    grid.className = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-3';
+    [
+      ['Full Name',w.full_name],['Email',w.email],['Phone',w.Phone],['District',w.district],['Address',w.address],
+      ['Skills / Trade',w.skills],['Experience (years)',w.experience_years],['Service Price (LKR)',w.service_price_lkr],
+      ['Availability',w.availability],['Available for work',w.is_available ? 'Yes' : 'No'],
+      ['Verification Status',w.verification_status],['Police Clearance Status',w.police_clearance_status],
+      ['GN Certificate Status',w.gn_certificate_status],['Clearance Label',w.clearance_label],
+      ['Temporary Booking Until',w.temporary_booking_until ? new Date(w.temporary_booking_until).toLocaleString() : 'No temporary approval'],
+      ['Approved At',w.approved_at ? new Date(w.approved_at).toLocaleString() : null],
+      ['Reviewed At',w.reviewed_at ? new Date(w.reviewed_at).toLocaleString() : null],
+      ['Phone visible publicly',w.show_phone_publicly ? 'Yes' : 'No'],['Profile Created',w.created_at ? new Date(w.created_at).toLocaleString() : null]
+    ].forEach(([label,value]) => grid.append(adminField(label,value)));
+    adminWorkerDetail.append(grid);
+    const docsTitle = document.createElement('h4');
+    docsTitle.className = 'text-lg font-black text-slate-900 mt-6 mb-3';
+    docsTitle.textContent = 'Private Verification Documents';
+    adminWorkerDetail.append(docsTitle);
+    const docs = [
+      ['Selfie Photo',w.selfie_storage_path],['ID Front (PDF)',w.nic_front_storage_path],['ID Back (PDF)',w.nic_back_storage_path],
+      ['Police Clearance (PDF)',w.police_clearance_path],['GN Certificate (PDF)',w.gn_certificate_path]
+    ];
+    const docGrid = document.createElement('div'); docGrid.className = 'grid sm:grid-cols-2 gap-3';
+    docs.forEach(([label,path]) => {
+      const panel = document.createElement('div'); panel.className = 'rounded-xl border border-slate-200 p-3 flex items-center justify-between gap-3';
+      const txt = document.createElement('div');
+      const title = document.createElement('p'); title.className = 'font-bold text-slate-800'; title.textContent = label;
+      const state = document.createElement('p'); state.className = 'text-xs text-slate-500 mt-1'; state.textContent = path ? 'Uploaded • Private' : 'Not uploaded';
+      txt.append(title,state); panel.append(txt);
+      if (path) {
+        const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'shrink-0 rounded-lg bg-blue-700 text-white px-3 py-2 text-sm font-bold'; btn.textContent = 'Open';
+        btn.addEventListener('click', async () => {
+          btn.disabled = true; btn.textContent = 'Opening...';
+          try { await openAdminPrivateDocument(path,label); }
+          catch (e) { state.textContent = `Could not open: ${e.message}`; }
+          finally { btn.disabled = false; btn.textContent = 'Open'; }
+        });
+        panel.append(btn);
+      }
+      docGrid.append(panel);
+    });
+    adminWorkerDetail.append(docGrid);
+
+    // Admin decisions: temporary booking approval is 14 days from the Admin action time.
+    const actionTitle = document.createElement('h4');
+    actionTitle.className = 'text-lg font-black text-slate-900 mt-6 mb-2';
+    actionTitle.textContent = 'Admin Verification & Approval';
+    adminWorkerDetail.append(actionTitle);
+    const actionNote = document.createElement('p');
+    actionNote.className = 'text-sm text-slate-600 mb-3';
+    actionNote.textContent = 'Temporary booking approval lasts 14 days from the moment the Admin grants it. Verifying either Police Clearance or GN Certificate grants clearance approval and ends the temporary period.';
+    adminWorkerDetail.append(actionNote);
+    const actionMessage = document.createElement('p');
+    actionMessage.className = 'text-sm font-semibold text-slate-700 mb-3';
+    actionMessage.setAttribute('role','status');
+    actionMessage.setAttribute('aria-live','polite');
+    adminWorkerDetail.append(actionMessage);
+    const actionButtons = document.createElement('div');
+    actionButtons.className = 'flex flex-wrap gap-2';
+    adminWorkerDetail.append(actionButtons);
+
+    async function applyAdminWorkerDecision(label, changes, confirmText) {
+      if (confirmText && !window.confirm(confirmText)) return;
+      actionButtons.querySelectorAll('button').forEach(b => b.disabled = true);
+      actionMessage.textContent = `${label}...`;
+      try {
+        const { data: sessionData } = await supabaseClient.auth.getSession();
+        const adminUserId = sessionData?.session?.user?.id;
+        if (!adminUserId) throw new Error('Admin session expired. Please sign in again.');
+        const payload = {...changes, reviewed_at: new Date().toISOString(), reviewed_by: adminUserId};
+        const { error } = await supabaseClient.from('worker_profiles').update(payload).eq('id',w.id);
+        if (error) throw error;
+        Object.assign(w,payload);
+        const cachedIndex = adminWorkerCache.findIndex(item => item.id === w.id);
+        if (cachedIndex >= 0) adminWorkerCache[cachedIndex] = {...adminWorkerCache[cachedIndex],...payload};
+        actionMessage.textContent = `${label} completed successfully.`;
+        showAdminWorkerDetail(w);
+        renderAdminWorkerList();
+      } catch (error) {
+        actionMessage.textContent = `Could not ${label.toLowerCase()}: ${error.message || 'Database update failed.'}`;
+        actionButtons.querySelectorAll('button').forEach(b => b.disabled = false);
+      }
+    }
+
+    function addAdminDecisionButton(text, style, handler) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `rounded-xl px-4 py-3 text-sm font-bold text-white ${style}`;
+      button.textContent = text;
+      button.addEventListener('click',handler);
+      actionButtons.append(button);
+    }
+
+    const clearanceVerified = w.police_clearance_status === 'verified' || w.gn_certificate_status === 'verified';
+    if (!clearanceVerified) {
+      addAdminDecisionButton('Temporary Approve (14 Days)','bg-blue-700 hover:bg-blue-800',() => {
+        const approvedAt = new Date();
+        const until = new Date(approvedAt.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString();
+        applyAdminWorkerDecision('Temporary approval',{
+          verification_status:'approved',
+          temporary_booking_until:until,
+          clearance_label:'Pending Clearance',
+          approved_at:approvedAt.toISOString()
+        },'Grant this worker temporary booking approval for 14 days from now?');
+      });
+    }
+
+    if (w.police_clearance_path && w.police_clearance_status !== 'verified') {
+      addAdminDecisionButton('Verify Police Clearance','bg-emerald-700 hover:bg-emerald-800',() => {
+        applyAdminWorkerDecision('Police Clearance verification',{
+          police_clearance_status:'verified',
+          verification_status:'approved',
+          temporary_booking_until:null,
+          clearance_label:'Clearance Verified',
+          approved_at:new Date().toISOString()
+        },'Confirm that you have checked and verified the Police Clearance document?');
+      });
+    }
+    if (w.gn_certificate_path && w.gn_certificate_status !== 'verified') {
+      addAdminDecisionButton('Verify GN Certificate','bg-emerald-700 hover:bg-emerald-800',() => {
+        applyAdminWorkerDecision('GN Certificate verification',{
+          gn_certificate_status:'verified',
+          verification_status:'approved',
+          temporary_booking_until:null,
+          clearance_label:'Clearance Verified',
+          approved_at:new Date().toISOString()
+        },'Confirm that you have checked and verified the GN Certificate document?');
+      });
+    }
+    if (clearanceVerified) {
+      const verifiedNote = document.createElement('p');
+      verifiedNote.className = 'w-full text-sm font-bold text-emerald-800';
+      verifiedNote.textContent = 'At least one clearance document is already verified.';
+      actionButtons.append(verifiedNote);
+    }
+    addAdminDecisionButton('Reject Worker','bg-rose-700 hover:bg-rose-800',() => {
+      applyAdminWorkerDecision('Worker rejection',{
+        verification_status:'rejected',
+        is_available:false,
+        temporary_booking_until:null,
+        clearance_label:'Clearance Rejected'
+      },'Reject this worker and stop their availability and temporary booking approval?');
+    });
+    addAdminDecisionButton('Request More Information','bg-amber-600 hover:bg-amber-700',() => {
+      applyAdminWorkerDecision('More information request',{
+        verification_status:'more_info_required',
+        temporary_booking_until:null
+      },'Set this worker status to More Information Required and end any temporary booking approval?');
+    });
+
+    const close = document.createElement('button'); close.type = 'button'; close.className = 'mt-5 rounded-xl border border-slate-300 px-5 py-3 font-bold text-slate-700'; close.textContent = 'Close Profile';
+    close.addEventListener('click', () => adminWorkerDetail.classList.add('hidden'));
+    adminWorkerDetail.append(close);
+    adminWorkerDetail.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  async function loadAdminWorkers() {
+    if (!adminWorkerListMessage) return;
+    adminWorkerListMessage.textContent = 'Loading worker profiles...';
+    if (adminWorkerList) adminWorkerList.replaceChildren();
+    try {
+      const { data, error } = await supabaseClient.from('worker_profiles').select('*').order('created_at',{ascending:false});
+      if (error) throw error;
+      adminWorkerCache = Array.isArray(data) ? data : [];
+      renderAdminWorkerList();
+    } catch (error) {
+      adminWorkerListMessage.textContent = `Could not load worker profiles: ${error.message || 'Check admin worker_profiles SELECT permission.'}`;
+    }
+  }
+
+  document.getElementById('adminRefreshWorkers')?.addEventListener('click', loadAdminWorkers);
+  document.getElementById('adminWorkerSearch')?.addEventListener('input', renderAdminWorkerList);
+
   document.getElementById('adminLoginForm').addEventListener('submit', async (event) => {
     event.preventDefault();
     const button = document.getElementById('adminLoginSubmit');
@@ -2204,6 +2457,7 @@
       document.getElementById('adminDashboardMessage').textContent = customers.error || workers.error
         ? 'Admin verified. Some summary counts are unavailable because of table permissions.'
         : 'Admin verified. Dashboard summary loaded.';
+      await loadAdminWorkers();
       window.scrollTo(0,0);
     } catch (error) {
       showMessage(message, error.message || 'Admin sign-in failed.', true);
