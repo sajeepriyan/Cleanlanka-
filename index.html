@@ -169,6 +169,30 @@
     #workerDashboard .cv-hero{padding:22px 20px}
   }
   @media(max-width:390px){#workerDashboard .cv-detail-list{grid-template-columns:1fr}}
+  #workerDashboard .phone-privacy-card{margin-top:18px;padding:18px;border:1px solid #cfe7d9;border-radius:20px;background:linear-gradient(120deg,#f0fdf4,#eff6ff)}
+  #workerDashboard .phone-privacy-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  #workerDashboard .phone-privacy-switch{position:relative;display:inline-flex;align-items:center;gap:10px;font-weight:900;color:#14532d;cursor:pointer}
+  #workerDashboard .phone-privacy-switch input{width:22px;height:22px;accent-color:#16a34a}
+  #workerDashboard .phone-privacy-help{font-size:12px;line-height:1.55;color:#526477;margin-top:9px}
+  #workerDashboard #phonePrivacyMessage{font-size:12px;font-weight:800;margin-top:10px;min-height:18px}
+</style>
+
+
+<style>
+#customerDashboard .customer-card{background:#fff;border:1px solid #dceee5;border-radius:22px;padding:20px;box-shadow:0 10px 28px #164e3b0d}
+.cl-worker-card,#customerJobsList .cl-job-card{border:1px solid #dbe7ef;border-radius:18px;padding:16px;background:linear-gradient(145deg,#fff,#f5fbf8)}
+.cl-action{border:0;border-radius:11px;padding:9px 13px;font-weight:800;background:#0f5132;color:#fff}
+.cl-action.blue{background:#1d4ed8}.cl-action.light{background:#e8f5ee;color:#14532d}.cl-action:disabled{opacity:.55;cursor:not-allowed}
+.cl-muted{font-size:12px;color:#64748b}.cl-chat-bubble{max-width:88%;padding:9px 12px;border-radius:13px;background:#e8f5ee;overflow-wrap:anywhere}.cl-chat-bubble.mine{margin-left:auto;background:#dbeafe}
+</style>
+
+
+<style>
+#adminDashboard{min-height:100vh;background:#f3f8f5;padding:22px 14px 60px;color:#163b2c}
+.admin-wrap{max-width:1250px;margin:auto}.admin-top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(110deg,#064e3b,#0f766e,#1d4ed8);color:white;padding:22px 26px;border-radius:24px;box-shadow:0 14px 35px #064e3b22}
+.admin-brand{font-size:27px;font-weight:1000;letter-spacing:-1px}.admin-sub{color:#d1fae5;font-size:13px}.admin-logout{background:#fff;color:#991b1b;border:0;border-radius:12px;padding:11px 16px;font-weight:900}
+.admin-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}.admin-stat,.admin-panel{background:#fff;border:1px solid #dcebe3;border-radius:19px;padding:17px;box-shadow:0 7px 24px #164e3b0a}.admin-stat span{display:block;color:#64748b;font-size:12px;font-weight:800;text-transform:uppercase}.admin-stat strong{display:block;font-size:30px;font-weight:1000;color:#075c3b;margin-top:5px}.admin-panel{margin-top:16px}.admin-panel h2{font-size:20px;font-weight:950;color:#064e3b;margin-bottom:12px}.admin-table-wrap{overflow-x:auto}.admin-table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}.admin-table th,.admin-table td{padding:11px 10px;border-bottom:1px solid #e5eee9;text-align:left;vertical-align:top}.admin-table th{color:#476457;background:#f5faf7;font-size:11px;text-transform:uppercase;letter-spacing:.04em}.admin-btn{border:0;border-radius:9px;padding:8px 10px;font-size:12px;font-weight:850;margin:2px;cursor:pointer}.admin-btn.green{background:#dcfce7;color:#166534}.admin-btn.blue{background:#dbeafe;color:#1e40af}.admin-btn.red{background:#fee2e2;color:#991b1b}.admin-btn.gold{background:#fef3c7;color:#92400e}.admin-note{padding:12px 14px;border-radius:12px;background:#fffbeb;color:#854d0e;font-size:12px;line-height:1.5;margin:10px 0}.admin-filter{padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;max-width:300px;width:100%;margin-bottom:12px}.admin-status{display:inline-block;padding:4px 8px;border-radius:20px;background:#eef2ff;font-size:11px;font-weight:900}
+@media(max-width:700px){.admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-top{padding:18px}.admin-brand{font-size:23px}}
 </style>
 
 </head>
@@ -1066,7 +1090,7 @@
         <div class="login-card-heading"><span class="material-symbols-outlined">account_circle</span><div><h3>Sign in to continue</h3><p>Use the email and password from registration.</p></div></div>
         <form id="loginForm" class="mt-6 space-y-4">
           <label class="login-label" for="loginRole">I am signing in as</label>
-          <select id="loginRole" required class="login-field"><option value="">Select Account Type</option><option value="customer">Customer</option><option value="worker">Service Worker</option></select>
+          <select id="loginRole" required class="login-field"><option value="">Select Account Type</option><option value="customer">Customer</option><option value="worker">Service Worker</option><option value="admin">Administrator</option></select>
           <label class="login-label" for="loginEmail">Email address</label>
           <input id="loginEmail" type="email" placeholder="Registered email address" autocomplete="username" required class="login-field">
           <label class="login-label" for="loginPassword">Password</label>
@@ -1121,7 +1145,66 @@
    <div class="customer-card"><h2 class="text-xl font-extrabold text-emerald-900 mb-3">Service Bookings</h2>
     <p class="text-slate-600 leading-relaxed">Your customer account is active. Booking history and online booking management will appear here when the booking database feature is connected.</p>
    </div>
+   </div>
+
+  <section class="customer-card mt-6" id="customerMarketplace">
+   <h2 class="text-2xl font-black text-emerald-900 mb-2">Find a Service Professional</h2>
+   <p class="text-sm text-slate-600 mb-4">Search approved workers across Sri Lanka. A phone number appears only when the worker has chosen Public.</p>
+   <div class="grid sm:grid-cols-3 gap-3 mb-4">
+    <input id="workerSearchText" class="w-full rounded-xl border border-slate-200 p-3" placeholder="Search skill or worker name">
+    <select id="workerSearchDistrict" class="w-full rounded-xl border border-slate-200 p-3"><option value="">All districts</option><option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option></select>
+    <button id="searchWorkersButton" class="rounded-xl bg-emerald-700 text-white p-3 font-bold">Search Workers</button>
+   </div>
+   <p id="workerSearchMessage" class="text-sm text-slate-500" aria-live="polite"></p>
+   <div id="publicWorkerResults" class="grid md:grid-cols-2 gap-4 mt-3"></div>
+  </section>
+
+  <section class="customer-card mt-6" id="customerJobBoard">
+   <h2 class="text-2xl font-black text-blue-900 mb-2">Post a Job</h2>
+   <p class="text-sm text-slate-600 mb-4">Describe the work you need. Approved and eligible workers can apply.</p>
+   <form id="customerJobForm" class="grid sm:grid-cols-2 gap-3">
+    <input id="jobTitle" required maxlength="120" class="rounded-xl border border-slate-200 p-3" placeholder="Job title (e.g. Home cleaning)">
+    <select id="jobDistrict" required class="rounded-xl border border-slate-200 p-3"><option value="">Select district</option><option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option></select>
+    <textarea id="jobDescription" required maxlength="3000" class="sm:col-span-2 rounded-xl border border-slate-200 p-3" rows="3" placeholder="Describe the work needed"></textarea>
+    <input id="jobArea" required maxlength="180" class="rounded-xl border border-slate-200 p-3" placeholder="Town / area (not full private address)">
+    <input id="jobBudget" type="number" min="0" step="1" class="rounded-xl border border-slate-200 p-3" placeholder="Budget in LKR (optional)">
+    <input id="jobDate" type="date" class="rounded-xl border border-slate-200 p-3">
+    <button class="sm:col-span-2 rounded-xl bg-blue-700 text-white p-3 font-bold" type="submit">Publish Job</button>
+   </form>
+   <p id="customerJobMessage" class="text-sm mt-3" aria-live="polite"></p>
+   <h3 class="text-lg font-extrabold text-slate-800 mt-6 mb-3">My Job Posts & Applications</h3>
+   <div id="customerJobsList" class="space-y-4"></div>
+  </section>
+
+  <section class="customer-card mt-6" id="customerChatPanel">
+   <h2 class="text-2xl font-black text-emerald-900 mb-2">My Conversations</h2>
+   <p class="text-sm text-slate-600 mb-3">Private messages are visible only to the customer and the selected worker.</p>
+   <div id="customerConversationList" class="space-y-2"></div>
+   <div id="customerChatWindow" class="hidden mt-4 border rounded-2xl p-3">
+    <div class="font-bold text-emerald-900 mb-2" id="customerChatTitle">Conversation</div>
+    <div id="customerChatMessages" class="max-h-64 overflow-y-auto space-y-2 bg-slate-50 rounded-xl p-3"></div>
+    <form id="customerChatForm" class="flex gap-2 mt-3"><input id="customerChatInput" required maxlength="4000" class="min-w-0 flex-1 rounded-xl border p-3" placeholder="Write a message"><button class="rounded-xl bg-emerald-700 text-white px-4 font-bold">Send</button></form>
+    <p id="customerChatMessage" class="text-xs mt-2" aria-live="polite"></p>
+   </div>
+  </section>
+ </div>
+</section>
+
+
+<!-- ADMIN DASHBOARD: access is checked against public.admins on the server -->
+<section id="adminDashboard" class="hidden">
+ <div class="admin-wrap">
+  <header class="admin-top"><div><div class="admin-brand">CLEAN <span style="color:#a7f3d0">LANKA</span> · ADMIN</div><div class="admin-sub">Secure administration • Sri Lanka marketplace</div></div><button id="adminLogoutButton" class="admin-logout" type="button">Sign Out</button></header>
+  <div class="admin-note"><strong>Privacy:</strong> This dashboard displays document submission status only. It does not expose NIC numbers, document files, private addresses, or identity images. An authorised adult administrator must review documents securely outside this page before marking them verified.</div>
+  <div class="admin-stats">
+   <div class="admin-stat"><span>Total workers</span><strong id="adminWorkerCount">—</strong></div>
+   <div class="admin-stat"><span>Pending review</span><strong id="adminPendingCount">—</strong></div>
+   <div class="admin-stat"><span>Approved workers</span><strong id="adminApprovedCount">—</strong></div>
+   <div class="admin-stat"><span>Open jobs</span><strong id="adminOpenJobsCount">—</strong></div>
   </div>
+  <section class="admin-panel"><h2>Worker Management &amp; Clearance Review</h2><input id="adminWorkerSearch" class="admin-filter" placeholder="Search worker name, email or district"><p id="adminWorkerMessage" class="text-sm text-slate-500 mb-2" aria-live="polite">Loading workers...</p><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Worker</th><th>District / Skills</th><th>Profile</th><th>Documents submitted</th><th>Clearance</th><th>Admin actions</th></tr></thead><tbody id="adminWorkersBody"><tr><td colspan="6">Loading...</td></tr></tbody></table></div></section>
+  <section class="admin-panel"><h2>Customer Job Posts</h2><p id="adminJobsMessage" class="text-sm text-slate-500 mb-2" aria-live="polite">Loading job posts...</p><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Job</th><th>Customer</th><th>Location</th><th>Budget</th><th>Status</th><th>Created</th></tr></thead><tbody id="adminJobsBody"><tr><td colspan="6">Loading...</td></tr></tbody></table></div></section>
+  <section class="admin-panel"><h2>Job Applications</h2><p id="adminAppsMessage" class="text-sm text-slate-500 mb-2" aria-live="polite">Loading applications...</p><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Job ID</th><th>Worker profile ID</th><th>Message</th><th>Status</th><th>Submitted</th></tr></thead><tbody id="adminAppsBody"><tr><td colspan="5">Loading...</td></tr></tbody></table></div></section>
  </div>
 </section>
 
@@ -1198,6 +1281,20 @@
           <div class="cv-detail wide"><span class="cv-label">Home address / Area</span><span id="workerDashAddress" class="cv-value">Not provided</span></div>
         </div>
 
+        <section class="phone-privacy-card" aria-labelledby="phonePrivacyHeading">
+          <div class="phone-privacy-row">
+            <div>
+              <h3 id="phonePrivacyHeading" class="cv-section-title" style="margin:0">📞 Phone privacy settings</h3>
+              <p class="phone-privacy-help">Choose whether customers can see your phone number on your public Clean Lanka profile. You can change this setting at any time.</p>
+            </div>
+            <label class="phone-privacy-switch" for="showPhonePublicly">
+              <input id="showPhonePublicly" type="checkbox" disabled>
+              <span id="phonePrivacyLabel">Private</span>
+            </label>
+          </div>
+          <p id="phonePrivacyMessage" role="status" aria-live="polite">Loading privacy setting...</p>
+        </section>
+
         <h3 class="cv-section-title mt-6"><span class="cv-dot"></span> Professional information</h3>
         <div class="cv-detail-list">
           <div class="cv-detail wide"><span class="cv-label">Skills & services</span><span id="workerDashSkills" class="cv-value">—</span></div>
@@ -1220,6 +1317,23 @@
           <div class="cv-feature">⭐ <strong>Build trust</strong><br>Approved profiles can be visible to customers.</div>
           <div class="cv-feature">🏡 <strong>More opportunities</strong><br>Booking access begins after approval.</div>
         </div>
+
+        <section class="cv-card mt-6" id="workerJobBoard">
+          <h3 class="cv-section-title"><span class="cv-dot"></span> Customer Jobs</h3>
+          <p class="text-sm text-slate-600 mb-3">Browse open job posts and apply when your skills match. Booking eligibility is checked by the database.</p>
+          <p id="workerJobsMessage" class="text-sm text-slate-500" aria-live="polite"></p>
+          <div id="workerOpenJobs" class="space-y-3"></div>
+        </section>
+        <section class="cv-card mt-6" id="workerChatPanel">
+          <h3 class="cv-section-title"><span class="cv-dot"></span> Customer Messages</h3>
+          <div id="workerConversationList" class="space-y-2"></div>
+          <div id="workerChatWindow" class="hidden mt-4 border rounded-2xl p-3">
+            <div class="font-bold text-emerald-900 mb-2" id="workerChatTitle">Conversation</div>
+            <div id="workerChatMessages" class="max-h-64 overflow-y-auto space-y-2 bg-slate-50 rounded-xl p-3"></div>
+            <form id="workerChatForm" class="flex gap-2 mt-3"><input id="workerChatInput" required maxlength="4000" class="min-w-0 flex-1 rounded-xl border p-3" placeholder="Write a message"><button class="rounded-xl bg-emerald-700 text-white px-4 font-bold">Send</button></form>
+            <p id="workerChatMessage" class="text-xs mt-2" aria-live="polite"></p>
+          </div>
+        </section>
       </main>
     </div>
   </div>
@@ -1273,6 +1387,51 @@
 </div>
 
 <script>
+  let activeWorkerProfileId = null;
+  let activeWorkerUserId = null;
+
+  function setPhonePrivacyUi(isPublic, message = '') {
+    const toggle = document.getElementById('showPhonePublicly');
+    const label = document.getElementById('phonePrivacyLabel');
+    const status = document.getElementById('phonePrivacyMessage');
+    if (!toggle || !label || !status) return;
+    toggle.checked = Boolean(isPublic);
+    label.textContent = isPublic ? 'Public' : 'Private';
+    status.textContent = message || (isPublic
+      ? 'Your phone number is set to appear on your public profile.'
+      : 'Your phone number is hidden from customers on your public profile.');
+    status.style.color = '#166534';
+  }
+
+  async function savePhonePrivacySetting(isPublic) {
+    const toggle = document.getElementById('showPhonePublicly');
+    const status = document.getElementById('phonePrivacyMessage');
+    if (!activeWorkerProfileId || !activeWorkerUserId) {
+      setPhonePrivacyUi(false, 'Your worker profile is not available yet.');
+      if (toggle) toggle.checked = false;
+      return;
+    }
+    if (toggle) toggle.disabled = true;
+    if (status) { status.textContent = 'Saving your privacy setting...'; status.style.color = '#285477'; }
+    try {
+      const { data, error } = await supabaseClient
+        .from('worker_profiles')
+        .update({ show_phone_publicly: Boolean(isPublic) })
+        .eq('id', activeWorkerProfileId)
+        .eq('user_id', activeWorkerUserId)
+        .select('show_phone_publicly')
+        .single();
+      if (error) throw error;
+      setPhonePrivacyUi(data.show_phone_publicly, 'Your phone privacy setting has been saved.');
+    } catch (error) {
+      console.error('Phone privacy update failed:', error);
+      setPhonePrivacyUi(!isPublic, 'Could not save this setting. Please try again.');
+      if (status) status.style.color = '#b91c1c';
+    } finally {
+      if (toggle) toggle.disabled = false;
+    }
+  }
+
   function openLoginPage() {
     document.body.classList.add('login-page-mode');
     document.getElementById('account-login').classList.remove('hidden');
@@ -1290,12 +1449,14 @@
     document.body.classList.remove('login-page-mode','registration-mode','worker-dashboard-mode');
     document.getElementById('account-login').classList.add('hidden');
     document.getElementById('workerDashboard').classList.add('hidden');
+    document.getElementById('adminDashboard').classList.add('hidden');
     document.getElementById('registration-screen').classList.add('hidden');
     document.getElementById('customerDashboard').classList.remove('hidden');
     document.getElementById('customerDashName').textContent = metadata.full_name || 'Customer';
     document.getElementById('customerDashEmail').textContent = user.email || '—';
     document.body.classList.add('customer-dashboard-mode');
     window.scrollTo(0,0);
+    if (window.cleanLankaLoadCustomerFeatures) window.cleanLankaLoadCustomerFeatures(user);
   }
 
   function openRegistration(role) {
@@ -1472,7 +1633,8 @@
       nic_storage_path: null,
       verification_status: 'pending',
       is_available: false,
-      Phone: metadata.Phone || ''
+      Phone: metadata.Phone || '',
+      show_phone_publicly: false
     };
 
     const { error: insertError } = await supabaseClient
@@ -1511,6 +1673,20 @@
 
     if (error) {
       console.warn('Worker profile read issue; displaying available sign-up details:', error);
+    }
+
+    activeWorkerProfileId = profile?.id || null;
+    activeWorkerUserId = user.id;
+    const phonePrivacyToggle = document.getElementById('showPhonePublicly');
+    if (phonePrivacyToggle) {
+      phonePrivacyToggle.disabled = !profile;
+      phonePrivacyToggle.checked = Boolean(profile?.show_phone_publicly);
+      document.getElementById('phonePrivacyLabel').textContent = profile?.show_phone_publicly ? 'Public' : 'Private';
+      document.getElementById('phonePrivacyMessage').textContent = profile
+        ? (profile.show_phone_publicly
+          ? 'Your phone number is set to appear on your public profile.'
+          : 'Your phone number is hidden from customers on your public profile.')
+        : 'Your worker profile must be saved before this setting can be changed.';
     }
 
     // Auth metadata is used as a safe display fallback if a row cannot be read.
@@ -1560,7 +1736,69 @@
     } else {
       dashboardMessage.textContent = 'Showing the details saved during registration. Your application remains pending review.';
     }
+    if (window.cleanLankaLoadWorkerFeatures) window.cleanLankaLoadWorkerFeatures(user);
   }
+
+  document.getElementById('showPhonePublicly').addEventListener('change', (event) => {
+    savePhonePrivacySetting(event.target.checked);
+  });
+
+
+  async function loadAdminDashboard(user) {
+    document.body.classList.remove('login-page-mode','registration-mode','worker-dashboard-mode','customer-dashboard-mode');
+    document.getElementById('account-login').classList.add('hidden');
+    document.getElementById('customerDashboard').classList.add('hidden');
+    document.getElementById('workerDashboard').classList.add('hidden');
+    document.getElementById('registration-screen').classList.add('hidden');
+    document.getElementById('adminDashboard').classList.remove('hidden');
+    window.scrollTo(0,0);
+    const {data:adminRow,error:adminError}=await supabaseClient.from('admins').select('user_id').eq('user_id',user.id).maybeSingle();
+    if(adminError || !adminRow){
+      document.getElementById('adminDashboard').classList.add('hidden');
+      await supabaseClient.auth.signOut();
+      throw new Error('Administrator access is not authorised for this account.');
+    }
+    await refreshAdminDashboard();
+  }
+
+  const adminEsc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  async function refreshAdminDashboard(){
+    const workerMsg=document.getElementById('adminWorkerMessage');
+    workerMsg.textContent='Loading worker records...';
+    const {data:workers,error:wErr}=await supabaseClient.from('worker_profiles').select('id,user_id,full_name,email,district,skills,experience_years,service_price_lkr,verification_status,is_available,police_clearance_status,gn_certificate_status,temporary_booking_until,clearance_label,approved_at,created_at').order('created_at',{ascending:false}).limit(250);
+    if(wErr){workerMsg.textContent='Worker records could not load: '+wErr.message;document.getElementById('adminWorkersBody').innerHTML='';return;}
+    document.getElementById('adminWorkerCount').textContent=workers.length;
+    document.getElementById('adminPendingCount').textContent=workers.filter(w=>w.verification_status==='pending').length;
+    document.getElementById('adminApprovedCount').textContent=workers.filter(w=>w.verification_status==='approved').length;
+    renderAdminWorkers(workers);
+    const {data:jobs,error:jErr}=await supabaseClient.from('job_posts').select('id,customer_id,service_title,description,district,budget_lkr,status,created_at').order('created_at',{ascending:false}).limit(100);
+    if(jErr){document.getElementById('adminJobsMessage').textContent='Job posts are not available yet. Admin read policy is required: '+jErr.message;document.getElementById('adminJobsBody').innerHTML='';document.getElementById('adminOpenJobsCount').textContent='—';}
+    else{document.getElementById('adminJobsMessage').textContent=jobs.length+' recent job posts';document.getElementById('adminOpenJobsCount').textContent=jobs.filter(j=>j.status==='open').length;document.getElementById('adminJobsBody').innerHTML=jobs.map(j=>`<tr><td><strong>${adminEsc(j.service_title||'Home service')}</strong><br><span class="text-slate-500">${adminEsc((j.description||'').slice(0,110))}</span></td><td>${adminEsc(j.customer_id)}</td><td>${adminEsc(j.district||'—')}</td><td>${j.budget_lkr==null?'—':'LKR '+Number(j.budget_lkr).toLocaleString('en-LK')}</td><td><span class="admin-status">${adminEsc(j.status)}</span></td><td>${j.created_at?new Date(j.created_at).toLocaleDateString(): '—'}</td></tr>`).join('')||'<tr><td colspan="6">No job posts found.</td></tr>';}
+    const {data:apps,error:aErr}=await supabaseClient.from('job_applications').select('id,job_id,worker_id,message,status,created_at').order('created_at',{ascending:false}).limit(100);
+    if(aErr){document.getElementById('adminAppsMessage').textContent='Applications could not load: '+aErr.message;document.getElementById('adminAppsBody').innerHTML='';}
+    else{document.getElementById('adminAppsMessage').textContent=apps.length+' recent applications';document.getElementById('adminAppsBody').innerHTML=apps.map(a=>`<tr><td>${adminEsc(a.job_id)}</td><td>${adminEsc(a.worker_id)}</td><td>${adminEsc((a.message||'').slice(0,160))}</td><td><span class="admin-status">${adminEsc(a.status)}</span></td><td>${a.created_at?new Date(a.created_at).toLocaleString(): '—'}</td></tr>`).join('')||'<tr><td colspan="5">No applications found.</td></tr>';}
+  }
+  let adminWorkerCache=[];
+  function renderAdminWorkers(rows){
+    adminWorkerCache=rows||[];const body=document.getElementById('adminWorkersBody');
+    body.innerHTML=adminWorkerCache.map(w=>{
+      const p=w.police_clearance_status||'pending',g=w.gn_certificate_status||'pending';
+      const temp=w.temporary_booking_until?new Date(w.temporary_booking_until):null;
+      const docText=`Police: ${p} · GN: ${g}`;
+      return `<tr data-worker-row="${adminEsc(w.id)}"><td><strong>${adminEsc(w.full_name)}</strong><br><span class="text-slate-500">${adminEsc(w.email||'')}</span><br><small>${adminEsc(w.id)}</small></td><td>${adminEsc(w.district)}<br>${adminEsc((w.skills||[]).join(', '))}</td><td><span class="admin-status">${adminEsc(w.verification_status)}</span><br><small>Available: ${w.is_available?'Yes':'No'}</small></td><td>${adminEsc(docText)}<br><small>Files are not opened or exposed here.</small></td><td>${adminEsc(w.clearance_label||'Pending Clearance')}<br><small>${temp?(temp>new Date()?'Temporary until '+temp.toLocaleString():'Temporary period expired'):'No temporary expiry'}</small></td><td><button class="admin-btn green" data-admin-action="approve-temp" data-worker="${adminEsc(w.id)}">Approve 14 days</button><button class="admin-btn blue" data-admin-action="verify-police" data-worker="${adminEsc(w.id)}">Mark Police verified</button><button class="admin-btn blue" data-admin-action="verify-gn" data-worker="${adminEsc(w.id)}">Mark GN verified</button><button class="admin-btn gold" data-admin-action="approve-verified" data-worker="${adminEsc(w.id)}">Approve verified</button><button class="admin-btn red" data-admin-action="reject" data-worker="${adminEsc(w.id)}">Reject</button></td></tr>`;
+    }).join('')||'<tr><td colspan="6">No worker records found.</td></tr>';
+  }
+  document.getElementById('adminWorkerSearch').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();renderAdminWorkers(adminWorkerCache.filter(w=>[w.full_name,w.email,w.district,(w.skills||[]).join(' ')].join(' ').toLowerCase().includes(q)));});
+  document.getElementById('adminWorkersBody').addEventListener('click',async e=>{
+    const b=e.target.closest('[data-admin-action]');if(!b)return;const w=adminWorkerCache.find(x=>x.id===b.dataset.worker);if(!w)return;
+    const action=b.dataset.adminAction;let patch={reviewed_at:new Date().toISOString(),reviewed_by:(await supabaseClient.auth.getUser()).data.user.id};
+    if(action==='verify-police'){if(!confirm('Only continue after an authorised adult has securely checked the original Police Clearance document. Mark it verified?'))return;patch.police_clearance_status='verified';patch.clearance_label='Clearance Verified';patch.temporary_booking_until=null;}
+    if(action==='verify-gn'){if(!confirm('Only continue after an authorised adult has securely checked the original Grama Niladhari certificate. Mark it verified?'))return;patch.gn_certificate_status='verified';patch.clearance_label='Clearance Verified';patch.temporary_booking_until=null;}
+    if(action==='approve-temp'){if(!confirm('Approve this worker for exactly 14 days from now, with Pending Clearance?'))return;patch.verification_status='approved';patch.is_available=true;patch.clearance_label='Pending Clearance';patch.approved_at=new Date().toISOString();patch.temporary_booking_until=new Date(Date.now()+14*24*60*60*1000).toISOString();}
+    if(action==='approve-verified'){if(w.police_clearance_status!=='verified'&&w.gn_certificate_status!=='verified'){alert('First verify at least one certificate.');return;}if(!confirm('Approve this worker with verified clearance?'))return;patch.verification_status='approved';patch.is_available=true;patch.clearance_label='Clearance Verified';patch.approved_at=w.approved_at||new Date().toISOString();patch.temporary_booking_until=null;}
+    if(action==='reject'){if(!confirm('Reject this worker profile?'))return;patch.verification_status='rejected';patch.is_available=false;patch.temporary_booking_until=null;}
+    b.disabled=true;const {error}=await supabaseClient.from('worker_profiles').update(patch).eq('id',w.id);if(error){alert('Update failed: '+error.message);b.disabled=false;return;}alert('Worker record updated.');await refreshAdminDashboard();
+  });
 
   const loginForm = document.getElementById('loginForm');
   loginForm.addEventListener('submit', async (event) => {
@@ -1583,12 +1821,13 @@
       if (error) throw error;
 
       const actualRole = data.user?.user_metadata?.account_type;
-      if (actualRole !== role) {
+      if (role === 'admin') {
+        await loadAdminDashboard(data.user);
+        showMessage(message, 'Administrator sign-in successful.');
+      } else if (actualRole !== role) {
         await supabaseClient.auth.signOut();
         throw new Error('This email is registered under a different account type. Please select the correct type.');
-      }
-
-      if (role === 'worker') {
+      } else if (role === 'worker') {
         let syncWarning = '';
         try {
           await saveWorkerProfileAfterLogin(data.user);
@@ -1690,6 +1929,7 @@
     document.getElementById('emailSettingsPanel').classList.add('hidden');
     document.getElementById('workerDashboard').classList.add('hidden');
     document.getElementById('customerDashboard').classList.add('hidden');
+    document.getElementById('adminDashboard').classList.add('hidden');
     document.getElementById('emailConfirmationHint').classList.remove('hidden');
     showMessage(message, 'You have signed out successfully.');
   }
@@ -1697,6 +1937,151 @@
   document.getElementById('logoutButton').addEventListener('click', cleanLankaSignOut);
   document.getElementById('workerDashboardLogoutButton').addEventListener('click', cleanLankaSignOut);
   document.getElementById('customerDashboardLogoutButton').addEventListener('click', cleanLankaSignOut);
+  document.getElementById('adminLogoutButton').addEventListener('click', cleanLankaSignOut);
 </script>
+
+<script>
+(function(){
+  const $ = (id) => document.getElementById(id);
+  let clCurrentUser = null;
+  let clCustomerChatId = null;
+  let clWorkerChatId = null;
+  const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const say = (id, msg, bad=false) => { const el=$(id); if(el){el.textContent=msg;el.style.color=bad?'#b91c1c':'#166534';} };
+  const money = v => v == null ? 'Price not listed' : 'LKR ' + Number(v).toLocaleString('en-LK');
+
+  async function getUser(){ const {data:{user}} = await supabaseClient.auth.getUser(); clCurrentUser=user; return user; }
+
+  async function loadPublicWorkers(){
+    say('workerSearchMessage','Loading approved workers...');
+    const {data,error}=await supabaseClient.rpc('get_public_worker_profiles');
+    if(error){say('workerSearchMessage','Could not load workers: '+error.message,true);return;}
+    const q=($('workerSearchText')?.value||'').trim().toLowerCase();
+    const d=$('workerSearchDistrict')?.value||'';
+    const rows=(data||[]).filter(w=>(!d||w.district===d)&&(!q||String(w.full_name||'').toLowerCase().includes(q)||(w.skills||[]).join(' ').toLowerCase().includes(q)));
+    const host=$('publicWorkerResults'); if(!host)return;
+    if(!rows.length){host.innerHTML='<p class="text-sm text-slate-500">No approved workers match this search yet.</p>';say('workerSearchMessage','Search complete.');return;}
+    host.innerHTML=rows.map(w=>`<article class="cl-worker-card"><div class="flex items-start justify-between gap-2"><h3 class="font-black text-emerald-900 text-lg">${esc(w.full_name)}</h3><span class="text-xs rounded-full bg-emerald-100 text-emerald-800 px-2 py-1">Approved</span></div><p class="text-sm text-slate-600 mt-1">${esc(w.district||'Sri Lanka')} · ${esc((w.skills||[]).join(', '))}</p><p class="text-sm mt-2">Experience: ${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'} · ${esc(money(w.service_price_lkr))}</p><p class="text-sm mt-2">${w.phone?`📞 <a class="font-bold text-blue-700 underline" href="tel:${esc(w.phone)}">${esc(w.phone)}</a>`:'🔒 Phone private — start a chat to contact this worker.'}</p><div class="mt-3"><button class="cl-action" data-start-chat="${esc(w.worker_id)}">Message Worker</button></div></article>`).join('');
+    say('workerSearchMessage',rows.length+' approved worker(s) found.');
+  }
+
+  async function startCustomerChat(workerId){
+    const user=clCurrentUser||await getUser(); if(!user) return;
+    let {data:existing,error:findError}=await supabaseClient.from('conversations').select('id').eq('customer_id',user.id).eq('worker_id',workerId).maybeSingle();
+    if(findError){say('customerChatMessage',findError.message,true);return;}
+    let conversation=existing;
+    if(!conversation){const {data,error}=await supabaseClient.from('conversations').insert({customer_id:user.id,worker_id:workerId}).select('id').single();if(error){say('customerChatMessage',error.message,true);return;}conversation=data;}
+    clCustomerChatId=conversation.id;
+    $('customerChatWindow').classList.remove('hidden');
+    $('customerChatTitle').textContent='Private worker conversation';
+    await loadChatMessages(clCustomerChatId,'customerChatMessages');
+    $('customerChatInput').focus();
+  }
+
+  async function loadCustomerJobs(){
+    const user=clCurrentUser||await getUser(); if(!user)return;
+    const host=$('customerJobsList'); if(!host)return;
+    const {data:jobs,error}=await supabaseClient.from('job_posts').select('*').eq('customer_id',user.id).order('created_at',{ascending:false});
+    if(error){host.textContent='Could not load your jobs: '+error.message;return;}
+    if(!jobs?.length){host.innerHTML='<p class="text-sm text-slate-500">You have not posted a job yet.</p>';return;}
+    host.innerHTML='';
+    for(const j of jobs){
+      const {data:apps,error:appError}=await supabaseClient.from('job_applications').select('id,worker_id,message,status,created_at').eq('job_id',j.id).order('created_at',{ascending:false});
+      const card=document.createElement('article');card.className='cl-job-card';
+      card.innerHTML=`<div class="flex flex-wrap justify-between gap-2"><h4 class="font-black text-slate-900">${esc(j.service_title)}</h4><span class="text-xs font-bold px-2 py-1 rounded-full bg-blue-50 text-blue-800">${esc(j.status)}</span></div><p class="text-sm text-slate-600 mt-1">${esc(j.district)} · ${esc(j.address)} · ${esc(money(j.budget_lkr))}</p><p class="text-sm mt-2">${esc(j.description)}</p><div class="mt-3" data-apps="${esc(j.id)}"></div>`;
+      const appHost=card.querySelector('[data-apps]');
+      if(appError){appHost.textContent='Could not load applications: '+appError.message;}
+      else if(!apps?.length){appHost.innerHTML='<p class="cl-muted mt-3">No worker applications yet.</p>';}
+      else{
+        for(const a of apps){
+          const row=document.createElement('div');row.className='border-t border-slate-200 mt-3 pt-3';
+          row.innerHTML=`<p class="text-sm font-bold">Worker application · ${esc(a.status)}</p><p class="text-sm text-slate-600">${esc(a.message||'No message supplied')}</p><p class="cl-muted">Worker reference: ${esc(String(a.worker_id).slice(0,8))}</p><div class="flex flex-wrap gap-2 mt-2"><button class="cl-action light" data-chat-worker="${esc(a.worker_id)}">Message Worker</button>${j.status==='open'&&a.status==='pending'?`<button class="cl-action" data-accept-app="${esc(a.id)}">Accept</button><button class="cl-action blue" data-reject-app="${esc(a.id)}">Reject</button>`:''}</div>`;
+          appHost.appendChild(row);
+        }
+      }
+      host.appendChild(card);
+    }
+  }
+
+  async function loadWorkerJobs(){
+    const host=$('workerOpenJobs');if(!host||!activeWorkerProfileId)return;
+    say('workerJobsMessage','Loading open jobs...');
+    const {data:jobs,error}=await supabaseClient.from('job_posts').select('id,service_title,description,district,address,budget_lkr,preferred_date,created_at').eq('status','open').order('created_at',{ascending:false}).limit(50);
+    if(error){say('workerJobsMessage','Could not load jobs: '+error.message,true);return;}
+    if(!jobs?.length){host.innerHTML='<p class="text-sm text-slate-500">No open jobs right now.</p>';say('workerJobsMessage','');return;}
+    const {data:mine}=await supabaseClient.from('job_applications').select('job_id,status').eq('worker_id',activeWorkerProfileId);
+    const applied=new Map((mine||[]).map(a=>[a.job_id,a.status]));
+    host.innerHTML=jobs.map(j=>`<article class="border rounded-xl p-4 bg-slate-50"><div class="font-black text-slate-900">${esc(j.service_title)}</div><p class="text-sm text-slate-600 mt-1">${esc(j.district)} · ${esc(j.address)} · ${esc(money(j.budget_lkr))}</p><p class="text-sm mt-2">${esc(j.description)}</p><p class="cl-muted mt-2">Preferred date: ${esc(j.preferred_date||'Flexible')}</p>${applied.has(j.id)?`<p class="text-sm font-bold text-emerald-700 mt-3">Application: ${esc(applied.get(j.id))}</p>`:`<form class="workerApplyForm mt-3" data-job-id="${esc(j.id)}"><textarea name="message" required maxlength="1200" class="w-full border rounded-xl p-3" placeholder="Short message to the customer"></textarea><button class="cl-action mt-2" type="submit">Apply for this Job</button></form>`}</article>`).join('');
+    say('workerJobsMessage',jobs.length+' open job(s) available.');
+  }
+
+  async function loadConversations(role){
+    const user=clCurrentUser||await getUser();if(!user)return;
+    let query=supabaseClient.from('conversations').select('id,customer_id,worker_id,created_at').order('created_at',{ascending:false});
+    if(role==='customer')query=query.eq('customer_id',user.id);else if(activeWorkerProfileId)query=query.eq('worker_id',activeWorkerProfileId);else return;
+    const {data,error}=await query;
+    const host=$(role==='customer'?'customerConversationList':'workerConversationList');if(!host)return;
+    if(error){host.textContent='Could not load conversations: '+error.message;return;}
+    if(!data?.length){host.innerHTML='<p class="text-sm text-slate-500">No conversations yet.</p>';return;}
+    host.innerHTML=data.map(c=>`<button class="w-full text-left border rounded-xl p-3 hover:bg-emerald-50" data-open-${role}-chat="${esc(c.id)}"><strong>${role==='customer'?'Worker':'Customer'} conversation</strong><span class="block cl-muted">Started ${new Date(c.created_at).toLocaleDateString()}</span></button>`).join('');
+  }
+
+  async function loadChatMessages(conversationId,hostId){
+    const host=$(hostId);if(!host)return;
+    const {data,error}=await supabaseClient.from('messages').select('id,sender_id,message,created_at').eq('conversation_id',conversationId).order('created_at',{ascending:true}).limit(100);
+    if(error){host.textContent='Could not load messages: '+error.message;return;}
+    host.innerHTML=(data||[]).map(m=>`<div class="cl-chat-bubble ${m.sender_id===clCurrentUser?.id?'mine':''}"><p class="text-sm">${esc(m.message)}</p><span class="block cl-muted mt-1">${new Date(m.created_at).toLocaleString()}</span></div>`).join('')||'<p class="text-sm text-slate-500">No messages yet. Start the conversation.</p>';
+    host.scrollTop=host.scrollHeight;
+  }
+
+  async function sendChatMessage(role){
+    const id=role==='customer'?clCustomerChatId:clWorkerChatId;
+    const input=$(role==='customer'?'customerChatInput':'workerChatInput');
+    const hostId=role==='customer'?'customerChatMessages':'workerChatMessages';
+    const statusId=role==='customer'?'customerChatMessage':'workerChatMessage';
+    const user=clCurrentUser||await getUser();if(!id||!user)return;
+    const message=input.value.trim();if(!message)return;
+    const {error}=await supabaseClient.from('messages').insert({conversation_id:id,sender_id:user.id,message});
+    if(error){say(statusId,error.message,true);return;}
+    input.value='';say(statusId,'Message sent.');await loadChatMessages(id,hostId);
+  }
+
+  $('searchWorkersButton')?.addEventListener('click',loadPublicWorkers);
+  $('workerSearchText')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();loadPublicWorkers();}});
+  $('customerJobForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();const user=clCurrentUser||await getUser();if(!user)return;
+    const payload={customer_id:user.id,service_title:$('jobTitle').value.trim(),description:$('jobDescription').value.trim(),district:$('jobDistrict').value,address:$('jobArea').value.trim(),budget_lkr:$('jobBudget').value?Number($('jobBudget').value):null,preferred_date:$('jobDate').value||null,status:'open'};
+    const {error}=await supabaseClient.from('job_posts').insert(payload);
+    if(error){say('customerJobMessage',error.message,true);return;}
+    $('customerJobForm').reset();say('customerJobMessage','Your job has been published. Eligible workers can now apply.');await loadCustomerJobs();
+  });
+  $('customerChatForm')?.addEventListener('submit',e=>{e.preventDefault();sendChatMessage('customer');});
+  $('workerChatForm')?.addEventListener('submit',e=>{e.preventDefault();sendChatMessage('worker');});
+
+  document.addEventListener('click',async e=>{
+    const t=e.target.closest('button');if(!t)return;
+    if(t.dataset.startChat){await startCustomerChat(t.dataset.startChat);}
+    if(t.dataset.chatWorker){await startCustomerChat(t.dataset.chatWorker);}
+    if(t.dataset.openCustomerChat){clCustomerChatId=t.dataset.openCustomerChat;$('customerChatWindow').classList.remove('hidden');$('customerChatTitle').textContent='Private worker conversation';await loadChatMessages(clCustomerChatId,'customerChatMessages');}
+    if(t.dataset.openWorkerChat){clWorkerChatId=t.dataset.openWorkerChat;$('workerChatWindow').classList.remove('hidden');$('workerChatTitle').textContent='Private customer conversation';await loadChatMessages(clWorkerChatId,'workerChatMessages');}
+    if(t.dataset.acceptApp){if(!confirm('Accept this worker for the job? Other pending applications will be rejected.'))return;t.disabled=true;const {data,error}=await supabaseClient.rpc('accept_job_application',{p_application_id:t.dataset.acceptApp});if(error){alert('Could not accept: '+error.message);t.disabled=false;}else{alert(data||'Worker accepted.');await loadCustomerJobs();}}
+    if(t.dataset.rejectApp){if(!confirm('Reject this application?'))return;t.disabled=true;const {data,error}=await supabaseClient.rpc('reject_job_application',{p_application_id:t.dataset.rejectApp});if(error){alert('Could not reject: '+error.message);t.disabled=false;}else{alert(data||'Application rejected.');await loadCustomerJobs();}}
+  });
+
+  document.addEventListener('submit',async e=>{
+    const form=e.target.closest('.workerApplyForm');if(!form)return;e.preventDefault();
+    const user=clCurrentUser||await getUser();if(!user||!activeWorkerProfileId)return;
+    const btn=form.querySelector('button');btn.disabled=true;
+    const message=form.elements.message.value.trim();
+    const {error}=await supabaseClient.from('job_applications').insert({job_id:form.dataset.jobId,worker_id:activeWorkerProfileId,message,status:'pending'});
+    if(error){say('workerJobsMessage','Application failed: '+error.message,true);btn.disabled=false;return;}
+    say('workerJobsMessage','Your application has been submitted.');await loadWorkerJobs();
+  });
+
+  window.cleanLankaLoadCustomerFeatures=async function(user){clCurrentUser=user||await getUser();await Promise.all([loadPublicWorkers(),loadCustomerJobs(),loadConversations('customer')]);};
+  window.cleanLankaLoadWorkerFeatures=async function(user){clCurrentUser=user||await getUser();await Promise.all([loadWorkerJobs(),loadConversations('worker')]);};
+})();
+</script>
+
 </body>
 </html>
