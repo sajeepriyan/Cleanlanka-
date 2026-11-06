@@ -17,14 +17,7 @@
         background-color: #ffffff;
       }
     }
-  
-  body.registration-mode > header,
-  body.registration-mode > main,
-  body.registration-mode > footer,
-  body.registration-mode > #account-login { display:none !important; }
-  #registration-screen { min-height:75vh; }
-  #registration-screen section { border:1px solid #d1fae5; }
-</style>
+  </style>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
     tailwind.config = {
@@ -131,6 +124,41 @@
     #workerDashboard .cv-hero{padding:22px 20px}
   }
   @media(max-width:390px){#workerDashboard .cv-detail-list{grid-template-columns:1fr}}
+
+  /* Clean Lanka dedicated login page */
+  .login-page-wrap{padding:64px 18px 76px;background:radial-gradient(circle at 12% 12%,#d1fae5 0,transparent 28%),radial-gradient(circle at 88% 18%,#dbeafe 0,transparent 30%),linear-gradient(135deg,#f0fdf4 0%,#eff6ff 52%,#f8fafc 100%);}
+  .login-page-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr minmax(320px,510px);gap:42px;align-items:center;}
+  .login-intro{padding:25px 12px;color:#123b31}
+  .login-orbit{width:94px;height:94px;border-radius:28px;display:grid;place-items:center;background:linear-gradient(135deg,#0f5132,#1684bd);color:#fff;box-shadow:0 18px 38px #0f513230;margin-bottom:25px}
+  .login-orbit .material-symbols-outlined{font-size:54px}
+  .login-eyebrow{font-size:12px;letter-spacing:2px;font-weight:900;color:#16804a;margin:0 0 12px}
+  .login-intro h2{font-size:clamp(34px,5vw,54px);line-height:1.08;font-weight:900;letter-spacing:-1.8px;margin:0 0 16px;color:#0f5132}
+  .login-intro>p:not(.login-eyebrow){font-size:19px;line-height:1.6;color:#475569;max-width:440px}
+  .login-trust-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+  .login-trust-row span{display:flex;align-items:center;gap:7px;background:#ffffffc9;border:1px solid #d8e9df;border-radius:999px;padding:10px 13px;font-size:12px;font-weight:800;color:#14532d}
+  .login-trust-row .material-symbols-outlined{font-size:18px}
+  .login-card{background:#fff;border:1px solid #dbe9e2;border-radius:28px;padding:30px;box-shadow:0 25px 70px #164e3b18}
+  .login-card-heading{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+  .login-card-heading>.material-symbols-outlined{font-size:35px;color:#0f8b55;background:#e8f8ef;border-radius:15px;padding:10px}
+  .login-card-heading h3{font-size:22px;font-weight:900;color:#123b31;margin:0}
+  .login-card-heading p{font-size:12px;color:#64748b;margin:4px 0 0}
+  .login-label{display:block;font-size:12px;font-weight:900;color:#334155;margin:12px 0 6px}
+  .login-field{width:100%;box-sizing:border-box;border:1px solid #d7e3e8;border-radius:13px;padding:14px 15px;background:#f8fbfd;color:#142b43;font-size:15px;outline:none}
+  .login-field:focus{border-color:#16a34a;box-shadow:0 0 0 3px #16a34a1c;background:#fff}
+  .login-links{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;font-weight:800;margin:2px 0 4px}
+  .login-links button,.login-links a,.login-manage-email{color:#1264a3;text-decoration:none;background:none;border:0;padding:0;font:inherit;cursor:pointer}
+  .login-primary-button,.login-secondary-button{width:100%;border:0;border-radius:14px;padding:15px 18px;font-size:15px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer}
+  .login-primary-button{background:linear-gradient(100deg,#0f5132,#1674c7);color:white;box-shadow:0 10px 22px #0f513226}
+  .login-secondary-button{background:linear-gradient(100deg,#0f5132,#1684bd);color:white;margin-top:12px}
+  .login-subpanel{margin-top:18px;padding:18px;border:1px solid #d9e9e2;border-radius:18px;background:linear-gradient(135deg,#f0fdf4,#eff6ff)}
+  .login-subpanel h3{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:900;color:#0f5132;margin:0 0 8px}
+  .login-subpanel p{font-size:12px;line-height:1.55;color:#526477;margin:0 0 12px}
+  .login-subpanel .login-field{margin-top:9px}
+  .login-feedback{margin-top:10px!important;font-weight:700}
+  .login-manage-email{display:block;margin:14px auto 0;font-size:12px;font-weight:900}
+  .login-bottom-note{border-top:1px solid #edf2f4;margin-top:20px;padding-top:15px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:5px;font-size:11px;color:#64748b}
+  .login-bottom-note a{color:#1264a3;font-weight:800;text-decoration:none}
+  @media(max-width:800px){.login-page-wrap{padding:38px 14px 50px}.login-page-inner{grid-template-columns:1fr;gap:14px}.login-intro{text-align:center;padding:8px 4px}.login-orbit{margin:0 auto 18px;width:76px;height:76px}.login-orbit .material-symbols-outlined{font-size:43px}.login-trust-row{justify-content:center}.login-card{padding:22px 18px;border-radius:22px}}
 </style>
 
 </head>
@@ -165,10 +193,10 @@
 <div class="flex items-center justify-between h-24">
 <!-- OFFICIAL BRAND LOGO -->
 <a class="flex items-center gap-3.5 group" href="#">
-<img alt="Clean Lanka Official Logo" class="h-20 sm:h-24 w-auto object-contain transition-transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSh7GcRie2m5v1OiH4IUu5lxi4Qmpn6h_Pep3G-39-hWm7AbRMjRiSaW8SsexcB7a_7tX9SAvOol6H691xnReL6mdZRfnbYcd-7BNMTw7Gg4htwndima_BEOAvVMt9HiksX1Ri23atqe1GVO1CKI16GOVKspLITaWrltY2U16g_mM9bw1hqxe2nZo7REvfttd1v1-sltMDGf-rk3tCAAVbMLB9FiHnjPpY0SBgHgnSEQYH5v3C8xoNg"/>
+<img alt="Clean Lanka Official Logo" class="h-16 sm:h-[70px] w-auto object-contain transition-transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSh7GcRie2m5v1OiH4IUu5lxi4Qmpn6h_Pep3G-39-hWm7AbRMjRiSaW8SsexcB7a_7tX9SAvOol6H691xnReL6mdZRfnbYcd-7BNMTw7Gg4htwndima_BEOAvVMt9HiksX1Ri23atqe1GVO1CKI16GOVKspLITaWrltY2U16g_mM9bw1hqxe2nZo7REvfttd1v1-sltMDGf-rk3tCAAVbMLB9FiHnjPpY0SBgHgnSEQYH5v3C8xoNg"/>
 <div class="flex flex-col">
-<span class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-primary tracking-tight leading-none">CLEAN LANKA</span>
-<span class="text-xs sm:text-sm font-bold text-secondary uppercase tracking-widest mt-1.5">Sri Lanka Domestic Services</span>
+<span class="text-2xl sm:text-[26px] font-extrabold text-primary tracking-tight leading-none">CLEAN LANKA</span>
+<span class="text-xs sm:text-[13px] font-bold text-secondary uppercase tracking-widest mt-1">Sri Lanka Domestic Services</span>
 </div>
 </a>
 <!-- NAV LINKS (DESKTOP) -->
@@ -186,7 +214,7 @@
 <span class="text-gray-300">|</span>
 <span>English</span>
 </div>
-<a class="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-bold text-[16px] sm:text-[17px] px-6 py-3 rounded-xl transition-all shadow-md shadow-emerald-950/10" href="#" onclick="openRegistration('customer'); return false;">
+<a class="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-bold text-[16px] sm:text-[17px] px-6 py-3 rounded-xl transition-all shadow-md shadow-emerald-950/10" href="#customer-register">
             Book a Service
           </a>
 </div>
@@ -221,29 +249,18 @@
             </p>
 <!-- DUAL LARGE CTA BUTTONS (py-4 px-8, 18px font-bold) -->
 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-10">
-<a class="inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary-dark text-white font-bold text-[18px] py-4 px-8 rounded-xl transition-all shadow-lg shadow-emerald-950/20 text-center" href="#" onclick="openRegistration('customer'); return false;">
+<a class="inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary-dark text-white font-bold text-[18px] py-4 px-8 rounded-xl transition-all shadow-lg shadow-emerald-950/20 text-center" href="#customer-register">
 <span>Book a Service Now</span>
 <span class="material-symbols-outlined text-[22px]">calendar_today</span>
 </a>
-<a class="inline-flex items-center justify-center gap-2 bg-white hover:bg-emerald-50 text-primary border-2 border-primary font-bold text-[18px] py-4 px-8 rounded-xl transition-all text-center" href="#" onclick="openRegistration('worker'); return false;">
+<a class="inline-flex items-center justify-center gap-2 bg-white hover:bg-emerald-50 text-primary border-2 border-primary font-bold text-[18px] py-4 px-8 rounded-xl transition-all text-center" href="#worker-register">
 <span>Join as a Service Worker</span>
 <span class="material-symbols-outlined text-[20px]">badge</span>
 </a>
-</div>
-<!-- VISUAL REGISTRATION CHOICES: first screen -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 mb-10" id="registration-choices">
-  <button type="button" onclick="openRegistration('customer')" class="group text-left rounded-[28px] p-5 sm:p-7 bg-gradient-to-br from-emerald-500 via-green-600 to-emerald-900 text-white shadow-xl hover:-translate-y-1 transition-all border-4 border-white/70">
-    <div class="flex items-center gap-4">
-      <svg viewBox="0 0 180 150" role="img" aria-label="Cartoon family at home" class="w-28 h-28 sm:w-36 sm:h-36 shrink-0"><circle cx="90" cy="72" r="68" fill="#ffffff" opacity=".16"/><path d="M30 82 90 28l60 54v48H30Z" fill="#fff"/><path d="M20 84 90 20l70 64" fill="none" stroke="#facc15" stroke-width="9" stroke-linecap="round"/><rect x="72" y="91" width="36" height="39" rx="5" fill="#16a34a"/><circle cx="57" cy="72" r="19" fill="#f6c49b"/><path d="M38 70q3-25 23-20 13 4 15 20-12-8-38 0" fill="#243047"/><path d="M38 95q19-18 38 0v29H38Z" fill="#2563eb"/><circle cx="119" cy="76" r="17" fill="#f3bd8d"/><path d="M101 74q1-23 20-21 15 2 17 21-18-9-37 0" fill="#49352e"/><path d="M101 96q18-17 36 0v28h-36Z" fill="#ec4899"/><circle cx="88" cy="103" r="13" fill="#f6c49b"/><path d="M75 101q2-17 15-16 12 1 13 16-12-7-28 0" fill="#47352c"/></svg>
-      <div><span class="inline-flex rounded-full bg-white/20 px-3 py-1 text-xs font-extrabold uppercase tracking-wider">For homes & families</span><h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Customer Registration</h2><p class="text-white/90 mt-2">Book trusted help for your home.</p><span class="inline-flex mt-4 bg-white text-emerald-800 rounded-full px-5 py-3 font-extrabold shadow">Get Started →</span></div>
-    </div>
-  </button>
-  <button type="button" onclick="openRegistration('worker')" class="group text-left rounded-[28px] p-5 sm:p-7 bg-gradient-to-br from-sky-400 via-blue-600 to-blue-950 text-white shadow-xl hover:-translate-y-1 transition-all border-4 border-white/70">
-    <div class="flex items-center gap-4">
-      <svg viewBox="0 0 180 150" role="img" aria-label="Cartoon home service worker" class="w-28 h-28 sm:w-36 sm:h-36 shrink-0"><circle cx="90" cy="74" r="68" fill="#ffffff" opacity=".16"/><path d="M48 56q4-37 43-37 38 0 43 37Z" fill="#123b80"/><path d="M39 55h105q-4 13-17 13H54q-12 0-15-13" fill="#0b2c66"/><circle cx="91" cy="79" r="31" fill="#d99a6b"/><path d="M61 76q2-35 31-35 27 0 31 35-18-12-62 0" fill="#2b211d"/><circle cx="80" cy="80" r="3" fill="#172554"/><circle cx="102" cy="80" r="3" fill="#172554"/><path d="M81 94q10 10 20 0" fill="none" stroke="#7c2d12" stroke-width="3" stroke-linecap="round"/><path d="M43 145q5-47 48-47 43 0 48 47" fill="#f8fafc"/><path d="M67 108h48l12 37H55Z" fill="#2563eb"/><path d="m126 94 17-24 8 6-16 25" fill="none" stroke="#facc15" stroke-width="7" stroke-linecap="round"/><circle cx="148" cy="68" r="8" fill="#cbd5e1"/></svg>
-      <div><span class="inline-flex rounded-full bg-white/20 px-3 py-1 text-xs font-extrabold uppercase tracking-wider">For skilled workers</span><h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Work Registration</h2><p class="text-white/90 mt-2">Join our network and share your skills.</p><span class="inline-flex mt-4 bg-white text-blue-800 rounded-full px-5 py-3 font-extrabold shadow">Register Now →</span></div>
-    </div>
-  </button>
+<a class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-700 to-indigo-700 hover:from-blue-800 hover:to-indigo-800 text-white font-bold text-[18px] py-4 px-8 rounded-xl transition-all text-center shadow-lg" href="#account-login">
+<span class="material-symbols-outlined text-[22px]">account_circle</span>
+<span>Login to Your Profile</span>
+</a>
 </div>
 <!-- TACTICAL SEARCH & DISTRICT SELECTOR BAR -->
 <div class="bg-white p-4 sm:p-5 rounded-2xl border-2 border-emerald-600/30 shadow-xl max-w-3xl">
@@ -811,7 +828,7 @@
 </div>
 <div>
 <h3 class="text-2xl font-extrabold">Need custom commercial cleaning or multi-day tradesmen?</h3>
-<p class="text-[17px] text-emerald-100 mt-1 font-normal">Based in Kallady, Batticaloa - 3000, serving customers across Sri Lanka.</p>
+<p class="text-[17px] text-emerald-100 mt-1 font-normal">Our Colombo Operations Desk will dispatch vetted teams anywhere across the island.</p>
 </div>
 </div>
 <div class="flex items-center gap-3">
@@ -897,7 +914,7 @@
 </div>
 <div class="p-4 rounded-xl bg-white/10 flex items-center gap-3">
 <span class="material-symbols-outlined text-[24px] text-emerald-300">verified</span>
-<span class="text-[15px] font-medium text-white">Clean Lanka home services • Kallady, Batticaloa - 3000.</span>
+<span class="text-[15px] font-medium text-white">Registered under Sri Lanka Company Act. Audited domestic operations hub in Colombo 03.</span>
 </div>
 </div>
 </div>
@@ -949,7 +966,7 @@
 </div>
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-emerald-400 text-[20px]">location_on</span>
-<span>Kallady, Batticaloa - 3000, Sri Lanka</span>
+<span>Colombo 03 Operations Hub, Western Province, Sri Lanka</span>
 </div>
 </div>
 </div>
@@ -1006,25 +1023,76 @@
 </script>
 
 
-<!-- CUSTOMER / WORKER LOGIN -->
-<section id="account-login" class="max-w-xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg scroll-mt-28">
-  <h2 class="text-2xl font-bold text-center text-emerald-700">Customer &amp; Worker Login</h2>
-  <p class="text-center text-gray-500 mt-2">Sign in after confirming your email address</p>
-  <form id="loginForm" class="mt-6 space-y-4">
-    <select id="loginRole" required class="w-full p-3 border rounded-lg">
-      <option value="">Select Account Type</option>
-      <option value="customer">Customer</option>
-      <option value="worker">Service Worker</option>
-    </select>
-    <input id="loginEmail" type="email" placeholder="Email Address" autocomplete="username" required class="w-full p-3 border rounded-lg">
-    <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" required class="w-full p-3 border rounded-lg">
-    <button id="loginSubmit" type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white p-3 rounded-lg font-bold">Sign In</button>
-    <p id="loginMessage" class="text-center text-sm" aria-live="polite"></p>
-  </form>
-  <button id="logoutButton" type="button" class="hidden w-full mt-3 border border-gray-300 text-gray-700 p-3 rounded-lg font-bold">Sign Out</button>
-  <p id="emailConfirmationHint" class="text-xs text-gray-500 mt-3 text-center">Email confirmation is required only before your first sign-in.</p>
-</section>
+<!-- CUSTOMER / WORKER LOGIN: DEDICATED PROFILE ACCESS PAGE -->
+<section id="account-login" class="login-page-wrap scroll-mt-24">
+  <div class="login-page-inner">
+    <div class="login-intro">
+      <div class="login-orbit"><span class="material-symbols-outlined">lock_person</span></div>
+      <p class="login-eyebrow">WELCOME BACK TO CLEAN LANKA</p>
+      <h2>Login to Your Profile</h2>
+      <p>One secure place for customers and service professionals.</p>
+      <div class="login-trust-row">
+        <span><span class="material-symbols-outlined">verified_user</span> Secure access</span>
+        <span><span class="material-symbols-outlined">support_agent</span> Customer &amp; Worker accounts</span>
+      </div>
+    </div>
 
+    <div class="login-card">
+      <div class="login-card-heading">
+        <span class="material-symbols-outlined">account_circle</span>
+        <div><h3>Sign in to continue</h3><p>Enter the email and password used during registration.</p></div>
+      </div>
+      <form id="loginForm" class="mt-6 space-y-4">
+        <label class="login-label" for="loginRole">I am signing in as</label>
+        <select id="loginRole" required class="login-field">
+          <option value="">Select Account Type</option>
+          <option value="customer">Customer</option>
+          <option value="worker">Service Worker</option>
+        </select>
+        <label class="login-label" for="loginEmail">Email address</label>
+        <input id="loginEmail" type="email" placeholder="Enter your registered email" autocomplete="username" required class="login-field">
+        <label class="login-label" for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" placeholder="Enter your password" autocomplete="current-password" required class="login-field">
+        <div class="login-links">
+          <button id="forgotPasswordButton" type="button">Forgot password?</button>
+          <a href="mailto:cleanlankaa@gmail.com?subject=Clean%20Lanka%20login%20help">Forgot email? Contact support</a>
+        </div>
+        <button id="loginSubmit" type="submit" class="login-primary-button">Sign In <span class="material-symbols-outlined">arrow_forward</span></button>
+        <p id="loginMessage" class="text-center text-sm" aria-live="polite"></p>
+      </form>
+
+      <div id="passwordResetPanel" class="login-subpanel hidden">
+        <h3><span class="material-symbols-outlined">mark_email_read</span> Reset your password</h3>
+        <p>Enter your registered email. We will send a secure password-reset link if the account can receive it.</p>
+        <input id="resetEmail" type="email" placeholder="Registered email address" autocomplete="email" class="login-field">
+        <button id="sendResetButton" type="button" class="login-secondary-button">Send password reset link</button>
+        <p id="resetMessage" class="login-feedback" aria-live="polite"></p>
+      </div>
+
+      <div id="newPasswordPanel" class="login-subpanel hidden">
+        <h3><span class="material-symbols-outlined">password</span> Create a new password</h3>
+        <p>Open the secure link sent to your email, then enter a new password below.</p>
+        <input id="newPassword" type="password" minlength="8" autocomplete="new-password" placeholder="New password (at least 8 characters)" class="login-field">
+        <input id="confirmNewPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Confirm new password" class="login-field">
+        <button id="saveNewPasswordButton" type="button" class="login-secondary-button">Save new password</button>
+        <p id="newPasswordMessage" class="login-feedback" aria-live="polite"></p>
+      </div>
+
+      <div id="emailSettingsPanel" class="login-subpanel hidden">
+        <h3><span class="material-symbols-outlined">alternate_email</span> Change your email</h3>
+        <p>Available after you sign in. Supabase will send a confirmation link to the new email address.</p>
+        <input id="newEmailAddress" type="email" autocomplete="email" placeholder="New email address" class="login-field">
+        <button id="changeEmailButton" type="button" class="login-secondary-button">Request email change</button>
+        <p id="emailChangeMessage" class="login-feedback" aria-live="polite"></p>
+      </div>
+
+      <button id="manageEmailButton" type="button" class="login-manage-email hidden">Change account email</button>
+      <button id="logoutButton" type="button" class="hidden w-full mt-3 border border-gray-300 text-gray-700 p-3 rounded-lg font-bold">Sign Out</button>
+      <p id="emailConfirmationHint" class="text-xs text-gray-500 mt-4 text-center">New users must confirm their email address before their first sign-in.</p>
+      <div class="login-bottom-note"><span class="material-symbols-outlined">help</span> Need help? <a href="mailto:cleanlankaa@gmail.com">cleanlankaa@gmail.com</a> · <a href="tel:+94702805105">+94 70 280 5105</a></div>
+    </div>
+  </div>
+</section>
 
 <!-- WORKER DASHBOARD: colourful CV-style profile -->
 <section id="workerDashboard" class="hidden">
@@ -1117,9 +1185,6 @@
   </div>
 </section>
 
-<!-- SECOND SCREEN: selected registration form -->
-<div id="registration-screen" class="hidden max-w-4xl mx-auto my-8 px-4">
-  <button type="button" onclick="closeRegistration()" class="mb-5 inline-flex items-center gap-2 rounded-full bg-slate-100 hover:bg-slate-200 px-5 py-3 font-bold text-slate-700">← Back to Home</button>
 <!-- CUSTOMER REGISTRATION -->
 <section id="customer-register" class="max-w-xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg scroll-mt-28">
   <h2 class="text-2xl font-bold text-center text-emerald-700">Customer Registration</h2>
@@ -1158,25 +1223,8 @@
   </form>
   <p class="text-center text-sm text-gray-500 mt-4">After email confirmation, your worker application must be reviewed before you can receive bookings.</p>
 </section>
-</div>
 
 <script>
-  function openRegistration(role) {
-    document.body.classList.add('registration-mode');
-    const screen = document.getElementById('registration-screen');
-    screen.classList.remove('hidden');
-    document.getElementById('customer-register').classList.toggle('hidden', role !== 'customer');
-    document.getElementById('worker-register').classList.toggle('hidden', role !== 'worker');
-    screen.scrollIntoView({behavior:'smooth', block:'start'});
-  }
-  function closeRegistration() {
-    document.body.classList.remove('registration-mode');
-    document.getElementById('registration-screen').classList.add('hidden');
-    document.getElementById('customer-register').classList.remove('hidden');
-    document.getElementById('worker-register').classList.remove('hidden');
-    window.scrollTo({top:0, behavior:'smooth'});
-  }
-
   function showMessage(element, message, isError = false) {
     element.textContent = message;
     element.classList.toggle('text-red-600', isError);
@@ -1206,7 +1254,7 @@
       submit.disabled = true;
       showMessage(message, 'Creating your account...');
       try {
-        const { error } = await supabaseClient.auth.signUp({
+        const { data, error } = await supabaseClient.auth.signUp({
           email,
           password,
           options: {
@@ -1215,6 +1263,10 @@
           }
         });
         if (error) throw error;
+        if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+          showMessage(message, 'This email may already be registered. Please sign in or use Forgot password. If you are new, try another email address.', true);
+          return;
+        }
         showMessage(message, 'Registration submitted. Please confirm your email, then sign in using the Login section.');
         form.reset();
       } catch (error) {
@@ -1256,7 +1308,7 @@
     submit.disabled = true;
     showMessage(message, 'Creating your worker account...');
     try {
-      const { error } = await supabaseClient.auth.signUp({
+      const { data, error } = await supabaseClient.auth.signUp({
         email,
         password,
         options: {
@@ -1276,6 +1328,10 @@
         }
       });
       if (error) throw error;
+      if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        showMessage(message, 'This email may already be registered. Please sign in or use Forgot password. If you are new, try another email address.', true);
+        return;
+      }
       showMessage(message, 'Worker registration submitted. Confirm your email, then sign in from the Login section. Your application will remain pending review.');
       workerFormClean.reset();
     } catch (error) {
@@ -1453,11 +1509,87 @@
       }
       document.getElementById('emailConfirmationHint').classList.add('hidden');
       document.getElementById('logoutButton').classList.remove('hidden');
+      document.getElementById('manageEmailButton').classList.remove('hidden');
     } catch (error) {
       showMessage(message, error.message || 'Sign-in failed. Check your email and password.', true);
     } finally {
       submit.disabled = false;
     }
+  });
+
+  // Password recovery: request a secure email link; never reveal or display the old password.
+  document.getElementById('forgotPasswordButton').addEventListener('click', () => {
+    const panel = document.getElementById('passwordResetPanel');
+    panel.classList.toggle('hidden');
+    const typedEmail = document.getElementById('loginEmail').value.trim();
+    if (typedEmail) document.getElementById('resetEmail').value = typedEmail;
+  });
+
+  document.getElementById('sendResetButton').addEventListener('click', async () => {
+    const email = document.getElementById('resetEmail').value.trim();
+    const message = document.getElementById('resetMessage');
+    if (!email) { showMessage(message, 'Please enter your registered email address.', true); return; }
+    const button = document.getElementById('sendResetButton');
+    button.disabled = true;
+    showMessage(message, 'Sending secure reset link...');
+    try {
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://cleanlanka.lk/#account-login'
+      });
+      if (error) throw error;
+      showMessage(message, 'If an account exists for this email, a password-reset link will be sent. Please check your inbox and spam folder.');
+    } catch (error) {
+      showMessage(message, error.message || 'Could not send the reset email. Please try again.', true);
+    } finally { button.disabled = false; }
+  });
+
+  // Supabase redirects back after the user opens the recovery email link.
+  supabaseClient.auth.onAuthStateChange((event) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      document.getElementById('newPasswordPanel').classList.remove('hidden');
+      document.getElementById('newPasswordPanel').scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  });
+  if (window.location.hash.includes('type=recovery')) {
+    document.getElementById('newPasswordPanel').classList.remove('hidden');
+  }
+
+  document.getElementById('saveNewPasswordButton').addEventListener('click', async () => {
+    const password = document.getElementById('newPassword').value;
+    const confirm = document.getElementById('confirmNewPassword').value;
+    const message = document.getElementById('newPasswordMessage');
+    if (password.length < 8) { showMessage(message, 'Password must contain at least 8 characters.', true); return; }
+    if (password !== confirm) { showMessage(message, 'The passwords do not match.', true); return; }
+    const button = document.getElementById('saveNewPasswordButton');
+    button.disabled = true;
+    try {
+      const { error } = await supabaseClient.auth.updateUser({ password });
+      if (error) throw error;
+      showMessage(message, 'Your password has been updated. You can now sign in with your new password.');
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmNewPassword').value = '';
+    } catch (error) {
+      showMessage(message, error.message || 'Could not update the password. Please open the latest reset email link.', true);
+    } finally { button.disabled = false; }
+  });
+
+  // Email changes require an authenticated session and confirmation at the new email address.
+  document.getElementById('manageEmailButton').addEventListener('click', () => {
+    document.getElementById('emailSettingsPanel').classList.toggle('hidden');
+  });
+  document.getElementById('changeEmailButton').addEventListener('click', async () => {
+    const newEmail = document.getElementById('newEmailAddress').value.trim();
+    const message = document.getElementById('emailChangeMessage');
+    if (!newEmail) { showMessage(message, 'Please enter your new email address.', true); return; }
+    const button = document.getElementById('changeEmailButton');
+    button.disabled = true;
+    try {
+      const { error } = await supabaseClient.auth.updateUser({ email: newEmail });
+      if (error) throw error;
+      showMessage(message, 'Email change requested. Please open the confirmation message sent to your new email address.');
+    } catch (error) {
+      showMessage(message, error.message || 'Could not request the email change.', true);
+    } finally { button.disabled = false; }
   });
 
   async function cleanLankaSignOut() {
@@ -1469,6 +1601,8 @@
     }
     document.body.classList.remove('worker-dashboard-mode');
     document.getElementById('logoutButton').classList.add('hidden');
+    document.getElementById('manageEmailButton').classList.add('hidden');
+    document.getElementById('emailSettingsPanel').classList.add('hidden');
     document.getElementById('workerDashboard').classList.add('hidden');
     document.getElementById('emailConfirmationHint').classList.remove('hidden');
     showMessage(message, 'You have signed out successfully.');
