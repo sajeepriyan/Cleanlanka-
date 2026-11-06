@@ -1300,13 +1300,32 @@
           <div style="margin-top:17px">
             <h3 class="cv-section-title"><span class="cv-dot"></span> Verification documents</h3>
             <div class="cv-doc-grid">
-              <div class="cv-doc"><div class="symbol">🪪</div><strong>ID – Front</strong><small>Private • Admin only</small></div>
-              <div class="cv-doc"><div class="symbol">🪪</div><strong>ID – Back</strong><small>Private • Admin only</small></div>
-              <div class="cv-doc"><div class="symbol">🤳</div><strong>Selfie</strong><small>Private • Admin only</small></div>
-              <div class="cv-doc"><div class="symbol">📄</div><strong>Police Clearance</strong><small>Private • Admin verification</small></div>
-              <div class="cv-doc"><div class="symbol">🏡</div><strong>Grama Niladhari Certificate</strong><small>Private • Admin verification</small></div>
+              <div class="cv-doc">
+                <div class="symbol">🪪</div><strong>ID – Front</strong>
+                <input id="workerNicFrontInput" type="file" accept=".pdf,image/jpeg,image/png,image/webp" class="mt-2 block w-full text-xs text-slate-700">
+                <button id="workerNicFrontUpload" type="button" class="mt-2 rounded-lg bg-emerald-700 px-3 py-2 text-xs font-bold text-white">Upload ID Front</button>
+                <small id="workerNicFrontStatus" role="status">Not uploaded</small>
+              </div>
+              <div class="cv-doc">
+                <div class="symbol">🪪</div><strong>ID – Back</strong>
+                <input id="workerNicBackInput" type="file" accept=".pdf,image/jpeg,image/png,image/webp" class="mt-2 block w-full text-xs text-slate-700">
+                <button id="workerNicBackUpload" type="button" class="mt-2 rounded-lg bg-emerald-700 px-3 py-2 text-xs font-bold text-white">Upload ID Back</button>
+                <small id="workerNicBackStatus" role="status">Not uploaded</small>
+              </div>
+              <div class="cv-doc">
+                <div class="symbol">📄</div><strong>Police Clearance</strong>
+                <input id="workerPoliceInput" type="file" accept=".pdf,image/jpeg,image/png,image/webp" class="mt-2 block w-full text-xs text-slate-700">
+                <button id="workerPoliceUpload" type="button" class="mt-2 rounded-lg bg-emerald-700 px-3 py-2 text-xs font-bold text-white">Upload Police Clearance</button>
+                <small id="workerPoliceStatus" role="status">Not uploaded</small>
+              </div>
+              <div class="cv-doc">
+                <div class="symbol">🏡</div><strong>Grama Niladhari Certificate</strong>
+                <input id="workerGnInput" type="file" accept=".pdf,image/jpeg,image/png,image/webp" class="mt-2 block w-full text-xs text-slate-700">
+                <button id="workerGnUpload" type="button" class="mt-2 rounded-lg bg-emerald-700 px-3 py-2 text-xs font-bold text-white">Upload GN Certificate</button>
+                <small id="workerGnStatus" role="status">Not uploaded</small>
+              </div>
             </div>
-            <p class="text-xs text-slate-500 mt-3">Document previews will appear here after secure upload is connected.</p>
+            <p class="text-xs text-slate-500 mt-3">PDF or image • Maximum 10 MB per document. Files are stored privately and are not shown on your public profile.</p>
           </div>
         </section>
         <section class="cv-note">🔒 Your identity documents and verification selfie must remain private. They are not displayed on the public worker profile.</section>
@@ -1896,6 +1915,73 @@
       message.textContent = 'Upload failed: ' + (err.message || 'Please check the private Storage bucket setup.');
     } finally { button.disabled = false; }
   });
+  // File 07 — secure worker verification document uploads.
+  const WORKER_DOCUMENT_UPLOADS = [
+    { input: 'workerNicFrontInput', button: 'workerNicFrontUpload', status: 'workerNicFrontStatus', column: 'nic_front_storage_path', key: 'nic-front', label: 'ID Front' },
+    { input: 'workerNicBackInput', button: 'workerNicBackUpload', status: 'workerNicBackStatus', column: 'nic_back_storage_path', key: 'nic-back', label: 'ID Back' },
+    { input: 'workerPoliceInput', button: 'workerPoliceUpload', status: 'workerPoliceStatus', column: 'police_clearance_path', key: 'police-clearance', label: 'Police Clearance' },
+    { input: 'workerGnInput', button: 'workerGnUpload', status: 'workerGnStatus', column: 'gn_certificate_path', key: 'gn-certificate', label: 'GN Certificate' }
+  ];
+
+  function updateWorkerDocumentStatuses(profile) {
+    WORKER_DOCUMENT_UPLOADS.forEach(doc => {
+      const status = document.getElementById(doc.status);
+      const button = document.getElementById(doc.button);
+      if (status) status.textContent = profile?.[doc.column] ? 'Uploaded • Private' : 'Not uploaded';
+      if (button) button.disabled = !profile || !activeWorkerProfileId;
+    });
+  }
+
+  WORKER_DOCUMENT_UPLOADS.forEach(doc => {
+    document.getElementById(doc.button)?.addEventListener('click', async () => {
+      const input = document.getElementById(doc.input);
+      const status = document.getElementById(doc.status);
+      const button = document.getElementById(doc.button);
+      const file = input?.files?.[0];
+      if (!file) { if (status) status.textContent = 'Please choose a PDF or image file first.'; return; }
+      const allowedMime = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
+      const ext = (file.name.split('.').pop() || '').toLowerCase();
+      if (!allowedMime.includes(file.type) || !['pdf', 'jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
+        if (status) status.textContent = 'Use a PDF, JPG, PNG or WEBP file.';
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) { if (status) status.textContent = 'File must be 10 MB or smaller.'; return; }
+      const { data: authData, error: authError } = await supabaseClient.auth.getUser();
+      const user = authData?.user;
+      if (authError || !user || !activeWorkerProfileId || !activeWorkerUserId || user.id !== activeWorkerUserId) {
+        if (status) status.textContent = 'Please sign in and load your Worker Profile first.';
+        return;
+      }
+      button.disabled = true;
+      if (status) status.textContent = 'Uploading securely...';
+      let uploadedPath = null;
+      try {
+        const safeExt = ext.replace(/[^a-z0-9]/g, '') || 'pdf';
+        uploadedPath = `${user.id}/${doc.key}-${Date.now()}.${safeExt}`;
+        const { error: uploadError } = await supabaseClient.storage.from(WORKER_PRIVATE_BUCKET)
+          .upload(uploadedPath, file, { upsert: false, contentType: file.type });
+        if (uploadError) throw uploadError;
+        const updatePayload = { [doc.column]: uploadedPath };
+        const { data: updated, error: updateError } = await supabaseClient.from('worker_profiles')
+          .update(updatePayload).eq('id', activeWorkerProfileId).eq('user_id', user.id).select('*').single();
+        if (updateError) throw updateError;
+        currentWorkerProfile = updated;
+        if (status) status.textContent = `${doc.label} uploaded • Private`;
+        input.value = '';
+        updateWorkerDocumentStatuses(updated);
+      } catch (err) {
+        if (uploadedPath) {
+          const { error: cleanupError } = await supabaseClient.storage.from(WORKER_PRIVATE_BUCKET).remove([uploadedPath]);
+          if (cleanupError) console.warn('Could not clean up an unlinked uploaded document:', cleanupError);
+        }
+        console.error(`${doc.label} upload failed:`, err);
+        if (status) status.textContent = 'Upload failed: ' + (err.message || 'Please check Storage and profile permissions.');
+      } finally {
+        button.disabled = !currentWorkerProfile || !activeWorkerProfileId;
+      }
+    });
+  });
+
   function populateWorkerEditForm(p) {
     document.getElementById('editWorkerFullName').value = p.full_name || '';
     document.getElementById('editWorkerPhone').value = p.Phone || '';
@@ -1969,6 +2055,7 @@
     const selfieButton = document.getElementById('workerSelfieUploadButton');
     if (selfieButton) selfieButton.disabled = !profile;
     if (profile?.selfie_storage_path) await showWorkerSelfie(profile.selfie_storage_path);
+    updateWorkerDocumentStatuses(profile);
     const phonePrivacyToggle = document.getElementById('showPhonePublicly');
     if (phonePrivacyToggle) {
       phonePrivacyToggle.disabled = !profile;
