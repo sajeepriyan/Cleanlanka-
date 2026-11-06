@@ -1,9 +1,10 @@
+<!-- CLEAN LANKA — FILE 05: Worker Profile Edit + Private Selfie Upload -->
 <!DOCTYPE html>
 
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Clean Lanka - Sri Lanka's #1 Trusted Home &amp; Domestic Services</title>
+<title>File 05 | Clean Lanka - Sri Lanka's #1 Trusted Home &amp; Domestic Services</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -191,6 +192,17 @@
   body.login-page-mode #account-login .login-intro {display:none!important;}
   body.login-page-mode #account-login .login-card {width:min(100%,500px);margin:0 auto;}
   body.login-page-mode #account-login .max-w-6xl {max-width:760px;}
+  /* Recovery link view: show only the new-password form, not the sign-in controls. */
+  body.password-recovery-mode #account-login .login-card-heading,
+  body.password-recovery-mode #account-login #loginForm,
+  body.password-recovery-mode #account-login #passwordResetPanel,
+  body.password-recovery-mode #account-login #emailSettingsPanel,
+  body.password-recovery-mode #account-login #manageEmailButton,
+  body.password-recovery-mode #account-login #logoutButton,
+  body.password-recovery-mode #account-login #emailConfirmationHint {display:none!important;}
+  body.password-recovery-mode #account-login #newPasswordPanel {display:block!important;width:min(100%,500px);margin:0 auto;}
+  body.password-recovery-mode #account-login .login-card {width:min(100%,560px);margin:0 auto;}
+  body.password-recovery-mode #account-login .login-page-inner {min-height:calc(100vh - 100px);}
   body.admin-login-mode > header,body.admin-login-mode > main,body.admin-login-mode > footer,body.admin-login-mode > aside,body.admin-login-mode > #registration-screen,body.admin-login-mode > #account-login,body.admin-login-mode > #customerDashboard,body.admin-login-mode > #workerDashboard {display:none!important;}
   body.admin-login-mode {min-height:100vh;background:radial-gradient(circle at 10% 10%,#d1fae5,transparent 30%),linear-gradient(135deg,#eff6ff,#f8fafc);}
   body.admin-login-mode #admin-login {display:flex!important;min-height:100vh;align-items:center;justify-content:center;padding:24px 16px;}
@@ -1260,7 +1272,7 @@
     <div class="cv-grid">
       <aside class="cv-left">
         <section class="cv-card">
-          <div class="cv-avatar" aria-label="Worker profile photo placeholder">
+          <div class="cv-avatar" id="workerSelfiePreview" aria-label="Private worker selfie preview">
             <svg viewBox="0 0 220 230" role="img" aria-label="Friendly 2D cartoon worker illustration">
               <ellipse cx="110" cy="215" rx="72" ry="10" fill="#5795a4" opacity=".22"/>
               <path d="M48 210 Q50 145 82 137 L138 137 Q170 145 172 210Z" fill="#1474b8"/>
@@ -1277,7 +1289,13 @@
               <rect x="91" y="179" width="38" height="22" rx="6" fill="#0f5132"/>
               <path d="M101 185 h18 M110 181 v15" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            <span class="cv-avatar-label">Your Profile Photo</span>
+            <span class="cv-avatar-label">Private Selfie Photo</span>
+          </div>
+          <div class="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+            <label for="workerSelfieInput" class="block text-sm font-extrabold text-emerald-900">🤳 Upload / Change Selfie</label>
+            <input id="workerSelfieInput" type="file" accept="image/*" capture="user" class="mt-2 block w-full text-sm text-slate-700">
+            <button id="workerSelfieUploadButton" type="button" class="mt-2 rounded-lg bg-emerald-700 px-4 py-2 text-sm font-bold text-white">Upload Selfie</button>
+            <p id="workerSelfieMessage" class="mt-2 text-xs text-slate-600" role="status" aria-live="polite">Private upload. Only you and authorised administrators can access it.</p>
           </div>
           <div style="margin-top:17px">
             <h3 class="cv-section-title"><span class="cv-dot"></span> Verification documents</h3>
@@ -1797,8 +1815,59 @@
   }
 
 
-  // Load the signed-in worker's saved profile and show a full-screen dashboard.
+  // File 05 — Worker profile editing and private selfie upload.
+  // The Storage bucket must be created with the companion SQL setup before selfie uploads work.
+  const WORKER_PRIVATE_BUCKET = 'worker-private-documents';
   let currentWorkerProfile = null;
+
+  async function showWorkerSelfie(path) {
+    const preview = document.getElementById('workerSelfiePreview');
+    if (!preview) return;
+    const old = preview.querySelector('img[data-selfie-preview]');
+    if (old) old.remove();
+    if (!path) return;
+    const { data, error } = await supabaseClient.storage.from(WORKER_PRIVATE_BUCKET).createSignedUrl(path, 300);
+    if (error || !data?.signedUrl) return;
+    const img = document.createElement('img');
+    img.src = data.signedUrl;
+    img.alt = 'Your private worker selfie';
+    img.dataset.selfiePreview = 'true';
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:24px;';
+    preview.style.position = 'relative';
+    preview.appendChild(img);
+  }
+
+  document.getElementById('workerSelfieUploadButton')?.addEventListener('click', async () => {
+    const input = document.getElementById('workerSelfieInput');
+    const message = document.getElementById('workerSelfieMessage');
+    const button = document.getElementById('workerSelfieUploadButton');
+    const file = input?.files?.[0];
+    if (!file) { message.textContent = 'Please choose a selfie using your camera or gallery.'; return; }
+    if (!file.type.startsWith('image/')) { message.textContent = 'Please select an image file.'; return; }
+    if (file.size > 5 * 1024 * 1024) { message.textContent = 'Image must be 5 MB or smaller.'; return; }
+    const { data: authData, error: authError } = await supabaseClient.auth.getUser();
+    const user = authData?.user;
+    if (authError || !user || !activeWorkerProfileId) { message.textContent = 'Please sign in and load your Worker Profile first.'; return; }
+    button.disabled = true; message.textContent = 'Uploading securely...';
+    try {
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
+      const path = `${user.id}/selfie-${Date.now()}.${ext}`;
+      const { error: uploadError } = await supabaseClient.storage.from(WORKER_PRIVATE_BUCKET).upload(path, file, { upsert: false, contentType: file.type });
+      if (uploadError) throw uploadError;
+      const { data: updated, error: updateError } = await supabaseClient.from('worker_profiles')
+        .update({ selfie_storage_path: path }).eq('id', activeWorkerProfileId).eq('user_id', user.id).select('*').single();
+      if (updateError) {
+        await supabaseClient.storage.from(WORKER_PRIVATE_BUCKET).remove([path]);
+        throw updateError;
+      }
+      currentWorkerProfile = updated;
+      await showWorkerSelfie(path);
+      message.textContent = 'Selfie uploaded successfully and stored privately.';
+      input.value = '';
+    } catch (err) {
+      message.textContent = 'Upload failed: ' + (err.message || 'Please check the private Storage bucket setup.');
+    } finally { button.disabled = false; }
+  });
   function populateWorkerEditForm(p) {
     document.getElementById('editWorkerFullName').value = p.full_name || '';
     document.getElementById('editWorkerPhone').value = p.Phone || '';
@@ -1867,6 +1936,9 @@
     activeWorkerUserId = user.id;
     currentWorkerProfile = profile || null;
     document.getElementById('workerEditToggle').disabled = !profile;
+    const selfieButton = document.getElementById('workerSelfieUploadButton');
+    if (selfieButton) selfieButton.disabled = !profile;
+    if (profile?.selfie_storage_path) await showWorkerSelfie(profile.selfie_storage_path);
     const phonePrivacyToggle = document.getElementById('showPhonePublicly');
     if (phonePrivacyToggle) {
       phonePrivacyToggle.disabled = !profile;
@@ -2045,12 +2117,14 @@
       document.getElementById('account-login').classList.remove('hidden');
       document.getElementById('newPasswordPanel').classList.remove('hidden');
       document.body.classList.add('login-page-mode');
+      document.body.classList.add('password-recovery-mode');
     }
   });
   if (window.location.hash.includes('type=recovery')) {
     document.getElementById('account-login').classList.remove('hidden');
     document.getElementById('newPasswordPanel').classList.remove('hidden');
     document.body.classList.add('login-page-mode');
+    document.body.classList.add('password-recovery-mode');
   }
   document.getElementById('saveNewPasswordButton').addEventListener('click', async () => {
     const password = document.getElementById('newPassword').value;
