@@ -1906,7 +1906,9 @@
       if (error) throw error;
       currentWorkerProfile = data;
       msg.textContent = 'Profile changes saved successfully.'; msg.style.color = '#166534';
-      await loadWorkerDashboard(clCurrentUser || (await supabaseClient.auth.getUser()).data.user);
+      const { data: authResult, error: authLookupError } = await supabaseClient.auth.getUser();
+      if (authLookupError || !authResult?.user) throw new Error(authLookupError?.message || 'Please sign in again.');
+      await loadWorkerDashboard(authResult.user);
       document.getElementById('workerProfileEditForm').classList.add('hidden');
     } catch (err) { msg.textContent = 'Could not save: ' + err.message; msg.style.color = '#b91c1c'; }
     finally { btn.disabled = false; }
@@ -2189,14 +2191,14 @@
 <script>
 (function(){
   const $ = (id) => document.getElementById(id);
-  let clCurrentUser = null;
+  window.clCurrentUser = null;
   let clCustomerChatId = null;
   let clWorkerChatId = null;
   const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const say = (id, msg, bad=false) => { const el=$(id); if(el){el.textContent=msg;el.style.color=bad?'#b91c1c':'#166534';} };
   const money = v => v == null ? 'Price not listed' : 'LKR ' + Number(v).toLocaleString('en-LK');
 
-  async function getUser(){ const {data:{user}} = await supabaseClient.auth.getUser(); clCurrentUser=user; return user; }
+  async function getUser(){ const {data:{user}} = await supabaseClient.auth.getUser(); window.clCurrentUser=user; return user; }
 
   async function loadPublicWorkers(){
     say('workerSearchMessage','Loading approved workers...');
@@ -2212,7 +2214,7 @@
   }
 
   async function startCustomerChat(workerId){
-    const user=clCurrentUser||await getUser(); if(!user) return;
+    const user=window.clCurrentUser||await getUser(); if(!user) return;
     let {data:existing,error:findError}=await supabaseClient.from('conversations').select('id').eq('customer_id',user.id).eq('worker_id',workerId).maybeSingle();
     if(findError){say('customerChatMessage',findError.message,true);return;}
     let conversation=existing;
@@ -2225,7 +2227,7 @@
   }
 
   async function loadCustomerJobs(){
-    const user=clCurrentUser||await getUser(); if(!user)return;
+    const user=window.clCurrentUser||await getUser(); if(!user)return;
     const host=$('customerJobsList'); if(!host)return;
     const {data:jobs,error}=await supabaseClient.from('job_posts').select('*').eq('customer_id',user.id).order('created_at',{ascending:false});
     if(error){host.textContent='Could not load your jobs: '+error.message;return;}
@@ -2262,7 +2264,7 @@
   }
 
   async function loadConversations(role){
-    const user=clCurrentUser||await getUser();if(!user)return;
+    const user=window.clCurrentUser||await getUser();if(!user)return;
     let query=supabaseClient.from('conversations').select('id,customer_id,worker_id,created_at').order('created_at',{ascending:false});
     if(role==='customer')query=query.eq('customer_id',user.id);else if(activeWorkerProfileId)query=query.eq('worker_id',activeWorkerProfileId);else return;
     const {data,error}=await query;
@@ -2276,7 +2278,7 @@
     const host=$(hostId);if(!host)return;
     const {data,error}=await supabaseClient.from('messages').select('id,sender_id,message,created_at').eq('conversation_id',conversationId).order('created_at',{ascending:true}).limit(100);
     if(error){host.textContent='Could not load messages: '+error.message;return;}
-    host.innerHTML=(data||[]).map(m=>`<div class="cl-chat-bubble ${m.sender_id===clCurrentUser?.id?'mine':''}"><p class="text-sm">${esc(m.message)}</p><span class="block cl-muted mt-1">${new Date(m.created_at).toLocaleString()}</span></div>`).join('')||'<p class="text-sm text-slate-500">No messages yet. Start the conversation.</p>';
+    host.innerHTML=(data||[]).map(m=>`<div class="cl-chat-bubble ${m.sender_id===window.clCurrentUser?.id?'mine':''}"><p class="text-sm">${esc(m.message)}</p><span class="block cl-muted mt-1">${new Date(m.created_at).toLocaleString()}</span></div>`).join('')||'<p class="text-sm text-slate-500">No messages yet. Start the conversation.</p>';
     host.scrollTop=host.scrollHeight;
   }
 
@@ -2285,7 +2287,7 @@
     const input=$(role==='customer'?'customerChatInput':'workerChatInput');
     const hostId=role==='customer'?'customerChatMessages':'workerChatMessages';
     const statusId=role==='customer'?'customerChatMessage':'workerChatMessage';
-    const user=clCurrentUser||await getUser();if(!id||!user)return;
+    const user=window.clCurrentUser||await getUser();if(!id||!user)return;
     const message=input.value.trim();if(!message)return;
     const {error}=await supabaseClient.from('messages').insert({conversation_id:id,sender_id:user.id,message});
     if(error){say(statusId,error.message,true);return;}
@@ -2295,7 +2297,7 @@
   $('searchWorkersButton')?.addEventListener('click',loadPublicWorkers);
   $('workerSearchText')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();loadPublicWorkers();}});
   $('customerJobForm')?.addEventListener('submit',async e=>{
-    e.preventDefault();const user=clCurrentUser||await getUser();if(!user)return;
+    e.preventDefault();const user=window.clCurrentUser||await getUser();if(!user)return;
     const payload={customer_id:user.id,service_title:$('jobTitle').value.trim(),description:$('jobDescription').value.trim(),district:$('jobDistrict').value,address:$('jobArea').value.trim(),budget_lkr:$('jobBudget').value?Number($('jobBudget').value):null,preferred_date:$('jobDate').value||null,status:'open'};
     const {error}=await supabaseClient.from('job_posts').insert(payload);
     if(error){say('customerJobMessage',error.message,true);return;}
@@ -2316,7 +2318,7 @@
 
   document.addEventListener('submit',async e=>{
     const form=e.target.closest('.workerApplyForm');if(!form)return;e.preventDefault();
-    const user=clCurrentUser||await getUser();if(!user||!activeWorkerProfileId)return;
+    const user=window.clCurrentUser||await getUser();if(!user||!activeWorkerProfileId)return;
     const btn=form.querySelector('button');btn.disabled=true;
     const message=form.elements.message.value.trim();
     const {error}=await supabaseClient.from('job_applications').insert({job_id:form.dataset.jobId,worker_id:activeWorkerProfileId,message,status:'pending'});
@@ -2324,8 +2326,8 @@
     say('workerJobsMessage','Your application has been submitted.');await loadWorkerJobs();
   });
 
-  window.cleanLankaLoadCustomerFeatures=async function(user){clCurrentUser=user||await getUser();await Promise.all([loadPublicWorkers(),loadCustomerJobs(),loadConversations('customer')]);};
-  window.cleanLankaLoadWorkerFeatures=async function(user){clCurrentUser=user||await getUser();await Promise.all([loadWorkerJobs(),loadConversations('worker')]);};
+  window.cleanLankaLoadCustomerFeatures=async function(user){window.clCurrentUser=user||await getUser();await Promise.all([loadPublicWorkers(),loadCustomerJobs(),loadConversations('customer')]);};
+  window.cleanLankaLoadWorkerFeatures=async function(user){window.clCurrentUser=user||await getUser();await Promise.all([loadWorkerJobs(),loadConversations('worker')]);};
 })();
 </script>
 
