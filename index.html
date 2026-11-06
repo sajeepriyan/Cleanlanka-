@@ -186,13 +186,19 @@
 .cl-muted{font-size:12px;color:#64748b}.cl-chat-bubble{max-width:88%;padding:9px 12px;border-radius:13px;background:#e8f5ee;overflow-wrap:anywhere}.cl-chat-bubble.mine{margin-left:auto;background:#dbeafe}
 </style>
 
-
-<style>
-#adminDashboard{min-height:100vh;background:#f3f8f5;padding:22px 14px 60px;color:#163b2c}
-.admin-wrap{max-width:1250px;margin:auto}.admin-top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(110deg,#064e3b,#0f766e,#1d4ed8);color:white;padding:22px 26px;border-radius:24px;box-shadow:0 14px 35px #064e3b22}
-.admin-brand{font-size:27px;font-weight:1000;letter-spacing:-1px}.admin-sub{color:#d1fae5;font-size:13px}.admin-logout{background:#fff;color:#991b1b;border:0;border-radius:12px;padding:11px 16px;font-weight:900}
-.admin-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}.admin-stat,.admin-panel{background:#fff;border:1px solid #dcebe3;border-radius:19px;padding:17px;box-shadow:0 7px 24px #164e3b0a}.admin-stat span{display:block;color:#64748b;font-size:12px;font-weight:800;text-transform:uppercase}.admin-stat strong{display:block;font-size:30px;font-weight:1000;color:#075c3b;margin-top:5px}.admin-panel{margin-top:16px}.admin-panel h2{font-size:20px;font-weight:950;color:#064e3b;margin-bottom:12px}.admin-table-wrap{overflow-x:auto}.admin-table{width:100%;border-collapse:collapse;min-width:760px;font-size:13px}.admin-table th,.admin-table td{padding:11px 10px;border-bottom:1px solid #e5eee9;text-align:left;vertical-align:top}.admin-table th{color:#476457;background:#f5faf7;font-size:11px;text-transform:uppercase;letter-spacing:.04em}.admin-btn{border:0;border-radius:9px;padding:8px 10px;font-size:12px;font-weight:850;margin:2px;cursor:pointer}.admin-btn.green{background:#dcfce7;color:#166534}.admin-btn.blue{background:#dbeafe;color:#1e40af}.admin-btn.red{background:#fee2e2;color:#991b1b}.admin-btn.gold{background:#fef3c7;color:#92400e}.admin-note{padding:12px 14px;border-radius:12px;background:#fffbeb;color:#854d0e;font-size:12px;line-height:1.5;margin:10px 0}.admin-filter{padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;max-width:300px;width:100%;margin-bottom:12px}.admin-status{display:inline-block;padding:4px 8px;border-radius:20px;background:#eef2ff;font-size:11px;font-weight:900}
-@media(max-width:700px){.admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-top{padding:18px}.admin-brand{font-size:23px}}
+<style id="clean-lanka-login-layout-fix">
+  body.login-page-mode #account-login .login-page-inner {display:flex!important;justify-content:center!important;align-items:center!important;min-height:calc(100vh - 120px);}
+  body.login-page-mode #account-login .login-intro {display:none!important;}
+  body.login-page-mode #account-login .login-card {width:min(100%,500px);margin:0 auto;}
+  body.login-page-mode #account-login .max-w-6xl {max-width:760px;}
+  body.admin-login-mode > header,body.admin-login-mode > main,body.admin-login-mode > footer,body.admin-login-mode > aside,body.admin-login-mode > #registration-screen,body.admin-login-mode > #account-login,body.admin-login-mode > #customerDashboard,body.admin-login-mode > #workerDashboard {display:none!important;}
+  body.admin-login-mode {min-height:100vh;background:radial-gradient(circle at 10% 10%,#d1fae5,transparent 30%),linear-gradient(135deg,#eff6ff,#f8fafc);}
+  body.admin-login-mode #admin-login {display:flex!important;min-height:100vh;align-items:center;justify-content:center;padding:24px 16px;}
+  body.admin-dashboard-mode > *:not(#adminDashboard) {display:none!important;}
+  body.admin-dashboard-mode #adminDashboard {display:block!important;position:fixed;inset:0;z-index:100000;overflow:auto;background:#f8fafc;padding:24px;}
+  #admin-login .admin-login-card {width:min(100%,460px);background:white;border:1px solid #dbe9e2;border-radius:24px;padding:28px;box-shadow:0 25px 70px #164e3b18;}
+  #admin-login .admin-login-field {width:100%;box-sizing:border-box;border:1px solid #d7e3e8;border-radius:12px;padding:13px 14px;background:#f8fbfd;margin-top:6px;}
+  @media(max-width:600px){body.login-page-mode #account-login.login-page-wrap{padding:20px 14px 36px;}body.admin-dashboard-mode #adminDashboard{padding:14px;}}
 </style>
 
 </head>
@@ -253,6 +259,9 @@
           </a>
           <button type="button" onclick="openLoginPage()" class="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-700 to-blue-900 text-white px-4 py-3 text-sm sm:text-base font-extrabold shadow-lg whitespace-nowrap">
             <span class="material-symbols-outlined">account_circle</span><span>Login to Your Profile</span>
+          </button>
+          <button type="button" onclick="openAdminLoginPage()" class="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-emerald-800 text-emerald-900 bg-white px-4 py-3 text-sm font-extrabold whitespace-nowrap">
+            <span class="material-symbols-outlined">admin_panel_settings</span><span>Admin</span>
           </button>
 </div>
 </div>
@@ -1090,7 +1099,7 @@
         <div class="login-card-heading"><span class="material-symbols-outlined">account_circle</span><div><h3>Sign in to continue</h3><p>Use the email and password from registration.</p></div></div>
         <form id="loginForm" class="mt-6 space-y-4">
           <label class="login-label" for="loginRole">I am signing in as</label>
-          <select id="loginRole" required class="login-field"><option value="">Select Account Type</option><option value="customer">Customer</option><option value="worker">Service Worker</option><option value="admin">Administrator</option></select>
+          <select id="loginRole" required class="login-field"><option value="">Select Account Type</option><option value="customer">Customer</option><option value="worker">Service Worker</option></select>
           <label class="login-label" for="loginEmail">Email address</label>
           <input id="loginEmail" type="email" placeholder="Registered email address" autocomplete="username" required class="login-field">
           <label class="login-label" for="loginPassword">Password</label>
@@ -1124,6 +1133,33 @@
   </div>
 </section>
 
+<!-- SEPARATE ADMIN LOGIN: access is checked against public.admins, not a selectable public role -->
+<section id="admin-login" class="hidden">
+ <div class="admin-login-card">
+  <button type="button" onclick="closeAdminLoginPage()" class="mb-6 text-sm font-bold text-emerald-800">← Back to Home</button>
+  <div class="text-center mb-6"><div class="mx-auto mb-3 grid place-items-center w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-900"><span class="material-symbols-outlined" style="font-size:36px">admin_panel_settings</span></div>
+   <p class="text-xs font-black tracking-widest text-emerald-700">CLEAN LANKA • SECURE ACCESS</p><h1 class="text-2xl font-black text-slate-900 mt-2">Administrator Login</h1><p class="text-sm text-slate-500 mt-2">Authorised administrators only</p></div>
+  <form id="adminLoginForm" class="space-y-4">
+   <label class="block text-sm font-bold text-slate-700" for="adminLoginEmail">Admin email</label><input id="adminLoginEmail" class="admin-login-field" type="email" autocomplete="username" required placeholder="Administrator email">
+   <label class="block text-sm font-bold text-slate-700" for="adminLoginPassword">Password</label><input id="adminLoginPassword" class="admin-login-field" type="password" autocomplete="current-password" required placeholder="Password">
+   <button id="adminLoginSubmit" type="submit" class="w-full rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white p-3 font-extrabold">Secure Admin Sign In</button>
+   <p id="adminLoginMessage" class="text-sm text-center" role="status" aria-live="polite"></p>
+  </form>
+  <p class="text-xs text-slate-500 text-center mt-5">Admin access is verified by the Supabase admins table.</p>
+ </div>
+</section>
+<section id="adminDashboard" class="hidden">
+ <div class="max-w-7xl mx-auto">
+  <div class="flex flex-wrap items-center justify-between gap-3 mb-7"><div><p class="text-xs font-black tracking-widest text-emerald-700">CLEAN LANKA CONTROL CENTRE</p><h1 class="text-3xl font-black text-slate-900">Admin Dashboard</h1><p id="adminDashboardEmail" class="text-sm text-slate-500 mt-1"></p></div><button id="adminDashboardLogoutButton" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold" type="button">Sign Out</button></div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+   <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Customer Profiles</p><p id="adminCustomerCount" class="text-3xl font-black text-emerald-800 mt-2">—</p></div>
+   <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Worker Profiles</p><p id="adminWorkerCount" class="text-3xl font-black text-blue-800 mt-2">—</p></div>
+   <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Admin Access</p><p class="text-xl font-black text-emerald-800 mt-2">Verified</p></div>
+  </div>
+  <div class="rounded-2xl bg-white border border-slate-200 p-6"><h2 class="text-xl font-black text-slate-900">Administration</h2><p class="text-slate-600 mt-2">Admin sign-in is separate from Customer and Service Worker sign-in. Worker review and approval tools can be connected here after confirming the current worker table and policy structure.</p><p id="adminDashboardMessage" class="text-sm mt-4 text-slate-600" role="status"></p></div>
+ </div>
+</section>
+
 <!-- CUSTOMER DASHBOARD: dedicated profile page -->
 <section id="customerDashboard" class="hidden">
  <div class="customer-shell">
@@ -1141,6 +1177,19 @@
     <p class="text-xs uppercase font-bold text-slate-500">Full Name</p><p id="customerDashName" class="text-lg font-bold text-slate-900 mb-4">—</p>
     <p class="text-xs uppercase font-bold text-slate-500">Email Address</p><p id="customerDashEmail" class="text-lg font-bold text-slate-900 mb-4 break-all">—</p>
     <p class="text-xs uppercase font-bold text-slate-500">Account Type</p><p class="text-lg font-bold text-emerald-700">Registered Customer</p>
+    <form id="customerProfileForm" class="mt-5 border-t border-slate-200 pt-5 space-y-3">
+     <h3 class="text-lg font-extrabold text-emerald-900">Complete / Update Your Profile</h3>
+     <label class="block text-sm font-bold text-slate-700" for="customerProfileFullName">Full Name</label>
+     <input id="customerProfileFullName" required maxlength="160" autocomplete="name" class="w-full rounded-xl border border-slate-200 p-3" placeholder="Your full name">
+     <label class="block text-sm font-bold text-slate-700" for="customerProfilePhone">Phone Number</label>
+     <input id="customerProfilePhone" type="tel" maxlength="30" autocomplete="tel" class="w-full rounded-xl border border-slate-200 p-3" placeholder="Your contact number">
+     <label class="block text-sm font-bold text-slate-700" for="customerProfileDistrict">District</label>
+     <select id="customerProfileDistrict" required class="w-full rounded-xl border border-slate-200 p-3"><option value="">Select district</option><option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option></select>
+     <label class="block text-sm font-bold text-slate-700" for="customerProfileAddress">Address</label>
+     <textarea id="customerProfileAddress" required maxlength="500" autocomplete="street-address" rows="3" class="w-full rounded-xl border border-slate-200 p-3" placeholder="Your address"></textarea>
+     <button id="saveCustomerProfileButton" type="submit" class="w-full rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white p-3 font-bold">Save Customer Profile</button>
+     <p id="customerProfileMessage" class="text-sm" role="status" aria-live="polite"></p>
+    </form>
    </div>
    <div class="customer-card"><h2 class="text-xl font-extrabold text-emerald-900 mb-3">Service Bookings</h2>
     <p class="text-slate-600 leading-relaxed">Your customer account is active. Booking history and online booking management will appear here when the booking database feature is connected.</p>
@@ -1187,24 +1236,6 @@
     <p id="customerChatMessage" class="text-xs mt-2" aria-live="polite"></p>
    </div>
   </section>
- </div>
-</section>
-
-
-<!-- ADMIN DASHBOARD: access is checked against public.admins on the server -->
-<section id="adminDashboard" class="hidden">
- <div class="admin-wrap">
-  <header class="admin-top"><div><div class="admin-brand">CLEAN <span style="color:#a7f3d0">LANKA</span> · ADMIN</div><div class="admin-sub">Secure administration • Sri Lanka marketplace</div></div><button id="adminLogoutButton" class="admin-logout" type="button">Sign Out</button></header>
-  <div class="admin-note"><strong>Privacy:</strong> This dashboard displays document submission status only. It does not expose NIC numbers, document files, private addresses, or identity images. An authorised adult administrator must review documents securely outside this page before marking them verified.</div>
-  <div class="admin-stats">
-   <div class="admin-stat"><span>Total workers</span><strong id="adminWorkerCount">—</strong></div>
-   <div class="admin-stat"><span>Pending review</span><strong id="adminPendingCount">—</strong></div>
-   <div class="admin-stat"><span>Approved workers</span><strong id="adminApprovedCount">—</strong></div>
-   <div class="admin-stat"><span>Open jobs</span><strong id="adminOpenJobsCount">—</strong></div>
-  </div>
-  <section class="admin-panel"><h2>Worker Management &amp; Clearance Review</h2><input id="adminWorkerSearch" class="admin-filter" placeholder="Search worker name, email or district"><p id="adminWorkerMessage" class="text-sm text-slate-500 mb-2" aria-live="polite">Loading workers...</p><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Worker</th><th>District / Skills</th><th>Profile</th><th>Documents submitted</th><th>Clearance</th><th>Admin actions</th></tr></thead><tbody id="adminWorkersBody"><tr><td colspan="6">Loading...</td></tr></tbody></table></div></section>
-  <section class="admin-panel"><h2>Customer Job Posts</h2><p id="adminJobsMessage" class="text-sm text-slate-500 mb-2" aria-live="polite">Loading job posts...</p><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Job</th><th>Customer</th><th>Location</th><th>Budget</th><th>Status</th><th>Created</th></tr></thead><tbody id="adminJobsBody"><tr><td colspan="6">Loading...</td></tr></tbody></table></div></section>
-  <section class="admin-panel"><h2>Job Applications</h2><p id="adminAppsMessage" class="text-sm text-slate-500 mb-2" aria-live="polite">Loading applications...</p><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Job ID</th><th>Worker profile ID</th><th>Message</th><th>Status</th><th>Submitted</th></tr></thead><tbody id="adminAppsBody"><tr><td colspan="5">Loading...</td></tr></tbody></table></div></section>
  </div>
 </section>
 
@@ -1281,6 +1312,26 @@
           <div class="cv-detail wide"><span class="cv-label">Home address / Area</span><span id="workerDashAddress" class="cv-value">Not provided</span></div>
         </div>
 
+        <section class="cv-card mt-6" id="workerProfileEditCard">
+          <div class="flex items-center justify-between gap-3 flex-wrap mb-4">
+            <div><h3 class="cv-section-title mb-1"><span class="cv-dot"></span> Edit Professional Profile</h3>
+              <p class="text-sm text-slate-600">Update your contact and service information. Changes are saved to your account.</p></div>
+            <button type="button" id="workerEditToggle" class="rounded-xl bg-blue-700 text-white px-4 py-2 font-bold">Edit Profile</button>
+          </div>
+          <form id="workerProfileEditForm" class="hidden grid sm:grid-cols-2 gap-3">
+            <label class="text-sm font-bold text-slate-700">Full name<input id="editWorkerFullName" required maxlength="120" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
+            <label class="text-sm font-bold text-slate-700">Phone number<input id="editWorkerPhone" type="tel" maxlength="30" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
+            <label class="text-sm font-bold text-slate-700">District<input id="editWorkerDistrict" required maxlength="80" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
+            <label class="text-sm font-bold text-slate-700">Town / Area<input id="editWorkerAddress" required maxlength="180" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
+            <label class="text-sm font-bold text-slate-700 sm:col-span-2">Skills / Services (comma separated)<input id="editWorkerSkills" required maxlength="500" placeholder="Electrician, Plumbing, Cleaning" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
+            <label class="text-sm font-bold text-slate-700">Experience (years)<input id="editWorkerExperience" type="number" min="0" max="60" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
+            <label class="text-sm font-bold text-slate-700">Expected price (LKR)<input id="editWorkerPrice" type="number" min="0" step="1" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
+            <label class="text-sm font-bold text-slate-700 sm:col-span-2">Availability<input id="editWorkerAvailability" maxlength="100" placeholder="Available weekdays / Weekends" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
+            <div class="sm:col-span-2 flex gap-2 flex-wrap"><button id="workerProfileSave" type="submit" class="rounded-xl bg-emerald-700 text-white px-5 py-3 font-bold">Save Changes</button><button id="workerEditCancel" type="button" class="rounded-xl bg-slate-100 px-5 py-3 font-bold">Cancel</button></div>
+            <p id="workerProfileEditMessage" class="sm:col-span-2 text-sm" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+
         <section class="phone-privacy-card" aria-labelledby="phonePrivacyHeading">
           <div class="phone-privacy-row">
             <div>
@@ -1288,7 +1339,7 @@
               <p class="phone-privacy-help">Choose whether customers can see your phone number on your public Clean Lanka profile. You can change this setting at any time.</p>
             </div>
             <label class="phone-privacy-switch" for="showPhonePublicly">
-              <input id="showPhonePublicly" type="checkbox" disabled>
+              <input id="showPhonePublicly" type="checkbox" disabled aria-label="Show my phone number publicly">
               <span id="phonePrivacyLabel">Private</span>
             </label>
           </div>
@@ -1444,18 +1495,110 @@
     window.scrollTo(0, 0);
   }
 
+  function openAdminLoginPage() {
+    document.body.classList.remove('login-page-mode','registration-mode','worker-dashboard-mode','customer-dashboard-mode','admin-dashboard-mode');
+    document.getElementById('account-login').classList.add('hidden');
+    document.getElementById('registration-screen').classList.add('hidden');
+    document.getElementById('admin-login').classList.remove('hidden');
+    document.body.classList.add('admin-login-mode');
+    window.scrollTo(0,0);
+  }
+  function closeAdminLoginPage() {
+    document.body.classList.remove('admin-login-mode');
+    document.getElementById('admin-login').classList.add('hidden');
+    window.scrollTo(0,0);
+  }
+
+  let activeCustomerUserId = null;
+
+  async function loadCustomerProfile(user) {
+    const metadata = user.user_metadata || {};
+    const message = document.getElementById('customerProfileMessage');
+    activeCustomerUserId = user.id;
+    const nameInput = document.getElementById('customerProfileFullName');
+    const phoneInput = document.getElementById('customerProfilePhone');
+    const districtInput = document.getElementById('customerProfileDistrict');
+    const addressInput = document.getElementById('customerProfileAddress');
+    nameInput.value = metadata.full_name || '';
+    phoneInput.value = metadata.phone || metadata.Phone || '';
+    districtInput.value = metadata.district || '';
+    addressInput.value = metadata.address || '';
+    try {
+      const { data, error } = await supabaseClient
+        .from('customer_profiles')
+        .select('id,user_id,full_name,email,district,address,phone')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (error) throw error;
+      if (data) {
+        nameInput.value = data.full_name || metadata.full_name || '';
+        phoneInput.value = data.phone || '';
+        districtInput.value = data.district || '';
+        addressInput.value = data.address || '';
+        document.getElementById('customerDashName').textContent = data.full_name || 'Customer';
+        if (message) showMessage(message, 'Your saved customer profile has been loaded.');
+      } else if (message) {
+        showMessage(message, 'Please complete your district and address, then save your customer profile.');
+      }
+    } catch (error) {
+      console.error('Customer profile load failed:', error);
+      if (message) showMessage(message, 'Could not load your saved profile. Please refresh and try again.', true);
+    }
+  }
+
+  document.getElementById('customerProfileForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!activeCustomerUserId) return;
+    const button = document.getElementById('saveCustomerProfileButton');
+    const message = document.getElementById('customerProfileMessage');
+    const profile = {
+      user_id: activeCustomerUserId,
+      full_name: document.getElementById('customerProfileFullName').value.trim(),
+      email: document.getElementById('customerDashEmail').textContent.trim(),
+      phone: document.getElementById('customerProfilePhone').value.trim() || null,
+      district: document.getElementById('customerProfileDistrict').value,
+      address: document.getElementById('customerProfileAddress').value.trim()
+    };
+    if (!profile.full_name || !profile.district || !profile.address) {
+      showMessage(message, 'Please enter your full name, district and address.', true);
+      return;
+    }
+    button.disabled = true;
+    showMessage(message, 'Saving your customer profile...');
+    try {
+      const { data: existing, error: readError } = await supabaseClient
+        .from('customer_profiles').select('id').eq('user_id', activeCustomerUserId).maybeSingle();
+      if (readError) throw readError;
+      let result;
+      if (existing) {
+        result = await supabaseClient.from('customer_profiles').update(profile)
+          .eq('user_id', activeCustomerUserId).select('id').single();
+      } else {
+        result = await supabaseClient.from('customer_profiles').insert(profile).select('id').single();
+      }
+      if (result.error) throw result.error;
+      document.getElementById('customerDashName').textContent = profile.full_name;
+      showMessage(message, 'Your customer profile has been saved successfully.');
+    } catch (error) {
+      console.error('Customer profile save failed:', error);
+      showMessage(message, error.message || 'Could not save your profile. Please try again.', true);
+    } finally {
+      button.disabled = false;
+    }
+  });
+
   function loadCustomerDashboard(user) {
     const metadata = user.user_metadata || {};
     document.body.classList.remove('login-page-mode','registration-mode','worker-dashboard-mode');
     document.getElementById('account-login').classList.add('hidden');
     document.getElementById('workerDashboard').classList.add('hidden');
-    document.getElementById('adminDashboard').classList.add('hidden');
     document.getElementById('registration-screen').classList.add('hidden');
     document.getElementById('customerDashboard').classList.remove('hidden');
     document.getElementById('customerDashName').textContent = metadata.full_name || 'Customer';
     document.getElementById('customerDashEmail').textContent = user.email || '—';
     document.body.classList.add('customer-dashboard-mode');
     window.scrollTo(0,0);
+    loadCustomerProfile(user);
     if (window.cleanLankaLoadCustomerFeatures) window.cleanLankaLoadCustomerFeatures(user);
   }
 
@@ -1655,6 +1798,51 @@
 
 
   // Load the signed-in worker's saved profile and show a full-screen dashboard.
+  let currentWorkerProfile = null;
+  function populateWorkerEditForm(p) {
+    document.getElementById('editWorkerFullName').value = p.full_name || '';
+    document.getElementById('editWorkerPhone').value = p.Phone || '';
+    document.getElementById('editWorkerDistrict').value = p.district || '';
+    document.getElementById('editWorkerAddress').value = p.address || '';
+    document.getElementById('editWorkerSkills').value = Array.isArray(p.skills) ? p.skills.join(', ') : (p.skills || '');
+    document.getElementById('editWorkerExperience').value = p.experience_years ?? 0;
+    document.getElementById('editWorkerPrice').value = p.service_price_lkr ?? '';
+    document.getElementById('editWorkerAvailability').value = p.availability || '';
+  }
+  document.getElementById('workerEditToggle').addEventListener('click', () => {
+    if (!currentWorkerProfile) { alert('Worker profile could not be loaded. Please sign out and sign in again.'); return; }
+    populateWorkerEditForm(currentWorkerProfile);
+    document.getElementById('workerProfileEditForm').classList.remove('hidden');
+    document.getElementById('workerProfileEditMessage').textContent = '';
+  });
+  document.getElementById('workerEditCancel').addEventListener('click', () => document.getElementById('workerProfileEditForm').classList.add('hidden'));
+  document.getElementById('workerProfileEditForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!currentWorkerProfile || !activeWorkerProfileId || !activeWorkerUserId) return;
+    const btn = document.getElementById('workerProfileSave');
+    const msg = document.getElementById('workerProfileEditMessage');
+    btn.disabled = true; msg.textContent = 'Saving changes...'; msg.style.color = '#285477';
+    const updates = {
+      full_name: document.getElementById('editWorkerFullName').value.trim(),
+      Phone: document.getElementById('editWorkerPhone').value.trim() || null,
+      district: document.getElementById('editWorkerDistrict').value.trim(),
+      address: document.getElementById('editWorkerAddress').value.trim(),
+      skills: document.getElementById('editWorkerSkills').value.split(',').map(x => x.trim()).filter(Boolean),
+      experience_years: Number(document.getElementById('editWorkerExperience').value || 0),
+      service_price_lkr: document.getElementById('editWorkerPrice').value === '' ? null : Number(document.getElementById('editWorkerPrice').value),
+      availability: document.getElementById('editWorkerAvailability').value.trim() || null
+    };
+    try {
+      const { data, error } = await supabaseClient.from('worker_profiles').update(updates).eq('id', activeWorkerProfileId).eq('user_id', activeWorkerUserId).select('*').single();
+      if (error) throw error;
+      currentWorkerProfile = data;
+      msg.textContent = 'Profile changes saved successfully.'; msg.style.color = '#166534';
+      await loadWorkerDashboard(clCurrentUser || (await supabaseClient.auth.getUser()).data.user);
+      document.getElementById('workerProfileEditForm').classList.add('hidden');
+    } catch (err) { msg.textContent = 'Could not save: ' + err.message; msg.style.color = '#b91c1c'; }
+    finally { btn.disabled = false; }
+  });
+
   async function loadWorkerDashboard(user) {
     const dashboard = document.getElementById('workerDashboard');
     const dashboardMessage = document.getElementById('workerDashboardMessage');
@@ -1677,6 +1865,8 @@
 
     activeWorkerProfileId = profile?.id || null;
     activeWorkerUserId = user.id;
+    currentWorkerProfile = profile || null;
+    document.getElementById('workerEditToggle').disabled = !profile;
     const phonePrivacyToggle = document.getElementById('showPhonePublicly');
     if (phonePrivacyToggle) {
       phonePrivacyToggle.disabled = !profile;
@@ -1743,63 +1933,6 @@
     savePhonePrivacySetting(event.target.checked);
   });
 
-
-  async function loadAdminDashboard(user) {
-    document.body.classList.remove('login-page-mode','registration-mode','worker-dashboard-mode','customer-dashboard-mode');
-    document.getElementById('account-login').classList.add('hidden');
-    document.getElementById('customerDashboard').classList.add('hidden');
-    document.getElementById('workerDashboard').classList.add('hidden');
-    document.getElementById('registration-screen').classList.add('hidden');
-    document.getElementById('adminDashboard').classList.remove('hidden');
-    window.scrollTo(0,0);
-    const {data:adminRow,error:adminError}=await supabaseClient.from('admins').select('user_id').eq('user_id',user.id).maybeSingle();
-    if(adminError || !adminRow){
-      document.getElementById('adminDashboard').classList.add('hidden');
-      await supabaseClient.auth.signOut();
-      throw new Error('Administrator access is not authorised for this account.');
-    }
-    await refreshAdminDashboard();
-  }
-
-  const adminEsc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  async function refreshAdminDashboard(){
-    const workerMsg=document.getElementById('adminWorkerMessage');
-    workerMsg.textContent='Loading worker records...';
-    const {data:workers,error:wErr}=await supabaseClient.from('worker_profiles').select('id,user_id,full_name,email,district,skills,experience_years,service_price_lkr,verification_status,is_available,police_clearance_status,gn_certificate_status,temporary_booking_until,clearance_label,approved_at,created_at').order('created_at',{ascending:false}).limit(250);
-    if(wErr){workerMsg.textContent='Worker records could not load: '+wErr.message;document.getElementById('adminWorkersBody').innerHTML='';return;}
-    document.getElementById('adminWorkerCount').textContent=workers.length;
-    document.getElementById('adminPendingCount').textContent=workers.filter(w=>w.verification_status==='pending').length;
-    document.getElementById('adminApprovedCount').textContent=workers.filter(w=>w.verification_status==='approved').length;
-    renderAdminWorkers(workers);
-    const {data:jobs,error:jErr}=await supabaseClient.from('job_posts').select('id,customer_id,service_title,description,district,budget_lkr,status,created_at').order('created_at',{ascending:false}).limit(100);
-    if(jErr){document.getElementById('adminJobsMessage').textContent='Job posts are not available yet. Admin read policy is required: '+jErr.message;document.getElementById('adminJobsBody').innerHTML='';document.getElementById('adminOpenJobsCount').textContent='—';}
-    else{document.getElementById('adminJobsMessage').textContent=jobs.length+' recent job posts';document.getElementById('adminOpenJobsCount').textContent=jobs.filter(j=>j.status==='open').length;document.getElementById('adminJobsBody').innerHTML=jobs.map(j=>`<tr><td><strong>${adminEsc(j.service_title||'Home service')}</strong><br><span class="text-slate-500">${adminEsc((j.description||'').slice(0,110))}</span></td><td>${adminEsc(j.customer_id)}</td><td>${adminEsc(j.district||'—')}</td><td>${j.budget_lkr==null?'—':'LKR '+Number(j.budget_lkr).toLocaleString('en-LK')}</td><td><span class="admin-status">${adminEsc(j.status)}</span></td><td>${j.created_at?new Date(j.created_at).toLocaleDateString(): '—'}</td></tr>`).join('')||'<tr><td colspan="6">No job posts found.</td></tr>';}
-    const {data:apps,error:aErr}=await supabaseClient.from('job_applications').select('id,job_id,worker_id,message,status,created_at').order('created_at',{ascending:false}).limit(100);
-    if(aErr){document.getElementById('adminAppsMessage').textContent='Applications could not load: '+aErr.message;document.getElementById('adminAppsBody').innerHTML='';}
-    else{document.getElementById('adminAppsMessage').textContent=apps.length+' recent applications';document.getElementById('adminAppsBody').innerHTML=apps.map(a=>`<tr><td>${adminEsc(a.job_id)}</td><td>${adminEsc(a.worker_id)}</td><td>${adminEsc((a.message||'').slice(0,160))}</td><td><span class="admin-status">${adminEsc(a.status)}</span></td><td>${a.created_at?new Date(a.created_at).toLocaleString(): '—'}</td></tr>`).join('')||'<tr><td colspan="5">No applications found.</td></tr>';}
-  }
-  let adminWorkerCache=[];
-  function renderAdminWorkers(rows){
-    adminWorkerCache=rows||[];const body=document.getElementById('adminWorkersBody');
-    body.innerHTML=adminWorkerCache.map(w=>{
-      const p=w.police_clearance_status||'pending',g=w.gn_certificate_status||'pending';
-      const temp=w.temporary_booking_until?new Date(w.temporary_booking_until):null;
-      const docText=`Police: ${p} · GN: ${g}`;
-      return `<tr data-worker-row="${adminEsc(w.id)}"><td><strong>${adminEsc(w.full_name)}</strong><br><span class="text-slate-500">${adminEsc(w.email||'')}</span><br><small>${adminEsc(w.id)}</small></td><td>${adminEsc(w.district)}<br>${adminEsc((w.skills||[]).join(', '))}</td><td><span class="admin-status">${adminEsc(w.verification_status)}</span><br><small>Available: ${w.is_available?'Yes':'No'}</small></td><td>${adminEsc(docText)}<br><small>Files are not opened or exposed here.</small></td><td>${adminEsc(w.clearance_label||'Pending Clearance')}<br><small>${temp?(temp>new Date()?'Temporary until '+temp.toLocaleString():'Temporary period expired'):'No temporary expiry'}</small></td><td><button class="admin-btn green" data-admin-action="approve-temp" data-worker="${adminEsc(w.id)}">Approve 14 days</button><button class="admin-btn blue" data-admin-action="verify-police" data-worker="${adminEsc(w.id)}">Mark Police verified</button><button class="admin-btn blue" data-admin-action="verify-gn" data-worker="${adminEsc(w.id)}">Mark GN verified</button><button class="admin-btn gold" data-admin-action="approve-verified" data-worker="${adminEsc(w.id)}">Approve verified</button><button class="admin-btn red" data-admin-action="reject" data-worker="${adminEsc(w.id)}">Reject</button></td></tr>`;
-    }).join('')||'<tr><td colspan="6">No worker records found.</td></tr>';
-  }
-  document.getElementById('adminWorkerSearch').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();renderAdminWorkers(adminWorkerCache.filter(w=>[w.full_name,w.email,w.district,(w.skills||[]).join(' ')].join(' ').toLowerCase().includes(q)));});
-  document.getElementById('adminWorkersBody').addEventListener('click',async e=>{
-    const b=e.target.closest('[data-admin-action]');if(!b)return;const w=adminWorkerCache.find(x=>x.id===b.dataset.worker);if(!w)return;
-    const action=b.dataset.adminAction;let patch={reviewed_at:new Date().toISOString(),reviewed_by:(await supabaseClient.auth.getUser()).data.user.id};
-    if(action==='verify-police'){if(!confirm('Only continue after an authorised adult has securely checked the original Police Clearance document. Mark it verified?'))return;patch.police_clearance_status='verified';patch.clearance_label='Clearance Verified';patch.temporary_booking_until=null;}
-    if(action==='verify-gn'){if(!confirm('Only continue after an authorised adult has securely checked the original Grama Niladhari certificate. Mark it verified?'))return;patch.gn_certificate_status='verified';patch.clearance_label='Clearance Verified';patch.temporary_booking_until=null;}
-    if(action==='approve-temp'){if(!confirm('Approve this worker for exactly 14 days from now, with Pending Clearance?'))return;patch.verification_status='approved';patch.is_available=true;patch.clearance_label='Pending Clearance';patch.approved_at=new Date().toISOString();patch.temporary_booking_until=new Date(Date.now()+14*24*60*60*1000).toISOString();}
-    if(action==='approve-verified'){if(w.police_clearance_status!=='verified'&&w.gn_certificate_status!=='verified'){alert('First verify at least one certificate.');return;}if(!confirm('Approve this worker with verified clearance?'))return;patch.verification_status='approved';patch.is_available=true;patch.clearance_label='Clearance Verified';patch.approved_at=w.approved_at||new Date().toISOString();patch.temporary_booking_until=null;}
-    if(action==='reject'){if(!confirm('Reject this worker profile?'))return;patch.verification_status='rejected';patch.is_available=false;patch.temporary_booking_until=null;}
-    b.disabled=true;const {error}=await supabaseClient.from('worker_profiles').update(patch).eq('id',w.id);if(error){alert('Update failed: '+error.message);b.disabled=false;return;}alert('Worker record updated.');await refreshAdminDashboard();
-  });
-
   const loginForm = document.getElementById('loginForm');
   loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -1821,13 +1954,12 @@
       if (error) throw error;
 
       const actualRole = data.user?.user_metadata?.account_type;
-      if (role === 'admin') {
-        await loadAdminDashboard(data.user);
-        showMessage(message, 'Administrator sign-in successful.');
-      } else if (actualRole !== role) {
+      if (actualRole !== role) {
         await supabaseClient.auth.signOut();
         throw new Error('This email is registered under a different account type. Please select the correct type.');
-      } else if (role === 'worker') {
+      }
+
+      if (role === 'worker') {
         let syncWarning = '';
         try {
           await saveWorkerProfileAfterLogin(data.user);
@@ -1849,6 +1981,44 @@
     } finally {
       submit.disabled = false;
     }
+  });
+
+  document.getElementById('adminLoginForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const button = document.getElementById('adminLoginSubmit');
+    const message = document.getElementById('adminLoginMessage');
+    const email = document.getElementById('adminLoginEmail').value.trim();
+    const password = document.getElementById('adminLoginPassword').value;
+    button.disabled = true;
+    showMessage(message, 'Verifying administrator credentials...');
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({email, password});
+      if (error) throw error;
+      const { data: adminRow, error: adminError } = await supabaseClient
+        .from('admins').select('user_id').eq('user_id', data.user.id).maybeSingle();
+      if (adminError) throw new Error('Could not verify admin access. Check the admins table SELECT policy: ' + adminError.message);
+      if (!adminRow) {
+        await supabaseClient.auth.signOut();
+        throw new Error('Access denied. This account is not registered as a Clean Lanka administrator.');
+      }
+      document.body.classList.remove('admin-login-mode','login-page-mode','registration-mode','worker-dashboard-mode','customer-dashboard-mode');
+      document.getElementById('admin-login').classList.add('hidden');
+      document.getElementById('adminDashboard').classList.remove('hidden');
+      document.body.classList.add('admin-dashboard-mode');
+      document.getElementById('adminDashboardEmail').textContent = data.user.email || '';
+      const [customers, workers] = await Promise.all([
+        supabaseClient.from('customer_profiles').select('id', {count:'exact', head:true}),
+        supabaseClient.from('worker_profiles').select('id', {count:'exact', head:true})
+      ]);
+      document.getElementById('adminCustomerCount').textContent = customers.error ? '—' : String(customers.count ?? 0);
+      document.getElementById('adminWorkerCount').textContent = workers.error ? '—' : String(workers.count ?? 0);
+      document.getElementById('adminDashboardMessage').textContent = customers.error || workers.error
+        ? 'Admin verified. Some summary counts are unavailable because of table permissions.'
+        : 'Admin verified. Dashboard summary loaded.';
+      window.scrollTo(0,0);
+    } catch (error) {
+      showMessage(message, error.message || 'Admin sign-in failed.', true);
+    } finally { button.disabled = false; }
   });
 
   document.getElementById('forgotPasswordButton').addEventListener('click', () => {
@@ -1923,13 +2093,15 @@
       showMessage(message, error.message || 'Could not sign out.', true);
       return;
     }
-    document.body.classList.remove('worker-dashboard-mode','customer-dashboard-mode','login-page-mode');
+    document.body.classList.remove('worker-dashboard-mode','customer-dashboard-mode','login-page-mode','admin-login-mode','admin-dashboard-mode');
+    activeCustomerUserId = null;
     document.getElementById('logoutButton').classList.add('hidden');
     document.getElementById('manageEmailButton').classList.add('hidden');
     document.getElementById('emailSettingsPanel').classList.add('hidden');
     document.getElementById('workerDashboard').classList.add('hidden');
     document.getElementById('customerDashboard').classList.add('hidden');
     document.getElementById('adminDashboard').classList.add('hidden');
+    document.getElementById('admin-login').classList.add('hidden');
     document.getElementById('emailConfirmationHint').classList.remove('hidden');
     showMessage(message, 'You have signed out successfully.');
   }
@@ -1937,7 +2109,7 @@
   document.getElementById('logoutButton').addEventListener('click', cleanLankaSignOut);
   document.getElementById('workerDashboardLogoutButton').addEventListener('click', cleanLankaSignOut);
   document.getElementById('customerDashboardLogoutButton').addEventListener('click', cleanLankaSignOut);
-  document.getElementById('adminLogoutButton').addEventListener('click', cleanLankaSignOut);
+  document.getElementById('adminDashboardLogoutButton').addEventListener('click', cleanLankaSignOut);
 </script>
 
 <script>
