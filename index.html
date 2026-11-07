@@ -2449,7 +2449,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
     adminWorkerDetail.append(actionTitle);
     const actionNote = document.createElement('p');
     actionNote.className = 'text-sm text-slate-600 mb-3';
-    actionNote.textContent = 'Temporary booking approval lasts 14 days from the moment the Admin grants it. Verifying either Police Clearance or GN Certificate grants clearance approval and ends the temporary period.';
+    actionNote.textContent = 'Approve Worker is always available to authorised Admins. If either Police Clearance or GN Certificate is verified, approval uses that verified clearance. Otherwise approval is temporary for 14 days. Reject Worker and Request More Information remain available regardless of clearance verification.';
     adminWorkerDetail.append(actionNote);
     const actionMessage = document.createElement('p');
     actionMessage.className = 'text-sm font-semibold text-slate-700 mb-3';
@@ -2498,18 +2498,28 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
     }
 
     const clearanceVerified = w.police_clearance_status === 'verified' || w.gn_certificate_status === 'verified';
-    if (!clearanceVerified) {
-      addAdminDecisionButton('Temporary Approve (14 Days)','bg-blue-700 hover:bg-blue-800',() => {
-        const approvedAt = new Date();
+
+    // Keep an explicit Approve action visible for every worker, including workers
+    // whose Police Clearance or GN Certificate has already been verified.
+    addAdminDecisionButton('Approve Worker','bg-emerald-700 hover:bg-emerald-800',() => {
+      const approvedAt = new Date();
+      if (clearanceVerified) {
+        applyAdminWorkerDecision('Worker approval',{
+          verification_status:'approved',
+          temporary_booking_until:null,
+          clearance_label:'Clearance Verified',
+          approved_at:approvedAt.toISOString()
+        },'Approve this worker? Their verified clearance will remain recorded.');
+      } else {
         const until = new Date(approvedAt.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString();
-        applyAdminWorkerDecision('Temporary approval',{
+        applyAdminWorkerDecision('Temporary worker approval',{
           verification_status:'approved',
           temporary_booking_until:until,
           clearance_label:'Pending Clearance',
           approved_at:approvedAt.toISOString()
-        },'Grant this worker temporary booking approval for 14 days from now?');
-      });
-    }
+        },'Approve this worker temporarily for 14 days while clearance is pending?');
+      }
+    });
 
     if (w.police_clearance_path && w.police_clearance_status !== 'verified') {
       addAdminDecisionButton('Verify Police Clearance','bg-emerald-700 hover:bg-emerald-800',() => {
