@@ -1,4 +1,4 @@
-<!-- CLEAN LANKA — FILE 09: Admin Worker Management + Dashboard Summary + Sub Admin Permissions -->
+<!-- CLEAN LANKA — FILE 10: Public Worker Marketplace + Public Job Board + Official Jobs -->
 <!DOCTYPE html>
 
 <html lang="en"><head>
@@ -1027,6 +1027,36 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 </div>
 </div>
 </section>
+
+<section id="homeMarketplace" class="bg-gradient-to-b from-emerald-50 via-white to-blue-50 py-16 sm:py-20">
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="text-center max-w-3xl mx-auto mb-10">
+   <span class="inline-flex rounded-full bg-emerald-100 text-emerald-800 px-4 py-2 text-xs font-black uppercase tracking-widest">Clean Lanka Marketplace</span>
+   <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mt-4">Find the Right Person for Your Home</h2>
+   <p class="text-slate-600 text-base sm:text-lg mt-4">Browse approved home-service professionals and discover job opportunities across Sri Lanka. View profiles before choosing who to contact.</p>
+  </div>
+  <section class="bg-white rounded-3xl border border-emerald-100 shadow-xl p-5 sm:p-8 mb-10" aria-labelledby="homeWorkersHeading">
+   <div class="flex flex-wrap items-end justify-between gap-3 mb-5"><div><h3 id="homeWorkersHeading" class="text-2xl font-black text-emerald-950">Find a Worker</h3><p class="text-sm text-slate-500 mt-1">Only Admin-approved worker profiles are listed.</p></div><a href="#worker-register" onclick="openRegistration('worker');return false;" class="rounded-xl bg-emerald-700 text-white px-4 py-3 font-bold">Join as a Worker</a></div>
+   <div class="grid sm:grid-cols-[1fr_240px_auto] gap-3 mb-4">
+    <input id="homeWorkerSearchText" type="search" class="w-full rounded-xl border border-slate-200 p-3" placeholder="Search worker name or skill" aria-label="Search worker name or skill">
+    <select id="homeWorkerSearchDistrict" class="w-full rounded-xl border border-slate-200 p-3" aria-label="Filter workers by district"><option value="">All districts</option><option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option></select>
+    <button id="homeWorkerSearchButton" type="button" class="rounded-xl bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 font-bold">Search Workers</button>
+   </div>
+   <p id="homeWorkerMessage" class="text-sm text-slate-500 mb-3" role="status" aria-live="polite">Loading approved workers...</p>
+   <div id="homeWorkerResults" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </section>
+  <section class="bg-white rounded-3xl border border-blue-100 shadow-xl p-5 sm:p-8" aria-labelledby="homeJobsHeading">
+   <div class="flex flex-wrap items-end justify-between gap-3 mb-5"><div><h3 id="homeJobsHeading" class="text-2xl font-black text-blue-950">Job Opportunities</h3><p class="text-sm text-slate-500 mt-1">Customer-posted jobs and official Clean Lanka opportunities.</p></div><a href="#worker-register" onclick="openLoginPage();return false;" class="rounded-xl border border-blue-200 text-blue-800 px-4 py-3 font-bold">Worker Login to Apply</a></div>
+   <div class="flex flex-wrap gap-2 mb-4"><button type="button" class="home-job-filter rounded-full bg-blue-700 text-white px-4 py-2 text-sm font-bold" data-job-filter="all">All Jobs</button><button type="button" class="home-job-filter rounded-full bg-slate-100 text-slate-700 px-4 py-2 text-sm font-bold" data-job-filter="customer">Customer Jobs</button><button type="button" class="home-job-filter rounded-full bg-slate-100 text-slate-700 px-4 py-2 text-sm font-bold" data-job-filter="official">Clean Lanka Jobs</button></div>
+   <p id="homeJobMessage" class="text-sm text-slate-500 mb-3" role="status" aria-live="polite">Loading job opportunities...</p>
+   <div id="homeJobResults" class="grid md:grid-cols-2 gap-4"></div>
+  </section>
+ </div>
+</section>
+<div id="homeWorkerProfileModal" class="hidden fixed inset-0 z-[80] bg-slate-950/70 p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="homeWorkerModalTitle">
+ <div class="max-w-xl mx-auto my-8 bg-white rounded-3xl shadow-2xl overflow-hidden"><div class="bg-gradient-to-r from-emerald-800 to-blue-800 p-6 text-white"><div class="flex items-start justify-between gap-3"><div><p class="text-xs uppercase tracking-widest font-black text-emerald-100">Clean Lanka Approved Professional</p><h3 id="homeWorkerModalTitle" class="text-2xl font-black mt-2">Worker Profile</h3></div><button type="button" id="closeHomeWorkerModal" class="rounded-full bg-white/15 px-3 py-2 font-bold" aria-label="Close profile">✕</button></div></div><div id="homeWorkerModalBody" class="p-6"></div></div>
+</div>
+
 </main>
 <!-- FLOATING LIVE CHAT / WHATSAPP BUBBLE (FEATURE 7) -->
 <aside class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
@@ -1211,6 +1241,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
    <div class="admin-stat"><p class="stat-label">Admin Access</p><p id="adminAccessLabel" class="stat-value">Verified</p></div>
   </div>
   <div class="admin-welcome"><h2>Welcome to your Clean Lanka Control Centre</h2><p class="mt-1">Manage workers, customers and administrator access from one secure workspace.</p><p id="adminDashboardMessage" class="text-sm mt-3" role="status"></p></div>
+  <div id="adminOfficialJobsMount"></div>
   <div class="hidden" aria-hidden="true"></div>
   <section id="adminCustomersSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminCustomersHeading">
    <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminCustomersHeading" class="text-xl font-black text-slate-900">Customer Management</h2><p class="text-sm text-slate-500 mt-1">Customer ID, name, district and registration date.</p></div><button id="adminRefreshCustomers" type="button" class="rounded-xl bg-emerald-800 text-white px-5 py-3 font-bold">Refresh Customers</button></div>
@@ -1252,6 +1283,21 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
    <div id="adminWorkerDetail" class="hidden mt-6 border-t border-slate-200 pt-6"></div>
   </section>
  </div>
+</section>
+
+<!-- ADMIN: publish official Clean Lanka jobs -->
+<section id="adminOfficialJobsSection" class="rounded-2xl bg-white border border-emerald-200 p-5 sm:p-6 mb-6">
+ <div class="mb-4"><h2 class="text-xl font-black text-emerald-950">Clean Lanka Official Job Posting</h2><p class="text-sm text-slate-600 mt-1">Publish opportunities directly from Clean Lanka. These will be labelled as official jobs on the public Home Page.</p></div>
+ <form id="adminOfficialJobForm" class="grid sm:grid-cols-2 gap-3">
+  <input id="officialJobTitle" required maxlength="120" class="rounded-xl border border-slate-200 p-3" placeholder="Job title">
+  <select id="officialJobDistrict" required class="rounded-xl border border-slate-200 p-3"><option value="">Select district</option><option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option></select>
+  <textarea id="officialJobDescription" required maxlength="3000" rows="3" class="sm:col-span-2 rounded-xl border border-slate-200 p-3" placeholder="Describe the official job and requirements"></textarea>
+  <input id="officialJobArea" required maxlength="180" class="rounded-xl border border-slate-200 p-3" placeholder="Town / area">
+  <input id="officialJobBudget" type="number" min="0" step="1" class="rounded-xl border border-slate-200 p-3" placeholder="Budget in LKR (optional)">
+  <input id="officialJobDate" type="date" class="rounded-xl border border-slate-200 p-3">
+  <button type="submit" class="sm:col-span-2 rounded-xl bg-emerald-800 text-white p-3 font-bold">Publish Official Clean Lanka Job</button>
+ </form>
+ <p id="adminOfficialJobMessage" class="text-sm mt-3" role="status" aria-live="polite"></p>
 </section>
 
 <!-- CUSTOMER DASHBOARD: dedicated profile page -->
@@ -3093,6 +3139,64 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
   }
   document.getElementById('customerRefreshNotifications')?.addEventListener('click',async()=>{const user=window.clCurrentUser||await getUser();if(user)await loadUserNotifications(user.id,'customerNotificationsList','customerNotificationsMessage');});
   document.getElementById('workerRefreshNotifications')?.addEventListener('click',async()=>{const user=window.clCurrentUser||await getUser();if(user)await loadUserNotifications(user.id,'workerNotificationsList','workerNotificationsMessage');});
+  // Move the official job editor into the authenticated Admin Dashboard.
+  const officialJobsSection=$('adminOfficialJobsSection');const officialJobsMount=$('adminOfficialJobsMount');if(officialJobsSection&&officialJobsMount)officialJobsMount.appendChild(officialJobsSection);if(officialJobsSection&&!['main_admin','admin'].includes(String(currentAdminRole||'')))officialJobsSection.classList.add('hidden');
+  // Public Home Page marketplace: approved worker directory and public job board.
+  let homeWorkerCache=[];
+  let homeJobCache=[];
+  let homeJobFilter='all';
+  function renderHomeWorkers(){
+    const q=($('homeWorkerSearchText')?.value||'').trim().toLowerCase();
+    const d=$('homeWorkerSearchDistrict')?.value||'';
+    const rows=homeWorkerCache.filter(w=>(!d||w.district===d)&&(!q||String(w.full_name||'').toLowerCase().includes(q)||(Array.isArray(w.skills)?w.skills.join(' '):String(w.skills||'')).toLowerCase().includes(q)));
+    const host=$('homeWorkerResults');if(!host)return;
+    if(!rows.length){host.innerHTML='<div class="sm:col-span-2 lg:col-span-3 rounded-xl bg-slate-50 p-5 text-slate-600">No approved workers match this search yet.</div>';return;}
+    host.innerHTML=rows.map(w=>`<article class="cl-worker-card flex flex-col"><div class="flex items-start justify-between gap-2"><div><p class="text-xs font-black uppercase tracking-wider text-emerald-700">Verified Clean Lanka Worker</p><h4 class="font-black text-emerald-950 text-xl mt-1">${esc(w.full_name||'Service Professional')}</h4></div><span class="text-xs rounded-full bg-emerald-100 text-emerald-800 px-2 py-1 font-bold">Approved</span></div><p class="text-sm text-slate-600 mt-2">${esc(w.district||'Sri Lanka')}</p><p class="text-sm font-semibold text-slate-800 mt-2">${esc(Array.isArray(w.skills)?w.skills.join(', '):(w.skills||'Home Services'))}</p><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div class="rounded-lg bg-emerald-50 p-2"><span class="block text-xs text-slate-500">Experience</span><strong>${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'}</strong></div><div class="rounded-lg bg-blue-50 p-2"><span class="block text-xs text-slate-500">Service Price</span><strong>${esc(money(w.service_price_lkr))}</strong></div></div><button type="button" class="cl-action mt-4 w-full" data-home-worker-profile="${esc(w.worker_id)}">View Full Profile</button></article>`).join('');
+  }
+  function openHomeWorkerProfile(workerId){
+    const w=homeWorkerCache.find(x=>String(x.worker_id)===String(workerId));if(!w)return;
+    const body=$('homeWorkerModalBody');
+    const phone=w.phone?`<div class="rounded-xl bg-emerald-50 p-3"><span class="block text-xs text-slate-500">Phone Number</span><a class="font-black text-emerald-800 underline" href="tel:${esc(w.phone)}">${esc(w.phone)}</a><p class="text-xs text-emerald-800 mt-1">This worker chose to show their number publicly.</p></div>`:'<div class="rounded-xl bg-slate-100 p-3 text-sm text-slate-700">🔒 Phone number is private. Contact this worker through Clean Lanka Live Chat.</div>';
+    body.innerHTML=`<div class="space-y-4"><div><p class="text-xs uppercase font-bold tracking-wider text-slate-500">District</p><p class="font-bold text-slate-900">${esc(w.district||'Not listed')}</p></div><div><p class="text-xs uppercase font-bold tracking-wider text-slate-500">Skills & Services</p><p class="font-semibold text-slate-900">${esc(Array.isArray(w.skills)?w.skills.join(', '):(w.skills||'Not listed'))}</p></div><div class="grid grid-cols-2 gap-3"><div class="rounded-xl bg-blue-50 p-3"><p class="text-xs text-slate-500">Experience</p><p class="font-black">${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'}</p></div><div class="rounded-xl bg-emerald-50 p-3"><p class="text-xs text-slate-500">Service Price</p><p class="font-black">${esc(money(w.service_price_lkr))}</p></div></div>${phone}<div class="flex flex-wrap gap-2"><button type="button" class="cl-action flex-1" data-home-worker-chat="${esc(w.worker_id)}">Message via Clean Lanka</button>${w.phone?`<a class="cl-action blue flex-1 text-center" href="tel:${esc(w.phone)}">Call Worker</a>`:''}</div><p class="text-xs text-slate-500">Only approved profile information is displayed. Private contact details are not shown.</p></div>`;
+    $('homeWorkerProfileModal').classList.remove('hidden');
+  }
+  async function loadHomeWorkers(){
+    const msg=$('homeWorkerMessage');if(msg)msg.textContent='Loading approved workers...';
+    const {data,error}=await supabaseClient.rpc('get_public_worker_profiles');
+    if(error){if(msg)msg.textContent='Could not load worker profiles: '+error.message;return;}
+    homeWorkerCache=data||[];renderHomeWorkers();if(msg)msg.textContent=homeWorkerCache.length+' approved worker profile(s) available.';
+  }
+  function renderHomeJobs(){
+    const host=$('homeJobResults');if(!host)return;
+    const rows=homeJobCache.filter(j=>homeJobFilter==='all'||(homeJobFilter==='official'?j.post_source==='clean_lanka':j.post_source!=='clean_lanka'));
+    if(!rows.length){host.innerHTML='<div class="md:col-span-2 rounded-xl bg-slate-50 p-5 text-slate-600">No open job opportunities are available right now.</div>';return;}
+    host.innerHTML=rows.map(j=>`<article class="rounded-2xl border border-slate-200 p-5 bg-white shadow-sm"><div class="flex flex-wrap justify-between gap-2"><span class="rounded-full px-3 py-1 text-xs font-black ${j.post_source==='clean_lanka'?'bg-amber-100 text-amber-800':'bg-blue-100 text-blue-800'}">${j.post_source==='clean_lanka'?'Official Clean Lanka Job':'Customer Job'}</span><span class="text-xs text-slate-500">${j.created_at?new Date(j.created_at).toLocaleDateString():''}</span></div><h4 class="text-lg font-black text-slate-900 mt-3">${esc(j.service_title)}</h4><p class="text-sm text-slate-600 mt-1">${esc(j.district||'Sri Lanka')} · ${esc(j.address||'Area not listed')}</p><p class="text-sm text-slate-700 mt-3">${esc(j.description||'')}</p><div class="flex flex-wrap justify-between gap-2 mt-4 text-sm"><strong>${esc(money(j.budget_lkr))}</strong><span class="text-slate-500">Preferred date: ${esc(j.preferred_date||'Flexible')}</span></div><button type="button" class="cl-action mt-4" data-home-job-apply="${esc(j.id)}">Login to Apply</button></article>`).join('');
+  }
+  async function loadHomeJobs(){
+    const msg=$('homeJobMessage');if(msg)msg.textContent='Loading public job opportunities...';
+    const {data,error}=await supabaseClient.rpc('get_public_job_posts');
+    if(error){if(msg)msg.textContent='Job board setup is pending: '+error.message;return;}
+    homeJobCache=data||[];renderHomeJobs();if(msg)msg.textContent=homeJobCache.length+' open job(s) published.';
+  }
+  $('homeWorkerSearchButton')?.addEventListener('click',renderHomeWorkers);
+  $('homeWorkerSearchText')?.addEventListener('input',renderHomeWorkers);
+  $('homeWorkerSearchDistrict')?.addEventListener('change',renderHomeWorkers);
+  $('closeHomeWorkerModal')?.addEventListener('click',()=>$('homeWorkerProfileModal')?.classList.add('hidden'));
+  $('homeWorkerProfileModal')?.addEventListener('click',e=>{if(e.target.id==='homeWorkerProfileModal')e.currentTarget.classList.add('hidden');});
+  document.addEventListener('click',async e=>{
+    const profile=e.target.closest('[data-home-worker-profile]');if(profile){openHomeWorkerProfile(profile.dataset.homeWorkerProfile);return;}
+    const chat=e.target.closest('[data-home-worker-chat]');if(chat){const user=await getUser();if(!user){openLoginPage();return;}if(!document.getElementById('customerDashboard')?.classList.contains('hidden')){await startCustomerChat(chat.dataset.homeWorkerChat);}else{openLoginPage();}return;}
+    const apply=e.target.closest('[data-home-job-apply]');if(apply){const user=await getUser();if(!user){openLoginPage();return;}openLoginPage();return;}
+    const filter=e.target.closest('[data-job-filter]');if(filter){homeJobFilter=filter.dataset.jobFilter;document.querySelectorAll('.home-job-filter').forEach(b=>{b.className='home-job-filter rounded-full px-4 py-2 text-sm font-bold '+(b===filter?'bg-blue-700 text-white':'bg-slate-100 text-slate-700');});renderHomeJobs();}
+  });
+  $('adminOfficialJobForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();const user=await getUser();if(!user){say('adminOfficialJobMessage','Admin session not found. Please sign in again.',true);return;}
+    const payload={customer_id:user.id,service_title:$('officialJobTitle').value.trim(),description:$('officialJobDescription').value.trim(),district:$('officialJobDistrict').value,address:$('officialJobArea').value.trim(),budget_lkr:$('officialJobBudget').value?Number($('officialJobBudget').value):null,preferred_date:$('officialJobDate').value||null,status:'open',post_source:'clean_lanka'};
+    const {error}=await supabaseClient.from('job_posts').insert(payload);if(error){say('adminOfficialJobMessage','Could not publish official job: '+error.message,true);return;}
+    $('adminOfficialJobForm').reset();say('adminOfficialJobMessage','Official Clean Lanka job published successfully.');await loadHomeJobs();
+  });
+  loadHomeWorkers();loadHomeJobs();
+
   window.cleanLankaLoadCustomerFeatures=async function(user){window.clCurrentUser=user||await getUser();await Promise.all([loadPublicWorkers(),loadCustomerJobs(),loadConversations('customer'),loadUserNotifications(window.clCurrentUser?.id,'customerNotificationsList','customerNotificationsMessage')]);};
   window.cleanLankaLoadWorkerFeatures=async function(user){window.clCurrentUser=user||await getUser();await Promise.all([loadWorkerJobs(),loadConversations('worker'),loadUserNotifications(window.clCurrentUser?.id,'workerNotificationsList','workerNotificationsMessage')]);};
 })();
