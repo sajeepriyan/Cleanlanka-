@@ -2,9 +2,10 @@
 <!DOCTYPE html>
 
 <html lang="en"><head>
+<!-- Clean Lanka Index 006: customer registration metadata + Contact navigation correction; prior features preserved. -->
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>File 09 | Clean Lanka - Admin Worker Management</title>
+<title>Clean Lanka | Sri Lanka Home Services Marketplace</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -294,7 +295,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 <a class="hover:text-primary transition-colors" href="#how-it-works">How It Works</a>
 <a class="hover:text-primary transition-colors" href="#verified-pros">Verified Professionals</a>
 <a class="hover:text-primary transition-colors" href="#why-choose-us">Safety Pledge</a>
-<a class="hover:text-primary transition-colors" href="tel:+94702805105">Contact</a>
+<a class="hover:text-primary transition-colors" href="#contact">Contact</a>
 </nav>
 <!-- CTA & LANGUAGE SELECTOR -->
 <div class="flex items-center gap-3 sm:gap-4">
@@ -1044,7 +1045,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 </div>
 </aside>
 <!-- OFFICIAL FOOTER (FEATURING PROMINENT LOGO, 25 DISTRICTS, CONTACTS) -->
-<footer class="bg-gray-900 text-gray-200 pt-20 pb-12 border-t-4 border-primary">
+<footer id="contact" class="bg-gray-900 text-gray-200 pt-20 pb-12 border-t-4 border-primary">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16 border-b border-gray-800">
 <!-- COLUMN 1 & 2: LOGO & CONTACT -->
@@ -1200,7 +1201,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 <section id="adminDashboard" class="hidden">
  <div class="max-w-7xl mx-auto">
   <div class="admin-topbar"><div class="admin-brand"><div class="admin-brand-mark" aria-hidden="true">🏡</div><div><p class="text-xs font-black tracking-widest">CLEAN LANKA • CONTROL CENTRE</p><h1>Admin Dashboard</h1><p id="adminDashboardEmail" class="text-sm mt-1"></p></div></div><button id="adminDashboardLogoutButton" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold" type="button">Sign Out</button></div>
-  <nav class="admin-nav" aria-label="Admin dashboard navigation"><a href="#adminOverview">▦ Overview</a><a href="#adminWorkersHeading">♙ Workers</a><a href="#adminCustomersHeading">♧ Customers</a><a href="#adminSubAdminsHeading">⚙ Sub Admins</a></nav>
+  <nav class="admin-nav" aria-label="Admin dashboard navigation"><a href="#adminOverview">▦ Overview</a><a href="#adminWorkersHeading">♙ Workers</a><a href="#adminCustomersHeading">♧ Customers</a><a href="#adminBookingsHeading">▤ Bookings</a><a href="#adminNotificationsHeading">♢ Notifications</a><a href="#adminSubAdminsHeading">⚙ Sub Admins</a></nav>
   <div id="adminOverview" class="admin-stats">
    <div class="admin-stat"><p class="stat-label">Total Members</p><p id="adminTotalMembers" class="stat-value">—</p></div>
    <div class="admin-stat"><p class="stat-label">Customer Profiles</p><p id="adminCustomerCount" class="stat-value">—</p></div>
@@ -1225,9 +1226,27 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
    <div class="flex items-center justify-between gap-3 mb-3"><h3 class="font-extrabold text-slate-900">Existing Sub Admins</h3><button id="adminRefreshSubAdmins" type="button" class="rounded-xl border border-slate-300 px-4 py-2 font-bold">Refresh List</button></div>
    <p id="subAdminListMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite"></p><div id="subAdminList" class="space-y-3"></div>
   </section>
+  <section id="adminBookingsSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminBookingsHeading">
+   <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminBookingsHeading" class="text-xl font-black text-slate-900">Booking Management</h2><p class="text-sm text-slate-500 mt-1">Review customer job requests, worker applications and update permitted booking statuses.</p></div><button id="adminRefreshBookings" type="button" class="rounded-xl bg-emerald-800 text-white px-5 py-3 font-bold">Refresh Bookings</button></div>
+   <div class="grid sm:grid-cols-2 gap-3 mb-4"><div><label for="adminBookingSearch" class="block text-sm font-bold text-slate-700 mb-2">Search bookings</label><input id="adminBookingSearch" type="search" class="w-full rounded-xl border border-slate-300 px-4 py-3" placeholder="Job, customer, district or worker"></div><div><label for="adminBookingStatusFilter" class="block text-sm font-bold text-slate-700 mb-2">Request status</label><select id="adminBookingStatusFilter" class="w-full rounded-xl border border-slate-300 px-4 py-3"><option value="all">All Requests</option><option value="open">Open</option><option value="assigned">Assigned</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option><option value="other">Other Status</option></select></div></div>
+   <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4"><div class="rounded-xl bg-slate-50 p-3"><p class="text-xs font-bold text-slate-500">Total Requests</p><p id="adminBookingTotal" class="text-2xl font-black text-slate-900">—</p></div><div class="rounded-xl bg-blue-50 p-3"><p class="text-xs font-bold text-blue-700">Open</p><p id="adminBookingOpen" class="text-2xl font-black text-blue-900">—</p></div><div class="rounded-xl bg-emerald-50 p-3"><p class="text-xs font-bold text-emerald-700">Assigned</p><p id="adminBookingAssigned" class="text-2xl font-black text-emerald-900">—</p></div><div class="rounded-xl bg-violet-50 p-3"><p class="text-xs font-bold text-violet-700">Completed</p><p id="adminBookingCompleted" class="text-2xl font-black text-violet-900">—</p></div><div class="rounded-xl bg-rose-50 p-3"><p class="text-xs font-bold text-rose-700">Cancelled</p><p id="adminBookingCancelled" class="text-2xl font-black text-rose-900">—</p></div></div>
+   <p id="adminBookingListMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite">Booking records have not been loaded.</p><div id="adminBookingList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+  </section>
+  <section id="adminNotificationsSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminNotificationsHeading">
+   <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminNotificationsHeading" class="text-xl font-black text-slate-900">Notifications Centre</h2><p class="text-sm text-slate-500 mt-1">Send a one-off account notification using the recipient's Supabase Auth User ID and review recent notifications. Automatic event alerts require database triggers.</p></div><button id="adminRefreshNotifications" type="button" class="rounded-xl border border-slate-300 px-4 py-3 font-bold">Refresh Notifications</button></div>
+   <form id="adminNotificationForm" class="grid sm:grid-cols-2 gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 mb-5">
+    <label class="text-sm font-bold text-slate-700 sm:col-span-2" for="adminNotificationUserId">Recipient Auth User ID (UUID)</label><input id="adminNotificationUserId" required maxlength="36" class="sm:col-span-2 w-full rounded-xl border border-slate-300 px-3 py-3" placeholder="Paste the recipient's Supabase Auth User ID">
+    <label class="text-sm font-bold text-slate-700" for="adminNotificationTitle">Notification title</label><input id="adminNotificationTitle" required maxlength="120" class="w-full rounded-xl border border-slate-300 px-3 py-3" placeholder="e.g. Booking update">
+    <label class="text-sm font-bold text-slate-700 sm:col-span-2" for="adminNotificationMessage">Message</label><textarea id="adminNotificationMessage" required maxlength="1500" rows="3" class="sm:col-span-2 w-full rounded-xl border border-slate-300 px-3 py-3" placeholder="Write a clear message"></textarea>
+    <label class="text-sm font-bold text-slate-700" for="adminNotificationType">Type</label><select id="adminNotificationType" class="w-full rounded-xl border border-slate-300 px-3 py-3"><option value="general">General</option><option value="booking_status">Booking status</option><option value="application">Application</option><option value="account">Account</option></select>
+    <label class="text-sm font-bold text-slate-700" for="adminNotificationJobId">Related Job ID (optional)</label><input id="adminNotificationJobId" maxlength="36" class="w-full rounded-xl border border-slate-300 px-3 py-3" placeholder="Job UUID (optional)">
+    <button id="adminSendNotificationButton" type="submit" class="sm:col-span-2 rounded-xl bg-emerald-800 text-white px-5 py-3 font-bold">Send Notification</button><p id="adminNotificationFormMessage" class="sm:col-span-2 text-sm" role="status" aria-live="polite"></p>
+   </form>
+   <p id="adminNotificationsMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite">Notifications have not been loaded.</p><div id="adminNotificationsList" class="grid md:grid-cols-2 gap-3"></div>
+  </section>
   <section class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6" aria-labelledby="adminWorkersHeading">
    <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminWorkersHeading" class="text-xl font-black text-slate-900">Worker Management</h2><p class="text-sm text-slate-500 mt-1">View worker profiles and securely open submitted documents.</p></div><button id="adminRefreshWorkers" type="button" class="rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white px-5 py-3 font-bold">Refresh Workers</button></div>
-   <div class="grid sm:grid-cols-[1fr_220px] gap-3 mb-4"><div><label class="block text-sm font-bold text-slate-700 mb-2" for="adminWorkerSearch">Search by Worker ID, name, email, phone, district or skill</label><input id="adminWorkerSearch" type="search" placeholder="Search workers..." class="w-full rounded-xl border border-slate-300 px-4 py-3"></div><div><label class="block text-sm font-bold text-slate-700 mb-2" for="adminWorkerStatusFilter">Profile Status</label><select id="adminWorkerStatusFilter" class="w-full rounded-xl border border-slate-300 px-4 py-3"><option value="all">All Workers</option><option value="pending">Pending</option><option value="more_info_required">Waiting</option><option value="approved">Approved</option></select></div></div>
+   <div class="grid sm:grid-cols-[1fr_220px] gap-3 mb-4"><div><label class="block text-sm font-bold text-slate-700 mb-2" for="adminWorkerSearch">Search by Worker ID, name, email, phone, district or skill</label><input id="adminWorkerSearch" type="search" placeholder="Search workers..." class="w-full rounded-xl border border-slate-300 px-4 py-3"></div><div><label class="block text-sm font-bold text-slate-700 mb-2" for="adminWorkerStatusFilter">Profile Status</label><select id="adminWorkerStatusFilter" class="w-full rounded-xl border border-slate-300 px-4 py-3"><option value="all">All Workers</option><option value="pending">Pending</option><option value="more_info_required">Waiting</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div></div>
    <p id="adminWorkerListMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite">Loading worker profiles...</p>
    <div id="adminWorkerList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
    <div id="adminWorkerDetail" class="hidden mt-6 border-t border-slate-200 pt-6"></div>
@@ -1247,6 +1266,10 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
    <h1 class="text-3xl sm:text-4xl font-black mt-2">Your Customer Profile</h1>
    <p class="mt-3 text-emerald-50">Manage your account and find trusted home services across Sri Lanka.</p>
   </div>
+  <section class="customer-card mb-6" id="customerNotificationsPanel" aria-labelledby="customerNotificationsHeading">
+   <div class="flex items-center justify-between gap-3 flex-wrap"><div><h2 id="customerNotificationsHeading" class="text-xl font-extrabold text-emerald-900">My Notifications</h2><p class="text-sm text-slate-500">Private updates for your account.</p></div><button id="customerRefreshNotifications" type="button" class="rounded-xl border border-slate-300 px-4 py-2 font-bold">Refresh</button></div>
+   <p id="customerNotificationsMessage" class="text-sm text-slate-600 mt-3" role="status" aria-live="polite"></p><div id="customerNotificationsList" class="grid md:grid-cols-2 gap-3 mt-3"></div>
+  </section>
   <div class="grid md:grid-cols-2 gap-5">
    <div class="customer-card"><h2 class="text-xl font-extrabold text-emerald-900 mb-4">Your Account Details</h2>
     <p class="text-xs uppercase font-bold text-slate-500">Full Name</p><p id="customerDashName" class="text-lg font-bold text-slate-900 mb-4">—</p>
@@ -1268,7 +1291,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
     </form>
    </div>
    <div class="customer-card"><h2 class="text-xl font-extrabold text-emerald-900 mb-3">Service Bookings</h2>
-    <p class="text-slate-600 leading-relaxed">Your customer account is active. Booking history and online booking management will appear here when the booking database feature is connected.</p>
+    <p class="text-slate-600 leading-relaxed">Your service requests, booking status and worker applications are available in the “My Job Posts & Applications” section below.</p>
    </div>
    </div>
 
@@ -1329,6 +1352,11 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
     <section class="cv-hero">
       <h2>Welcome to your<br>Professional Profile!</h2>
       <p>Your skills. Your experience. Your opportunity.</p>
+    </section>
+
+    <section class="cv-card mb-5" id="workerNotificationsPanel" aria-labelledby="workerNotificationsHeading">
+      <div class="flex items-center justify-between gap-3 flex-wrap"><div><h2 id="workerNotificationsHeading" class="cv-section-title">My Notifications</h2><p class="text-sm text-slate-500">Private updates for your worker account.</p></div><button id="workerRefreshNotifications" type="button" class="rounded-xl border border-slate-300 px-4 py-2 font-bold">Refresh</button></div>
+      <p id="workerNotificationsMessage" class="text-sm text-slate-600 mt-3" role="status" aria-live="polite"></p><div id="workerNotificationsList" class="grid md:grid-cols-2 gap-3 mt-3"></div>
     </section>
 
     <div id="workerDashboardMessage" class="cv-message" aria-live="polite">Loading your worker profile...</div>
@@ -1501,7 +1529,10 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
   <p class="text-center text-gray-500 mt-2">Create your Clean Lanka customer account</p>
   <form id="customerRegisterForm" class="mt-6 space-y-4">
     <input id="customerName" type="text" placeholder="Full Name" autocomplete="name" required class="w-full p-3 border rounded-lg">
+    <input id="customerPhone" type="tel" placeholder="Mobile Number" autocomplete="tel" required class="w-full p-3 border rounded-lg">
     <input id="customerEmail" type="email" placeholder="Email Address" autocomplete="email" required class="w-full p-3 border rounded-lg">
+    <select id="customerDistrict" required class="w-full p-3 border rounded-lg"><option value="">Select District</option><option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option></select>
+    <textarea id="customerAddress" placeholder="Town / Area" autocomplete="street-address" required class="w-full p-3 border rounded-lg"></textarea>
     <input id="customerPassword" type="password" placeholder="Password (minimum 8 characters)" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
     <input id="customerConfirmPassword" type="password" placeholder="Confirm Password" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
     <details class="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-slate-700"><summary class="cursor-pointer font-bold text-emerald-900">Read Customer Terms &amp; Conditions</summary><p class="mt-2">Use accurate account details. Keep your password private. Treat service providers respectfully. Confirm service details and prices before work begins. Do not misuse the platform. Clean Lanka may review reports and suspend accounts that breach these terms. Read the Privacy Policy before sharing personal information.</p></details>
@@ -1735,6 +1766,16 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
       const name = document.getElementById(nameId).value.trim();
       const email = document.getElementById(emailId).value.trim();
       const password = document.getElementById(passwordId).value;
+      const metadata = { full_name: name, account_type: role };
+      if (role === 'customer') {
+        metadata.phone = document.getElementById('customerPhone').value.trim();
+        metadata.district = document.getElementById('customerDistrict').value;
+        metadata.address = document.getElementById('customerAddress').value.trim();
+        if (!metadata.phone || !metadata.district || !metadata.address) {
+          showMessage(document.getElementById(messageId), 'Please enter your mobile number, district and town / area.', true);
+          return;
+        }
+      }
       const confirmPassword = document.getElementById(confirmId).value;
       const message = document.getElementById(messageId);
       const submit = form.querySelector('button[type="submit"]');
@@ -1755,7 +1796,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
           email,
           password,
           options: {
-            data: { full_name: name, account_type: role },
+            data: metadata,
             emailRedirectTo: 'https://cleanlanka.lk'
           }
         });
@@ -2286,7 +2327,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
     bookings_view:'View bookings', bookings_manage:'Manage bookings', reports_view:'View reports'
   };
   function adminHasPermission(permission) {
-    return currentAdminRole === 'main_admin' || currentAdminPermissions?.all === true || currentAdminPermissions?.[permission] === true;
+    return ['main_admin','admin'].includes(currentAdminRole) || currentAdminPermissions?.all === true || currentAdminPermissions?.[permission] === true;
   }
   function adminSafeText(value, fallback = 'Not provided') {
     if (value === null || value === undefined || value === '') return fallback;
@@ -2533,6 +2574,110 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
     }
   }
 
+  let adminBookingCache = [];
+  function renderAdminBookings() {
+    const host=document.getElementById('adminBookingList');
+    const query=(document.getElementById('adminBookingSearch')?.value||'').trim().toLowerCase();
+    const filter=document.getElementById('adminBookingStatusFilter')?.value||'all';
+    if(!host)return;
+    const filtered=adminBookingCache.filter(row=>{
+      const status=String(row.status||'').toLowerCase();
+      const bucket=status==='cancelled'?'cancelled':status==='assigned'?'assigned':status==='completed'?'completed':status==='open'?'open':'other';
+      const hay=[row.service_title,row.description,row.district,row.address,row.customer_name,...(row.applications||[]).flatMap(a=>[a.worker_name,a.status,a.message])].join(' ').toLowerCase();
+      return (filter==='all'||filter===bucket)&&(!query||hay.includes(query));
+    });
+    if(!filtered.length){host.innerHTML='<p class="text-sm text-slate-500">No booking requests match this filter.</p>';return;}
+    const canManage=currentAdminRole!=='sub_admin' && (currentAdminRole==='main_admin'||currentAdminRole==='admin');
+    host.innerHTML=filtered.map(row=>{
+      const apps=(row.applications||[]).map(a=>`<div class="border-t border-slate-200 mt-3 pt-3"><p class="text-sm font-bold">${esc(a.worker_name||'Worker')} · ${esc(a.status||'pending')}</p><p class="text-xs text-slate-600 mt-1">${esc(a.message||'No application message')}</p><p class="text-xs text-slate-500 break-all">Application ID: ${esc(a.id)}</p><p class="text-xs text-slate-500 break-all">Worker Auth User ID: ${esc(a.worker_user_id||'Unavailable')}</p></div>`).join('')||'<p class="text-sm text-slate-500 mt-3">No worker applications yet.</p>';
+      const status=String(row.status||'open').toLowerCase();
+      const accepted=(row.applications||[]).some(a=>String(a.status||'').toLowerCase()==='accepted');
+      const options=['open','assigned','completed','cancelled'].map(v=>`<option value="${v}" ${status===v?'selected':''}>${v.charAt(0).toUpperCase()+v.slice(1)}</option>`).join('');
+      const updateControl=canManage?`<div class="mt-4 border-t border-slate-200 pt-3"><label class="block text-xs font-bold text-slate-600 mb-2" for="admin-booking-status-${esc(row.id)}">Update booking status</label><div class="flex gap-2"><select id="admin-booking-status-${esc(row.id)}" class="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2" data-admin-booking-status="${esc(row.id)}">${options}</select><button type="button" data-admin-update-booking="${esc(row.id)}" class="rounded-lg bg-emerald-800 text-white px-3 py-2 text-sm font-bold">Save</button></div><p class="text-xs text-slate-500 mt-1">Assigned status requires an accepted worker application.</p></div>`:'';
+      const badge=status.replace(/</g,'&lt;');
+      return `<article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><div class="flex flex-wrap justify-between gap-2"><h3 class="font-black text-slate-900">${esc(row.service_title||'Service request')}</h3><span class="rounded-full px-3 py-1 text-xs font-bold ${status==='completed'?'bg-emerald-100 text-emerald-800':status==='cancelled'?'bg-rose-100 text-rose-800':status==='assigned'?'bg-violet-100 text-violet-800':'bg-blue-100 text-blue-800'}">${esc(badge)}</span></div><p class="text-sm text-slate-600 mt-2">${esc(row.district||'District not set')} · ${esc(row.address||'Address not set')}</p><p class="text-sm mt-2"><strong>Customer:</strong> ${esc(row.customer_name||'Customer account')}</p><p class="text-xs text-slate-500 break-all"><strong>Customer User ID:</strong> ${esc(row.customer_id||'Unavailable')}</p><p class="text-sm"><strong>Budget:</strong> ${esc(row.budget_lkr==null?'Not specified':'LKR '+Number(row.budget_lkr).toLocaleString('en-LK'))}</p><p class="text-sm"><strong>Preferred date:</strong> ${esc(row.preferred_date||'Flexible')}</p><p class="text-xs text-slate-500 mt-2">Created: ${row.created_at?new Date(row.created_at).toLocaleString():'Date unavailable'}</p><p class="text-sm text-slate-700 mt-3">${esc(row.description||'No description supplied')}</p><div class="mt-3"><p class="text-xs font-black uppercase tracking-wide text-slate-500">Worker applications (${(row.applications||[]).length})</p>${apps}</div>${updateControl}</article>`;
+    }).join('');
+  }
+  async function loadAdminBookings() {
+    const message=document.getElementById('adminBookingListMessage');
+    const host=document.getElementById('adminBookingList');
+    if(!message||!adminHasPermission('bookings_view'))return;
+    message.textContent='Loading booking requests and applications...'; if(host)host.replaceChildren();
+    try {
+      const {data:jobs,error:jobError}=await supabaseClient.from('job_posts').select('*').order('created_at',{ascending:false}).limit(250);
+      if(jobError)throw jobError;
+      const jobRows=Array.isArray(jobs)?jobs:[];
+      const jobIds=jobRows.map(j=>j.id).filter(Boolean);
+      const customerIds=[...new Set(jobRows.map(j=>j.customer_id).filter(Boolean))];
+      let apps=[];
+      if(jobIds.length){const {data,error}=await supabaseClient.from('job_applications').select('id,job_id,worker_id,message,status,created_at').in('job_id',jobIds).order('created_at',{ascending:false});if(error)throw error;apps=data||[];}
+      const workerIds=[...new Set(apps.map(a=>a.worker_id).filter(Boolean))];
+      const [customersResult,workersResult]=await Promise.all([
+        customerIds.length?supabaseClient.from('customer_profiles').select('id,full_name').in('id',customerIds):Promise.resolve({data:[],error:null}),
+        workerIds.length?supabaseClient.from('worker_profiles').select('id,user_id,full_name').in('id',workerIds):Promise.resolve({data:[],error:null})
+      ]);
+      if(customersResult.error)throw customersResult.error;
+      if(workersResult.error)throw workersResult.error;
+      const customerMap=new Map((customersResult.data||[]).map(x=>[x.id,x.full_name]));
+      const workerMap=new Map((workersResult.data||[]).map(x=>[x.id,x.full_name]));
+      const workerUserMap=new Map((workersResult.data||[]).map(x=>[x.id,x.user_id]));
+      const appMap=new Map();
+      for(const a of apps){if(!appMap.has(a.job_id))appMap.set(a.job_id,[]);appMap.get(a.job_id).push({...a,worker_name:workerMap.get(a.worker_id)||'Worker',worker_user_id:workerUserMap.get(a.worker_id)||null});}
+      adminBookingCache=jobRows.map(j=>({...j,customer_name:customerMap.get(j.customer_id)||'Customer account',applications:appMap.get(j.id)||[]}));
+      const count=(id,n)=>{const el=document.getElementById(id);if(el)el.textContent=String(n);};
+      count('adminBookingTotal',jobRows.length);count('adminBookingOpen',jobRows.filter(j=>String(j.status||'').toLowerCase()==='open').length);count('adminBookingAssigned',jobRows.filter(j=>String(j.status||'').toLowerCase()==='assigned').length);count('adminBookingCompleted',jobRows.filter(j=>String(j.status||'').toLowerCase()==='completed').length);count('adminBookingCancelled',jobRows.filter(j=>String(j.status||'').toLowerCase()==='cancelled').length);
+      renderAdminBookings();message.textContent=`Loaded ${jobRows.length} request(s) and ${apps.length} worker application(s).`;
+    } catch(error) {message.textContent=`Could not load booking records: ${error.message||'Check Admin read permissions for job_posts and job_applications.'}`;}
+  }
+  async function updateAdminBooking(jobId) {
+    if(!['main_admin','admin'].includes(currentAdminRole)){alert('Only an authorised Admin can update booking status.');return;}
+    const select=[...document.querySelectorAll('[data-admin-booking-status]')].find(el=>el.dataset.adminBookingStatus===jobId);
+    const nextStatus=select?.value;
+    if(!['open','assigned','completed','cancelled'].includes(nextStatus)){alert('Invalid booking status.');return;}
+    const row=adminBookingCache.find(x=>x.id===jobId);if(!row)return;
+    if(nextStatus==='assigned' && !(row.applications||[]).some(a=>String(a.status||'').toLowerCase()==='accepted')){alert('This booking cannot be marked Assigned until a worker application is accepted by the customer.');return;}
+    if(!confirm(`Change booking status to ${nextStatus}?`))return;
+    const button=[...document.querySelectorAll('[data-admin-update-booking]')].find(el=>el.dataset.adminUpdateBooking===jobId);if(button)button.disabled=true;
+    try {
+      const {error}=await supabaseClient.from('job_posts').update({status:nextStatus}).eq('id',jobId);
+      if(error)throw error;
+      let notificationWarning='';
+      const recipients=[{user_id:row.customer_id,title:'Booking status updated',message:`Your ${row.service_title||'service'} request status is now ${nextStatus}.`,notification_type:'booking_status',related_job_id:row.id}];
+      const acceptedApplication=(row.applications||[]).find(a=>String(a.status||'').toLowerCase()==='accepted'&&a.worker_user_id);
+      if(acceptedApplication)recipients.push({user_id:acceptedApplication.worker_user_id,title:'Booking status updated',message:`The ${row.service_title||'service'} booking you were selected for is now ${nextStatus}.`,notification_type:'booking_status',related_job_id:row.id});
+      const {error:noticeError}=await supabaseClient.from('notifications').insert(recipients);
+      if(noticeError)notificationWarning=` Booking updated, but notification could not be sent: ${noticeError.message}`;
+      const msg=document.getElementById('adminBookingListMessage');if(msg)msg.textContent=`Booking status updated.${notificationWarning}`;
+      await loadAdminBookings();
+    } catch(error) {alert(`Could not update booking: ${error.message||error}`);if(button)button.disabled=false;}
+  }
+  document.getElementById('adminRefreshBookings')?.addEventListener('click',loadAdminBookings);
+  document.getElementById('adminBookingSearch')?.addEventListener('input',renderAdminBookings);
+  document.getElementById('adminBookingStatusFilter')?.addEventListener('change',renderAdminBookings);
+
+  async function loadAdminNotifications() {
+    const host=document.getElementById('adminNotificationsList');const msg=document.getElementById('adminNotificationsMessage');if(!host||!msg)return;
+    msg.textContent='Loading recent notifications...';host.replaceChildren();
+    const {data,error}=await supabaseClient.from('notifications').select('id,user_id,title,message,notification_type,is_read,related_job_id,created_at').order('created_at',{ascending:false}).limit(50);
+    if(error){msg.textContent=`Could not load notifications: ${error.message}`;return;}
+    if(!data?.length){msg.textContent='No notifications have been created yet.';return;}
+    host.innerHTML=data.map(n=>`<article class="rounded-xl border border-slate-200 p-4 ${n.is_read?'bg-white':'bg-emerald-50'}"><div class="flex justify-between gap-2"><strong class="text-slate-900">${esc(n.title)}</strong><span class="text-xs font-bold text-slate-500">${n.is_read?'Read':'Unread'}</span></div><p class="text-sm text-slate-700 mt-2">${esc(n.message)}</p><p class="text-xs text-slate-500 mt-2 break-all">To: ${esc(n.user_id)} · ${esc(n.notification_type)} · ${n.created_at?new Date(n.created_at).toLocaleString():''}</p></article>`).join('');
+    msg.textContent=`Showing ${data.length} recent notification(s).`;
+  }
+  document.getElementById('adminRefreshNotifications')?.addEventListener('click',loadAdminNotifications);
+  document.getElementById('adminNotificationForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();const form=e.currentTarget;const message=document.getElementById('adminNotificationFormMessage');const button=document.getElementById('adminSendNotificationButton');
+    const userId=document.getElementById('adminNotificationUserId').value.trim();const jobId=document.getElementById('adminNotificationJobId').value.trim();
+    const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if(!uuid.test(userId)){message.textContent='Enter a valid recipient Auth User UUID.';return;}
+    if(jobId&&!uuid.test(jobId)){message.textContent='Related Job ID must be a valid UUID or left empty.';return;}
+    button.disabled=true;message.textContent='Sending notification...';
+    const payload={user_id:userId,title:document.getElementById('adminNotificationTitle').value.trim(),message:document.getElementById('adminNotificationMessage').value.trim(),notification_type:document.getElementById('adminNotificationType').value,related_job_id:jobId||null};
+    try{const {error}=await supabaseClient.from('notifications').insert(payload);if(error)throw error;message.textContent='Notification sent successfully.';form.reset();await loadAdminNotifications();}
+    catch(error){message.textContent=`Could not send notification: ${error.message||error}`;}
+    finally{button.disabled=false;}
+  });
+
   async function loadAdminDashboardSummary() {
     const { data, error } = await supabaseClient.rpc('get_admin_dashboard_summary');
     if (error) throw error;
@@ -2670,12 +2815,16 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
       document.getElementById('adminSubAdminsSection').classList.toggle('hidden',currentAdminRole!=='main_admin');
       document.getElementById('adminWorkersHeading').closest('section').classList.toggle('hidden',!adminHasPermission('workers_view'));
       document.getElementById('adminCustomersSection').classList.toggle('hidden',!adminHasPermission('customers_view'));
+      document.getElementById('adminBookingsSection').classList.toggle('hidden',!adminHasPermission('bookings_view'));
+      document.getElementById('adminNotificationsSection').classList.toggle('hidden',!['main_admin','admin'].includes(currentAdminRole));
       const dashboardMessage=document.getElementById('adminDashboardMessage');
       try { await loadAdminDashboardSummary(); dashboardMessage.textContent='Admin verified. Dashboard summary loaded.'; }
       catch(summaryError) { dashboardMessage.textContent=`Admin verified, but summary could not load: ${summaryError.message}`; }
       const tasks=[];
       if(adminHasPermission('workers_view')) tasks.push(loadAdminWorkers());
       if(adminHasPermission('customers_view')) tasks.push(loadAdminCustomers());
+      if(adminHasPermission('bookings_view')) tasks.push(loadAdminBookings());
+      if(['main_admin','admin'].includes(currentAdminRole)) tasks.push(loadAdminNotifications());
       if(currentAdminRole==='main_admin') tasks.push(loadSubAdmins());
       await Promise.all(tasks);
       window.scrollTo(0,0);
@@ -2898,6 +3047,13 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 
   document.addEventListener('click',async e=>{
     const t=e.target.closest('button');if(!t)return;
+    if(t.dataset.adminUpdateBooking){await updateAdminBooking(t.dataset.adminUpdateBooking);return;}
+    if(t.dataset.markNotificationRead){
+      t.disabled=true;
+      const {error}=await supabaseClient.from('notifications').update({is_read:true}).eq('id',t.dataset.markNotificationRead);
+      if(error){alert(`Could not mark notification as read: ${error.message}`);t.disabled=false;return;}
+      await loadUserNotifications((window.clCurrentUser||await getUser())?.id,t.dataset.notificationHost,t.dataset.notificationMessage);return;
+    }
     if(t.dataset.startChat){await startCustomerChat(t.dataset.startChat);}
     if(t.dataset.chatWorker){await startCustomerChat(t.dataset.chatWorker);}
     if(t.dataset.openCustomerChat){clCustomerChatId=t.dataset.openCustomerChat;$('customerChatWindow').classList.remove('hidden');$('customerChatTitle').textContent='Private worker conversation';await loadChatMessages(clCustomerChatId,'customerChatMessages');}
@@ -2916,8 +3072,19 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
     say('workerJobsMessage','Your application has been submitted.');await loadWorkerJobs();
   });
 
-  window.cleanLankaLoadCustomerFeatures=async function(user){window.clCurrentUser=user||await getUser();await Promise.all([loadPublicWorkers(),loadCustomerJobs(),loadConversations('customer')]);};
-  window.cleanLankaLoadWorkerFeatures=async function(user){window.clCurrentUser=user||await getUser();await Promise.all([loadWorkerJobs(),loadConversations('worker')]);};
+  async function loadUserNotifications(userId,hostId,messageId) {
+    const host=$(hostId);const message=$(messageId);if(!host||!message||!userId)return;
+    message.textContent='Loading notifications...';host.replaceChildren();
+    const {data,error}=await supabaseClient.from('notifications').select('id,title,message,notification_type,is_read,created_at').eq('user_id',userId).order('created_at',{ascending:false}).limit(30);
+    if(error){message.textContent=`Could not load notifications: ${error.message}`;return;}
+    if(!data?.length){message.textContent='You have no notifications yet.';return;}
+    host.innerHTML=data.map(n=>`<article class="rounded-xl border border-slate-200 p-4 ${n.is_read?'bg-white':'bg-emerald-50'}"><div class="flex flex-wrap items-center justify-between gap-2"><strong class="text-slate-900">${esc(n.title)}</strong><span class="text-xs font-bold ${n.is_read?'text-slate-500':'text-emerald-700'}">${n.is_read?'Read':'New'}</span></div><p class="text-sm text-slate-700 mt-2">${esc(n.message)}</p><p class="text-xs text-slate-500 mt-2">${n.created_at?new Date(n.created_at).toLocaleString():''}</p>${n.is_read?'':`<button type="button" data-mark-notification-read="${esc(n.id)}" data-notification-host="${esc(hostId)}" data-notification-message="${esc(messageId)}" class="mt-3 rounded-lg bg-emerald-800 text-white px-3 py-2 text-xs font-bold">Mark as read</button>`}</article>`).join('');
+    message.textContent=`${data.length} notification(s) · ${data.filter(n=>!n.is_read).length} unread.`;
+  }
+  document.getElementById('customerRefreshNotifications')?.addEventListener('click',async()=>{const user=window.clCurrentUser||await getUser();if(user)await loadUserNotifications(user.id,'customerNotificationsList','customerNotificationsMessage');});
+  document.getElementById('workerRefreshNotifications')?.addEventListener('click',async()=>{const user=window.clCurrentUser||await getUser();if(user)await loadUserNotifications(user.id,'workerNotificationsList','workerNotificationsMessage');});
+  window.cleanLankaLoadCustomerFeatures=async function(user){window.clCurrentUser=user||await getUser();await Promise.all([loadPublicWorkers(),loadCustomerJobs(),loadConversations('customer'),loadUserNotifications(window.clCurrentUser?.id,'customerNotificationsList','customerNotificationsMessage')]);};
+  window.cleanLankaLoadWorkerFeatures=async function(user){window.clCurrentUser=user||await getUser();await Promise.all([loadWorkerJobs(),loadConversations('worker'),loadUserNotifications(window.clCurrentUser?.id,'workerNotificationsList','workerNotificationsMessage')]);};
 })();
 </script>
 
