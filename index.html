@@ -1,4 +1,4 @@
-<!-- CLEAN LANKA — INDEX 012: Clear Worker Availability ON/OFF buttons; preserves Index 011 features -->
+<!-- CLEAN LANKA — INDEX 013: Customer worker profiles + chat feedback + uncropped larger homepage branding; preserves Index 012 features -->
 <!DOCTYPE html>
 
 <html lang="en"><head>
@@ -63,6 +63,22 @@
   .login-bottom-note a { color:#1264a3; font-weight:800; }
   .login-back-home { display:inline-flex; align-items:center; gap:7px; border:1px solid #d5e6dd; background:white; color:#14532d; border-radius:999px; padding:10px 16px; font-weight:900; margin:0 auto 18px; }
   @media(max-width:800px) { .login-page-inner { grid-template-columns:1fr; gap:12px; } .login-intro { text-align:center; padding:8px 4px; } .login-orbit { margin:0 auto 16px; width:74px; height:74px; } .login-trust-row { justify-content:center; } .login-card { padding:21px 17px; } }
+
+
+  /* INDEX 013: prevent the homepage brand from being clipped */
+  body > header:not(#workerDashboard header) { overflow: visible !important; min-height: 112px; }
+  body > header:not(#workerDashboard header) > div { min-height: 112px; }
+  body > header:not(#workerDashboard header) > div > div { min-height: 112px !important; height: auto !important; padding-top: 10px; padding-bottom: 10px; gap: 16px; }
+  body > header:not(#workerDashboard header) a.group { min-width: 0; flex: 0 1 auto; align-items: center; gap: 16px; overflow: visible; }
+  body > header:not(#workerDashboard header) a.group img { height: 104px !important; width: auto !important; max-width: 132px; object-fit: contain !important; object-position: center center !important; flex: 0 0 auto; transform: none !important; }
+  body > header:not(#workerDashboard header) a.group span:first-child { font-size: clamp(28px, 3.2vw, 46px) !important; line-height: 1.02 !important; white-space: nowrap; }
+  body > header:not(#workerDashboard header) a.group span:last-child { font-size: clamp(10px, 1.15vw, 15px) !important; line-height: 1.25 !important; letter-spacing: .12em; }
+  @media (max-width: 1023px) { body > header:not(#workerDashboard header) > div > div { flex-wrap: wrap; justify-content: center; } body > header:not(#workerDashboard header) nav { order: 3; } }
+  @media (max-width: 640px) { body > header:not(#workerDashboard header), body > header:not(#workerDashboard header) > div { min-height: 0; } body > header:not(#workerDashboard header) > div > div { justify-content: space-between; align-items: center; gap: 10px; } body > header:not(#workerDashboard header) a.group { gap: 9px; } body > header:not(#workerDashboard header) a.group img { height: 78px !important; max-width: 88px; } body > header:not(#workerDashboard header) a.group span:first-child { font-size: clamp(23px, 6vw, 32px) !important; white-space: normal; } body > header:not(#workerDashboard header) a.group span:last-child { font-size: 9px !important; letter-spacing: .08em; } body > header:not(#workerDashboard header) > div > div > div:last-child { width: 100%; justify-content: center; flex-wrap: wrap; } }
+  #customerChatPanel { scroll-margin-top: 125px; }
+  .cl-app-worker-profile { display:grid; grid-template-columns:64px minmax(0,1fr); gap:12px; align-items:center; }
+  .cl-app-worker-avatar { width:64px; height:64px; border-radius:18px; display:grid; place-items:center; background:linear-gradient(135deg,#d1fae5,#dbeafe); color:#14532d; font-size:24px; font-weight:900; overflow:hidden; }
+  .cl-app-worker-avatar img { width:100%; height:100%; object-fit:cover; }
 
 </style>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -1383,7 +1399,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
     <div class="font-bold text-emerald-900 mb-2" id="customerChatTitle">Conversation</div>
     <div id="customerChatMessages" class="max-h-64 overflow-y-auto space-y-2 bg-slate-50 rounded-xl p-3"></div>
     <form id="customerChatForm" class="flex gap-2 mt-3"><input id="customerChatInput" required maxlength="4000" class="min-w-0 flex-1 rounded-xl border p-3" placeholder="Write a message"><button class="rounded-xl bg-emerald-700 text-white px-4 font-bold">Send</button></form>
-    <p id="customerChatMessage" class="text-xs mt-2" aria-live="polite"></p>
+    <p id="customerChatMessage" class="text-xs mt-2 font-semibold" aria-live="polite">Select Message Worker to start a private conversation.</p>
    </div>
   </section>
  </div>
@@ -3177,20 +3193,33 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
   }
 
   async function startCustomerChat(workerId){
-    const user=await getUser();
-    if(!user){say('customerChatMessage','Please sign in as a Customer to message a worker.',true);openLoginPage();return;}
-    const {data:customerProfile}=await supabaseClient.from('customer_profiles').select('id').eq('id',user.id).maybeSingle();
-    if(!customerProfile){say('customerChatMessage','Only registered Customer accounts can start a worker chat.',true);return;}
-    let {data:existing,error:findError}=await supabaseClient.from('conversations').select('id').eq('customer_id',user.id).eq('worker_id',workerId).maybeSingle();
-    if(findError){say('customerChatMessage',findError.message,true);return;}
-    let conversation=existing;
-    if(!conversation){const {data,error}=await supabaseClient.from('conversations').insert({customer_id:user.id,worker_id:workerId}).select('id').single();if(error){say('customerChatMessage',error.message,true);return;}conversation=data;}
-    clCustomerChatId=conversation.id;
-    $('customerChatWindow').classList.remove('hidden');
-    $('customerChatTitle').textContent='Private worker conversation';
-    await loadChatMessages(clCustomerChatId,'customerChatMessages');
-    await subscribeChatRealtime(clCustomerChatId,'customerChatMessages');
-    $('customerChatInput').focus();
+    const panel=$('customerChatPanel');
+    const windowEl=$('customerChatWindow');
+    say('customerChatMessage','Opening secure conversation...');
+    try {
+      const user=await getUser();
+      if(!user){say('customerChatMessage','Please sign in as a Customer to message a worker.',true);openLoginPage();return;}
+      const {data:customerProfile,error:profileError}=await supabaseClient.from('customer_profiles').select('id').eq('id',user.id).maybeSingle();
+      if(profileError)throw profileError;
+      if(!customerProfile){say('customerChatMessage','Only registered Customer accounts can start a worker chat.',true);return;}
+      let {data:existing,error:findError}=await supabaseClient.from('conversations').select('id').eq('customer_id',user.id).eq('worker_id',workerId).maybeSingle();
+      if(findError)throw findError;
+      let conversation=existing;
+      if(!conversation){const {data,error}=await supabaseClient.from('conversations').insert({customer_id:user.id,worker_id:workerId}).select('id').single();if(error)throw error;conversation=data;}
+      if(!conversation?.id)throw new Error('Conversation could not be created. Please try again.');
+      clCustomerChatId=conversation.id;
+      if(windowEl)windowEl.classList.remove('hidden');
+      $('customerChatTitle').textContent='Private worker conversation';
+      await loadChatMessages(clCustomerChatId,'customerChatMessages');
+      await subscribeChatRealtime(clCustomerChatId,'customerChatMessages');
+      say('customerChatMessage','Conversation opened. You can now send a message.');
+      panel?.scrollIntoView({behavior:'smooth',block:'start'});
+      $('customerChatInput')?.focus();
+    } catch(error) {
+      say('customerChatMessage','Chat could not open: '+(error?.message||'Unknown error'),true);
+      if(windowEl)windowEl.classList.remove('hidden');
+      panel?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 
   async function loadCustomerJobs(){
@@ -3199,6 +3228,9 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
     const {data:jobs,error}=await supabaseClient.from('job_posts').select('*').eq('customer_id',user.id).order('created_at',{ascending:false});
     if(error){host.textContent='Could not load your jobs: '+error.message;return;}
     if(!jobs?.length){host.innerHTML='<p class="text-sm text-slate-500">You have not posted a job yet.</p>';return;}
+    const {data:publicWorkers, error:workersError}=await supabaseClient.rpc('get_public_worker_profiles');
+    if(workersError){say('customerJobMessage','Applications loaded, but worker profiles could not be loaded: '+workersError.message,true);}
+    const publicWorkerMap=new Map((publicWorkers||[]).map(w=>[String(w.worker_id),w]));
     host.innerHTML='';
     for(const j of jobs){
       const {data:apps,error:appError}=await supabaseClient.from('job_applications').select('id,worker_id,message,status,created_at').eq('job_id',j.id).order('created_at',{ascending:false});
@@ -3210,7 +3242,12 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
       else{
         for(const a of apps){
           const row=document.createElement('div');row.className='border-t border-slate-200 mt-3 pt-3';
-          row.innerHTML=`<p class="text-sm font-bold">Worker application · ${esc(a.status)}</p><p class="text-sm text-slate-600">${esc(a.message||'No message supplied')}</p><p class="cl-muted">Worker reference: ${esc(String(a.worker_id).slice(0,8))}</p><div class="flex flex-wrap gap-2 mt-2"><button class="cl-action light" data-chat-worker="${esc(a.worker_id)}">Message Worker</button>${j.status==='open'&&a.status==='pending'?`<button class="cl-action" data-accept-app="${esc(a.id)}">Accept</button><button class="cl-action blue" data-reject-app="${esc(a.id)}">Reject</button>`:''}</div>`;
+          const worker=publicWorkerMap.get(String(a.worker_id));
+          const workerName=worker?.full_name||'Worker profile details unavailable';
+          const avatarUrl=worker?.photo_url||worker?.avatar_url||worker?.profile_photo_url||'';
+          const avatar=avatarUrl?`<img src="${esc(avatarUrl)}" alt="Worker profile">`:esc((workerName.trim()[0]||'W').toUpperCase());
+          const skillText=Array.isArray(worker?.skills)?worker.skills.join(', '):(worker?.skills||'Not listed');
+          row.innerHTML=`<div class="cl-app-worker-profile rounded-xl bg-emerald-50 p-3 mb-3"><div class="cl-app-worker-avatar">${avatar}</div><div><p class="font-black text-emerald-950 text-lg">${esc(workerName)}</p><p class="text-xs text-slate-600">Worker ID: ${esc(worker?.public_id||worker?.worker_code||String(a.worker_id).slice(0,8))}</p><span class="inline-flex mt-1 rounded-full bg-emerald-100 text-emerald-800 px-2 py-1 text-xs font-bold">${esc(worker?.verification_status||'Application received')}</span></div></div><div class="grid sm:grid-cols-2 gap-2 text-sm mb-3"><p><strong>District:</strong> ${esc(worker?.district||'Not listed')}</p><p><strong>Skills:</strong> ${esc(skillText)}</p><p><strong>Experience:</strong> ${worker?.experience_years==null?'Not listed':esc(worker.experience_years)+' years'}</p><p><strong>Service Price:</strong> ${esc(money(worker?.service_price_lkr))}</p></div><p class="text-sm font-bold">Application · ${esc(a.status)}</p><p class="text-sm text-slate-600 mt-1">${esc(a.message||'No message supplied')}</p>${!worker?'<p class="text-xs text-amber-700 mt-2">Public worker profile is unavailable. The application reference is shown below.</p>':''}<p class="cl-muted mt-1">Worker reference: ${esc(String(a.worker_id).slice(0,8))}</p><div class="flex flex-wrap gap-2 mt-3"><button type="button" class="cl-action light" data-chat-worker="${esc(a.worker_id)}">Message Worker</button>${j.status==='open'&&a.status==='pending'?`<button type="button" class="cl-action" data-accept-app="${esc(a.id)}">Accept</button><button type="button" class="cl-action blue" data-reject-app="${esc(a.id)}">Reject</button>`:''}</div>`;
           appHost.appendChild(row);
         }
       }
@@ -3287,7 +3324,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
       await loadUserNotifications((window.clCurrentUser||await getUser())?.id,t.dataset.notificationHost,t.dataset.notificationMessage);return;
     }
     if(t.dataset.startChat){await startCustomerChat(t.dataset.startChat);}
-    if(t.dataset.chatWorker){await startCustomerChat(t.dataset.chatWorker);}
+    if(t.dataset.chatWorker){t.disabled=true;try{await startCustomerChat(t.dataset.chatWorker);}finally{t.disabled=false;}return;}
     if(t.dataset.openCustomerChat){clCustomerChatId=t.dataset.openCustomerChat;$('customerChatWindow').classList.remove('hidden');$('customerChatTitle').textContent='Private worker conversation';await loadChatMessages(clCustomerChatId,'customerChatMessages');await subscribeChatRealtime(clCustomerChatId,'customerChatMessages');}
     if(t.dataset.openWorkerChat){clWorkerChatId=t.dataset.openWorkerChat;$('workerChatWindow').classList.remove('hidden');$('workerChatTitle').textContent='Private customer conversation';await loadChatMessages(clWorkerChatId,'workerChatMessages');await subscribeChatRealtime(clWorkerChatId,'workerChatMessages');}
     if(t.dataset.acceptApp){if(!confirm('Accept this worker for the job? Other pending applications will be rejected.'))return;t.disabled=true;const {data,error}=await supabaseClient.rpc('accept_job_application',{p_application_id:t.dataset.acceptApp});if(error){alert('Could not accept: '+error.message);t.disabled=false;}else{alert(data||'Worker accepted.');await loadCustomerJobs();}}
