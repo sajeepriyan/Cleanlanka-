@@ -213,6 +213,43 @@
   @media(max-width:600px){body.login-page-mode #account-login.login-page-wrap{padding:20px 14px 36px;}body.admin-dashboard-mode #adminDashboard{padding:14px;}}
 </style>
 
+
+<style id="clean-lanka-admin-premium-v3">
+body.admin-dashboard-mode #adminDashboard{background:#f3f7f5!important;padding:0!important;color:#172b24}
+body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;margin:0 auto!important;padding:28px clamp(14px,3vw,42px) 56px!important}
+#adminDashboard .admin-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;background:linear-gradient(115deg,#073b2b 0%,#0f6848 55%,#155e75 100%);color:#fff;border-radius:26px;padding:26px 30px;margin-bottom:20px;box-shadow:0 18px 45px #0f513222;position:relative;overflow:hidden}
+#adminDashboard .admin-topbar:after{content:"";position:absolute;width:280px;height:280px;border:1px solid #ffffff22;border-radius:50%;right:-70px;top:-160px;box-shadow:0 0 0 28px #ffffff08,0 0 0 58px #ffffff06;pointer-events:none}
+#adminDashboard .admin-brand{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+#adminDashboard .admin-brand-mark{width:58px;height:58px;display:grid;place-items:center;border-radius:18px;background:#ffffff18;border:1px solid #ffffff35;font-size:30px}
+#adminDashboard .admin-brand h1{font-size:clamp(25px,3vw,36px);line-height:1.1;font-weight:900;letter-spacing:-.8px;color:#fff;margin:5px 0}
+#adminDashboard .admin-brand p{color:#d1fae5}
+#adminDashboard #adminDashboardEmail{color:#d1fae5!important}
+#adminDashboard #adminDashboardLogoutButton{background:#fff!important;color:#9f1239!important;border:1px solid #ffffffaa;border-radius:13px;padding:12px 18px;position:relative;z-index:2}
+#adminDashboard .admin-nav{display:flex;gap:9px;overflow-x:auto;padding:4px 1px 18px;margin-bottom:4px;scrollbar-width:thin}
+#adminDashboard .admin-nav a{white-space:nowrap;text-decoration:none;background:#fff;border:1px solid #dce9e2;color:#24513d;padding:11px 15px;border-radius:13px;font-size:13px;font-weight:800;box-shadow:0 3px 10px #123b2410;transition:.2s}
+#adminDashboard .admin-nav a:hover{background:#e6f5ec;border-color:#8ac6a5;transform:translateY(-1px)}
+#adminDashboard .admin-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin:0 0 20px}
+#adminDashboard .admin-stat{position:relative;overflow:hidden;background:#fff;border:1px solid #e1ebe5;border-radius:20px;padding:21px 22px;min-height:116px;box-shadow:0 7px 24px #123b2409}
+#adminDashboard .admin-stat:after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;right:-32px;bottom:-42px;background:#e8f5ed}
+#adminDashboard .admin-stat .stat-label{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#718278}
+#adminDashboard .admin-stat .stat-value{font-size:32px;line-height:1.2;font-weight:900;margin-top:9px;color:#0f5132;position:relative;z-index:1}
+#adminDashboard .admin-stat:nth-child(3) .stat-value{color:#155e9a}
+#adminDashboard .admin-stat:nth-child(4) .stat-value{color:#b7791f}
+#adminDashboard .admin-stat:nth-child(5) .stat-value{color:#15803d}
+#adminDashboard .admin-stat:nth-child(6) .stat-value{font-size:19px;color:#0f5132}
+#adminDashboard .admin-welcome{background:linear-gradient(110deg,#e4f5eb,#edf7fb);border:1px solid #d4e9dc;border-radius:20px;padding:20px 23px;margin-bottom:20px}
+#adminDashboard .admin-welcome h2{font-size:20px;font-weight:900;color:#104b33}
+#adminDashboard .admin-welcome p{color:#4e665a}
+#adminDashboard #adminCustomersSection,#adminDashboard #adminSubAdminsSection,#adminDashboard section[aria-labelledby="adminWorkersHeading"]{border:1px solid #e0eae4!important;border-radius:22px!important;padding:24px!important;box-shadow:0 8px 28px #123b2409;margin-bottom:20px!important;scroll-margin-top:18px}
+#adminDashboard #adminCustomersHeading,#adminDashboard #adminSubAdminsHeading,#adminDashboard #adminWorkersHeading{font-size:21px;letter-spacing:-.3px;color:#103f2c}
+#adminDashboard button{transition:filter .18s,transform .18s}
+#adminDashboard button:hover{filter:brightness(.96)}
+#adminDashboard input,#adminDashboard select,#adminDashboard textarea{border-radius:12px!important;border-color:#d7e3dc!important}
+#adminDashboard input:focus,#adminDashboard select:focus,#adminDashboard textarea:focus{outline:3px solid #16a34a22;border-color:#16a34a!important}
+@media(max-width:760px){body.admin-dashboard-mode #adminDashboard>.max-w-7xl{padding:14px 12px 34px!important}#adminDashboard .admin-topbar{padding:19px 17px;border-radius:20px;align-items:flex-start}#adminDashboard .admin-brand-mark{width:46px;height:46px;border-radius:14px;font-size:24px}#adminDashboard .admin-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#adminDashboard .admin-stat{padding:16px;min-height:100px}#adminDashboard .admin-stat .stat-value{font-size:27px}#adminDashboard #adminCustomersSection,#adminDashboard #adminSubAdminsSection,#adminDashboard section[aria-labelledby="adminWorkersHeading"]{padding:17px!important}}
+@media(max-width:390px){#adminDashboard .admin-topbar{flex-direction:column}#adminDashboard #adminDashboardLogoutButton{align-self:flex-end}#adminDashboard .admin-stat .stat-value{font-size:24px}}
+</style>
+
 </head>
 <body class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -1162,19 +1199,21 @@
 </section>
 <section id="adminDashboard" class="hidden">
  <div class="max-w-7xl mx-auto">
-  <div class="flex flex-wrap items-center justify-between gap-3 mb-7"><div><p class="text-xs font-black tracking-widest text-emerald-700">CLEAN LANKA CONTROL CENTRE</p><h1 class="text-3xl font-black text-slate-900">Admin Dashboard</h1><p id="adminDashboardEmail" class="text-sm text-slate-500 mt-1"></p></div><button id="adminDashboardLogoutButton" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold" type="button">Sign Out</button></div>
-  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-   <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Total Members</p><p id="adminTotalMembers" class="text-3xl font-black text-emerald-800 mt-2">—</p></div>
-   <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Customer Profiles</p><p id="adminCustomerCount" class="text-3xl font-black text-emerald-800 mt-2">—</p></div>
-   <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Worker Profiles</p><p id="adminWorkerCount" class="text-3xl font-black text-blue-800 mt-2">—</p></div>
-   <div class="rounded-2xl bg-white border border-amber-200 p-6"><p class="text-sm font-bold text-slate-500">Pending Workers</p><p id="adminPendingWorkerCount" class="text-3xl font-black text-amber-700 mt-2">—</p></div>
-   <div class="rounded-2xl bg-white border border-emerald-200 p-6"><p class="text-sm font-bold text-slate-500">Approved Workers</p><p id="adminApprovedWorkerCount" class="text-3xl font-black text-emerald-700 mt-2">—</p></div>
-   <div class="rounded-2xl bg-white border border-slate-200 p-6"><p class="text-sm font-bold text-slate-500">Admin Access</p><p id="adminAccessLabel" class="text-xl font-black text-emerald-800 mt-2">Verified</p></div>
+  <div class="admin-topbar"><div class="admin-brand"><div class="admin-brand-mark" aria-hidden="true">🏡</div><div><p class="text-xs font-black tracking-widest">CLEAN LANKA • CONTROL CENTRE</p><h1>Admin Dashboard</h1><p id="adminDashboardEmail" class="text-sm mt-1"></p></div></div><button id="adminDashboardLogoutButton" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold" type="button">Sign Out</button></div>
+  <nav class="admin-nav" aria-label="Admin dashboard navigation"><a href="#adminOverview">▦ Overview</a><a href="#adminWorkersHeading">♙ Workers</a><a href="#adminCustomersHeading">♧ Customers</a><a href="#adminSubAdminsHeading">⚙ Sub Admins</a></nav>
+  <div id="adminOverview" class="admin-stats">
+   <div class="admin-stat"><p class="stat-label">Total Members</p><p id="adminTotalMembers" class="stat-value">—</p></div>
+   <div class="admin-stat"><p class="stat-label">Customer Profiles</p><p id="adminCustomerCount" class="stat-value">—</p></div>
+   <div class="admin-stat"><p class="stat-label">Worker Profiles</p><p id="adminWorkerCount" class="stat-value">—</p></div>
+   <div class="admin-stat"><p class="stat-label">Pending Workers</p><p id="adminPendingWorkerCount" class="stat-value">—</p></div>
+   <div class="admin-stat"><p class="stat-label">Approved Workers</p><p id="adminApprovedWorkerCount" class="stat-value">—</p></div>
+   <div class="admin-stat"><p class="stat-label">Admin Access</p><p id="adminAccessLabel" class="stat-value">Verified</p></div>
   </div>
-  <div class="rounded-2xl bg-white border border-slate-200 p-6 mb-6"><h2 class="text-xl font-black text-slate-900">Administration</h2><p class="text-slate-600 mt-2">Authorised administrator access verified. Worker information and private verification files are available below for review.</p><p id="adminDashboardMessage" class="text-sm mt-4 text-slate-600" role="status"></p></div>
+  <div class="admin-welcome"><h2>Welcome to your Clean Lanka Control Centre</h2><p class="mt-1">Manage workers, customers and administrator access from one secure workspace.</p><p id="adminDashboardMessage" class="text-sm mt-3" role="status"></p></div>
+  <div class="hidden" aria-hidden="true"></div>
   <section id="adminCustomersSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminCustomersHeading">
    <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminCustomersHeading" class="text-xl font-black text-slate-900">Customer Management</h2><p class="text-sm text-slate-500 mt-1">Customer ID, name, district and registration date.</p></div><button id="adminRefreshCustomers" type="button" class="rounded-xl bg-emerald-800 text-white px-5 py-3 font-bold">Refresh Customers</button></div>
-   <p id="adminCustomerListMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite"></p><div id="adminCustomerList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+   <p id="adminCustomerListMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite"></p><div id="adminCustomerList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div><div id="adminCustomerDetail" class="hidden mt-5 rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-5" aria-live="polite"></div>
   </section>
   <section id="adminSubAdminsSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminSubAdminsHeading">
    <div class="mb-4"><h2 id="adminSubAdminsHeading" class="text-xl font-black text-slate-900">Sub Admin Permission Management</h2><p class="text-sm text-slate-500 mt-1">Create Sub Admin access, control permissions and activate or deactivate accounts.</p></div>
@@ -1213,6 +1252,7 @@
     <p class="text-xs uppercase font-bold text-slate-500">Full Name</p><p id="customerDashName" class="text-lg font-bold text-slate-900 mb-4">—</p>
     <p class="text-xs uppercase font-bold text-slate-500">Email Address</p><p id="customerDashEmail" class="text-lg font-bold text-slate-900 mb-4 break-all">—</p>
     <p class="text-xs uppercase font-bold text-slate-500">Account Type</p><p class="text-lg font-bold text-emerald-700">Registered Customer</p>
+    <div class="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-xs font-black uppercase tracking-widest text-emerald-800">Your Customer ID</p><p id="customerDashPublicId" class="mt-1 text-2xl sm:text-3xl font-black tracking-wider text-emerald-950">CUS-000000</p><p class="mt-1 text-xs text-emerald-800">Your unique Clean Lanka customer reference</p></div>
     <form id="customerProfileForm" class="mt-5 border-t border-slate-200 pt-5 space-y-3">
      <h3 class="text-lg font-extrabold text-emerald-900">Complete / Update Your Profile</h3>
      <label class="block text-sm font-bold text-slate-700" for="customerProfileFullName">Full Name</label>
@@ -1242,7 +1282,6 @@
    </div>
    <p id="workerSearchMessage" class="text-sm text-slate-500" aria-live="polite"></p>
    <div id="publicWorkerResults" class="grid md:grid-cols-2 gap-4 mt-3"></div>
-   <div id="publicWorkerDetail" class="hidden mt-6 rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-white to-emerald-50 p-5" aria-live="polite"></div>
   </section>
 
   <section class="customer-card mt-6" id="customerJobBoard">
@@ -1368,6 +1407,7 @@
 
         <h3 class="cv-section-title"><span class="cv-dot"></span> Personal information</h3>
         <div class="cv-detail-list">
+          <div class="cv-detail wide" style="background:#e8f8ef;border-color:#b7e4c7"><span class="cv-label">Your Worker ID</span><span id="workerDashPublicId" class="cv-value" style="font-size:24px;letter-spacing:1.5px;color:#0f5132">WRK-000000</span></div>
           <div class="cv-detail"><span class="cv-label">Email address</span><span id="workerDashEmail" class="cv-value">—</span></div>
           <div class="cv-detail"><span class="cv-label">Phone number</span><span id="workerDashPhone" class="cv-value">—</span></div>
           <div class="cv-detail"><span class="cv-label">District</span><span id="workerDashDistrict" class="cv-value">—</span></div>
@@ -1460,17 +1500,7 @@
   <h2 class="text-2xl font-bold text-center text-emerald-700">Customer Registration</h2>
   <p class="text-center text-gray-500 mt-2">Create your Clean Lanka customer account</p>
   <form id="customerRegisterForm" class="mt-6 space-y-4">
-    <input id="customerName" type="text" placeholder="Full Name" autocomplete="name" required maxlength="160" class="w-full p-3 border rounded-lg">
-    <input id="customerPhone" type="tel" placeholder="Phone Number" autocomplete="tel" required maxlength="30" class="w-full p-3 border rounded-lg">
-    <select id="customerDistrict" required class="w-full p-3 border rounded-lg">
-      <option value="">Select District</option>
-      <option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option>
-      <option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option>
-      <option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option>
-      <option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option>
-      <option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option>
-    </select>
-    <textarea id="customerAddress" placeholder="Full Address" autocomplete="street-address" required maxlength="500" rows="3" class="w-full p-3 border rounded-lg"></textarea>
+    <input id="customerName" type="text" placeholder="Full Name" autocomplete="name" required class="w-full p-3 border rounded-lg">
     <input id="customerEmail" type="email" placeholder="Email Address" autocomplete="email" required class="w-full p-3 border rounded-lg">
     <input id="customerPassword" type="password" placeholder="Password (minimum 8 characters)" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
     <input id="customerConfirmPassword" type="password" placeholder="Confirm Password" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
@@ -1598,7 +1628,7 @@
     try {
       const { data, error } = await supabaseClient
         .from('customer_profiles')
-        .select('id,user_id,full_name,email,district,address,phone')
+        .select('id,user_id,full_name,email,district,address,phone,customer_public_id')
         .eq('user_id', user.id)
         .maybeSingle();
       if (error) throw error;
@@ -1608,8 +1638,10 @@
         districtInput.value = data.district || '';
         addressInput.value = data.address || '';
         document.getElementById('customerDashName').textContent = data.full_name || 'Customer';
+        document.getElementById('customerDashPublicId').textContent = data.customer_public_id ? `CUS-${data.customer_public_id}` : 'CUS-PENDING';
         if (message) showMessage(message, 'Your saved customer profile has been loaded.');
       } else if (message) {
+        document.getElementById('customerDashPublicId').textContent = 'CUS-PENDING';
         showMessage(message, 'Please complete your district and address, then save your customer profile.');
       }
     } catch (error) {
@@ -1646,8 +1678,7 @@
         result = await supabaseClient.from('customer_profiles').update(profile)
           .eq('user_id', activeCustomerUserId).select('id').single();
       } else {
-        result = await supabaseClient.from('customer_profiles')
-          .insert({ ...profile, id: activeCustomerUserId }).select('id').single();
+        result = await supabaseClient.from('customer_profiles').insert({ ...profile, id: activeCustomerUserId }).select('id').single();
       }
       if (result.error) throw result.error;
       document.getElementById('customerDashName').textContent = profile.full_name;
@@ -1697,15 +1728,12 @@
     element.classList.toggle('text-emerald-700', !isError);
   }
 
-  async function registerAccount({formId, nameId, emailId, passwordId, confirmId, messageId, phoneId, districtId, addressId, role}) {
+  async function registerAccount({formId, nameId, emailId, passwordId, confirmId, messageId, role}) {
     const form = document.getElementById(formId);
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const name = document.getElementById(nameId).value.trim();
       const email = document.getElementById(emailId).value.trim();
-      const phone = document.getElementById(phoneId).value.trim();
-      const district = document.getElementById(districtId).value;
-      const address = document.getElementById(addressId).value.trim();
       const password = document.getElementById(passwordId).value;
       const confirmPassword = document.getElementById(confirmId).value;
       const message = document.getElementById(messageId);
@@ -1727,13 +1755,7 @@
           email,
           password,
           options: {
-            data: {
-              full_name: name,
-              phone,
-              district,
-              address,
-              account_type: role
-            },
+            data: { full_name: name, account_type: role },
             emailRedirectTo: 'https://cleanlanka.lk'
           }
         });
@@ -1755,7 +1777,6 @@
   registerAccount({
     formId: 'customerRegisterForm', nameId: 'customerName', emailId: 'customerEmail',
     passwordId: 'customerPassword', confirmId: 'customerConfirmPassword',
-    phoneId: 'customerPhone', districtId: 'customerDistrict', addressId: 'customerAddress',
     messageId: 'customerRegisterMessage', role: 'customer'
   });
 
@@ -2158,6 +2179,7 @@
     };
 
     put('workerDashName', value(p.full_name, metadata.full_name));
+    put('workerDashPublicId', p.worker_public_id ? `WRK-${p.worker_public_id}` : 'WRK-PENDING');
     put('workerDashEmail', value(p.email, user.email, metadata.email));
     put('workerDashPhone', value(p.Phone, p.phone, metadata.Phone, metadata.phone));
     put('workerDashDistrict', value(p.district, metadata.district));
@@ -2289,7 +2311,7 @@
     if (!adminWorkerList) return;
     const term = (document.getElementById('adminWorkerSearch')?.value || '').trim().toLowerCase();
     const statusFilter = document.getElementById('adminWorkerStatusFilter')?.value || 'all';
-    const filtered = adminWorkerCache.filter(w => (statusFilter === 'all' || w.verification_status === statusFilter) && [w.worker_code,w.full_name,w.email,w.Phone,w.district,w.address,w.skills]
+    const filtered = adminWorkerCache.filter(w => (statusFilter === 'all' || w.verification_status === statusFilter) && [w.worker_public_id,w.worker_code,w.full_name,w.email,w.Phone,w.district,w.address,w.skills]
       .map(v => Array.isArray(v) ? v.join(' ') : (v ?? '')).join(' ').toLowerCase().includes(term));
     adminWorkerList.replaceChildren();
     if (!filtered.length) {
@@ -2303,7 +2325,7 @@
       const name = document.createElement('h3');
       name.className = 'text-lg font-black text-slate-900';
       name.textContent = adminSafeText(w.full_name, 'Worker name unavailable');
-      const code = document.createElement('p'); code.className = 'text-xs font-extrabold tracking-wide text-blue-800 mt-1'; code.textContent = `Worker ID: ${adminSafeText(w.worker_code, 'Not available')}`;
+      const code = document.createElement('p'); code.className = 'text-base font-black tracking-wide text-blue-800 mt-2'; code.textContent = `Worker ID: ${w.worker_public_id ? 'WRK-' + w.worker_public_id : 'Pending ID'}`;
       const skill = document.createElement('p');
       skill.className = 'text-sm text-emerald-800 font-bold mt-1';
       skill.textContent = adminSafeText(w.skills, 'Skills not provided');
@@ -2339,7 +2361,7 @@
     const grid = document.createElement('div');
     grid.className = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-3';
     [
-      ['Worker ID',w.worker_code],['Full Name',w.full_name],['Email',w.email],['Phone',w.Phone],['District',w.district],['Address',w.address],
+      ['Worker ID',w.worker_public_id ? 'WRK-' + w.worker_public_id : 'Pending ID'],['Full Name',w.full_name],['Email',w.email],['Phone',w.Phone],['District',w.district],['Address',w.address],
       ['Skills / Trade',w.skills],['Experience (years)',w.experience_years],['Service Price (LKR)',w.service_price_lkr],
       ['Availability',w.availability],['Available for work',w.is_available ? 'Yes' : 'No'],
       ['Verification Status',w.verification_status],['Police Clearance Status',w.police_clearance_status],
@@ -2523,6 +2545,18 @@
     setCount('adminApprovedWorkerCount', summary.approved_workers);
   }
 
+  function showAdminCustomerDetail(c) {
+    const panel=document.getElementById('adminCustomerDetail');
+    if(!panel) return;
+    panel.replaceChildren(); panel.classList.remove('hidden');
+    const heading=document.createElement('h3'); heading.className='text-xl font-black text-emerald-950 mb-4'; heading.textContent=`Customer Profile: ${adminSafeText(c.full_name,'Customer')}`; panel.append(heading);
+    const grid=document.createElement('div'); grid.className='grid sm:grid-cols-2 lg:grid-cols-3 gap-3';
+    [['Customer ID',c.customer_public_id ? 'CUS-'+c.customer_public_id : 'Pending ID'],['Full Name',c.full_name],['Email',c.email],['Phone',c.phone],['District',c.district],['Address',c.address],['Registered',c.created_at?new Date(c.created_at).toLocaleString():'Not available']].forEach(([label,value])=>grid.append(adminField(label,value)));
+    panel.append(grid);
+    const close=document.createElement('button'); close.type='button'; close.className='mt-5 rounded-xl border border-emerald-300 bg-white px-5 py-3 font-bold text-emerald-900'; close.textContent='Close Customer Profile'; close.addEventListener('click',()=>panel.classList.add('hidden')); panel.append(close);
+    panel.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
   async function loadAdminCustomers() {
     const section=document.getElementById('adminCustomersSection');
     const list=document.getElementById('adminCustomerList');
@@ -2530,18 +2564,20 @@
     if (!adminHasPermission('customers_view')) { section?.classList.add('hidden'); return; }
     section?.classList.remove('hidden'); msg.textContent='Loading customer profiles...'; list.replaceChildren();
     try {
-      const {data,error}=await supabaseClient.rpc('get_admin_customer_profiles');
+      // Admin RLS policy checks customers_view; direct SELECT includes the new public ID and profile fields.
+      const {data,error}=await supabaseClient.from('customer_profiles').select('*').order('created_at',{ascending:false});
       if(error) throw error;
       const rows=Array.isArray(data)?data:[];
       msg.textContent=`${rows.length} customer profile(s).`;
       if(!rows.length){msg.textContent='No customer profiles found.';return;}
       rows.forEach(c=>{
         const card=document.createElement('article'); card.className='rounded-2xl border border-slate-200 p-4 bg-white';
-        const name=document.createElement('h3'); name.className='text-lg font-black text-slate-900'; name.textContent=adminSafeText(c.full_name);
-        const code=document.createElement('p'); code.className='text-xs font-extrabold text-blue-800 mt-1'; code.textContent=`Customer ID: ${adminSafeText(c.customer_code)}`;
+        const name=document.createElement('h3'); name.className='text-lg font-black text-slate-900'; name.textContent=adminSafeText(c.full_name,'Customer');
+        const code=document.createElement('p'); code.className='text-base font-black text-blue-800 mt-2'; code.textContent=`Customer ID: ${c.customer_public_id ? 'CUS-'+c.customer_public_id : 'Pending ID'}`;
         const district=document.createElement('p'); district.className='text-sm text-slate-600 mt-2'; district.textContent=`District: ${adminSafeText(c.district)}`;
         const date=document.createElement('p'); date.className='text-xs text-slate-500 mt-1'; date.textContent=`Registered: ${c.created_at?new Date(c.created_at).toLocaleString():'Not available'}`;
-        card.append(name,code,district,date); list.append(card);
+        const btn=document.createElement('button'); btn.type='button'; btn.className='mt-4 w-full rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white px-4 py-3 font-bold'; btn.textContent='View Full Customer Profile'; btn.addEventListener('click',()=>showAdminCustomerDetail(c));
+        card.append(name,code,district,date,btn); list.append(card);
       });
     } catch(error){msg.textContent=`Could not load customers: ${error.message||'Customer view permission required.'}`;}
   }
@@ -2754,42 +2790,18 @@
 
   async function getUser(){ const {data:{user}} = await supabaseClient.auth.getUser(); window.clCurrentUser=user; return user; }
 
-  let publicWorkerCache = [];
-  function showPublicWorkerProfile(workerId){
-    const w=publicWorkerCache.find(item=>String(item.worker_id)===String(workerId));
-    const panel=$('publicWorkerDetail');
-    if(!w||!panel)return;
-    const initials=String(w.full_name||'Worker').trim().split(/\s+/).slice(0,2).map(part=>part[0]||'').join('').toUpperCase();
-    panel.innerHTML=`<div class="flex flex-wrap items-start justify-between gap-3"><div class="flex items-center gap-4"><div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-600 to-blue-600 text-white grid place-items-center text-xl font-black shadow">${esc(initials)}</div><div><p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Approved service professional</p><h3 class="text-2xl font-black text-emerald-950">${esc(w.full_name||'Worker')}</h3><p class="text-sm text-slate-600">${esc(w.district||'Sri Lanka')}</p></div></div><button type="button" data-close-worker-profile class="rounded-lg border border-slate-300 bg-white px-3 py-2 font-bold text-slate-700">Close ✕</button></div><div class="grid sm:grid-cols-2 gap-3 mt-5"><div class="rounded-xl bg-white p-3 border border-emerald-100"><p class="text-xs font-bold text-slate-500">SKILLS / SERVICES</p><p class="font-bold text-slate-900 mt-1">${esc((Array.isArray(w.skills)?w.skills.join(', '):String(w.skills||''))||'Not listed')}</p></div><div class="rounded-xl bg-white p-3 border border-emerald-100"><p class="text-xs font-bold text-slate-500">EXPERIENCE</p><p class="font-bold text-slate-900 mt-1">${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'}</p></div><div class="rounded-xl bg-white p-3 border border-emerald-100"><p class="text-xs font-bold text-slate-500">SERVICE PRICE</p><p class="font-bold text-slate-900 mt-1">${esc(money(w.service_price_lkr))}</p></div><div class="rounded-xl bg-white p-3 border border-emerald-100"><p class="text-xs font-bold text-slate-500">AVAILABILITY</p><p class="font-bold text-slate-900 mt-1">${esc(w.availability||'Contact worker to confirm')}</p></div></div><p class="text-sm text-slate-600 mt-4">${w.phone?`Public phone: <a class="font-bold text-blue-700 underline" href="tel:${esc(w.phone)}">${esc(w.phone)}</a>`:'Phone number is private. Use the secure message option to contact this worker.'}</p><button type="button" class="mt-4 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white px-5 py-3 font-bold" data-start-chat="${esc(w.worker_id)}">Message this Worker</button>`;
-    panel.classList.remove('hidden');
-    panel.scrollIntoView({behavior:'smooth',block:'nearest'});
-  }
-
   async function loadPublicWorkers(){
     say('workerSearchMessage','Loading approved workers...');
     const {data,error}=await supabaseClient.rpc('get_public_worker_profiles');
-    const host=$('publicWorkerResults'); if(!host)return;
-    if(error){host.innerHTML='';say('workerSearchMessage','Could not load workers: '+error.message,true);return;}
+    if(error){say('workerSearchMessage','Could not load workers: '+error.message,true);return;}
     const q=($('workerSearchText')?.value||'').trim().toLowerCase();
     const d=$('workerSearchDistrict')?.value||'';
-    publicWorkerCache=(data||[]);
-    const rows=publicWorkerCache.filter(w=>(!d||w.district===d)&&(!q||String(w.full_name||'').toLowerCase().includes(q)||(Array.isArray(w.skills)?w.skills.join(' '):String(w.skills||'')).toLowerCase().includes(q)));
-    if(!rows.length){host.innerHTML='<p class="text-sm text-slate-500">No approved workers are available for this search yet. Workers appear here after their profiles are approved by the Clean Lanka admin team.</p>';say('workerSearchMessage','No approved workers found.');return;}
-    host.innerHTML=rows.map(w=>{const initials=String(w.full_name||'Worker').trim().split(/\s+/).slice(0,2).map(part=>part[0]||'').join('').toUpperCase();const skills=Array.isArray(w.skills)?w.skills.join(', '):String(w.skills||'');return `<article class="cl-worker-card"><div class="flex items-center gap-3"><button type="button" class="w-14 h-14 shrink-0 rounded-full bg-gradient-to-br from-emerald-600 to-blue-600 text-white grid place-items-center text-lg font-black shadow" aria-label="View ${esc(w.full_name||'worker')} profile" data-view-worker="${esc(w.worker_id)}">${esc(initials)}</button><div class="min-w-0 flex-1"><h3 class="font-black text-emerald-900 text-lg">${esc(w.full_name||'Worker')}</h3><p class="text-sm text-slate-600">${esc(w.district||'Sri Lanka')}</p></div><span class="text-xs rounded-full bg-emerald-100 text-emerald-800 px-2 py-1">Approved</span></div><p class="text-sm text-emerald-800 font-semibold mt-3">${esc(skills||'Skills not listed')}</p><p class="text-sm text-slate-600 mt-2">Experience: ${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'} · ${esc(money(w.service_price_lkr))}</p><div class="grid grid-cols-2 gap-2 mt-4"><button type="button" class="rounded-xl border border-emerald-700 text-emerald-800 px-3 py-2 font-bold" data-view-worker="${esc(w.worker_id)}">View Profile</button><button type="button" class="cl-action" data-start-chat="${esc(w.worker_id)}">Message Worker</button></div></article>`;}).join('');
+    const rows=(data||[]).filter(w=>(!d||w.district===d)&&(!q||String(w.full_name||'').toLowerCase().includes(q)||(w.skills||[]).join(' ').toLowerCase().includes(q)));
+    const host=$('publicWorkerResults'); if(!host)return;
+    if(!rows.length){host.innerHTML='<p class="text-sm text-slate-500">No approved workers match this search yet.</p>';say('workerSearchMessage','Search complete.');return;}
+    host.innerHTML=rows.map(w=>`<article class="cl-worker-card"><div class="flex items-start justify-between gap-2"><h3 class="font-black text-emerald-900 text-lg">${esc(w.full_name)}</h3><span class="text-xs rounded-full bg-emerald-100 text-emerald-800 px-2 py-1">Approved</span></div><p class="text-sm text-slate-600 mt-1">${esc(w.district||'Sri Lanka')} · ${esc((w.skills||[]).join(', '))}</p><p class="text-sm mt-2">Experience: ${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'} · ${esc(money(w.service_price_lkr))}</p><p class="text-sm mt-2">${w.phone?`📞 <a class="font-bold text-blue-700 underline" href="tel:${esc(w.phone)}">${esc(w.phone)}</a>`:'🔒 Phone private — start a chat to contact this worker.'}</p><div class="mt-3"><button class="cl-action" data-start-chat="${esc(w.worker_id)}">Message Worker</button></div></article>`).join('');
     say('workerSearchMessage',rows.length+' approved worker(s) found.');
   }
-
-  $('publicWorkerResults')?.addEventListener('click',e=>{
-    const profileButton=e.target.closest('[data-view-worker]');
-    if(profileButton){showPublicWorkerProfile(profileButton.dataset.viewWorker);return;}
-    const chatButton=e.target.closest('[data-start-chat]');
-    if(chatButton)startCustomerChat(chatButton.dataset.startChat);
-  });
-  $('publicWorkerDetail')?.addEventListener('click',e=>{
-    if(e.target.closest('[data-close-worker-profile]')){$('publicWorkerDetail').classList.add('hidden');return;}
-    const chatButton=e.target.closest('[data-start-chat]');
-    if(chatButton)startCustomerChat(chatButton.dataset.startChat);
-  });
 
   async function startCustomerChat(workerId){
     const user=window.clCurrentUser||await getUser(); if(!user) return;
