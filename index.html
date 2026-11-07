@@ -1242,6 +1242,7 @@
    </div>
    <p id="workerSearchMessage" class="text-sm text-slate-500" aria-live="polite"></p>
    <div id="publicWorkerResults" class="grid md:grid-cols-2 gap-4 mt-3"></div>
+   <div id="publicWorkerDetail" class="hidden mt-6 rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-white to-emerald-50 p-5" aria-live="polite"></div>
   </section>
 
   <section class="customer-card mt-6" id="customerJobBoard">
@@ -1459,7 +1460,17 @@
   <h2 class="text-2xl font-bold text-center text-emerald-700">Customer Registration</h2>
   <p class="text-center text-gray-500 mt-2">Create your Clean Lanka customer account</p>
   <form id="customerRegisterForm" class="mt-6 space-y-4">
-    <input id="customerName" type="text" placeholder="Full Name" autocomplete="name" required class="w-full p-3 border rounded-lg">
+    <input id="customerName" type="text" placeholder="Full Name" autocomplete="name" required maxlength="160" class="w-full p-3 border rounded-lg">
+    <input id="customerPhone" type="tel" placeholder="Phone Number" autocomplete="tel" required maxlength="30" class="w-full p-3 border rounded-lg">
+    <select id="customerDistrict" required class="w-full p-3 border rounded-lg">
+      <option value="">Select District</option>
+      <option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option>
+      <option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option>
+      <option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option>
+      <option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option>
+      <option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option>
+    </select>
+    <textarea id="customerAddress" placeholder="Full Address" autocomplete="street-address" required maxlength="500" rows="3" class="w-full p-3 border rounded-lg"></textarea>
     <input id="customerEmail" type="email" placeholder="Email Address" autocomplete="email" required class="w-full p-3 border rounded-lg">
     <input id="customerPassword" type="password" placeholder="Password (minimum 8 characters)" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
     <input id="customerConfirmPassword" type="password" placeholder="Confirm Password" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
@@ -1635,7 +1646,8 @@
         result = await supabaseClient.from('customer_profiles').update(profile)
           .eq('user_id', activeCustomerUserId).select('id').single();
       } else {
-        result = await supabaseClient.from('customer_profiles').insert(profile).select('id').single();
+        result = await supabaseClient.from('customer_profiles')
+          .insert({ ...profile, id: activeCustomerUserId }).select('id').single();
       }
       if (result.error) throw result.error;
       document.getElementById('customerDashName').textContent = profile.full_name;
@@ -1685,12 +1697,15 @@
     element.classList.toggle('text-emerald-700', !isError);
   }
 
-  async function registerAccount({formId, nameId, emailId, passwordId, confirmId, messageId, role}) {
+  async function registerAccount({formId, nameId, emailId, passwordId, confirmId, messageId, phoneId, districtId, addressId, role}) {
     const form = document.getElementById(formId);
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const name = document.getElementById(nameId).value.trim();
       const email = document.getElementById(emailId).value.trim();
+      const phone = document.getElementById(phoneId).value.trim();
+      const district = document.getElementById(districtId).value;
+      const address = document.getElementById(addressId).value.trim();
       const password = document.getElementById(passwordId).value;
       const confirmPassword = document.getElementById(confirmId).value;
       const message = document.getElementById(messageId);
@@ -1712,7 +1727,13 @@
           email,
           password,
           options: {
-            data: { full_name: name, account_type: role },
+            data: {
+              full_name: name,
+              phone,
+              district,
+              address,
+              account_type: role
+            },
             emailRedirectTo: 'https://cleanlanka.lk'
           }
         });
@@ -1734,6 +1755,7 @@
   registerAccount({
     formId: 'customerRegisterForm', nameId: 'customerName', emailId: 'customerEmail',
     passwordId: 'customerPassword', confirmId: 'customerConfirmPassword',
+    phoneId: 'customerPhone', districtId: 'customerDistrict', addressId: 'customerAddress',
     messageId: 'customerRegisterMessage', role: 'customer'
   });
 
@@ -2732,18 +2754,42 @@
 
   async function getUser(){ const {data:{user}} = await supabaseClient.auth.getUser(); window.clCurrentUser=user; return user; }
 
+  let publicWorkerCache = [];
+  function showPublicWorkerProfile(workerId){
+    const w=publicWorkerCache.find(item=>String(item.worker_id)===String(workerId));
+    const panel=$('publicWorkerDetail');
+    if(!w||!panel)return;
+    const initials=String(w.full_name||'Worker').trim().split(/\s+/).slice(0,2).map(part=>part[0]||'').join('').toUpperCase();
+    panel.innerHTML=`<div class="flex flex-wrap items-start justify-between gap-3"><div class="flex items-center gap-4"><div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-600 to-blue-600 text-white grid place-items-center text-xl font-black shadow">${esc(initials)}</div><div><p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Approved service professional</p><h3 class="text-2xl font-black text-emerald-950">${esc(w.full_name||'Worker')}</h3><p class="text-sm text-slate-600">${esc(w.district||'Sri Lanka')}</p></div></div><button type="button" data-close-worker-profile class="rounded-lg border border-slate-300 bg-white px-3 py-2 font-bold text-slate-700">Close ✕</button></div><div class="grid sm:grid-cols-2 gap-3 mt-5"><div class="rounded-xl bg-white p-3 border border-emerald-100"><p class="text-xs font-bold text-slate-500">SKILLS / SERVICES</p><p class="font-bold text-slate-900 mt-1">${esc((Array.isArray(w.skills)?w.skills.join(', '):String(w.skills||''))||'Not listed')}</p></div><div class="rounded-xl bg-white p-3 border border-emerald-100"><p class="text-xs font-bold text-slate-500">EXPERIENCE</p><p class="font-bold text-slate-900 mt-1">${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'}</p></div><div class="rounded-xl bg-white p-3 border border-emerald-100"><p class="text-xs font-bold text-slate-500">SERVICE PRICE</p><p class="font-bold text-slate-900 mt-1">${esc(money(w.service_price_lkr))}</p></div><div class="rounded-xl bg-white p-3 border border-emerald-100"><p class="text-xs font-bold text-slate-500">AVAILABILITY</p><p class="font-bold text-slate-900 mt-1">${esc(w.availability||'Contact worker to confirm')}</p></div></div><p class="text-sm text-slate-600 mt-4">${w.phone?`Public phone: <a class="font-bold text-blue-700 underline" href="tel:${esc(w.phone)}">${esc(w.phone)}</a>`:'Phone number is private. Use the secure message option to contact this worker.'}</p><button type="button" class="mt-4 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white px-5 py-3 font-bold" data-start-chat="${esc(w.worker_id)}">Message this Worker</button>`;
+    panel.classList.remove('hidden');
+    panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
   async function loadPublicWorkers(){
     say('workerSearchMessage','Loading approved workers...');
     const {data,error}=await supabaseClient.rpc('get_public_worker_profiles');
-    if(error){say('workerSearchMessage','Could not load workers: '+error.message,true);return;}
+    const host=$('publicWorkerResults'); if(!host)return;
+    if(error){host.innerHTML='';say('workerSearchMessage','Could not load workers: '+error.message,true);return;}
     const q=($('workerSearchText')?.value||'').trim().toLowerCase();
     const d=$('workerSearchDistrict')?.value||'';
-    const rows=(data||[]).filter(w=>(!d||w.district===d)&&(!q||String(w.full_name||'').toLowerCase().includes(q)||(w.skills||[]).join(' ').toLowerCase().includes(q)));
-    const host=$('publicWorkerResults'); if(!host)return;
-    if(!rows.length){host.innerHTML='<p class="text-sm text-slate-500">No approved workers match this search yet.</p>';say('workerSearchMessage','Search complete.');return;}
-    host.innerHTML=rows.map(w=>`<article class="cl-worker-card"><div class="flex items-start justify-between gap-2"><h3 class="font-black text-emerald-900 text-lg">${esc(w.full_name)}</h3><span class="text-xs rounded-full bg-emerald-100 text-emerald-800 px-2 py-1">Approved</span></div><p class="text-sm text-slate-600 mt-1">${esc(w.district||'Sri Lanka')} · ${esc((w.skills||[]).join(', '))}</p><p class="text-sm mt-2">Experience: ${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'} · ${esc(money(w.service_price_lkr))}</p><p class="text-sm mt-2">${w.phone?`📞 <a class="font-bold text-blue-700 underline" href="tel:${esc(w.phone)}">${esc(w.phone)}</a>`:'🔒 Phone private — start a chat to contact this worker.'}</p><div class="mt-3"><button class="cl-action" data-start-chat="${esc(w.worker_id)}">Message Worker</button></div></article>`).join('');
+    publicWorkerCache=(data||[]);
+    const rows=publicWorkerCache.filter(w=>(!d||w.district===d)&&(!q||String(w.full_name||'').toLowerCase().includes(q)||(Array.isArray(w.skills)?w.skills.join(' '):String(w.skills||'')).toLowerCase().includes(q)));
+    if(!rows.length){host.innerHTML='<p class="text-sm text-slate-500">No approved workers are available for this search yet. Workers appear here after their profiles are approved by the Clean Lanka admin team.</p>';say('workerSearchMessage','No approved workers found.');return;}
+    host.innerHTML=rows.map(w=>{const initials=String(w.full_name||'Worker').trim().split(/\s+/).slice(0,2).map(part=>part[0]||'').join('').toUpperCase();const skills=Array.isArray(w.skills)?w.skills.join(', '):String(w.skills||'');return `<article class="cl-worker-card"><div class="flex items-center gap-3"><button type="button" class="w-14 h-14 shrink-0 rounded-full bg-gradient-to-br from-emerald-600 to-blue-600 text-white grid place-items-center text-lg font-black shadow" aria-label="View ${esc(w.full_name||'worker')} profile" data-view-worker="${esc(w.worker_id)}">${esc(initials)}</button><div class="min-w-0 flex-1"><h3 class="font-black text-emerald-900 text-lg">${esc(w.full_name||'Worker')}</h3><p class="text-sm text-slate-600">${esc(w.district||'Sri Lanka')}</p></div><span class="text-xs rounded-full bg-emerald-100 text-emerald-800 px-2 py-1">Approved</span></div><p class="text-sm text-emerald-800 font-semibold mt-3">${esc(skills||'Skills not listed')}</p><p class="text-sm text-slate-600 mt-2">Experience: ${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'} · ${esc(money(w.service_price_lkr))}</p><div class="grid grid-cols-2 gap-2 mt-4"><button type="button" class="rounded-xl border border-emerald-700 text-emerald-800 px-3 py-2 font-bold" data-view-worker="${esc(w.worker_id)}">View Profile</button><button type="button" class="cl-action" data-start-chat="${esc(w.worker_id)}">Message Worker</button></div></article>`;}).join('');
     say('workerSearchMessage',rows.length+' approved worker(s) found.');
   }
+
+  $('publicWorkerResults')?.addEventListener('click',e=>{
+    const profileButton=e.target.closest('[data-view-worker]');
+    if(profileButton){showPublicWorkerProfile(profileButton.dataset.viewWorker);return;}
+    const chatButton=e.target.closest('[data-start-chat]');
+    if(chatButton)startCustomerChat(chatButton.dataset.startChat);
+  });
+  $('publicWorkerDetail')?.addEventListener('click',e=>{
+    if(e.target.closest('[data-close-worker-profile]')){$('publicWorkerDetail').classList.add('hidden');return;}
+    const chatButton=e.target.closest('[data-start-chat]');
+    if(chatButton)startCustomerChat(chatButton.dataset.startChat);
+  });
 
   async function startCustomerChat(workerId){
     const user=window.clCurrentUser||await getUser(); if(!user) return;
