@@ -1,4 +1,4 @@
-<!-- CLEAN LANKA — INDEX 013: Customer worker profiles + chat feedback + uncropped larger homepage branding; preserves Index 012 features -->
+<!-- CLEAN LANKA — INDEX 015: Customer worker profiles + chat feedback + uncropped larger homepage branding; preserves Index 012 features -->
 <!DOCTYPE html>
 
 <html lang="en"><head>
@@ -267,6 +267,22 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 @media(max-width:390px){#adminDashboard .admin-topbar{flex-direction:column}#adminDashboard #adminDashboardLogoutButton{align-self:flex-end}#adminDashboard .admin-stat .stat-value{font-size:24px}}
 </style>
 
+
+<style id="clean-lanka-index014-layout">
+/* Customer account is a separate full-screen page, not appended below the public homepage. */
+body.customer-dashboard-mode{min-height:100vh;background:#eff7f3!important;overflow:hidden}
+body.customer-dashboard-mode>header,body.customer-dashboard-mode>main,body.customer-dashboard-mode>footer,body.customer-dashboard-mode>aside,body.customer-dashboard-mode>#registration-screen,body.customer-dashboard-mode>#account-login,body.customer-dashboard-mode>#workerDashboard,body.customer-dashboard-mode>#adminDashboard{display:none!important}
+body.customer-dashboard-mode>#customerDashboard{display:block!important;position:fixed!important;inset:0!important;z-index:100000!important;overflow-y:auto!important;overscroll-behavior:contain;background:linear-gradient(135deg,#effcf5,#eff6ff 58%,#fffaf0)!important;padding:18px!important;width:100vw!important;height:100dvh!important}
+#homeWorkersHeading{display:inline-block;padding:8px 16px;border-radius:14px;background:linear-gradient(100deg,#064e3b,#059669,#0e7490);color:#fff!important;box-shadow:0 8px 22px #04785730}
+#homeWorkersHeading+p{color:#315b51!important;font-weight:600}
+#homeJobsHeading{display:inline-block;padding:8px 16px;border-radius:14px;background:linear-gradient(100deg,#1e3a8a,#2563eb,#7c3aed);color:#fff!important;box-shadow:0 8px 22px #2563eb30}
+#homeJobsHeading+p{color:#3d4d78!important;font-weight:600}
+#homeWorkersHeading,#homeJobsHeading{letter-spacing:-.5px}
+#services-section .group{border:1px solid #d5e8df;box-shadow:0 12px 30px #164e3b12}
+#services-section .group:hover{transform:translateY(-4px);border-color:#34a879}
+@media(max-width:640px){body.customer-dashboard-mode>#customerDashboard{padding:10px!important}}
+</style>
+
 </head>
 <body class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -387,7 +403,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 </div>
 <!-- TACTICAL SEARCH & DISTRICT SELECTOR BAR -->
 <div class="bg-white p-4 sm:p-5 rounded-2xl border-2 border-emerald-600/30 shadow-xl max-w-3xl">
-<form class="grid grid-cols-1 md:grid-cols-12 gap-3" onsubmit="event.preventDefault(); document.getElementById('services-section').scrollIntoView({behavior: 'smooth'});">
+<form class="grid grid-cols-1 md:grid-cols-12 gap-3" onsubmit="event.preventDefault(); const d=document.getElementById('hero-district-selector').value; const w=document.getElementById('homeWorkerSearchDistrict'); if(w){w.value=d;w.dispatchEvent(new Event('change'));} document.getElementById('homeWorkersHeading')?.scrollIntoView({behavior:'smooth',block:'center'});">
 <!-- Service Selector -->
 <div class="md:col-span-5 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-left">
 <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">
@@ -402,20 +418,36 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 <option value="household">General Household &amp; Garden</option>
 </select>
 </div>
-<!-- District & City Selector -->
+<!-- District Selector: all 25 Sri Lankan districts; no city field -->
 <div class="md:col-span-4 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-left">
-<label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">
-                    District or City
-                  </label>
+<label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Select District</label>
 <select class="w-full bg-transparent font-bold text-gray-900 text-[17px] focus:outline-none cursor-pointer" id="hero-district-selector">
-<option value="colombo">Colombo &amp; Suburbs</option>
-<option value="gampaha">Gampaha &amp; Negombo</option>
-<option value="kandy">Kandy District</option>
-<option value="galle">Galle &amp; Southern Coast</option>
-<option value="kurunegala">Kurunegala District</option>
-<option value="kalutara">Kalutara District</option>
-<option value="matara">Matara District</option>
-<option value="all">All 25 Districts</option>
+<option value="">All Districts</option>
+<option value="Ampara">Ampara</option>
+<option value="Anuradhapura">Anuradhapura</option>
+<option value="Badulla">Badulla</option>
+<option value="Batticaloa">Batticaloa</option>
+<option value="Colombo">Colombo</option>
+<option value="Galle">Galle</option>
+<option value="Gampaha">Gampaha</option>
+<option value="Hambantota">Hambantota</option>
+<option value="Jaffna">Jaffna</option>
+<option value="Kalutara">Kalutara</option>
+<option value="Kandy">Kandy</option>
+<option value="Kegalle">Kegalle</option>
+<option value="Kilinochchi">Kilinochchi</option>
+<option value="Kurunegala">Kurunegala</option>
+<option value="Mannar">Mannar</option>
+<option value="Matale">Matale</option>
+<option value="Matara">Matara</option>
+<option value="Monaragala">Monaragala</option>
+<option value="Mullaitivu">Mullaitivu</option>
+<option value="Nuwara Eliya">Nuwara Eliya</option>
+<option value="Polonnaruwa">Polonnaruwa</option>
+<option value="Puttalam">Puttalam</option>
+<option value="Ratnapura">Ratnapura</option>
+<option value="Trincomalee">Trincomalee</option>
+<option value="Vavuniya">Vavuniya</option>
 </select>
 </div>
 <!-- Search Button -->
@@ -526,9 +558,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 <span class="text-xs uppercase font-bold text-gray-500 block">Starting Rate</span>
 <span class="text-2xl font-extrabold text-primary">LKR 3,500</span>
 </div>
-<a class="bg-primary hover:bg-primary-dark text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20would%20like%20to%20book%20Home%20Cleaning%20service." target="_blank">
-                Book Service
-              </a>
+<button type="button" class="bg-gradient-to-r from-emerald-700 to-blue-700 hover:from-emerald-800 hover:to-blue-800 text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" onclick="cleanLankaStartBooking()">Book Service</button>
 </div>
 </div>
 <!-- CARD 2: ELECTRICIAN & WIRING -->
@@ -565,9 +595,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 <span class="text-xs uppercase font-bold text-gray-500 block">Starting Rate</span>
 <span class="text-2xl font-extrabold text-primary">LKR 2,000</span>
 </div>
-<a class="bg-primary hover:bg-primary-dark text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20would%20like%20to%20book%20an%20Electrician." target="_blank">
-                Book Service
-              </a>
+<button type="button" class="bg-gradient-to-r from-emerald-700 to-blue-700 hover:from-emerald-800 hover:to-blue-800 text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" onclick="cleanLankaStartBooking()">Book Service</button>
 </div>
 </div>
 <!-- CARD 3: PLUMBING & WATER WORKS -->
@@ -604,9 +632,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 <span class="text-xs uppercase font-bold text-gray-500 block">Starting Rate</span>
 <span class="text-2xl font-extrabold text-primary">LKR 2,200</span>
 </div>
-<a class="bg-primary hover:bg-primary-dark text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20would%20like%20to%20book%20a%20Plumber." target="_blank">
-                Book Service
-              </a>
+<button type="button" class="bg-gradient-to-r from-emerald-700 to-blue-700 hover:from-emerald-800 hover:to-blue-800 text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" onclick="cleanLankaStartBooking()">Book Service</button>
 </div>
 </div>
 <!-- CARD 4: HOME COOKING & CHEF -->
@@ -643,9 +669,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 <span class="text-xs uppercase font-bold text-gray-500 block">Starting Rate</span>
 <span class="text-2xl font-extrabold text-primary">LKR 3,000</span>
 </div>
-<a class="bg-primary hover:bg-primary-dark text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20would%20like%20to%20book%20Home%20Cooking%20service." target="_blank">
-                Book Service
-              </a>
+<button type="button" class="bg-gradient-to-r from-emerald-700 to-blue-700 hover:from-emerald-800 hover:to-blue-800 text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" onclick="cleanLankaStartBooking()">Book Service</button>
 </div>
 </div>
 <!-- CARD 5: HOME MAINTENANCE & CARPENTRY -->
@@ -682,9 +706,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 <span class="text-xs uppercase font-bold text-gray-500 block">Starting Rate</span>
 <span class="text-2xl font-extrabold text-primary">LKR 2,800</span>
 </div>
-<a class="bg-primary hover:bg-primary-dark text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20would%20like%20to%20book%20Home%20Maintenance." target="_blank">
-                Book Service
-              </a>
+<button type="button" class="bg-gradient-to-r from-emerald-700 to-blue-700 hover:from-emerald-800 hover:to-blue-800 text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" onclick="cleanLankaStartBooking()">Book Service</button>
 </div>
 </div>
 <!-- CARD 6: GENERAL HOUSEHOLD & GARDEN -->
@@ -721,9 +743,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
 <span class="text-xs uppercase font-bold text-gray-500 block">Starting Rate</span>
 <span class="text-2xl font-extrabold text-primary">LKR 1,800</span>
 </div>
-<a class="bg-primary hover:bg-primary-dark text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" href="https://wa.me/94702805105?text=Hello%20Clean%20Lanka,%20I%20would%20like%20to%20book%20Household%20or%20Garden%20help." target="_blank">
-                Book Service
-              </a>
+<button type="button" class="bg-gradient-to-r from-emerald-700 to-blue-700 hover:from-emerald-800 hover:to-blue-800 text-white font-bold text-[17px] py-3.5 px-6 rounded-xl transition-all shadow-md" onclick="cleanLankaStartBooking()">Book Service</button>
 </div>
 </div>
 </div>
@@ -3192,6 +3212,19 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
     say('workerSearchMessage',rows.length+' approved worker(s) found.');
   }
 
+  // Service-category booking stays inside Clean Lanka; it never redirects to WhatsApp.
+  window.cleanLankaStartBooking = async function(){
+    try{
+      const user=window.clCurrentUser||await getUser();
+      if(!user){openLoginPage();return;}
+      const customerProfile=await supabaseClient.from('customer_profiles').select('id').eq('id',user.id).maybeSingle();
+      if(customerProfile.error)throw customerProfile.error;
+      if(!customerProfile.data){alert('Please sign in with a Customer account to create a service request.');return;}
+      loadCustomerDashboard(user);
+      setTimeout(()=>document.getElementById('customerJobBoard')?.scrollIntoView({behavior:'smooth',block:'start'}),150);
+    }catch(error){alert('Could not open booking: '+(error?.message||'Please try again.'));}
+  };
+
   async function startCustomerChat(workerId){
     const panel=$('customerChatPanel');
     const windowEl=$('customerChatWindow');
@@ -3437,6 +3470,134 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1440px!important;
   };
   window.cleanLankaLoadCustomerFeatures=async function(user){window.clCurrentUser=user||await getUser();await Promise.all([loadPublicWorkers(),loadCustomerJobs(),loadConversations('customer'),loadUserNotifications(window.clCurrentUser?.id,'customerNotificationsList','customerNotificationsMessage')]);};
   window.cleanLankaLoadWorkerFeatures=async function(user){window.clCurrentUser=user||await getUser();await Promise.all([loadWorkerJobs(),loadConversations('worker'),loadUserNotifications(window.clCurrentUser?.id,'workerNotificationsList','workerNotificationsMessage')]);await trackCurrentWorkerPresence();};
+})();
+</script>
+
+
+<!-- CLEAN LANKA INDEX 015: mobile/browser Back navigation guard -->
+<script id="clean-lanka-mobile-back-navigation">
+(function () {
+  if (window.__cleanLankaBackNavigationInstalled) return;
+  window.__cleanLankaBackNavigationInstalled = true;
+
+  function isVisible(id) {
+    const el = document.getElementById(id);
+    return !!el && !el.classList.contains('hidden') &&
+      getComputedStyle(el).display !== 'none';
+  }
+
+  function currentAppViewIsOpen() {
+    const body = document.body;
+    return body.classList.contains('login-page-mode') ||
+      body.classList.contains('registration-mode') ||
+      body.classList.contains('admin-login-mode') ||
+      body.classList.contains('worker-dashboard-mode') ||
+      body.classList.contains('customer-dashboard-mode') ||
+      body.classList.contains('admin-dashboard-mode') ||
+      body.classList.contains('password-recovery-mode') ||
+      isVisible('customerDashboard') ||
+      isVisible('workerDashboard') ||
+      isVisible('adminDashboard') ||
+      isVisible('admin-login') ||
+      isVisible('account-login') ||
+      isVisible('registration-screen');
+  }
+
+  function closeTopmostPanel() {
+    const customerChat = document.getElementById('customerChatWindow');
+    if (customerChat && !customerChat.classList.contains('hidden')) {
+      customerChat.classList.add('hidden');
+      return true;
+    }
+    const workerChat = document.getElementById('workerChatWindow');
+    if (workerChat && !workerChat.classList.contains('hidden')) {
+      workerChat.classList.add('hidden');
+      return true;
+    }
+    const workerModal = document.getElementById('homeWorkerProfileModal');
+    if (workerModal && !workerModal.classList.contains('hidden')) {
+      workerModal.classList.add('hidden');
+      return true;
+    }
+    const detail = document.getElementById('adminWorkerDetail');
+    if (detail && !detail.classList.contains('hidden')) {
+      detail.classList.add('hidden');
+      return true;
+    }
+    return false;
+  }
+
+  function returnToPublicHome() {
+    const body = document.body;
+    body.classList.remove(
+      'login-page-mode', 'registration-mode', 'admin-login-mode',
+      'worker-dashboard-mode', 'customer-dashboard-mode',
+      'admin-dashboard-mode', 'password-recovery-mode'
+    );
+
+    [
+      'account-login', 'registration-screen', 'admin-login',
+      'workerDashboard', 'customerDashboard', 'adminDashboard'
+    ].forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    });
+
+    const customerChat = document.getElementById('customerChatWindow');
+    if (customerChat) customerChat.classList.add('hidden');
+    const workerChat = document.getElementById('workerChatWindow');
+    if (workerChat) workerChat.classList.add('hidden');
+
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }
+
+  function armBackGuard() {
+    try {
+      window.history.pushState(
+        { cleanLankaBackGuard: true, at: Date.now() },
+        '',
+        window.location.href
+      );
+    } catch (error) {
+      console.warn('Clean Lanka back navigation guard could not be armed:', error);
+    }
+  }
+
+  // Keep one in-site history entry so Android/browser Back is handled by the site
+  // before the browser or installed web app is allowed to leave the page.
+  try {
+    window.history.replaceState(
+      Object.assign({}, window.history.state || {}, { cleanLankaPage: true }),
+      '',
+      window.location.href
+    );
+  } catch (error) {
+    console.warn('Clean Lanka history state could not be initialized:', error);
+  }
+  armBackGuard();
+
+  window.addEventListener('popstate', function () {
+    if (closeTopmostPanel()) {
+      armBackGuard();
+      return;
+    }
+
+    if (currentAppViewIsOpen()) {
+      returnToPublicHome();
+      armBackGuard();
+      return;
+    }
+
+    // On the public homepage, ask before leaving the site/app.
+    const leave = window.confirm('Do you want to exit Clean Lanka?');
+    if (!leave) armBackGuard();
+  });
+
+  // If the page is restored from the mobile browser's back-forward cache,
+  // reinstall the guard without disturbing the current dashboard.
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) armBackGuard();
+  });
 })();
 </script>
 
