@@ -80,6 +80,18 @@
   .cl-app-worker-avatar { width:64px; height:64px; border-radius:18px; display:grid; place-items:center; background:linear-gradient(135deg,#d1fae5,#dbeafe); color:#14532d; font-size:24px; font-weight:900; overflow:hidden; }
   .cl-app-worker-avatar img { width:100%; height:100%; object-fit:cover; }
 
+
+/* INDEX 018: large, high-contrast, easy-to-read profile forms */
+#customer-register,#worker-register{border:2px solid #b7e4ce!important;border-radius:28px!important;background:linear-gradient(145deg,#ffffff,#f0fdf4 58%,#eff6ff)!important;box-shadow:0 18px 50px #14532d18!important;padding:clamp(20px,4vw,34px)!important}
+#customer-register h2,#worker-register h2{font-size:clamp(28px,5vw,36px)!important;font-weight:950!important;line-height:1.15!important}
+#customer-register p,#worker-register p{font-size:16px!important;line-height:1.6!important}
+#customer-register input,#customer-register select,#customer-register textarea,#worker-register input,#worker-register select,#worker-register textarea,#customerProfileForm input,#customerProfileForm select,#customerProfileForm textarea{min-height:56px!important;border:2px solid #b8cfc2!important;border-radius:14px!important;padding:14px 16px!important;font-size:18px!important;font-weight:650!important;color:#123b2b!important;background:#fff!important}
+#customer-register input:focus,#customer-register select:focus,#customer-register textarea:focus,#worker-register input:focus,#worker-register select:focus,#worker-register textarea:focus,#customerProfileForm input:focus{outline:3px solid #93c5fd!important;outline-offset:2px!important}
+#customer-register button,#worker-register button,#customerProfileForm button{min-height:58px!important;font-size:18px!important;font-weight:900!important;border-radius:16px!important}
+#customerDashboard .customer-card h2{font-size:clamp(21px,3vw,26px)!important}
+#adminCustomerList article,#adminWorkerList article{border:2px solid #d5e9df!important;background:linear-gradient(145deg,#fff,#f4fbf7)!important;border-radius:20px!important}
+#adminCustomerList article button,#adminWorkerList article button{min-height:50px!important;font-size:16px!important}
+
 </style>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
@@ -281,6 +293,23 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
 #services-section .group{border:1px solid #d5e8df;box-shadow:0 12px 30px #164e3b12}
 #services-section .group:hover{transform:translateY(-4px);border-color:#34a879}
 @media(max-width:640px){body.customer-dashboard-mode>#customerDashboard{padding:10px!important}}
+</style>
+
+
+<style id="clean-lanka-index019-marketplace-ux">
+.cl-accountbar{position:sticky;top:0;z-index:100020;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;margin:-2px -2px 18px;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border:1px solid #dcebe4;border-radius:18px;box-shadow:0 8px 24px #164e3b10}
+.cl-accountbrand{font-weight:950;letter-spacing:-.7px;color:#064e3b;font-size:19px}.cl-accountbrand span{color:#2563eb}
+.cl-account-actions{display:flex;align-items:center;gap:9px}.cl-account-menu-wrap{position:relative}
+.cl-avatar-button{width:44px;height:44px;border-radius:50%;border:2px solid #b7e4ce;background:linear-gradient(135deg,#047857,#2563eb);color:#fff;font-weight:900;font-size:18px;display:grid;place-items:center;box-shadow:0 4px 12px #064e3b25}
+.cl-account-dropdown{position:absolute;right:0;top:52px;width:min(270px,calc(100vw - 30px));background:#fff;border:1px solid #dbe7e1;border-radius:16px;padding:8px;box-shadow:0 18px 45px #0f172a26;display:none;z-index:100100}
+.cl-account-dropdown.open{display:block}.cl-menu-caption{padding:9px 11px 7px;color:#64748b;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.cl-menu-item{width:100%;display:flex;align-items:center;gap:10px;text-align:left;padding:11px;border-radius:10px;color:#1e293b;font-weight:700;font-size:14px}.cl-menu-item:hover{background:#ecfdf5;color:#065f46}.cl-menu-item .material-symbols-outlined{font-size:20px;color:#0f766e}
+.cl-dash-nav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}.cl-dash-nav button{border:1px solid #d7e8df;background:#fff;border-radius:12px;padding:10px 13px;font-size:13px;font-weight:800;color:#245346}.cl-dash-nav button:hover{background:#ecfdf5;border-color:#86c9a7}
+.cl-quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 20px}.cl-quick-card{display:flex;align-items:center;gap:12px;text-align:left;padding:15px;border:1px solid #dcebe4;border-radius:16px;background:#fff;box-shadow:0 5px 16px #164e3b08;font-weight:800;color:#164e3b;min-height:76px}.cl-quick-card:hover{transform:translateY(-2px);border-color:#72bd97;box-shadow:0 10px 22px #164e3b12}.cl-quick-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:13px;background:#e8f7ee;color:#08734d}.cl-quick-icon .material-symbols-outlined{font-size:23px}
+.cl-mobile-nav{display:none}
+@media(max-width:700px){.cl-accountbar{margin:0 0 14px;padding:10px 11px;border-radius:14px}.cl-accountbrand{font-size:17px}.cl-accountbar-sub{font-size:10px!important}.cl-dash-nav{display:none}.cl-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.cl-quick-card{padding:11px;gap:8px;font-size:12px;min-height:68px}.cl-quick-icon{width:35px;height:35px;flex-basis:35px}.cl-mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);left:0;right:0;bottom:0;z-index:100050;padding:7px 5px max(7px,env(safe-area-inset-bottom));background:rgba(255,255,255,.97);backdrop-filter:blur(15px);border-top:1px solid #d8e8df;box-shadow:0 -8px 24px #0f172a12}.cl-mobile-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;color:#47665b;font-size:10px;font-weight:800;padding:4px 1px}.cl-mobile-nav .material-symbols-outlined{font-size:21px}.cl-mobile-nav button:active,.cl-mobile-nav button.active{color:#047857}.customer-dashboard-mode #customerDashboard,.worker-dashboard-mode #workerDashboard{padding-bottom:88px!important}}
+@media(min-width:701px){.cl-mobile-nav{display:none!important}}
+.cl-nav-highlight{outline:3px solid #6bc49a!important;outline-offset:3px!important;transition:outline .2s}
 </style>
 
 </head>
@@ -1344,9 +1373,28 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
 <!-- CUSTOMER DASHBOARD: dedicated profile page -->
 <section id="customerDashboard" class="hidden">
  <div class="customer-shell">
-  <div class="flex items-center justify-between gap-3 flex-wrap mb-6">
-   <div><div class="text-3xl font-black text-emerald-900">CLEAN <span class="text-blue-700">LANKA</span></div><p class="text-sm text-slate-500 font-semibold">Customer Profile</p></div>
-   <button id="customerDashboardLogoutButton" type="button" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold">Sign Out</button>
+  <div class="cl-accountbar">
+   <div><div class="cl-accountbrand">CLEAN <span>LANKA</span></div><p class="cl-accountbar-sub text-xs text-slate-500 font-semibold">Customer Dashboard · Your home services hub</p></div>
+   <div class="cl-account-actions"><button type="button" class="rounded-xl bg-rose-50 text-rose-700 border border-rose-100 px-3 py-2 text-sm font-bold" id="customerDashboardLogoutButton">Sign Out</button>
+    <div class="cl-account-menu-wrap"><button type="button" class="cl-avatar-button" aria-label="Open customer account menu" aria-expanded="false" data-cl-menu-toggle="customerAccountMenu">C</button>
+     <div class="cl-account-dropdown" id="customerAccountMenu"><div class="cl-menu-caption">Customer account</div>
+      <button class="cl-menu-item" data-cl-go="customerProfileForm"><span class="material-symbols-outlined">person</span>My Profile</button>
+      <button class="cl-menu-item" data-cl-go="customerMarketplace"><span class="material-symbols-outlined">search</span>Find Professionals</button>
+      <button class="cl-menu-item" data-cl-go="customerJobBoard"><span class="material-symbols-outlined">work</span>My Job Posts</button>
+      <button class="cl-menu-item" data-cl-go="customerChatPanel"><span class="material-symbols-outlined">chat</span>Messages</button>
+      <button class="cl-menu-item" data-cl-go="customerNotificationsPanel"><span class="material-symbols-outlined">notifications</span>Notifications</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <nav class="cl-dash-nav" aria-label="Customer dashboard navigation"><button data-cl-go="customerMarketplace">Find Professionals</button><button data-cl-go="customerJobBoard">My Job Posts</button><button data-cl-go="customerChatPanel">Messages</button><button data-cl-go="customerNotificationsPanel">Notifications</button><button data-cl-go="customerProfileForm">My Profile</button></nav>
+  <div class="cl-quick-grid" aria-label="Customer quick actions">
+   <button class="cl-quick-card" data-cl-go="customerMarketplace"><span class="cl-quick-icon"><span class="material-symbols-outlined">person_search</span></span><span>Find a Worker</span></button>
+   <button class="cl-quick-card" data-cl-go="customerJobBoard"><span class="cl-quick-icon"><span class="material-symbols-outlined">post_add</span></span><span>Post a Job</span></button>
+   <button class="cl-quick-card" data-cl-go="customerChatPanel"><span class="cl-quick-icon"><span class="material-symbols-outlined">forum</span></span><span>Messages</span></button>
+   <button class="cl-quick-card" data-cl-go="customerNotificationsPanel"><span class="cl-quick-icon"><span class="material-symbols-outlined">notifications</span></span><span>Notifications</span></button>
+   <button class="cl-quick-card" data-cl-go="customerProfileForm"><span class="cl-quick-icon"><span class="material-symbols-outlined">manage_accounts</span></span><span>Edit Profile</span></button>
+   <button class="cl-quick-card" data-cl-go="customerJobsList"><span class="cl-quick-icon"><span class="material-symbols-outlined">assignment</span></span><span>Applications</span></button>
   </div>
   <div class="rounded-3xl p-7 sm:p-10 text-white bg-gradient-to-r from-emerald-800 via-green-700 to-blue-800 shadow-xl mb-6">
    <p class="text-sm font-bold uppercase tracking-widest text-emerald-100">Welcome to Clean Lanka</p>
@@ -1368,7 +1416,7 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
      <label class="block text-sm font-bold text-slate-700" for="customerProfileFullName">Full Name</label>
      <input id="customerProfileFullName" required maxlength="160" autocomplete="name" class="w-full rounded-xl border border-slate-200 p-3" placeholder="Your full name">
      <label class="block text-sm font-bold text-slate-700" for="customerProfilePhone">Phone Number</label>
-     <input id="customerProfilePhone" type="tel" maxlength="30" autocomplete="tel" class="w-full rounded-xl border border-slate-200 p-3" placeholder="Your contact number">
+     <input id="customerProfilePhone" type="tel" inputmode="numeric" maxlength="10" minlength="10" pattern="[0-9]{10}" title="Enter exactly 10 digits" autocomplete="tel" required class="w-full rounded-xl border border-slate-200 p-3" placeholder="Your contact number">
      <label class="block text-sm font-bold text-slate-700" for="customerProfileDistrict">District</label>
      <select id="customerProfileDistrict" required class="w-full rounded-xl border border-slate-200 p-3"><option value="">Select district</option><option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option></select>
      <label class="block text-sm font-bold text-slate-700" for="customerProfileAddress">Address</label>
@@ -1422,6 +1470,9 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
     <p id="customerChatMessage" class="text-xs mt-2 font-semibold" aria-live="polite">Select Message Worker to start a private conversation.</p>
    </div>
   </section>
+<nav class="cl-mobile-nav" id="customerMobileNav" aria-label="Customer mobile navigation">
+ <button data-cl-go="customerMarketplace"><span class="material-symbols-outlined">search</span>Find</button><button data-cl-go="customerJobBoard"><span class="material-symbols-outlined">work</span>Jobs</button><button data-cl-go="customerChatPanel"><span class="material-symbols-outlined">chat</span>Messages</button><button data-cl-go="customerNotificationsPanel"><span class="material-symbols-outlined">notifications</span>Alerts</button><button data-cl-go="customerProfileForm"><span class="material-symbols-outlined">person</span>Profile</button>
+</nav>
  </div>
 </section>
 
@@ -1433,8 +1484,23 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
         <div class="cv-brand">Clean <span>Lanka</span></div>
         <div class="cv-tagline">Skilled people • Better homes</div>
       </div>
-      <button id="workerDashboardLogoutButton" type="button" class="cv-logout">Sign Out ↗</button>
+      <div class="cl-account-actions"><div class="cl-account-menu-wrap"><button type="button" class="cl-avatar-button" aria-label="Open worker account menu" aria-expanded="false" data-cl-menu-toggle="workerAccountMenu">W</button>
+       <div class="cl-account-dropdown" id="workerAccountMenu"><div class="cl-menu-caption">Worker account</div>
+        <button class="cl-menu-item" data-cl-go="workerProfileEditCard"><span class="material-symbols-outlined">person</span>My Profile</button>
+        <button class="cl-menu-item" data-cl-go="workerAvailabilityCard"><span class="material-symbols-outlined">toggle_on</span>Availability</button>
+        <button class="cl-menu-item" data-cl-go="workerJobBoard"><span class="material-symbols-outlined">work</span>Find Jobs</button>
+        <button class="cl-menu-item" data-cl-go="workerChatPanel"><span class="material-symbols-outlined">chat</span>Messages</button>
+        <button class="cl-menu-item" data-cl-go="workerNotificationsPanel"><span class="material-symbols-outlined">notifications</span>Notifications</button>
+       </div></div><button id="workerDashboardLogoutButton" type="button" class="cv-logout">Sign Out ↗</button></div>
     </header>
+    <nav class="cl-dash-nav" aria-label="Worker dashboard navigation"><button data-cl-go="workerProfileEditCard">My Profile</button><button data-cl-go="workerAvailabilityCard">Availability</button><button data-cl-go="workerJobBoard">Find Jobs</button><button data-cl-go="workerChatPanel">Messages</button><button data-cl-go="workerNotificationsPanel">Notifications</button></nav>
+    <div class="cl-quick-grid" aria-label="Worker quick actions">
+     <button class="cl-quick-card" data-cl-go="workerProfileEditCard"><span class="cl-quick-icon"><span class="material-symbols-outlined">badge</span></span><span>My Profile</span></button>
+     <button class="cl-quick-card" data-cl-go="workerAvailabilityCard"><span class="cl-quick-icon"><span class="material-symbols-outlined">toggle_on</span></span><span>Availability</span></button>
+     <button class="cl-quick-card" data-cl-go="workerJobBoard"><span class="cl-quick-icon"><span class="material-symbols-outlined">work</span></span><span>Find Jobs</span></button>
+     <button class="cl-quick-card" data-cl-go="workerChatPanel"><span class="cl-quick-icon"><span class="material-symbols-outlined">forum</span></span><span>Messages</span></button>
+     <button class="cl-quick-card" data-cl-go="workerNotificationsPanel"><span class="cl-quick-icon"><span class="material-symbols-outlined">notifications</span></span><span>Notifications</span></button>
+    </div>
 
     <section class="cv-hero">
       <h2>Welcome to your<br>Professional Profile!</h2>
@@ -1610,7 +1676,11 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
         </section>
         <section class="cv-card mt-6" id="workerChatPanel">
           <h3 class="cv-section-title"><span class="cv-dot"></span> Customer Messages</h3>
-          <div id="workerConversationList" class="space-y-2"></div>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <p class="text-sm text-slate-600">Messages from customers who contacted you through Clean Lanka.</p>
+            <button type="button" id="workerRefreshConversations" class="cl-action light">Refresh Messages</button>
+          </div>
+          <div id="workerConversationList" class="space-y-2" aria-live="polite"><p class="text-sm text-slate-500">Loading customer messages...</p></div>
           <div id="workerChatWindow" class="hidden mt-4 border rounded-2xl p-3">
             <div class="font-bold text-emerald-900 mb-2" id="workerChatTitle">Conversation</div>
             <div id="workerChatMessages" class="max-h-64 overflow-y-auto space-y-2 bg-slate-50 rounded-xl p-3"></div>
@@ -1620,6 +1690,9 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
         </section>
       </main>
     </div>
+<nav class="cl-mobile-nav" id="workerMobileNav" aria-label="Worker mobile navigation">
+ <button data-cl-go="workerProfileEditCard"><span class="material-symbols-outlined">person</span>Profile</button><button data-cl-go="workerAvailabilityCard"><span class="material-symbols-outlined">toggle_on</span>Status</button><button data-cl-go="workerJobBoard"><span class="material-symbols-outlined">work</span>Jobs</button><button data-cl-go="workerChatPanel"><span class="material-symbols-outlined">chat</span>Messages</button><button data-cl-go="workerNotificationsPanel"><span class="material-symbols-outlined">notifications</span>Alerts</button>
+</nav>
   </div>
 </section>
 
@@ -1632,7 +1705,7 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
   <p class="text-center text-gray-500 mt-2">Create your Clean Lanka customer account</p>
   <form id="customerRegisterForm" class="mt-6 space-y-4">
     <input id="customerName" type="text" placeholder="Full Name" autocomplete="name" required class="w-full p-3 border rounded-lg">
-    <input id="customerPhone" type="tel" placeholder="Mobile Number" autocomplete="tel" required class="w-full p-3 border rounded-lg">
+    <input id="customerPhone" type="tel" inputmode="numeric" maxlength="10" minlength="10" pattern="[0-9]{10}" title="Enter exactly 10 digits" placeholder="Mobile Number (10 digits)" autocomplete="tel" required class="w-full p-3 border rounded-lg">
     <input id="customerEmail" type="email" placeholder="Email Address" autocomplete="email" required class="w-full p-3 border rounded-lg">
     <select id="customerDistrict" required class="w-full p-3 border rounded-lg"><option value="">Select District</option><option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option></select>
     <textarea id="customerAddress" placeholder="Town / Area" autocomplete="street-address" required class="w-full p-3 border rounded-lg"></textarea>
@@ -1652,7 +1725,7 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
   <p class="text-center text-gray-500 mt-2">Join Clean Lanka as a Service Professional</p>
   <form id="workerRegisterForm" class="mt-6 space-y-4">
     <input id="workerName" type="text" placeholder="Full Name" autocomplete="name" required class="w-full p-3 border rounded-lg">
-    <input id="workerPhone" type="tel" placeholder="Mobile Number" autocomplete="tel" required class="w-full p-3 border rounded-lg">
+    <input id="workerPhone" type="tel" inputmode="numeric" maxlength="10" minlength="10" pattern="[0-9]{10}" title="Enter exactly 10 digits" placeholder="Mobile Number (10 digits)" autocomplete="tel" required class="w-full p-3 border rounded-lg">
     <input id="workerEmail" type="email" placeholder="Email Address" autocomplete="email" required class="w-full p-3 border rounded-lg">
     <select id="workerDistrict" required class="w-full p-3 border rounded-lg">
       <option value="">Select District</option>
@@ -1836,6 +1909,10 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
       district: document.getElementById('customerProfileDistrict').value,
       address: document.getElementById('customerProfileAddress').value.trim()
     };
+    if (!/^[0-9]{10}$/.test(profile.phone || '')) {
+      showMessage(message, 'Phone number must contain exactly 10 digits. Customer profile cannot be saved.', true);
+      return;
+    }
     if (!profile.full_name || !profile.district || !profile.address) {
       showMessage(message, 'Please enter your full name, district and address.', true);
       return;
@@ -1913,8 +1990,12 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
         metadata.phone = document.getElementById('customerPhone').value.trim();
         metadata.district = document.getElementById('customerDistrict').value;
         metadata.address = document.getElementById('customerAddress').value.trim();
-        if (!metadata.phone || !metadata.district || !metadata.address) {
-          showMessage(document.getElementById(messageId), 'Please enter your mobile number, district and town / area.', true);
+        if (!/^[0-9]{10}$/.test(metadata.phone)) {
+          showMessage(document.getElementById(messageId), 'Phone number must contain exactly 10 digits. Profile registration cannot continue.', true);
+          return;
+        }
+        if (!metadata.district || !metadata.address) {
+          showMessage(document.getElementById(messageId), 'Please enter your district and town / area.', true);
           return;
         }
       }
@@ -1976,6 +2057,10 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
     const message = document.getElementById('workerRegisterMessage');
     const submit = workerFormClean.querySelector('button[type="submit"]');
 
+    if (!/^[0-9]{10}$/.test(val('workerPhone'))) {
+      showMessage(message, 'Phone number must contain exactly 10 digits. Worker profile cannot be created.', true);
+      return;
+    }
     if (password !== confirmPassword) {
       showMessage(message, 'Passwords do not match.', true);
       return;
@@ -2025,6 +2110,9 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
   async function saveWorkerProfileAfterLogin(user) {
     const metadata = user.user_metadata || {};
     if (metadata.account_type !== 'worker') return;
+    if (!/^[0-9]{10}$/.test(String(metadata.Phone || ''))) {
+      throw new Error('Your Worker phone number must contain exactly 10 digits. Update your registration details before creating the Worker profile.');
+    }
 
     const { data: existing, error: lookupError } = await supabaseClient
       .from('worker_profiles')
@@ -2583,11 +2671,12 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
       const meta = document.createElement('p');
       meta.className = 'text-sm text-slate-600 mt-2';
       meta.textContent = `${adminSafeText(w.district)} • ${adminSafeText(w.verification_status, 'Pending')}`;
+      const contact = document.createElement('p'); contact.className = 'text-base font-bold text-blue-900 mt-2'; contact.textContent = `Phone: ${adminSafeText(w.Phone, 'Not provided')}`;
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'mt-4 w-full rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white px-4 py-3 font-bold';
       btn.textContent = 'View Full Profile & Documents';
       btn.addEventListener('click', () => showAdminWorkerDetail(w));
-      card.append(name, code, skill, meta, btn);
+      card.append(name, code, skill, meta, contact, btn);
       adminWorkerList.append(card);
     });
   }
@@ -2809,13 +2898,13 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
     if(!filtered.length){host.innerHTML='<p class="text-sm text-slate-500">No booking requests match this filter.</p>';return;}
     const canManage=currentAdminRole!=='sub_admin' && (currentAdminRole==='main_admin'||currentAdminRole==='admin');
     host.innerHTML=filtered.map(row=>{
-      const apps=(row.applications||[]).map(a=>`<div class="border-t border-slate-200 mt-3 pt-3"><p class="text-sm font-bold">${esc(a.worker_name||'Worker')} · ${esc(a.status||'pending')}</p><p class="text-xs text-slate-600 mt-1">${esc(a.message||'No application message')}</p><p class="text-xs text-slate-500 break-all">Application ID: ${esc(a.id)}</p><p class="text-xs text-slate-500 break-all">Worker Auth User ID: ${esc(a.worker_user_id||'Unavailable')}</p></div>`).join('')||'<p class="text-sm text-slate-500 mt-3">No worker applications yet.</p>';
+      const apps=(row.applications||[]).map(a=>`<div class="border-t border-slate-200 mt-3 pt-3"><p class="text-sm font-bold">${esc(a.worker_name||'Worker')} · ${esc(a.status||'pending')}</p><p class="text-sm font-bold text-blue-900">Worker Phone: ${esc(a.worker_phone||'Not available')}</p><p class="text-sm break-all">Worker Email: ${esc(a.worker_email||'Not available')}</p><p class="text-sm">Worker ID: ${esc(a.worker_public_id||'Pending ID')} · ${esc(a.worker_district||'District unavailable')}</p><p class="text-xs text-slate-600 mt-1">${esc(a.message||'No application message')}</p><p class="text-xs text-slate-500 break-all">Application ID: ${esc(a.id)}</p><p class="text-xs text-slate-500 break-all">Worker Auth User ID: ${esc(a.worker_user_id||'Unavailable')}</p></div>`).join('')||'<p class="text-sm text-slate-500 mt-3">No worker applications yet.</p>';
       const status=String(row.status||'open').toLowerCase();
       const accepted=(row.applications||[]).some(a=>String(a.status||'').toLowerCase()==='accepted');
       const options=['open','assigned','completed','cancelled'].map(v=>`<option value="${v}" ${status===v?'selected':''}>${v.charAt(0).toUpperCase()+v.slice(1)}</option>`).join('');
       const updateControl=canManage?`<div class="mt-4 border-t border-slate-200 pt-3"><label class="block text-xs font-bold text-slate-600 mb-2" for="admin-booking-status-${esc(row.id)}">Update booking status</label><div class="flex gap-2"><select id="admin-booking-status-${esc(row.id)}" class="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2" data-admin-booking-status="${esc(row.id)}">${options}</select><button type="button" data-admin-update-booking="${esc(row.id)}" class="rounded-lg bg-emerald-800 text-white px-3 py-2 text-sm font-bold">Save</button></div><p class="text-xs text-slate-500 mt-1">Assigned status requires an accepted worker application.</p></div>`:'';
       const badge=status.replace(/</g,'&lt;');
-      return `<article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><div class="flex flex-wrap justify-between gap-2"><h3 class="font-black text-slate-900">${esc(row.service_title||'Service request')}</h3><span class="rounded-full px-3 py-1 text-xs font-bold ${status==='completed'?'bg-emerald-100 text-emerald-800':status==='cancelled'?'bg-rose-100 text-rose-800':status==='assigned'?'bg-violet-100 text-violet-800':'bg-blue-100 text-blue-800'}">${esc(badge)}</span></div><p class="text-sm text-slate-600 mt-2">${esc(row.district||'District not set')} · ${esc(row.address||'Address not set')}</p><p class="text-sm mt-2"><strong>Customer:</strong> ${esc(row.customer_name||'Customer account')}</p><p class="text-xs text-slate-500 break-all"><strong>Customer User ID:</strong> ${esc(row.customer_id||'Unavailable')}</p><p class="text-sm"><strong>Budget:</strong> ${esc(row.budget_lkr==null?'Not specified':'LKR '+Number(row.budget_lkr).toLocaleString('en-LK'))}</p><p class="text-sm"><strong>Preferred date:</strong> ${esc(row.preferred_date||'Flexible')}</p><p class="text-xs text-slate-500 mt-2">Created: ${row.created_at?new Date(row.created_at).toLocaleString():'Date unavailable'}</p><p class="text-sm text-slate-700 mt-3">${esc(row.description||'No description supplied')}</p><div class="mt-3"><p class="text-xs font-black uppercase tracking-wide text-slate-500">Worker applications (${(row.applications||[]).length})</p>${apps}</div>${updateControl}</article>`;
+      return `<article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><div class="flex flex-wrap justify-between gap-2"><h3 class="font-black text-slate-900">${esc(row.service_title||'Service request')}</h3><span class="rounded-full px-3 py-1 text-xs font-bold ${status==='completed'?'bg-emerald-100 text-emerald-800':status==='cancelled'?'bg-rose-100 text-rose-800':status==='assigned'?'bg-violet-100 text-violet-800':'bg-blue-100 text-blue-800'}">${esc(badge)}</span></div><p class="text-sm text-slate-600 mt-2">${esc(row.district||'District not set')} · ${esc(row.address||'Address not set')}</p><p class="text-sm mt-2"><strong>Customer:</strong> ${esc(row.customer_name||'Customer account')}</p><p class="text-sm font-bold text-blue-900"><strong>Customer Phone:</strong> ${esc(row.customer_phone||'Not available')}</p><p class="text-sm break-all"><strong>Customer Email:</strong> ${esc(row.customer_email||'Not available')}</p><p class="text-xs text-slate-500 break-all"><strong>Customer User ID:</strong> ${esc(row.customer_id||'Unavailable')}</p><p class="text-sm"><strong>Budget:</strong> ${esc(row.budget_lkr==null?'Not specified':'LKR '+Number(row.budget_lkr).toLocaleString('en-LK'))}</p><p class="text-sm"><strong>Preferred date:</strong> ${esc(row.preferred_date||'Flexible')}</p><p class="text-xs text-slate-500 mt-2">Created: ${row.created_at?new Date(row.created_at).toLocaleString():'Date unavailable'}</p><p class="text-sm text-slate-700 mt-3">${esc(row.description||'No description supplied')}</p><div class="mt-3"><p class="text-xs font-black uppercase tracking-wide text-slate-500">Worker applications (${(row.applications||[]).length})</p>${apps}</div>${updateControl}</article>`;
     }).join('');
   }
   async function loadAdminBookings() {
@@ -2833,17 +2922,17 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
       if(jobIds.length){const {data,error}=await supabaseClient.from('job_applications').select('id,job_id,worker_id,message,status,created_at').in('job_id',jobIds).order('created_at',{ascending:false});if(error)throw error;apps=data||[];}
       const workerIds=[...new Set(apps.map(a=>a.worker_id).filter(Boolean))];
       const [customersResult,workersResult]=await Promise.all([
-        customerIds.length?supabaseClient.from('customer_profiles').select('id,full_name').in('id',customerIds):Promise.resolve({data:[],error:null}),
-        workerIds.length?supabaseClient.from('worker_profiles').select('id,user_id,full_name').in('id',workerIds):Promise.resolve({data:[],error:null})
+        customerIds.length?supabaseClient.from('customer_profiles').select('id,full_name,email,phone,district,address').in('id',customerIds):Promise.resolve({data:[],error:null}),
+        workerIds.length?supabaseClient.from('worker_profiles').select('id,user_id,full_name,email,"Phone",district,address,worker_public_id,worker_code').in('id',workerIds):Promise.resolve({data:[],error:null})
       ]);
       if(customersResult.error)throw customersResult.error;
       if(workersResult.error)throw workersResult.error;
-      const customerMap=new Map((customersResult.data||[]).map(x=>[x.id,x.full_name]));
-      const workerMap=new Map((workersResult.data||[]).map(x=>[x.id,x.full_name]));
+      const customerMap=new Map((customersResult.data||[]).map(x=>[x.id,x]));
+      const workerMap=new Map((workersResult.data||[]).map(x=>[x.id,x]));
       const workerUserMap=new Map((workersResult.data||[]).map(x=>[x.id,x.user_id]));
       const appMap=new Map();
-      for(const a of apps){if(!appMap.has(a.job_id))appMap.set(a.job_id,[]);appMap.get(a.job_id).push({...a,worker_name:workerMap.get(a.worker_id)||'Worker',worker_user_id:workerUserMap.get(a.worker_id)||null});}
-      adminBookingCache=jobRows.map(j=>({...j,customer_name:customerMap.get(j.customer_id)||'Customer account',applications:appMap.get(j.id)||[]}));
+      for(const a of apps){if(!appMap.has(a.job_id))appMap.set(a.job_id,[]);const worker=workerMap.get(a.worker_id)||{};appMap.get(a.job_id).push({...a,worker_name:worker.full_name||'Worker',worker_phone:worker.Phone||'',worker_email:worker.email||'',worker_district:worker.district||'',worker_public_id:worker.worker_public_id||worker.worker_code||'',worker_user_id:workerUserMap.get(a.worker_id)||null});}
+      adminBookingCache=jobRows.map(j=>{const customer=customerMap.get(j.customer_id)||{};return {...j,customer_name:customer.full_name||'Customer account',customer_phone:customer.phone||'',customer_email:customer.email||'',customer_district:customer.district||'',customer_address:customer.address||'',applications:appMap.get(j.id)||[]};});
       const count=(id,n)=>{const el=document.getElementById(id);if(el)el.textContent=String(n);};
       count('adminBookingTotal',jobRows.length);count('adminBookingOpen',jobRows.filter(j=>String(j.status||'').toLowerCase()==='open').length);count('adminBookingAssigned',jobRows.filter(j=>String(j.status||'').toLowerCase()==='assigned').length);count('adminBookingCompleted',jobRows.filter(j=>String(j.status||'').toLowerCase()==='completed').length);count('adminBookingCancelled',jobRows.filter(j=>String(j.status||'').toLowerCase()==='cancelled').length);
       renderAdminBookings();message.textContent=`Loaded ${jobRows.length} request(s) and ${apps.length} worker application(s).`;
@@ -2940,9 +3029,11 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
         const name=document.createElement('h3'); name.className='text-lg font-black text-slate-900'; name.textContent=adminSafeText(c.full_name,'Customer');
         const code=document.createElement('p'); code.className='text-base font-black text-blue-800 mt-2'; code.textContent=`Customer ID: ${c.customer_public_id ? 'CUS-'+c.customer_public_id : 'Pending ID'}`;
         const district=document.createElement('p'); district.className='text-sm text-slate-600 mt-2'; district.textContent=`District: ${adminSafeText(c.district)}`;
+        const phone=document.createElement('p'); phone.className='text-base font-bold text-blue-900 mt-2'; phone.textContent=`Phone: ${adminSafeText(c.phone,'Not provided')}`;
+        const email=document.createElement('p'); email.className='text-sm text-slate-700 mt-1 break-all'; email.textContent=`Email: ${adminSafeText(c.email)}`;
         const date=document.createElement('p'); date.className='text-xs text-slate-500 mt-1'; date.textContent=`Registered: ${c.created_at?new Date(c.created_at).toLocaleString():'Not available'}`;
         const btn=document.createElement('button'); btn.type='button'; btn.className='mt-4 w-full rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white px-4 py-3 font-bold'; btn.textContent='View Full Customer Profile'; btn.addEventListener('click',()=>showAdminCustomerDetail(c));
-        card.append(name,code,district,date,btn); list.append(card);
+        card.append(name,code,district,phone,email,date,btn); list.append(card);
       });
     } catch(error){msg.textContent=`Could not load customers: ${error.message||'Customer view permission required.'}`;}
   }
@@ -3261,8 +3352,9 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
     const {data:jobs,error}=await supabaseClient.from('job_posts').select('*').eq('customer_id',user.id).order('created_at',{ascending:false});
     if(error){host.textContent='Could not load your jobs: '+error.message;return;}
     if(!jobs?.length){host.innerHTML='<p class="text-sm text-slate-500">You have not posted a job yet.</p>';return;}
-    const {data:publicWorkers, error:workersError}=await supabaseClient.rpc('get_public_worker_profiles');
-    if(workersError){say('customerJobMessage','Applications loaded, but worker profiles could not be loaded: '+workersError.message,true);}
+    // Customer-specific RPC returns only workers who applied to this customer's own jobs.
+    const {data:publicWorkers, error:workersError}=await supabaseClient.rpc('get_customer_application_worker_profiles');
+    if(workersError){say('customerJobMessage','Applications loaded, but worker details could not be loaded. Run the Index 017 SQL setup: '+workersError.message,true);}
     const publicWorkerMap=new Map((publicWorkers||[]).map(w=>[String(w.worker_id),w]));
     host.innerHTML='';
     for(const j of jobs){
@@ -3277,10 +3369,12 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
           const row=document.createElement('div');row.className='border-t border-slate-200 mt-3 pt-3';
           const worker=publicWorkerMap.get(String(a.worker_id));
           const workerName=worker?.full_name||'Worker profile details unavailable';
-          const avatarUrl=worker?.photo_url||worker?.avatar_url||worker?.profile_photo_url||'';
-          const avatar=avatarUrl?`<img src="${esc(avatarUrl)}" alt="Worker profile">`:esc((workerName.trim()[0]||'W').toUpperCase());
+          // selfie_storage_path is a private verification selfie, never expose it as a public profile photo.
+          const avatar=esc((workerName.trim()[0]||'W').toUpperCase());
           const skillText=Array.isArray(worker?.skills)?worker.skills.join(', '):(worker?.skills||'Not listed');
-          row.innerHTML=`<div class="cl-app-worker-profile rounded-xl bg-emerald-50 p-3 mb-3"><div class="cl-app-worker-avatar">${avatar}</div><div><p class="font-black text-emerald-950 text-lg">${esc(workerName)}</p><p class="text-xs text-slate-600">Worker ID: ${esc(worker?.public_id||worker?.worker_code||String(a.worker_id).slice(0,8))}</p><span class="inline-flex mt-1 rounded-full bg-emerald-100 text-emerald-800 px-2 py-1 text-xs font-bold">${esc(worker?.verification_status||'Application received')}</span></div></div><div class="grid sm:grid-cols-2 gap-2 text-sm mb-3"><p><strong>District:</strong> ${esc(worker?.district||'Not listed')}</p><p><strong>Skills:</strong> ${esc(skillText)}</p><p><strong>Experience:</strong> ${worker?.experience_years==null?'Not listed':esc(worker.experience_years)+' years'}</p><p><strong>Service Price:</strong> ${esc(money(worker?.service_price_lkr))}</p></div><p class="text-sm font-bold">Application · ${esc(a.status)}</p><p class="text-sm text-slate-600 mt-1">${esc(a.message||'No message supplied')}</p>${!worker?'<p class="text-xs text-amber-700 mt-2">Public worker profile is unavailable. The application reference is shown below.</p>':''}<p class="cl-muted mt-1">Worker reference: ${esc(String(a.worker_id).slice(0,8))}</p><div class="flex flex-wrap gap-2 mt-3"><button type="button" class="cl-action light" data-chat-worker="${esc(a.worker_id)}">Message Worker</button>${j.status==='open'&&a.status==='pending'?`<button type="button" class="cl-action" data-accept-app="${esc(a.id)}">Accept</button><button type="button" class="cl-action blue" data-reject-app="${esc(a.id)}">Reject</button>`:''}</div>`;
+          const workerId=worker?.worker_public_id ? ('WRK-'+String(worker.worker_public_id).replace(/^WRK-/i,'')) : (worker?.worker_code||String(a.worker_id).slice(0,8));
+          const phoneLine=worker?.phone ? `<p><strong>Phone:</strong> <a class="font-bold text-blue-700 underline" href="tel:${esc(worker.phone)}">${esc(worker.phone)}</a></p>` : '<p><strong>Phone:</strong> Private — use Clean Lanka chat</p>';
+          row.innerHTML=`<div class="cl-app-worker-profile rounded-xl bg-emerald-50 p-3 mb-3"><div class="cl-app-worker-avatar">${avatar}</div><div><p class="font-black text-emerald-950 text-lg">${esc(workerName)}</p><p class="text-xs text-slate-600">Worker ID: ${esc(workerId)}</p><span class="inline-flex mt-1 rounded-full bg-emerald-100 text-emerald-800 px-2 py-1 text-xs font-bold">Verification: ${esc(worker?.verification_status||'Not available')}</span></div></div><div class="grid sm:grid-cols-2 gap-2 text-sm mb-3"><p><strong>District:</strong> ${esc(worker?.district||'Not listed')}</p><p><strong>Skills:</strong> ${esc(skillText)}</p><p><strong>Experience:</strong> ${worker?.experience_years==null?'Not listed':esc(worker.experience_years)+' years'}</p><p><strong>Service Price:</strong> ${esc(money(worker?.service_price_lkr))}</p><p><strong>Availability:</strong> ${esc(worker?.availability||'Not listed')} ${worker?.is_available===true?'(Available for applications)':worker?.is_available===false?'(Not currently accepting jobs)':''}</p><p><strong>Clearance:</strong> ${esc(worker?.clearance_label||'Not specified')}</p><p><strong>Police clearance:</strong> ${esc(worker?.police_clearance_status||'Not specified')}</p><p><strong>GN certificate:</strong> ${esc(worker?.gn_certificate_status||'Not specified')}</p>${phoneLine}</div><p class="text-sm font-bold">Application · ${esc(a.status)}</p><p class="text-sm text-slate-600 mt-1">${esc(a.message||'No message supplied')}</p>${!worker?'<p class="text-xs text-amber-700 mt-2">Worker details could not be loaded. Run the Index 017 SQL setup and refresh.</p>':''}<p class="cl-muted mt-1">Worker reference: ${esc(String(a.worker_id).slice(0,8))}</p><div class="flex flex-wrap gap-2 mt-3"><button type="button" class="cl-action light" data-chat-worker="${esc(a.worker_id)}">Message Worker</button>${j.status==='open'&&a.status==='pending'?`<button type="button" class="cl-action" data-accept-app="${esc(a.id)}">Accept</button><button type="button" class="cl-action blue" data-reject-app="${esc(a.id)}">Reject</button>`:''}</div>`;
           appHost.appendChild(row);
         }
       }
@@ -3305,14 +3399,25 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
   }
 
   async function loadConversations(role){
-    const user=window.clCurrentUser||await getUser();if(!user)return;
+    const host=$(role==='customer'?'customerConversationList':'workerConversationList');
+    if(!host)return;
+    host.innerHTML='<p class="text-sm text-slate-500">Loading messages...</p>';
+    const user=window.clCurrentUser||await getUser();
+    if(!user){host.innerHTML='<p class="text-sm text-amber-700">Please sign in to view messages.</p>';return;}
+    let workerProfileId=activeWorkerProfileId;
+    if(role==='worker'&&!workerProfileId){
+      const {data:profile,error:profileError}=await supabaseClient.from('worker_profiles').select('id').eq('user_id',user.id).maybeSingle();
+      if(profileError){host.innerHTML='<p class="text-sm text-red-700">Could not identify your Worker profile: '+esc(profileError.message)+'</p>';return;}
+      workerProfileId=profile?.id||null;
+      if(workerProfileId)activeWorkerProfileId=workerProfileId;
+    }
+    if(role==='worker'&&!workerProfileId){host.innerHTML='<p class="text-sm text-amber-700">Your Worker profile is not linked to this login yet. Please contact Clean Lanka support.</p>';return;}
     let query=supabaseClient.from('conversations').select('id,customer_id,worker_id,created_at').order('created_at',{ascending:false});
-    if(role==='customer')query=query.eq('customer_id',user.id);else if(activeWorkerProfileId)query=query.eq('worker_id',activeWorkerProfileId);else return;
+    if(role==='customer')query=query.eq('customer_id',user.id);else query=query.eq('worker_id',workerProfileId);
     const {data,error}=await query;
-    const host=$(role==='customer'?'customerConversationList':'workerConversationList');if(!host)return;
-    if(error){host.textContent='Could not load conversations: '+error.message;return;}
-    if(!data?.length){host.innerHTML='<p class="text-sm text-slate-500">No conversations yet.</p>';return;}
-    host.innerHTML=data.map(c=>`<button class="w-full text-left border rounded-xl p-3 hover:bg-emerald-50" data-open-${role}-chat="${esc(c.id)}"><strong>${role==='customer'?'Worker':'Customer'} conversation</strong><span class="block cl-muted">Started ${new Date(c.created_at).toLocaleDateString()}</span></button>`).join('');
+    if(error){host.innerHTML='<p class="text-sm text-red-700">Could not load customer messages: '+esc(error.message)+'</p>';return;}
+    if(!data?.length){host.innerHTML='<p class="text-sm text-slate-500">No customer messages yet. New conversations will appear here.</p>';return;}
+    host.innerHTML=data.map(c=>`<button type="button" class="w-full text-left border rounded-xl p-3 hover:bg-emerald-50" data-open-${role}-chat="${esc(c.id)}"><strong>${role==='customer'?'Worker':'Customer'} conversation</strong><span class="block cl-muted">Started ${new Date(c.created_at).toLocaleDateString()}</span><span class="block text-xs text-emerald-800 mt-1">Open messages →</span></button>`).join('');
   }
 
   async function loadChatMessages(conversationId,hostId){
@@ -3346,6 +3451,7 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
   });
   $('customerChatForm')?.addEventListener('submit',e=>{e.preventDefault();sendChatMessage('customer');});
   $('workerChatForm')?.addEventListener('submit',e=>{e.preventDefault();sendChatMessage('worker');});
+  $('workerRefreshConversations')?.addEventListener('click',()=>loadConversations('worker'));
 
   document.addEventListener('click',async e=>{
     const t=e.target.closest('button');if(!t)return;
@@ -3601,5 +3707,21 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
 })();
 </script>
 
+<script>
+
+// Index 019: marketplace-style account menus and dashboard navigation.
+(function(){
+  function closeMenus(){document.querySelectorAll('.cl-account-dropdown.open').forEach(el=>el.classList.remove('open'));document.querySelectorAll('[data-cl-menu-toggle][aria-expanded="true"]').forEach(el=>el.setAttribute('aria-expanded','false'));}
+  document.addEventListener('click',function(e){
+    const toggle=e.target.closest('[data-cl-menu-toggle]');
+    if(toggle){const menu=document.getElementById(toggle.dataset.clMenuToggle);const opening=menu&&!menu.classList.contains('open');closeMenus();if(menu&&opening){menu.classList.add('open');toggle.setAttribute('aria-expanded','true');}return;}
+    const go=e.target.closest('[data-cl-go]');
+    if(go){const target=document.getElementById(go.dataset.clGo);closeMenus();if(target){target.scrollIntoView({behavior:'smooth',block:'start'});target.classList.add('cl-nav-highlight');setTimeout(()=>target.classList.remove('cl-nav-highlight'),1100);}return;}
+    if(!e.target.closest('.cl-account-menu-wrap'))closeMenus();
+  });
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenus();});
+})();
+
+</script>
 </body>
 </html>
