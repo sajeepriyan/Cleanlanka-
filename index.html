@@ -3519,8 +3519,24 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       document.getElementById('adminBookingsSection').classList.toggle('hidden',!adminHasPermission('bookings_view'));
       document.getElementById('adminNotificationsSection').classList.toggle('hidden',!['main_admin','admin'].includes(currentAdminRole));
       const dashboardMessage=document.getElementById('adminDashboardMessage');
-      try { await loadAdminDashboardSummary(); dashboardMessage.textContent='Admin verified. Dashboard summary loaded.'; }
-      catch(summaryError) { dashboardMessage.textContent=`Admin verified, but summary could not load: ${summaryError.message}`; }
+      const canViewSummary=adminHasPermission('workers_view')||adminHasPermission('customers_view');
+      if(canViewSummary){
+        try { await loadAdminDashboardSummary(); dashboardMessage.textContent='Admin verified. Dashboard summary loaded.'; }
+        catch(summaryError) { dashboardMessage.textContent=`Admin verified, but summary could not load: ${summaryError.message}`; }
+      }else{
+        ['adminTotalMembers','adminCustomerCount','adminWorkerCount','adminPendingWorkerCount','adminApprovedWorkerCount'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='Restricted';});
+        dashboardMessage.textContent='Sub Admin signed in. Summary access is not included in your assigned permissions.';
+      }
+      document.querySelectorAll('#adminDashboard .admin-nav a').forEach(link=>{
+        const href=link.getAttribute('href');
+        const permitted=href==='#adminSubAdminsHeading'?currentAdminRole==='main_admin':
+          href==='#adminWorkersHeading'?adminHasPermission('workers_view'):
+          href==='#adminCustomersHeading'?adminHasPermission('customers_view'):
+          href==='#adminBookingsHeading'?adminHasPermission('bookings_view'):
+          href==='#adminNotificationsHeading'?['main_admin','admin'].includes(currentAdminRole):true;
+        link.hidden=!permitted;
+        link.style.display=permitted?'':'none';
+      });
       const tasks=[];
       if(adminHasPermission('workers_view')) tasks.push(loadAdminWorkers());
       if(adminHasPermission('customers_view')) tasks.push(loadAdminCustomers());
