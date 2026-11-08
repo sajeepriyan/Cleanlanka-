@@ -5522,6 +5522,25 @@ document.addEventListener('DOMContentLoaded',function(){
   });
  }
  if(list)new MutationObserver(addDeletes).observe(list,{childList:true,subtree:true});addDeletes();
+ function addResendButtons(){
+  list?.querySelectorAll('article').forEach(card=>{
+   if(card.querySelector('.cl-subadmin-resend'))return;
+   const txt=card.textContent||'';
+   if(!/pending|inactive|invitation/i.test(txt))return;
+   const id=(card.getAttribute('data-user-id')||txt.match(/[0-9a-f]{8}-[0-9a-f-]{27,}/i)?.[0]||'');
+   if(!id)return;
+   const button=document.createElement('button');button.type='button';button.className='cl-subadmin-resend rounded-xl border border-blue-600 px-3 py-2 font-bold text-blue-800';button.textContent='Resend activation email';
+   button.onclick=async()=>{button.disabled=true;button.textContent='Sending...';try{
+    const {data:{session}}=await client.auth.getSession();if(!session?.access_token)throw new Error('Sign in as Main Admin again.');
+    const response=await fetch('https://eudzypjjnoiboqzqrlin.supabase.co/functions/v1/manage-sub-admin',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'resend_pending',user_id:id,session_token:session.access_token})});
+    const result=await response.json();if(!response.ok||result.error)throw new Error(result.error||'Email could not be sent');
+    button.textContent='Email requested';alert('A new recovery email was requested. Open the newest link in the invited mailbox.');
+   }catch(err){button.textContent='Resend activation email';alert(err.message);}finally{button.disabled=false;}};
+   (card.querySelector('div.mt-3')||card).appendChild(button);
+  });
+ }
+ if(list)new MutationObserver(addResendButtons).observe(list,{childList:true,subtree:true});addResendButtons();
+
  const invite=new URLSearchParams(location.search).has('cl_subadmin_invite');
  if(!invite)return;
  const screen=document.getElementById('clSubAdminInviteScreen');screen.classList.add('cl-open');
