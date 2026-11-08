@@ -5502,7 +5502,7 @@ document.addEventListener('DOMContentLoaded',function(){
    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent='Enter a valid email.';return;}
    const permissions={};document.querySelectorAll('#newSubAdminPermissions input[type="checkbox"]').forEach(x=>permissions[x.value]=x.checked);
    btn.disabled=true;msg.textContent='Sending invitation...';
-   try{await call({action:'invite',email,permissions});msg.textContent='Invitation sent. The person must open their email and create a password.';form.reset();document.getElementById('adminRefreshSubAdmins')?.click();}
+   try{const {data:{session},error:sessionError}=await client.auth.getSession();if(sessionError||!session?.access_token)throw new Error('Please sign in as Main Admin again.');const response=await fetch('https://eudzypjjnoiboqzqrlin.supabase.co/functions/v1/manage-sub-admin',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'invite',email,permissions,session_token:session.access_token})});const result=await response.json().catch(()=>({error:'Invalid server response'}));if(!response.ok||result.error)throw new Error(result.error||'Invitation request failed');msg.textContent='Invitation sent. The person must open their email and create a password.';form.reset();document.getElementById('adminRefreshSubAdmins')?.click();}
    catch(err){msg.textContent='Invitation failed: '+err.message;}finally{btn.disabled=false;}
   },true);
  }
