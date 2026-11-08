@@ -827,6 +827,66 @@ body.customer-dashboard-mode > #customerDashboard{
  #customerConversationList .cl076-chat-row .cl073-avatar{width:46px!important;height:46px!important}
 }
 </style>
+<style id="cl078-reference-homepage">
+/* Homepage visual refresh — all existing dashboard, search and auth handlers retained */
+body:not(.worker-dashboard-mode):not(.customer-dashboard-mode):not(.admin-dashboard-mode)>.bg-primary:first-of-type{display:none!important}
+.cl-home-nav{background:#fff!important;box-shadow:0 4px 20px #0c3b6712!important;border-bottom:1px solid #e6f0f2!important}
+.cl-home-nav-inner{max-width:1536px!important;min-height:94px!important;padding:8px 28px!important}
+.cl-home-brand img{width:95px!important;height:83px!important;object-fit:contain!important}
+.cl-home-brand-name{font-size:clamp(31px,3vw,46px)!important;font-weight:950!important;color:#08763b!important}
+.cl-home-brand-name span{color:#083e88!important}
+.cl-home-brand-sub{font-size:14px!important;color:#0e2450!important}
+.cl-home-navlinks{gap:clamp(11px,1.3vw,24px)!important;font-size:14px!important;color:#0b2148!important}
+.cl-home-navlinks a:first-child{color:#0b4389!important;border-bottom:2px solid #0b4389!important}
+.cl-home-nav-actions .cl-home-login{border-radius:28px!important;padding:12px 20px!important;background:#0a428c!important;color:#fff!important}
+.cl-hero{min-height:385px!important;position:relative!important;background-image:linear-gradient(90deg,rgba(232,248,255,.78) 0%,rgba(245,251,255,.55) 45%,rgba(255,255,255,.04) 100%),url("https://lh3.googleusercontent.com/aida-public/AB6AXuAAjzqKxdAox3eqmZOqvb-P20ajbGbGrhmK7F_AP9x9R36XBKoEPPhLaJN-StESJ9ry-9Qqcu9pB6Fr6scLS_Jz_m6hGDNVCRzdeWwfpGYiKaZJsfh69gczSzwcKhTnF5Gml1cWUZZ4USUjTyVy4-9VVnW-KAEqGUXxGrDhbpFmba_uQ6z6mhyG6W7jJQFQQI3SGUvNefx_j6lMuctsF9KDQhplff5U4uXqIiUM8PpN")!important;background-size:cover!important;background-position:center!important}
+.cl-hero-inner{max-width:1536px!important;padding:60px 28px 25px!important;text-align:center!important}
+.cl-hero h1{font-size:clamp(58px,7vw,108px)!important;letter-spacing:-4px!important;color:#0a3e89!important;font-weight:950!important;line-height:1.02!important;text-shadow:0 2px 4px #ffffffaa!important}
+.cl-hero h1 span{color:#07833c!important}
+.cl-hero-sub{font-size:clamp(21px,2.3vw,31px)!important;font-weight:900!important;color:#0c2150!important;margin:8px auto!important}
+.cl-hero-tag{font-size:clamp(20px,2vw,27px)!important;color:#057d38!important;font-style:italic!important;font-weight:900!important;margin:12px auto 25px!important}
+#heroMarketplaceSearchForm{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(170px,210px) minmax(175px,225px)!important;align-items:center!important;gap:10px!important;width:min(100%,1260px)!important;max-width:1260px!important;margin:0 auto!important;background:#fff!important;border:8px solid #a2e775!important;border-radius:35px!important;padding:8px!important;box-shadow:0 12px 30px #0d513533!important;box-sizing:border-box!important}
+#heroMarketplaceSearchForm input,#heroMarketplaceSearchForm select{width:100%!important;min-width:0!important;height:59px!important;border:1px solid #e3e9f0!important;border-radius:16px!important;background:#fff!important;color:#122344!important;font-size:17px!important;padding:0 16px!important}
+#heroMarketplaceSearchForm input{border-color:transparent!important}
+#heroMarketplaceSearchForm button{height:59px!important;min-width:0!important;border-radius:29px!important;background:linear-gradient(120deg,#087a38,#00a14b)!important;color:#fff!important;font-size:21px!important;font-weight:900!important;box-shadow:0 6px 14px #04803b30!important}
+#registration-choices{max-width:1000px!important;margin:26px auto 0!important;gap:16px!important}
+#services-section{background:linear-gradient(180deg,#f6fbff,#fff)!important;padding:12px 20px 18px!important}
+.cl-home-cats{max-width:1370px!important;margin:auto!important;gap:16px!important}
+.cl-home-cat{min-height:111px!important;border-radius:23px!important;background:#fff!important;border:1px solid #e3e9ef!important;box-shadow:0 8px 23px #0b33610c!important;font-weight:900!important;color:#102147!important}
+.cl-home-cat .material-symbols-outlined{font-size:42px!important;color:#0d63b9!important}
+.cl-home-cat:nth-child(1) .material-symbols-outlined{color:#e5a400!important}
+.cl-home-cat:nth-child(3) .material-symbols-outlined{color:#d18b18!important}
+.cl-home-cat:nth-child(6) .material-symbols-outlined{color:#00a44e!important}
+#homeMarketplace{background:#fff!important}
+#homeMarketplace .cl-market-wrap{max-width:1500px!important}
+#homeMarketplace .cl-market-grid{grid-template-columns:minmax(0,2.05fr) minmax(300px,.95fr)!important;gap:18px!important}
+#homeMarketplace .cl-market-jobs,#homeMarketplace .cl-market-trust{border-radius:24px!important;border:1px solid #e4eaf1!important;box-shadow:0 7px 24px #10234b0d!important}
+#homeMarketplace .cl-market-heading{font-size:clamp(24px,2vw,30px)!important;color:#102147!important}
+#homeMarketplace .cl-market-trust{background:linear-gradient(145deg,#e8fff0,#f4fff6)!important;border-color:#c9f0d5!important}
+#homeMarketplace .cl-market-register{border-radius:35px!important;background:linear-gradient(120deg,#007d37,#00a34c)!important}
+#homeJobResults{grid-template-columns:minmax(0,1fr)!important}
+@media(max-width:1000px){#homeMarketplace .cl-market-grid{grid-template-columns:minmax(0,1fr)!important}#homeMarketplace .cl-market-jobs,#homeMarketplace .cl-market-trust{grid-column:1!important;grid-row:auto!important}}
+@media(max-width:700px){
+ .cl-home-nav-inner{min-height:68px!important;padding:7px 12px!important}
+ .cl-home-brand img{width:54px!important;height:54px!important}
+ .cl-home-brand-name{font-size:clamp(23px,6vw,32px)!important}
+ .cl-home-brand-sub{font-size:10px!important}
+ .cl-home-navlinks{display:none!important}
+ .cl-home-nav-actions .cl-home-login{font-size:12px!important;padding:9px 11px!important}
+ .cl-hero{min-height:0!important;background-position:62% center!important}
+ .cl-hero-inner{padding:40px 12px 18px!important}
+ .cl-hero h1{font-size:clamp(48px,12vw,69px)!important;letter-spacing:-2px!important}
+ .cl-hero-sub{font-size:19px!important}
+ .cl-hero-tag{font-size:19px!important}
+ #heroMarketplaceSearchForm{grid-template-columns:minmax(0,1fr)!important;border-width:5px!important;border-radius:23px!important;gap:7px!important}
+ #heroMarketplaceSearchForm input,#heroMarketplaceSearchForm select,#heroMarketplaceSearchForm button{height:50px!important;font-size:15px!important}
+ #registration-choices{margin-top:18px!important}
+ #services-section{padding:12px!important}
+ .cl-home-cats{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+ .cl-home-cat{min-height:95px!important;border-radius:15px!important;font-size:12px!important;padding:9px 4px!important}
+ .cl-home-cat .material-symbols-outlined{font-size:30px!important}
+}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
