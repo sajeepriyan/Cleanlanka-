@@ -3454,7 +3454,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1480px!important;
     createSubAdminForm.addEventListener('submit',async(event)=>{
       event.preventDefault(); const msg=document.getElementById('subAdminFormMessage'); const button=document.getElementById('createSubAdminButton');
       const email=document.getElementById('newSubAdminEmail').value.trim();
-      if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){msg.textContent='Enter a valid registered email.';return;}
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent='Enter a valid registered email.';return;}
       button.disabled=true; msg.textContent='Finding registered account...';
       try{
         const {data:matches,error:lookupError}=await supabaseClient.rpc('lookup_sub_admin_user_by_email',{p_email:email});
