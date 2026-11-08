@@ -1256,6 +1256,29 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 #adminDashboard .admin-stat-card{border-radius:18px!important}
 @media(min-width:900px){#adminDashboard #adminWorkerDetail>div.grid:first-of-type{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:600px){#adminDashboard #adminWorkerDetail{padding:13px!important}#adminDashboard #adminWorkerDetail>div.grid:first-of-type{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}#adminDashboard #adminWorkerDetail>div.grid:first-of-type>div{padding:10px!important}#adminDashboard #adminWorkerDetail>div.grid:first-of-type>div p:last-child{font-size:13px!important}#adminDashboard #adminWorkerDetail>h3{font-size:18px!important}}
+</style><style id="cl-worker-premium-v2">
+#adminDashboard #adminWorkerDetail{background:linear-gradient(160deg,#f0faff,#fff 40%,#e9fff4)!important;padding:clamp(12px,2.5vw,28px)!important}
+#adminDashboard #adminWorkerDetail .cl-worker-hero{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;background:linear-gradient(115deg,#e0f7ec,#e1f0ff 60%,#fce6ee);border:1px solid #b9e4da;border-radius:19px;padding:17px;margin-bottom:18px;box-shadow:0 8px 25px #103c6720}
+#adminDashboard #adminWorkerDetail .cl-worker-hero-info{display:flex;align-items:center;gap:15px;min-width:0;flex:1}
+#adminDashboard #adminWorkerDetail .cl-worker-avatar{display:grid;place-items:center;flex:none;width:78px;height:78px;border-radius:18px;background:linear-gradient(140deg,#008d65,#1559b8);color:#fff;font-size:38px;font-weight:900}
+#adminDashboard #adminWorkerDetail .cl-worker-summary{min-width:0}
+#adminDashboard #adminWorkerDetail .cl-worker-summary h3{font-size:clamp(19px,2.5vw,27px)!important;color:#0c2544!important;font-weight:900!important;line-height:1.2;overflow-wrap:anywhere}
+#adminDashboard #adminWorkerDetail .cl-worker-summary p{font-size:14px!important;font-weight:700!important;color:#234d69!important;margin-top:7px}
+#adminDashboard #adminWorkerDetail .cl-worker-status-hero{display:flex;flex-direction:column;gap:7px;border:2px solid;border-radius:15px;padding:16px 20px;min-width:190px;text-align:center}
+#adminDashboard #adminWorkerDetail .cl-worker-status-hero strong{font-size:21px;font-weight:900;letter-spacing:.02em}
+#adminDashboard #adminWorkerDetail .cl-worker-status-hero small{font-size:12px;font-weight:750;line-height:1.4}
+#adminDashboard #adminWorkerDetail .cl-worker-fields{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+#adminDashboard #adminWorkerDetail .cl-worker-fields>div{background:#fff!important;border:1px solid #d3e3f4!important;border-left:5px solid #2a7fc3!important;box-shadow:0 3px 9px #173f6712!important;border-radius:12px!important;padding:13px!important}
+#adminDashboard #adminWorkerDetail .cl-worker-fields>div[data-cl-tone=good]{background:#e3f9ec!important;border-left-color:#16a34a!important}
+#adminDashboard #adminWorkerDetail .cl-worker-fields>div[data-cl-tone=bad]{background:#ffe6e9!important;border-left-color:#e11d48!important}
+#adminDashboard #adminWorkerDetail .cl-worker-fields>div[data-cl-tone=warn]{background:#fff2d3!important;border-left-color:#f59e0b!important}
+#adminDashboard #adminWorkerDetail .cl-worker-fields>div[data-cl-tone=info]{background:#e4f1ff!important;border-left-color:#2563eb!important}
+#adminDashboard #adminWorkerDetail .cl-worker-fields>div p:last-child{font-size:15px!important;font-weight:850!important;color:#0b2c4e!important}
+#adminDashboard #adminWorkerDetail .cl-worker-fields>div[data-cl-tone=bad] p:last-child{color:#b01238!important}
+#adminDashboard #adminWorkerDetail .cl-worker-fields>div[data-cl-tone=good] p:last-child{color:#086c3d!important}
+#adminDashboard #adminWorkerDetail>h4{background:linear-gradient(100deg,#d3f7e2,#cfe2ff)!important;border-left:6px solid #07865e!important;padding:15px!important;color:#123b66!important;font-size:20px!important}
+#adminDashboard #adminWorkerDetail>div.flex.flex-wrap button{padding:12px 18px!important;font-size:15px!important;box-shadow:0 5px 13px #0c3a6020}
+@media(max-width:600px){#adminDashboard #adminWorkerDetail .cl-worker-hero{padding:12px}#adminDashboard #adminWorkerDetail .cl-worker-avatar{width:56px;height:56px;font-size:27px}#adminDashboard #adminWorkerDetail .cl-worker-status-hero{width:100%;min-width:0}#adminDashboard #adminWorkerDetail .cl-worker-fields>div{padding:10px!important}#adminDashboard #adminWorkerDetail .cl-worker-fields>div p:last-child{font-size:13px!important}}
 </style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -3106,7 +3129,21 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const heading = document.createElement('h3');
     heading.className = 'text-xl font-black text-slate-900 mb-4';
     heading.textContent = `Worker Profile: ${adminSafeText(w.full_name, 'Unnamed worker')}`;
-    adminWorkerDetail.append(heading);
+    const status=String(w.verification_status||'pending').toLowerCase();
+    const statusStyle=status==='approved'?{bg:'#dcfce7',fg:'#166534',line:'#16a34a',icon:'✓'}:status==='rejected'?{bg:'#ffe4e6',fg:'#be123c',line:'#e11d48',icon:'✕'}:status.includes('more')?{bg:'#dbeafe',fg:'#1d4ed8',line:'#3b82f6',icon:'ⓘ'}:{bg:'#fef3c7',fg:'#92400e',line:'#f59e0b',icon:'◷'};
+    const hero=document.createElement('div');hero.className='cl-worker-hero';
+    const heroInfo=document.createElement('div');heroInfo.className='cl-worker-hero-info';
+    const avatar=document.createElement('div');avatar.className='cl-worker-avatar';avatar.textContent=String(w.full_name||'W').trim().charAt(0).toUpperCase();
+    const summary=document.createElement('div');summary.className='cl-worker-summary';
+    const name=document.createElement('h3');name.textContent=adminSafeText(w.full_name,'Worker');
+    const workerId=document.createElement('p');workerId.textContent=(w.worker_public_id?'WRK-'+w.worker_public_id:'Worker Profile')+'  •  '+adminSafeText(w.district,'Sri Lanka');
+    const trade=document.createElement('p');trade.textContent='🛠 '+adminSafeText(w.skills,'Service Worker')+'  •  '+adminSafeText(w.availability,'Availability unknown');
+    summary.append(name,workerId,trade);heroInfo.append(avatar,summary);
+    const badge=document.createElement('div');badge.className='cl-worker-status-hero';badge.style.background=statusStyle.bg;badge.style.color=statusStyle.fg;badge.style.borderColor=statusStyle.line;
+    const badgeTitle=document.createElement('strong');badgeTitle.textContent=statusStyle.icon+'  '+status.replace(/_/g,' ').toUpperCase();
+    const badgeDate=document.createElement('small');badgeDate.textContent='Current verification status'+(w.reviewed_at?' • Updated '+new Date(w.reviewed_at).toLocaleString():'');
+    badge.append(badgeTitle,badgeDate);hero.append(heroInfo,badge);
+    adminWorkerDetail.append(hero);
     const grid = document.createElement('div');
     grid.className = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-3';
     [
@@ -3130,6 +3167,15 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       else if (value==='rejected'||value==='no') card.classList.add('cl-rejected');
       else if (value.includes('pending')||value.includes('more_info')||value.includes('more info')) card.classList.add('cl-pending');
       else card.classList.add('cl-info');
+    });
+    grid.classList.add('cl-worker-fields');
+    [...grid.children].forEach(card=>{
+      const key=(card.firstElementChild?.textContent||'').trim().toLowerCase();
+      const value=(card.lastElementChild?.textContent||'').trim().toLowerCase();
+      if(['verification status','police clearance status','gn certificate status','available for work','clearance label'].includes(key)){
+        const tone=(value==='approved'||value==='verified'||value==='yes'||value==='clearance verified')?'good':(value==='rejected'||value==='no')?'bad':value.includes('pending')||value.includes('more')?'warn':'info';
+        card.dataset.clTone=tone;
+      }
     });
     adminWorkerDetail.append(grid);
     const docsTitle = document.createElement('h4');
