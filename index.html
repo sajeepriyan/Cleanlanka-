@@ -666,6 +666,28 @@ body.customer-dashboard-mode > #customerDashboard{
 #workerDashboard #workerConversationList .cl073-preview,#customerDashboard #customerConversationList .cl073-preview{display:block!important;white-space:nowrap!important;text-overflow:ellipsis!important;overflow:hidden!important}
 #workerDashboard #workerChatPanel,#customerDashboard #customerChatPanel{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important;box-sizing:border-box!important}
 </style>
+<style id="cl076-whatsapp-inbox">
+#workerDashboard #workerConversationList,#customerDashboard #customerConversationList{display:block!important;background:#fff!important;border:0!important;border-radius:18px!important;padding:0!important;max-width:100%!important;overflow:visible!important}
+#workerDashboard #workerConversationList>.cl076-inbox-top,#customerDashboard #customerConversationList>.cl076-inbox-top{display:flex!important;align-items:center!important;justify-content:space-between!important;padding:16px 14px 10px!important;border:0!important;margin:0!important;background:#fff!important}
+.cl076-inbox-top h2{font-size:27px!important;font-weight:900!important;color:#122a22!important;margin:0!important}.cl076-inbox-top>span{font-size:12px!important;color:#64748b!important}
+#workerConversationList>.cl076-search,#customerConversationList>.cl076-search{display:flex!important;align-items:center!important;gap:10px!important;margin:8px 12px 15px!important;padding:0 16px!important;background:#f1f5f9!important;border:0!important;border-radius:30px!important;height:49px!important}
+.cl076-search span{font-size:27px;color:#64748b}.cl076-search input{background:transparent!important;border:0!important;outline:0!important;box-shadow:none!important;min-width:0;width:100%;font-size:15px!important;color:#0f172a!important}
+#workerConversationList>.cl076-filters,#customerConversationList>.cl076-filters{display:flex!important;gap:8px!important;padding:4px 12px 15px!important;border:0!important;margin:0!important;background:#fff!important}
+.cl076-filters button{border:1px solid #e2e8f0!important;border-radius:30px!important;padding:8px 18px!important;background:#fff!important;color:#475569!important;font-size:14px!important;font-weight:650!important}
+.cl076-filters button.selected{background:#dcfce7!important;border-color:#bbf7d0!important;color:#166534!important}
+#workerConversationList>.cl076-list,#customerConversationList>.cl076-list{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:0!important;border:0!important;padding:0!important;margin:0!important;background:#fff!important;width:100%!important}
+#workerDashboard #workerConversationList .cl076-list>button.cl076-chat-row,#customerDashboard #customerConversationList .cl076-list>button.cl076-chat-row{display:flex!important;flex-direction:row!important;width:100%!important;max-width:100%!important;min-height:82px!important;align-items:center!important;text-align:left!important;gap:13px!important;margin:0!important;padding:12px 14px!important;background:#fff!important;border:0!important;border-bottom:1px solid #f1f5f9!important;border-radius:0!important;box-shadow:none!important;box-sizing:border-box!important}
+.cl076-chat-row[hidden]{display:none!important}
+.cl076-chat-row .cl073-avatar{width:52px!important;height:52px!important;flex:none!important;border-radius:50%!important;background:#dceee5!important;color:#116143!important;font-size:22px!important}
+.cl076-chat-row .cl073-chat-info{flex:1!important;min-width:0!important;overflow:hidden!important}
+.cl076-chat-row .cl073-chat-info strong{font-size:17px!important;font-weight:800!important;color:#111827!important}
+.cl076-chat-row .cl073-preview{font-size:14px!important;color:#64748b!important;display:block!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.cl076-chat-row .cl073-meta{flex:none!important;align-items:flex-end!important;min-width:64px!important;font-size:11px!important}
+.cl076-chat-row.cl073-new .cl073-count{background:#22c55e!important;color:#fff!important;border-radius:99px!important}
+#workerDashboard #workerConversationList .cl076-chat-row.cl073-new,#customerDashboard #customerConversationList .cl076-chat-row.cl073-new{background:#f6fdf8!important}
+.cl076-empty{padding:24px!important;color:#64748b!important;text-align:center}
+@media(max-width:600px){.cl076-chat-row .cl073-avatar{width:47px!important;height:47px!important}.cl076-chat-row .cl073-chat-info strong{font-size:16px!important}}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -3408,12 +3430,24 @@ body.customer-dashboard-mode > #customerDashboard{
       return {c,latest,unread:counts.get(c.id)||0,name:names.get(String(c.id))|| (role==='worker'?'Customer':'Worker')};
     }));
     rows.sort((a,b)=>new Date(b.latest?.created_at||b.c.created_at)-new Date(a.latest?.created_at||a.c.created_at));
-    host.innerHTML='<div class="cl073-inbox-head"><strong>Messages</strong><span>'+rows.filter(r=>r.unread>0).length+' unread chats</span></div>'+rows.map(({c,latest,unread,name})=>{
+    const currentFilter=host.dataset.clInboxFilter||'all';
+    const currentSearch=host.dataset.clInboxSearch||'';
+    const shownRows=rows.filter(r=>(currentFilter!=='unread'||r.unread>0)&&(!currentSearch||(r.name+' '+(r.latest?.message||'')).toLocaleLowerCase().includes(currentSearch.toLocaleLowerCase())));
+    host.innerHTML='<div class="cl076-inbox-top"><h2>Messages</h2><span>'+rows.filter(r=>r.unread>0).length+' unread</span></div><label class="cl076-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search chats..." aria-label="Search chats" value="'+esc(currentSearch)+'"></label><div class="cl076-filters"><button type="button" data-cl076-filter="all" class="'+(currentFilter==='all'?'selected':'')+'">All</button><button type="button" data-cl076-filter="unread" class="'+(currentFilter==='unread'?'selected':'')+'">Unread '+rows.filter(r=>r.unread>0).length+'</button></div><div class="cl076-list">'+shownRows.map(({c,latest,unread,name})=>{
       const time=new Date(latest?.created_at||c.created_at);
       const label=esc(String(name||'Contact'));const initials=esc(String(name||'C').trim().charAt(0).toUpperCase());
       const preview=esc(latest?.message||'Start a conversation');
-      return '<button type="button" class="cl073-chat-row '+(unread?'cl073-new':'')+'" data-open-'+role+'-chat="'+esc(c.id)+'"><span class="cl073-avatar">'+initials+'</span><span class="cl073-chat-info"><strong>'+label+'</strong><span class="cl073-preview">'+preview+'</span></span><span class="cl073-meta"><time>'+esc(time.toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))+'</time>'+(unread?'<span class="cl073-count">'+unread+'</span>':'<span class="cl073-read">✓</span>')+'</span></button>';
-    }).join('');
+      return '<button type="button" class="cl073-chat-row cl076-chat-row '+(unread?'cl073-new':'')+'" data-cl076-search="'+esc((name+' '+(latest?.message||'')).toLocaleLowerCase())+'" data-open-'+role+'-chat="'+esc(c.id)+'"><span class="cl073-avatar">'+initials+'</span><span class="cl073-chat-info"><strong>'+label+'</strong><span class="cl073-preview">'+preview+'</span></span><span class="cl073-meta"><time>'+esc(time.toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))+'</time>'+(unread?'<span class="cl073-count">'+unread+'</span>':'<span class="cl073-read">✓</span>')+'</span></button>';
+    }).join('')+'</div>';
+    if(!shownRows.length)host.querySelector('.cl076-list').innerHTML='<p class="cl076-empty">No matching chats</p>';
+    host.querySelector('.cl076-search input')?.addEventListener('input',e=>{
+      host.dataset.clInboxSearch=e.target.value;
+      const search=e.target.value.toLocaleLowerCase();
+      host.querySelectorAll('.cl076-chat-row').forEach(el=>el.hidden=!el.dataset.cl076Search.includes(search));
+    });
+    host.querySelectorAll('[data-cl076-filter]').forEach(b=>b.addEventListener('click',()=>{
+      host.dataset.clInboxFilter=b.dataset.cl076Filter;loadConversations(role);
+    }));
   }
 
   function startConversationListRefresh(role){
