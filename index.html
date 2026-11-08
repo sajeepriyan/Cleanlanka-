@@ -1667,7 +1667,7 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1480px!important;
   <section id="adminSubAdminsSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminSubAdminsHeading">
    <div class="mb-4"><h2 id="adminSubAdminsHeading" class="text-xl font-black text-slate-900">Sub Admin Permission Management</h2><p class="text-sm text-slate-500 mt-1">Create Sub Admin access, control permissions and activate or deactivate accounts.</p></div>
    <form id="adminCreateSubAdminForm" class="rounded-xl bg-slate-50 border border-slate-200 p-4 mb-5 space-y-3">
-    <label class="block text-sm font-bold text-slate-700" for="newSubAdminUserId">Sub Admin User ID (UUID from the registered account)</label><input id="newSubAdminUserId" required class="w-full rounded-xl border border-slate-300 px-3 py-3" placeholder="Paste the registered Supabase User ID">
+    <label class="block text-sm font-bold text-slate-700" for="newSubAdminEmail">Registered Sub Admin Email</label><input id="newSubAdminEmail" required type="email" autocomplete="off" class="w-full rounded-xl border border-slate-300 px-3 py-3" placeholder="Enter registered account email"><p class="text-xs text-slate-500">Only the Main Admin can look up a registered account. The selected account receives only the permissions you tick.</p>
     <p class="text-sm font-bold text-slate-700">Permissions</p><div id="newSubAdminPermissions" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
     <button id="createSubAdminButton" type="submit" class="rounded-xl bg-emerald-800 text-white px-5 py-3 font-bold">Create Sub Admin</button><p id="subAdminFormMessage" class="text-sm" role="status" aria-live="polite"></p>
    </form>
@@ -3453,10 +3453,16 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1480px!important;
     renderSubAdminPermissionInputs(document.getElementById('newSubAdminPermissions'));
     createSubAdminForm.addEventListener('submit',async(event)=>{
       event.preventDefault(); const msg=document.getElementById('subAdminFormMessage'); const button=document.getElementById('createSubAdminButton');
-      const userId=document.getElementById('newSubAdminUserId').value.trim();
-      if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(userId)){msg.textContent='Enter a valid registered Supabase User UUID.';return;}
-      button.disabled=true; msg.textContent='Creating Sub Admin...';
-      try{const {error}=await supabaseClient.rpc('create_sub_admin',{p_user_id:userId,p_permissions:readSubAdminPermissions(document.getElementById('newSubAdminPermissions'))});if(error)throw error;msg.textContent='Sub Admin created successfully.';createSubAdminForm.reset();renderSubAdminPermissionInputs(document.getElementById('newSubAdminPermissions'));await loadSubAdmins();}
+      const email=document.getElementById('newSubAdminEmail').value.trim();
+      if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){msg.textContent='Enter a valid registered email.';return;}
+      button.disabled=true; msg.textContent='Finding registered account...';
+      try{
+        const {data:matches,error:lookupError}=await supabaseClient.rpc('lookup_sub_admin_user_by_email',{p_email:email});
+        if(lookupError)throw lookupError;
+        if(!matches?.length)throw new Error('No registered account found for this email.');
+        const userId=matches[0].user_id;
+        msg.textContent='Creating Sub Admin...';
+        const {error}=await supabaseClient.rpc('create_sub_admin',{p_user_id:userId,p_permissions:readSubAdminPermissions(document.getElementById('newSubAdminPermissions'))});if(error)throw error;msg.textContent='Sub Admin created successfully.';createSubAdminForm.reset();renderSubAdminPermissionInputs(document.getElementById('newSubAdminPermissions'));await loadSubAdmins();}
       catch(error){msg.textContent=`Could not create Sub Admin: ${error.message||'Please check the User ID and permissions.'}`;}
       finally{button.disabled=false;}
     });
@@ -4302,6 +4308,33 @@ body.worker-dashboard-mode #clHomeProfileButton,body.customer-dashboard-mode #cl
 @media(max-width:600px){#clHomeProfileButton{width:49px;height:49px;left:10px;top:10px}#clDashboardHomeButton{left:10px;top:10px;padding:10px 14px}}
 </style>
 <button id="clHomeProfileButton" type="button" aria-label="Open my Clean Lanka dashboard" title="My Dashboard"></button>
+<button id="clAdminReturnButton" type="button" aria-label="Return to Admin Dashboard" style="display:none;position:fixed;right:12px;bottom:90px;z-index:2147483000;border:0;border-radius:999px;background:#065f46;color:#fff;padding:13px 18px;font-weight:800;box-shadow:0 5px 22px #0004">⚙ Admin Dashboard</button>
+<script id="cl-admin-return-v1">
+(function(){
+ const btn=document.getElementById('clAdminReturnButton');
+ const dashboard=document.getElementById('adminDashboard');
+ const login=document.getElementById('admin-login');
+ if(!btn||!dashboard||!login)return;
+ const inHome=()=>!['admin-dashboard-mode','admin-login-mode','worker-dashboard-mode','customer-dashboard-mode','registration-mode','login-page-mode'].some(c=>document.body.classList.contains(c));
+ function update(){btn.style.display=(inHome()&&dashboard.dataset.clAdminVisited==='yes')?'inline-flex':'none'}
+ new MutationObserver(update).observe(document.body,{attributes:true,attributeFilter:['class']});
+ document.addEventListener('click',function(e){if(e.target.closest('#adminLoginSubmit')||e.target.closest('#adminDashboard')){if(document.body.classList.contains('admin-dashboard-mode'))dashboard.dataset.clAdminVisited='yes';update()}});
+ btn.addEventListener('click',async function(){
+  btn.disabled=true;
+  try{
+   const client=window.supabaseClient;
+   if(!client)throw Error('Supabase unavailable');
+   const {data:{user},error}=await client.auth.getUser();
+   if(error||!user)throw Error('Sign in again');
+   const {data:row,error:roleError}=await client.from('admins').select('role,is_active').eq('user_id',user.id).maybeSingle();
+   if(roleError||!row?.is_active||!['main_admin','admin','sub_admin'].includes(row.role))throw Error('Admin sign in required');
+   document.body.classList.remove('admin-login-mode','login-page-mode','registration-mode','worker-dashboard-mode','customer-dashboard-mode','password-recovery-mode');
+   login.classList.add('hidden');dashboard.classList.remove('hidden');document.body.classList.add('admin-dashboard-mode');dashboard.scrollTop=0;
+  }catch(err){if(typeof window.openAdminLoginPage==='function')window.openAdminLoginPage();else window.location.href='/admin';}
+  finally{btn.disabled=false;update()}
+ });
+})();
+</script>
 <button id="clDashboardHomeButton" type="button" aria-label="Back to the first Clean Lanka page" title="Back to first page">← Back to First Page</button>
 <script id="clean-lanka-account-home-switch-v020-script">
 (function(){
