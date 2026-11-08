@@ -5533,7 +5533,7 @@ document.addEventListener('DOMContentLoaded',function(){
   const btn=formAccept.querySelector('button');btn.disabled=true;msg.textContent='Setting up your account...';
   try{
    const {data:{user},error:userError}=await client.auth.getUser();if(userError||!user)throw new Error('Open the original invitation link from your email again.');
-   const {error}=await client.auth.updateUser({password:pass});if(error)throw error;
+   const {error}=await client.auth.updateUser({password:pass});if(error && !/new password should be different from the old password/i.test(error.message||''))throw error;
    const {data:{session},error:sessionError}=await client.auth.getSession();if(sessionError||!session?.access_token)throw new Error('Invitation session expired. Open your email invitation again.');const response=await fetch('https://eudzypjjnoiboqzqrlin.supabase.co/functions/v1/manage-sub-admin',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'complete',session_token:session.access_token})});const result=await response.json().catch(()=>({error:'Invalid activation server response'}));if(!response.ok||result.error)throw new Error(result.error||'Activation failed');msg.textContent='Account activated. You can now sign in using your email and password.';
    formAccept.style.display='none';const done=document.createElement('button');done.textContent='Go to Clean Lanka';done.onclick=()=>location.assign('/');msg.after(done);
   }catch(err){msg.textContent=err.message;}finally{btn.disabled=false;}
