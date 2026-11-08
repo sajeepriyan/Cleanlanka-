@@ -1,3 +1,4 @@
+<!-- CLEAN LANKA — INDEX 030: dashboard Home visibility, left-side messaging, colourful panels and improved language switching.
 <!-- CLEAN LANKA — INDEX 027: dashboard Back navigation checkpoint + automatic customer/worker message refresh and previews. -->
 <!-- CLEAN LANKA — INDEX 026: approved homepage design layer; preserves Index 025 features. -->
 <!-- CLEAN LANKA — INDEX 023: Retains profile-to-dashboard/home navigation, responsive marketplace layout, logo sizing, WhatsApp support, and adds customer-entered multilingual job titles/search terms backed by Supabase. -->
@@ -438,12 +439,39 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
 /* Both Customer and Worker chat: scroll messages separately; keep the composer visible. */
 #workerChatWindow,#customerChatWindow{display:flex;flex-direction:column;min-width:0;overflow:visible}
 #workerChatWindow.hidden,#customerChatWindow.hidden{display:none!important}
-#workerChatMessages,#customerChatMessages{display:block;min-height:110px;max-height:42vh;overflow-y:auto;overscroll-behavior:contain;overflow-wrap:anywhere}
+#workerChatMessages,#customerChatMessages{display:block;height:280px;min-height:180px;max-height:42vh;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;overflow-anchor: none;overflow-wrap:anywhere;scroll-behavior:auto;-webkit-overflow-scrolling:touch;contain:layout paint}
 #workerChatForm,#customerChatForm{display:flex!important;align-items:stretch;gap:8px;margin-top:12px!important;width:100%;position:relative;z-index:2}
 #workerChatInput,#customerChatInput{display:block!important;visibility:visible!important;opacity:1!important;min-width:0;flex:1 1 auto;width:1%;min-height:48px;background:#fff!important;color:#0f172a!important;border:1px solid #94a3b8!important;border-radius:12px;padding:12px!important;font-size:16px!important}
 #workerChatForm button,#customerChatForm button{display:inline-flex!important;visibility:visible!important;opacity:1!important;flex:0 0 auto;min-width:76px;min-height:48px;align-items:center;justify-content:center;border-radius:12px;padding:10px 16px;font-weight:800}
 #workerChatMessage,#customerChatMessage{display:block;min-height:20px;overflow-wrap:anywhere}
 @media(max-width:640px){#workerChatForm,#customerChatForm{gap:6px}#workerChatForm button,#customerChatForm button{min-width:68px;padding:8px 10px}}
+</style>
+
+
+<style id="clean-lanka-dashboard-home-chat-language-v030">
+/* The fixed Home control is a direct body child: dashboard isolation rules hid it. */
+body.worker-dashboard-mode #clDashboardHomeButton,
+body.customer-dashboard-mode #clDashboardHomeButton,
+body.admin-dashboard-mode #clDashboardHomeButton{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;position:fixed!important;left:14px!important;top:14px!important;z-index:2147483000!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;}
+body.admin-dashboard-mode #clDashboardHomeButton{background:linear-gradient(120deg,#0b4389,#0f8b55)!important;color:#fff!important;border:2px solid #fff!important;}
+body.worker-dashboard-mode #clDashboardHomeButton,body.customer-dashboard-mode #clDashboardHomeButton{padding:11px 17px!important;}
+#customerDashboard .customer-card#customerChatPanel,
+#workerDashboard #workerChatPanel{background:linear-gradient(145deg,#f0fdf4 0%,#eff6ff 52%,#fff7ed 100%)!important;border:1px solid #b8dccc!important;border-radius:22px!important;box-shadow:0 12px 28px #164e3b12!important;padding:18px!important;min-width:0;}
+#customerDashboard #customerChatPanel h2,#workerDashboard #workerChatPanel h3{color:#0f5132!important;}
+#customerDashboard #customerConversationList>*,#workerDashboard #workerConversationList>*{border:1px solid #dbeafe!important;border-radius:13px!important;background:#fff!important;padding:11px!important;margin:7px 0!important;}
+#customerDashboard #customerChatWindow,#workerDashboard #workerChatWindow{background:#fff!important;border:1px solid #bfdbfe!important;border-radius:18px!important;box-shadow:inset 0 1px 8px #0f172a08;padding:13px!important;}
+#customerDashboard #customerChatMessages,#workerDashboard #workerChatMessages{background:linear-gradient(145deg,#f8fafc,#eff6ff)!important;border:1px solid #dbeafe!important;border-radius:14px!important;padding:12px!important;}
+#customerDashboard #customerChatForm button,#workerDashboard #workerChatForm button{background:linear-gradient(120deg,#0f8b55,#0b65a5)!important;color:#fff!important;box-shadow:0 5px 13px #0b65a533!important;}
+#customerDashboard #customerChatInput,#workerDashboard #workerChatInput{border:1px solid #9db8d1!important;background:#fff!important;}
+/* Chat is moved into the left column by the v030 layout script. */
+#customerDashboard .cl-customer-main-grid{display:grid!important;grid-template-columns:minmax(280px,.9fr) minmax(0,1.5fr)!important;gap:18px!important;align-items:start!important;}
+#customerDashboard .cl-customer-main-grid>#customerChatPanel{grid-column:1;grid-row:2;}
+#customerDashboard .cl-customer-main-grid>.customer-card:first-child{grid-column:1;grid-row:1;}
+#customerDashboard .cl-customer-main-grid>.customer-card:nth-child(2){grid-column:2;grid-row:1 / span 2;}
+#workerDashboard .cv-grid{grid-template-columns:minmax(280px,340px) minmax(0,1fr)!important;}
+#workerDashboard .cv-left #workerChatPanel{margin-top:16px!important;}
+@media(max-width:900px){#customerDashboard .cl-customer-main-grid{grid-template-columns:1fr!important}#customerDashboard .cl-customer-main-grid>#customerChatPanel,#customerDashboard .cl-customer-main-grid>.customer-card:first-child,#customerDashboard .cl-customer-main-grid>.customer-card:nth-child(2){grid-column:1;grid-row:auto}#workerDashboard .cv-grid{grid-template-columns:1fr!important}}
+@media(max-width:600px){body.worker-dashboard-mode #clDashboardHomeButton,body.customer-dashboard-mode #clDashboardHomeButton,body.admin-dashboard-mode #clDashboardHomeButton{left:9px!important;top:9px!important;padding:9px 12px!important;font-size:13px!important;min-height:42px}#customerDashboard #customerChatForm,#workerDashboard #workerChatForm{display:flex!important}#customerDashboard #customerChatInput,#workerDashboard #workerChatInput{font-size:16px!important}}
 </style>
 
 </head>
@@ -3085,7 +3113,7 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
       await subscribeChatRealtime(clCustomerChatId,'customerChatMessages');
       say('customerChatMessage','Conversation opened. You can now send a message.');
       panel?.scrollIntoView({behavior:'smooth',block:'start'});
-      $('customerChatInput')?.focus();
+      $('customerChatInput')?.focus({preventScroll:true});
     } catch(error) {
       say('customerChatMessage','Chat could not open: '+(error?.message||'Unknown error'),true);
       if(windowEl)windowEl.classList.remove('hidden');
@@ -3185,10 +3213,13 @@ body.customer-dashboard-mode>#customerDashboard{display:block!important;position
 
   async function loadChatMessages(conversationId,hostId){
     const host=$(hostId);if(!host)return;
+    // Remember whether the reader was already near the bottom. Refreshing messages
+    // must never scroll the document/page; only this fixed chat viewport may move.
+    const wasNearBottom=(host.scrollHeight-host.scrollTop-host.clientHeight)<90;
     const {data,error}=await supabaseClient.from('messages').select('id,sender_id,message,created_at').eq('conversation_id',conversationId).order('created_at',{ascending:true}).limit(100);
     if(error){host.textContent='Could not load messages: '+error.message;return;}
     host.innerHTML=(data||[]).map(m=>`<div class="cl-chat-bubble ${m.sender_id===window.clCurrentUser?.id?'mine':''}"><p class="text-sm">${esc(m.message)}</p><span class="block cl-muted mt-1">${new Date(m.created_at).toLocaleString()}</span></div>`).join('')||'<p class="text-sm text-slate-500">No messages yet. Start the conversation.</p>';
-    host.scrollTop=host.scrollHeight;
+    if(wasNearBottom){host.scrollTop=host.scrollHeight;}
   }
 
   async function sendChatMessage(role){
@@ -3685,30 +3716,134 @@ body.worker-dashboard-mode #clHomeProfileButton,body.customer-dashboard-mode #cl
 </script>
 
 
+
+<style id="clean-lanka-chat-sidebar-v031">
+  #customerDashboard .cl-customer-dashboard-layout{display:grid;grid-template-columns:minmax(280px,350px) minmax(0,1fr);gap:20px;align-items:start;margin-top:20px}
+  #customerDashboard .cl-customer-chat-sidebar{position:sticky;top:16px;min-width:0}
+  #customerDashboard #customerChatPanel{margin:0!important;padding:20px;border:1px solid #b8e4ce;border-radius:24px;background:linear-gradient(155deg,#f0fdf4 0%,#eff6ff 55%,#fff 100%);box-shadow:0 12px 30px #14532d14}
+  #customerDashboard #customerChatPanel h2{color:#075985!important}
+  #customerDashboard #customerConversationList>*,#workerDashboard #workerConversationList>*{border:1px solid #dbeafe;border-radius:14px;background:linear-gradient(110deg,#eff6ff,#f0fdf4);padding:12px;margin-bottom:9px}
+  #customerDashboard #customerChatMessages,#workerDashboard #workerChatMessages{min-height:190px;background:linear-gradient(145deg,#eff6ff,#f0fdf4)!important;border:1px solid #cfe5f5}
+  #workerDashboard #workerChatPanel{margin-top:18px!important;padding:18px;border:1px solid #b8d9f2;border-radius:22px;background:linear-gradient(155deg,#eff6ff 0%,#f0fdf4 55%,#fff8e8 100%);box-shadow:0 12px 28px #1d4ed814}
+  #workerDashboard #workerChatPanel .cv-section-title{color:#075985}
+  @media(max-width:850px){#customerDashboard .cl-customer-dashboard-layout{grid-template-columns:1fr}#customerDashboard .cl-customer-chat-sidebar{position:static;order:0}#customerDashboard .cl-customer-dashboard-content{min-width:0}}
+</style>
+
+<style id="clean-lanka-chat-scroll-isolation-v032">
+  /* Both customer and worker chats scroll inside the message pane, never the page. */
+  #customerDashboard #customerChatMessages,
+  #workerDashboard #workerChatMessages {
+    height:280px!important;
+    min-height:180px!important;
+    max-height:42vh!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    overscroll-behavior-y:contain!important;
+    overflow-anchor:none!important;
+    -webkit-overflow-scrolling:touch;
+    contain:layout paint;
+  }
+  @media(max-width:640px){
+    #customerDashboard #customerChatMessages,
+    #workerDashboard #workerChatMessages {
+      height:240px!important;
+      max-height:38vh!important;
+    }
+  }
+</style>
+
+<script id="clean-lanka-dashboard-layout-v031">
+(function(){
+ function arrangeDashboardPanels(){
+  const customer=document.getElementById('customerDashboard');
+  const shell=customer?.querySelector('.customer-shell');
+  const chat=customer?.querySelector('#customerChatPanel');
+  const quick=shell?.querySelector('.cl-quick-grid');
+  const mobile=shell?.querySelector('#customerMobileNav');
+  if(shell&&chat&&quick&&!shell.querySelector('.cl-customer-dashboard-layout')){
+   const layout=document.createElement('div');layout.className='cl-customer-dashboard-layout';
+   const sidebar=document.createElement('aside');sidebar.className='cl-customer-chat-sidebar';sidebar.setAttribute('aria-label','Customer messages');
+   const content=document.createElement('main');content.className='cl-customer-dashboard-content';
+   shell.insertBefore(layout,quick.nextSibling);layout.append(sidebar,content);sidebar.appendChild(chat);
+   let node=layout.nextSibling;
+   while(node&&node!==mobile){const next=node.nextSibling;content.appendChild(node);node=next;}
+  }
+  const worker=document.getElementById('workerDashboard');
+  const workerChat=worker?.querySelector('#workerChatPanel');
+  const workerLeft=worker?.querySelector('.cv-grid .cv-left');
+  if(workerChat&&workerLeft&&!workerLeft.contains(workerChat))workerLeft.appendChild(workerChat);
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',arrangeDashboardPanels,{once:true});else arrangeDashboardPanels();
+ window.addEventListener('load',arrangeDashboardPanels,{once:true});
+})();
+</script>
+
 <div id="google_translate_element" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true"></div>
 <style>.goog-te-banner-frame,.skiptranslate iframe{display:none!important}body{top:0!important}.goog-te-gadget{font-size:0!important}.goog-te-gadget span{display:none!important}#google_translate_element{display:none!important}</style>
-<script>
+<script id="clean-lanka-language-switch-v030">
 (function(){
- const el=document.getElementById('clLanguageSelect'); if(!el)return;
+ const el=document.getElementById('clLanguageSelect');if(!el)return;
  const status=document.getElementById('clLanguageStatus');
- function cookie(v){document.cookie='googtrans='+v+';path=/;max-age=31536000;SameSite=Lax';}
- let current='en';try{current=localStorage.getItem('cleanLankaLanguage')||'en';}catch(e){}
- el.value=current;
- if(current!=='en'){cookie('/en/'+current);}
+ const allowed=['en','si','ta'];
+ function setCookie(lang){
+   const value='/en/'+lang;
+   document.cookie='googtrans='+value+';path=/;max-age=31536000;SameSite=Lax';
+   const host=location.hostname;
+   if(host&&host!=='localhost'&&host.indexOf('.')>-1){const parts=host.split('.');const domain='.'+parts.slice(-2).join('.');document.cookie='googtrans='+value+';path=/;domain='+domain+';max-age=31536000;SameSite=Lax';}
+ }
+ function applyLanguage(lang){
+   if(!allowed.includes(lang))lang='en';
+   setCookie(lang);
+   const combo=document.querySelector('.goog-te-combo');
+   if(combo){
+     if(combo.value!==lang){combo.value=lang;combo.dispatchEvent(new Event('change',{bubbles:true}));}
+     if(status)status.textContent=lang==='ta'?'தமிழ் மொழி தேர்ந்தெடுக்கப்பட்டது':lang==='si'?'සිංහල භාෂාව තෝරා ඇත':'English selected';
+     return true;
+   }
+   return false;
+ }
+ // Start new deployments in English. Only a language explicitly selected
+ // through this updated selector is remembered; old stale Tamil/Sinhala values
+ // from earlier builds must not silently change the first page view.
+ const preferenceKey='cleanLankaLanguagePreferenceV2';
+ let saved='en';
+ try{
+   const stored=localStorage.getItem(preferenceKey);
+   if(stored&&allowed.includes(stored))saved=stored;
+   else localStorage.setItem(preferenceKey,'en');
+ }catch(e){}
+ if(!allowed.includes(saved))saved='en';
+ el.value=saved;
+ // Override any stale Google Translate cookie left by an older build.
+ setCookie(saved);
+ // Apply saved language after Google Translate has actually created its selector.
+ let attempts=0;
+ const initTimer=setInterval(function(){
+   attempts++;
+   if(applyLanguage(saved)||attempts>=30)clearInterval(initTimer);
+ },300);
  el.addEventListener('change',function(){
-  const lang=this.value||'en';
-  try{localStorage.setItem('cleanLankaLanguage',lang);}catch(e){}
-  const labels={en:'English selected',si:'සිංහල තෝරාගෙන ඇත',ta:'தமிழ் தேர்ந்தெடுக்கப்பட்டது'};
-  if(status)status.textContent=labels[lang]||labels.en;
-  cookie('/en/'+lang);
-  location.reload();
+   const lang=allowed.includes(this.value)?this.value:'en';
+   try{localStorage.setItem(preferenceKey,lang);}catch(e){}
+   setCookie(lang);
+   if(applyLanguage(lang))return;
+   if(status)status.textContent=lang==='ta'?'மொழி மாற்றப்படுகிறது…':lang==='si'?'භාෂාව වෙනස් කරමින්…':'Changing language…';
+   // The widget script can load slowly on mobile; reload only after giving it time.
+   let tries=0;const wait=setInterval(function(){
+     tries++;
+     if(applyLanguage(lang)){clearInterval(wait);}
+     else if(tries>=20){clearInterval(wait);location.reload();}
+   },300);
  });
  window.googleTranslateElementInit=function(){
-  if(window.google&&google.translate&&google.translate.TranslateElement){
-   new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'en,si,ta',autoDisplay:false},'google_translate_element');
-  }
+   if(window.google&&google.translate&&google.translate.TranslateElement){
+     new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'en,si,ta',autoDisplay:false},'google_translate_element');
+     setTimeout(()=>applyLanguage(saved),250);
+   }
  };
- const script=document.createElement('script');script.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';script.async=true;document.head.appendChild(script);
+ if(!document.querySelector('script[data-cleanlanka-google-translate]')){
+   const script=document.createElement('script');script.dataset.cleanlankaGoogleTranslate='1';script.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';script.async=true;document.head.appendChild(script);
+ }
 })();
 </script>
 
