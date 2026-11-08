@@ -5515,7 +5515,7 @@ document.addEventListener('DOMContentLoaded',function(){
    button.addEventListener('click',async()=>{
     if(!confirm('Remove this Sub Admin access permanently? The login account will not be deleted.'))return;
     button.disabled=true;
-    try{await call({action:'delete',user_id:id});document.getElementById('adminRefreshSubAdmins')?.click();}
+    try{const {data,error}=await client.rpc('delete_sub_admin',{p_user_id:id});if(error)throw error;if(data!==true)throw new Error('Delete was not confirmed');document.getElementById('adminRefreshSubAdmins')?.click();}
     catch(err){alert('Could not remove Sub Admin: '+err.message);button.disabled=false;}
    });
    (card.querySelector('div.mt-3')||card).appendChild(button);
