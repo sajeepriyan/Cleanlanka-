@@ -1913,6 +1913,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
      <h3 class="text-lg font-extrabold text-emerald-900">Complete / Update Your Profile</h3>
      <label class="block text-sm font-bold text-slate-700" for="customerProfileFullName">Full Name</label>
      <input id="customerProfileFullName" required maxlength="160" autocomplete="name" class="w-full rounded-xl border border-slate-200 p-3" placeholder="Your full name">
+     <label class="block text-sm font-bold text-slate-700" for="customerProfileGender">Gender / பாலினம்</label><select id="customerProfileGender" class="w-full rounded-xl border border-slate-200 p-3 bg-white" aria-label="Gender"><option value="">Select gender (optional)</option><option value="male">Male / ஆண்</option><option value="female">Female / பெண்</option><option value="prefer_not_to_say">Prefer not to say / குறிப்பிட விரும்பவில்லை</option></select>
      <label class="block text-sm font-bold text-slate-700" for="customerProfilePhone">Phone Number</label>
      <input id="customerProfilePhone" type="tel" inputmode="numeric" maxlength="10" minlength="10" pattern="[0-9]{10}" title="Enter exactly 10 digits" autocomplete="tel" required class="w-full rounded-xl border border-slate-200 p-3" placeholder="Your contact number">
      <label class="block text-sm font-bold text-slate-700" for="customerProfileDistrict">District</label>
@@ -2120,6 +2121,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
           </div>
           <form id="workerProfileEditForm" class="hidden grid sm:grid-cols-2 gap-3">
             <label class="text-sm font-bold text-slate-700">Full name<input id="editWorkerFullName" required maxlength="120" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
+            <label class="text-sm font-bold text-slate-700">Gender<select id="editWorkerGender" class="mt-1 w-full rounded-xl border p-3 font-normal bg-white"><option value="">Not specified</option><option value="male">Male / ஆண்</option><option value="female">Female / பெண்</option><option value="prefer_not_to_say">Prefer not to say</option></select></label>
             <label class="text-sm font-bold text-slate-700">Phone number<input id="editWorkerPhone" type="tel" maxlength="30" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
             <label class="text-sm font-bold text-slate-700">District<select id="editWorkerDistrict" required class="mt-1 w-full rounded-xl border p-3 font-normal bg-white"><option value="">Select Sri Lanka District</option><option value="Ampara">Ampara</option><option value="Anuradhapura">Anuradhapura</option><option value="Badulla">Badulla</option><option value="Batticaloa">Batticaloa</option><option value="Colombo">Colombo</option><option value="Galle">Galle</option><option value="Gampaha">Gampaha</option><option value="Hambantota">Hambantota</option><option value="Jaffna">Jaffna</option><option value="Kalutara">Kalutara</option><option value="Kandy">Kandy</option><option value="Kegalle">Kegalle</option><option value="Kilinochchi">Kilinochchi</option><option value="Kurunegala">Kurunegala</option><option value="Mannar">Mannar</option><option value="Matale">Matale</option><option value="Matara">Matara</option><option value="Monaragala">Monaragala</option><option value="Mullaitivu">Mullaitivu</option><option value="Nuwara Eliya">Nuwara Eliya</option><option value="Polonnaruwa">Polonnaruwa</option><option value="Puttalam">Puttalam</option><option value="Ratnapura">Ratnapura</option><option value="Trincomalee">Trincomalee</option><option value="Vavuniya">Vavuniya</option></select></label>
             <label class="text-sm font-bold text-slate-700">Town / Area<input id="editWorkerAddress" required maxlength="180" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
@@ -2232,6 +2234,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
   <p class="text-center text-gray-500 mt-2">Join Clean Lanka as a Service Professional</p>
   <form id="workerRegisterForm" class="mt-6 space-y-4">
     <input id="workerName" type="text" placeholder="Full Name" autocomplete="name" required class="w-full p-3 border rounded-lg">
+    <label class="block text-sm font-bold text-slate-700" for="workerGender">Gender / பாலினம்</label><select id="workerGender" class="w-full rounded-xl border border-slate-200 p-3 bg-white" aria-label="Gender"><option value="">Select gender (optional)</option><option value="male">Male / ஆண்</option><option value="female">Female / பெண்</option><option value="prefer_not_to_say">Prefer not to say / குறிப்பிட விரும்பவில்லை</option></select>
     <input id="workerPhone" type="tel" inputmode="numeric" maxlength="10" minlength="10" pattern="[0-9]{10}" title="Enter exactly 10 digits" placeholder="Mobile Number (10 digits)" autocomplete="tel" required class="w-full p-3 border rounded-lg">
     <input id="workerEmail" type="email" placeholder="Email Address" autocomplete="email" required class="w-full p-3 border rounded-lg">
     <select id="workerDistrict" required class="w-full p-3 border rounded-lg">
@@ -2372,21 +2375,24 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     activeCustomerUserId = user.id;
     const nameInput = document.getElementById('customerProfileFullName');
     const phoneInput = document.getElementById('customerProfilePhone');
+    const genderInput = document.getElementById('customerProfileGender');
     const districtInput = document.getElementById('customerProfileDistrict');
     const addressInput = document.getElementById('customerProfileAddress');
     nameInput.value = metadata.full_name || '';
+    genderInput.value = metadata.gender || '';
     phoneInput.value = metadata.phone || metadata.Phone || '';
     districtInput.value = metadata.district || '';
     addressInput.value = metadata.address || '';
     try {
       const { data, error } = await supabaseClient
         .from('customer_profiles')
-        .select('id,user_id,full_name,email,district,address,phone,customer_public_id')
+        .select('id,user_id,full_name,email,district,address,phone,gender,customer_public_id')
         .eq('user_id', user.id)
         .maybeSingle();
       if (error) throw error;
       if (data) {
         nameInput.value = data.full_name || metadata.full_name || '';
+        genderInput.value = data.gender || '';
         phoneInput.value = data.phone || '';
         districtInput.value = data.district || '';
         addressInput.value = data.address || '';
@@ -2411,6 +2417,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const profile = {
       user_id: activeCustomerUserId,
       full_name: document.getElementById('customerProfileFullName').value.trim(),
+      gender: document.getElementById('customerProfileGender').value || null,
       email: document.getElementById('customerDashEmail').textContent.trim(),
       phone: document.getElementById('customerProfilePhone').value.trim() || null,
       district: document.getElementById('customerProfileDistrict').value,
@@ -2590,6 +2597,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
             full_name: name,
             account_type: 'worker',
             Phone: val('workerPhone'),
+            gender: val('workerGender') || null,
             district: val('workerDistrict'),
             address: val('workerAddress'),
             skills: val('workerSkills'),
@@ -2649,6 +2657,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const profile = {
       user_id: user.id,
       full_name: metadata.full_name || '',
+      gender: ['male','female','prefer_not_to_say'].includes(metadata.gender) ? metadata.gender : null,
       email: user.email || '',
       district: metadata.district || '',
       address: metadata.address || '',
@@ -2864,6 +2873,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
   }
   function populateWorkerEditForm(p) {
     document.getElementById('editWorkerFullName').value = p.full_name || '';
+    document.getElementById('editWorkerGender').value = p.gender || '';
     document.getElementById('editWorkerPhone').value = p.Phone || '';
     const districtSelect = document.getElementById('editWorkerDistrict');
     districtSelect.value = districtsAreValidForEdit(p.district) ? p.district : '';
@@ -2891,6 +2901,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     }
     const updates = {
       full_name: document.getElementById('editWorkerFullName').value.trim(),
+      gender: document.getElementById('editWorkerGender').value || null,
       Phone: document.getElementById('editWorkerPhone').value.trim() || null,
       district: document.getElementById('editWorkerDistrict').value.trim(),
       address: document.getElementById('editWorkerAddress').value.trim(),
@@ -3231,7 +3242,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const grid = document.createElement('div');
     grid.className = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-3';
     [
-      ['Worker ID',w.worker_public_id ? 'WRK-' + w.worker_public_id : 'Pending ID'],['Full Name',w.full_name],['Email',w.email],['Phone',w.Phone],['District',w.district],['Address',w.address],
+      ['Worker ID',w.worker_public_id ? 'WRK-' + w.worker_public_id : 'Pending ID'],['Full Name',w.full_name],['Gender',w.gender === 'male' ? 'Male / ஆண்' : w.gender === 'female' ? 'Female / பெண்' : w.gender === 'prefer_not_to_say' ? 'Prefer not to say' : 'Not specified'],['Email',w.email],['Phone',w.Phone],['District',w.district],['Address',w.address],
       ['Skills / Trade',w.skills],['Experience (years)',w.experience_years],['Service Price (LKR)',w.service_price_lkr],
       ['Availability',w.availability],['Available for work',w.is_available ? 'Yes' : 'No'],
       ['Verification Status',w.verification_status],['Police Clearance Status',w.police_clearance_status],
