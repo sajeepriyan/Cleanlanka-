@@ -3138,7 +3138,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     actionButtons.className = 'flex flex-wrap gap-2';
     adminWorkerDetail.append(actionButtons);
     if (!adminHasPermission('approvals_approve')) {
-      actionNote.textContent = 'You have view-only access. Worker approval and profile changes are restricted to an authorised administrator.';
+      actionNote.textContent = 'You have view-only access. Worker approval requires the Approve / reject workers permission.';
       actionButtons.classList.add('hidden');
     }
 
