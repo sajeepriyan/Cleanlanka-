@@ -3512,6 +3512,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       document.getElementById('adminDashboard').classList.remove('hidden');
       document.body.classList.add('admin-dashboard-mode');
       document.getElementById('adminDashboardEmail').textContent = `${data.user.email || ''} • ${currentAdminRole.replace('_',' ').toUpperCase()}`;
+      document.getElementById('adminDashboard').dataset.adminRole=currentAdminRole;
       document.getElementById('adminAccessLabel').textContent=currentAdminRole==='main_admin'?'Main Admin':currentAdminRole==='sub_admin'?'Sub Admin':'Admin';
       document.getElementById('adminSubAdminsSection').classList.toggle('hidden',currentAdminRole!=='main_admin');
       document.getElementById('adminWorkersHeading').closest('section').classList.toggle('hidden',!adminHasPermission('workers_view'));
@@ -5976,6 +5977,8 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
 #adminDashboard.cl-admin-pages-active [data-cl-admin-page="true"]{display:none!important}
 #adminDashboard.cl-admin-pages-active [data-cl-admin-page="true"].cl-admin-page-current{display:block!important}
 #adminDashboard #adminSubAdminsSection:not(.cl-admin-page-current){display:none!important}
+#adminDashboard[data-admin-role="sub_admin"] #adminSubAdminsSection{display:none!important}
+#adminDashboard[data-admin-role="sub_admin"] .admin-nav a[href="#adminSubAdminsHeading"]{display:none!important}
 #adminDashboard .admin-nav{display:flex!important;flex-wrap:wrap;gap:8px}
 #clAdminPageBack{background:#0e4c94;color:white;border:0;border-radius:12px;padding:12px 18px;font-weight:800;margin:16px 0}
 #clAdminPageTitle{color:#12386c;font-size:clamp(21px,3vw,29px);font-weight:900;margin:14px 0}
@@ -5994,8 +5997,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
  const detail=document.getElementById('adminCustomerDetail');const originalParent=detail?.parentElement;
  let current='overview';
  function allowed(page){
-  const role=(document.getElementById('adminDashboardEmail')?.textContent||'').toUpperCase();
-  const isMain=role.includes('MAIN ADMIN');
+  const isMain=root.dataset.adminRole==='main_admin';
   if(page==='subadmins')return isMain;
   const link=nav.querySelector('[data-cl-admin-target="'+page+'"]');
   if(link&&link.style.display==='none')return false;
@@ -6007,6 +6009,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   current=page;root.classList.add('cl-admin-pages-active');
   [...sections,customerPage].forEach(el=>el.classList.toggle('cl-admin-page-current',el===(page==='customerprofile'?customerPage:pages[page])));
   if(pages[page]&&allowed(page))pages[page].classList.remove('hidden');
+  if(root.dataset.adminRole==='sub_admin')pages.subadmins?.classList.add('hidden');
   title.textContent=labels[page];back.style.display=page==='overview'?'none':'inline-flex';
   back.textContent=page==='customerprofile'?'← Back to Customers':'← Back to Admin Dashboard';
   if(page==='customerprofile'&&detail){customerPage.appendChild(detail);detail.classList.remove('hidden');}
