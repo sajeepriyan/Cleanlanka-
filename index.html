@@ -1309,6 +1309,28 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 #adminDashboard .cl-admin-main section{scroll-margin-top:18px}
 @media(max-width:850px){#adminDashboard .cl-admin-workspace{grid-template-columns:1fr!important;gap:12px}#adminDashboard .cl-admin-workspace>.admin-nav{position:relative!important;top:auto!important;min-height:0!important;display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;padding:13px!important;border-radius:16px!important}#adminDashboard .cl-admin-side-heading{width:100%;padding:5px 7px 12px;margin-bottom:0;font-size:14px}#adminDashboard .cl-admin-workspace>.admin-nav>a{font-size:13px!important;min-height:43px;padding:10px 12px!important}#adminDashboard .admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:480px){#adminDashboard{padding:8px!important}#adminDashboard .admin-topbar{padding:15px!important}#adminDashboard .cl-admin-workspace>.admin-nav{gap:7px!important}#adminDashboard .cl-admin-workspace>.admin-nav>a{font-size:12px!important}#adminDashboard .admin-stat{padding:13px!important;min-height:103px!important}#adminDashboard .admin-stat .stat-label{font-size:11px!important}#adminDashboard .admin-stat .stat-value{font-size:22px!important}}
+</style><style id="cl-admin-mobile-layout-repair">
+/* Keep sidebar and content in separate rows on phones; prevent text wrapping vertically. */
+@media(max-width:900px){
+ #adminDashboard .cl-admin-workspace{display:flex!important;flex-direction:column!important;gap:14px!important;width:100%!important;min-width:0!important}
+ #adminDashboard .cl-admin-workspace>.admin-nav{position:static!important;display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;align-items:center!important;width:100%!important;min-height:0!important;max-height:none!important;gap:8px!important;padding:12px!important;overflow:visible!important}
+ #adminDashboard .cl-admin-workspace>.admin-nav .cl-admin-side-heading{width:100%!important;margin:0!important}
+ #adminDashboard .cl-admin-workspace>.admin-nav>a{flex:0 1 auto!important;max-width:100%!important;min-width:0!important;white-space:normal!important}
+ #adminDashboard .cl-admin-main{display:block!important;flex:none!important;width:100%!important;min-width:0!important;max-width:100%!important}
+ #adminDashboard #adminWorkerDetail{width:100%!important;min-width:0!important;max-width:100%!important}
+ #adminDashboard #adminWorkerDetail .cl-worker-hero{display:flex!important;flex-direction:column!important;align-items:stretch!important;width:100%!important;min-width:0!important}
+ #adminDashboard #adminWorkerDetail .cl-worker-hero-info{display:flex!important;flex-direction:row!important;align-items:center!important;width:100%!important;min-width:0!important;flex:0 1 auto!important}
+ #adminDashboard #adminWorkerDetail .cl-worker-summary{flex:1 1 auto!important;min-width:0!important;width:auto!important;overflow-wrap:break-word!important;word-break:normal!important}
+ #adminDashboard #adminWorkerDetail .cl-worker-summary h3{font-size:clamp(17px,4.5vw,23px)!important;line-height:1.35!important;white-space:normal!important;overflow-wrap:break-word!important;word-break:normal!important}
+ #adminDashboard #adminWorkerDetail .cl-worker-status-hero{width:100%!important;min-width:0!important;box-sizing:border-box!important}
+ #adminDashboard #adminWorkerDetail .cl-worker-fields{width:100%!important;min-width:0!important}
+ #adminDashboard #adminWorkerDetail .cl-worker-fields>div{min-width:0!important;overflow-wrap:anywhere!important}
+}
+@media(min-width:901px){
+ #adminDashboard .cl-admin-workspace{grid-template-columns:245px minmax(0,1fr)!important}
+ #adminDashboard .cl-admin-main{min-width:0!important;width:100%!important}
+ #adminDashboard #adminWorkerDetail .cl-worker-summary{min-width:0!important;overflow-wrap:break-word!important;word-break:normal!important}
+}
 </style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
