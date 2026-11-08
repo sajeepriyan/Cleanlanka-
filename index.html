@@ -634,6 +634,17 @@ body.customer-dashboard-mode > #customerDashboard{
 }
 </style>
 
+<style id="cl073-inbox-style">
+#customerConversationList,#workerConversationList{max-height:460px!important;overflow:auto!important;background:#f8fafc!important;border-radius:16px;padding:6px!important}
+#customerConversationList .cl073-inbox-head,#workerConversationList .cl073-inbox-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;color:#0f172a;font-size:17px}
+#customerConversationList .cl073-inbox-head span,#workerConversationList .cl073-inbox-head span{font-size:12px;color:#475569}
+#customerConversationList .cl073-chat-row,#workerConversationList .cl073-chat-row{display:flex!important;align-items:center!important;gap:12px!important;width:100%!important;text-align:left!important;background:#fff!important;color:#0f172a!important;border:1px solid #e2e8f0!important;border-radius:14px!important;padding:13px!important;margin:5px 0!important;min-height:76px!important;box-shadow:none!important}
+#customerConversationList .cl073-chat-row.cl073-new,#workerConversationList .cl073-chat-row.cl073-new{background:#ecfdf5!important;border-color:#86efac!important}
+.cl073-avatar{flex:none;display:grid;place-items:center;width:45px;height:45px;border-radius:50%;background:#dbeafe;color:#1e40af;font-size:19px;font-weight:900}
+.cl073-chat-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}.cl073-chat-info strong{color:#0f172a!important;font-size:16px!important}.cl073-preview{font-size:14px!important;color:#475569!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.cl073-meta{display:flex;flex-direction:column;align-items:flex-end;gap:9px;flex:none;color:#64748b;font-size:11px}.cl073-count{background:#16a34a;color:white;border-radius:99px;min-width:23px;height:23px;padding:2px 6px;text-align:center;font-size:13px;font-weight:900}.cl073-read{color:#64748b;font-size:15px}
+@media(max-width:600px){#customerConversationList .cl073-chat-row,#workerConversationList .cl073-chat-row{gap:9px!important;padding:10px!important}.cl073-avatar{width:40px;height:40px}.cl073-chat-info strong{font-size:15px!important}}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -3355,24 +3366,32 @@ body.customer-dashboard-mode > #customerDashboard{
     let workerProfileId=activeWorkerProfileId;
     if(role==='worker'&&!workerProfileId){
       const {data:profile,error:profileError}=await supabaseClient.from('worker_profiles').select('id').eq('user_id',user.id).maybeSingle();
-      if(profileError){host.innerHTML='<p class="text-sm text-red-700">Could not identify your Worker profile: '+esc(profileError.message)+'</p>';return;}
-      workerProfileId=profile?.id||null;
-      if(workerProfileId)activeWorkerProfileId=workerProfileId;
+      if(profileError){host.textContent='Could not identify your Worker profile: '+profileError.message;return;}
+      workerProfileId=profile?.id||null;if(workerProfileId)activeWorkerProfileId=workerProfileId;
     }
-    if(role==='worker'&&!workerProfileId){host.innerHTML='<p class="text-sm text-amber-700">Your Worker profile is not linked to this login yet. Please contact Clean Lanka support.</p>';return;}
-    let query=supabaseClient.from('conversations').select('id,customer_id,worker_id,created_at').order('created_at',{ascending:false}).limit(50);
-    if(role==='customer')query=query.eq('customer_id',user.id);else query=query.eq('worker_id',workerProfileId);
+    if(role==='worker'&&!workerProfileId){host.textContent='Your Worker profile is not linked to this login.';return;}
+    let query=supabaseClient.from('conversations').select('id,customer_id,worker_id,created_at').order('created_at',{ascending:false}).limit(100);
+    query=role==='customer'?query.eq('customer_id',user.id):query.eq('worker_id',workerProfileId);
     const {data,error}=await query;
-    if(error){host.innerHTML='<p class="text-sm text-red-700">Could not load conversations: '+esc(error.message)+'</p>';return;}
-    if(!data?.length){host.innerHTML='<p class="text-sm text-slate-500">No conversations yet. Messages from your Clean Lanka contacts will appear here.</p>';return;}
+    if(error){host.textContent='Could not load conversations: '+error.message;return;}
+    if(!data?.length){host.innerHTML='<p class="text-sm text-slate-500">No conversations yet. New chats will appear here.</p>';return;}
+    const [unreadResult,profileResult]=await Promise.all([
+      supabaseClient.from('notifications').select('related_conversation_id').eq('user_id',user.id).eq('notification_type','message').eq('is_read',false).not('related_conversation_id','is',null).limit(1000),
+      role==='worker'?supabaseClient.from('customer_profiles').select('user_id,full_name').in('user_id',[...new Set(data.map(c=>c.customer_id).filter(Boolean))]):
+      supabaseClient.from('worker_profiles').select('id,full_name').in('id',[...new Set(data.map(c=>c.worker_id).filter(Boolean))])
+    ]);
+    const counts=new Map();for(const n of unreadResult.data||[])counts.set(n.related_conversation_id,(counts.get(n.related_conversation_id)||0)+1);
+    const names=new Map((profileResult.data||[]).map(p=>[String(role==='worker'?p.user_id:p.id),p.full_name]));
     const rows=await Promise.all(data.map(async c=>{
-      const latest=await supabaseClient.from('messages').select('message,created_at,sender_id').eq('conversation_id',c.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
-      return {conversation:c,latest:latest.data,latestError:latest.error};
+      const {data:latest}=await supabaseClient.from('messages').select('message,created_at,sender_id').eq('conversation_id',c.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+      return {c,latest,unread:counts.get(c.id)||0,name:names.get(String(role==='worker'?c.customer_id:c.worker_id))|| (role==='worker'?'Customer':'Worker')};
     }));
-    host.innerHTML=rows.map(({conversation:c,latest,latestError})=>{
-      const preview=latestError?'Message preview unavailable':(latest?.message?esc(latest.message):'No messages yet');
-      const when=latest?.created_at||c.created_at;
-      return `<button type="button" class="w-full text-left border rounded-xl p-3 hover:bg-emerald-50 mb-2" data-open-${role}-chat="${esc(c.id)}"><strong>${role==='customer'?'Worker':'Customer'} conversation</strong><span class="block text-sm text-slate-700 mt-1 break-words">${preview}</span><span class="block cl-muted mt-1">${new Date(when).toLocaleString()}</span><span class="block text-xs text-emerald-800 mt-1">Open messages →</span></button>`;
+    rows.sort((a,b)=>(b.unread>0)-(a.unread>0)||new Date(b.latest?.created_at||b.c.created_at)-new Date(a.latest?.created_at||a.c.created_at));
+    host.innerHTML='<div class="cl073-inbox-head"><strong>Messages</strong><span>'+rows.filter(r=>r.unread>0).length+' unread chats</span></div>'+rows.map(({c,latest,unread,name})=>{
+      const time=new Date(latest?.created_at||c.created_at);
+      const label=esc(String(name||'Contact'));const initials=esc(String(name||'C').trim().charAt(0).toUpperCase());
+      const preview=esc(latest?.message||'Start a conversation');
+      return '<button type="button" class="cl073-chat-row '+(unread?'cl073-new':'')+'" data-open-'+role+'-chat="'+esc(c.id)+'"><span class="cl073-avatar">'+initials+'</span><span class="cl073-chat-info"><strong>'+label+'</strong><span class="cl073-preview">'+preview+'</span></span><span class="cl073-meta"><time>'+esc(time.toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))+'</time>'+(unread?'<span class="cl073-count">'+unread+'</span>':'<span class="cl073-read">✓</span>')+'</span></button>';
     }).join('');
   }
 
