@@ -1331,6 +1331,28 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
  #adminDashboard .cl-admin-main{min-width:0!important;width:100%!important}
  #adminDashboard #adminWorkerDetail .cl-worker-summary{min-width:0!important;overflow-wrap:break-word!important;word-break:normal!important}
 }
+</style><style id="cl-admin-layout-hotfix-v4">
+/* Force single-column mobile layout independently of site viewport settings. */
+#adminDashboard .cl-admin-workspace{min-width:0!important}
+#adminDashboard .cl-admin-main{min-width:0!important}
+#adminDashboard #adminWorkerDetail .cl-worker-hero-info{min-width:0!important}
+#adminDashboard #adminWorkerDetail .cl-worker-summary{min-width:0!important;flex:1 1 260px!important;width:auto!important;max-width:100%!important;overflow-wrap:normal!important;word-break:normal!important}
+#adminDashboard #adminWorkerDetail .cl-worker-summary h3,#adminDashboard #adminWorkerDetail .cl-worker-summary p{word-break:normal!important;overflow-wrap:break-word!important;white-space:normal!important}
+@media(max-width:1100px){
+#adminDashboard .cl-admin-workspace{display:block!important;width:100%!important;max-width:100%!important}
+#adminDashboard .cl-admin-workspace>.admin-nav{position:static!important;display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;align-items:center!important;gap:8px!important;min-height:0!important;width:100%!important;margin:0 0 16px!important}
+#adminDashboard .cl-admin-workspace>.admin-nav>.cl-admin-side-heading{width:100%!important}
+#adminDashboard .cl-admin-workspace>.admin-nav>a{width:auto!important;flex:0 0 auto!important;min-width:0!important}
+#adminDashboard .cl-admin-main{display:block!important;width:100%!important;max-width:100%!important}
+#adminDashboard #adminWorkerDetail .cl-worker-hero{display:block!important;min-width:0!important;width:100%!important}
+#adminDashboard #adminWorkerDetail .cl-worker-hero-info{display:grid!important;grid-template-columns:64px minmax(0,1fr)!important;align-items:center!important;width:100%!important;gap:12px!important}
+#adminDashboard #adminWorkerDetail .cl-worker-avatar{width:58px!important;height:58px!important}
+#adminDashboard #adminWorkerDetail .cl-worker-summary{width:100%!important;min-width:0!important;max-width:100%!important;display:block!important;flex:none!important}
+#adminDashboard #adminWorkerDetail .cl-worker-summary h3{display:block!important;width:100%!important;font-size:19px!important;line-height:1.3!important;letter-spacing:normal!important}
+#adminDashboard #adminWorkerDetail .cl-worker-summary p{font-size:12px!important}
+#adminDashboard #adminWorkerDetail .cl-worker-status-hero{display:block!important;width:100%!important;min-width:0!important;margin-top:12px!important}
+}
+@media(max-width:600px){#adminDashboard .cl-admin-workspace>.admin-nav{padding:10px!important}#adminDashboard .cl-admin-workspace>.admin-nav>a{padding:9px!important;font-size:12px!important}#adminDashboard #adminWorkerDetail .cl-worker-fields{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
