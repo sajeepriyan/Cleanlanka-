@@ -5477,6 +5477,69 @@ document.addEventListener('DOMContentLoaded',function(){
  if(button&&frame)button.addEventListener('click',function(){frame.src='/?cl_preview_refresh='+Date.now();});
 });
 </script>
+<style id="cl-subadmin-invite-v1-style">
+#clSubAdminInviteScreen{position:fixed;inset:0;z-index:2147483646;background:linear-gradient(140deg,#eff6ff,#e8fff3);display:none;align-items:center;justify-content:center;padding:18px;font-family:Inter,Arial,sans-serif}
+#clSubAdminInviteScreen.cl-open{display:flex!important}
+#clSubAdminInviteScreen .cl-invite-card{width:min(100%,470px);background:white;border-radius:24px;padding:28px;box-shadow:0 14px 55px #16406a2c}
+#clSubAdminInviteScreen h2{color:#12458c;font-size:26px;font-weight:900}
+#clSubAdminInviteScreen input{width:100%;padding:13px;border:1px solid #a4b5ca;border-radius:12px;margin:10px 0;font-size:17px}
+#clSubAdminInviteScreen button{background:#1255a0;color:white;border:0;border-radius:12px;padding:13px 18px;font-weight:800;cursor:pointer}
+#adminDashboard .cl-subadmin-delete{background:#b91c1c!important;color:white!important;padding:10px 14px;border-radius:10px;font-weight:800}
+</style>
+<div id="clSubAdminInviteScreen" aria-live="polite"><div class="cl-invite-card"><h2>Clean Lanka • Sub Admin</h2><p>Create your private password to accept the invitation.</p><form id="clSubAdminAcceptForm"><label for="clSubAdminNewPassword">New password (minimum 12 characters)</label><input id="clSubAdminNewPassword" type="password" minlength="12" autocomplete="new-password" required placeholder="Create password"><label for="clSubAdminConfirmPassword">Confirm password</label><input id="clSubAdminConfirmPassword" type="password" minlength="12" autocomplete="new-password" required placeholder="Confirm password"><button type="submit">Create Password & Activate</button></form><p id="clSubAdminAcceptMessage" role="status"></p></div></div>
+<script id="cl-subadmin-invite-v1">
+(function(){
+ const client=window.supabaseClient;if(!client)return;
+ const call=async(payload)=>{const {data,error}=await client.functions.invoke('manage-sub-admin',{body:payload});if(error)throw new Error(data?.error||error.message);if(data?.error)throw new Error(data.error);return data;};
+ const form=document.getElementById('adminCreateSubAdminForm');
+ if(form){
+  const label=form.querySelector('label[for="newSubAdminEmail"]');if(label)label.textContent='Sub Admin Email Address';
+  const hint=form.querySelector('input#newSubAdminEmail + p');if(hint)hint.textContent='An invitation email will be sent. The recipient creates their own password. No Customer or Worker profile required.';
+  const btn=document.getElementById('createSubAdminButton');if(btn)btn.textContent='Send Email Invitation';
+  form.addEventListener('submit',async e=>{
+   e.preventDefault();e.stopImmediatePropagation();
+   const msg=document.getElementById('subAdminFormMessage');const email=document.getElementById('newSubAdminEmail').value.trim();
+   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent='Enter a valid email.';return;}
+   const permissions={};document.querySelectorAll('#newSubAdminPermissions input[type="checkbox"]').forEach(x=>permissions[x.value]=x.checked);
+   btn.disabled=true;msg.textContent='Sending invitation...';
+   try{await call({action:'invite',email,permissions});msg.textContent='Invitation sent. The person must open their email and create a password.';form.reset();document.getElementById('adminRefreshSubAdmins')?.click();}
+   catch(err){msg.textContent='Invitation failed: '+err.message;}finally{btn.disabled=false;}
+  },true);
+ }
+ const list=document.getElementById('subAdminList');
+ function addDeletes(){
+  list?.querySelectorAll('article').forEach(card=>{
+   if(card.querySelector('.cl-subadmin-delete'))return;
+   const title=card.querySelector('p');const match=title?.textContent?.match(/[0-9a-f]{8}-[0-9a-f-]{27,}/i);if(!match)return;
+   const id=match[0],button=document.createElement('button');button.type='button';button.className='cl-subadmin-delete';button.textContent='Delete Sub Admin';
+   button.addEventListener('click',async()=>{
+    if(!confirm('Remove this Sub Admin access permanently? The login account will not be deleted.'))return;
+    button.disabled=true;
+    try{await call({action:'delete',user_id:id});document.getElementById('adminRefreshSubAdmins')?.click();}
+    catch(err){alert('Could not remove Sub Admin: '+err.message);button.disabled=false;}
+   });
+   (card.querySelector('div.mt-3')||card).appendChild(button);
+  });
+ }
+ if(list)new MutationObserver(addDeletes).observe(list,{childList:true,subtree:true});addDeletes();
+ const invite=new URLSearchParams(location.search).has('cl_subadmin_invite');
+ if(!invite)return;
+ const screen=document.getElementById('clSubAdminInviteScreen');screen.classList.add('cl-open');
+ const msg=document.getElementById('clSubAdminAcceptMessage');
+ const formAccept=document.getElementById('clSubAdminAcceptForm');
+ formAccept.addEventListener('submit',async e=>{
+  e.preventDefault();const pass=document.getElementById('clSubAdminNewPassword').value,confirmPass=document.getElementById('clSubAdminConfirmPassword').value;
+  if(pass.length<12||pass!==confirmPass){msg.textContent='Passwords must match and contain at least 12 characters.';return;}
+  const btn=formAccept.querySelector('button');btn.disabled=true;msg.textContent='Setting up your account...';
+  try{
+   const {data:{user},error:userError}=await client.auth.getUser();if(userError||!user)throw new Error('Open the original invitation link from your email again.');
+   const {error}=await client.auth.updateUser({password:pass});if(error)throw error;
+   await call({action:'complete'});msg.textContent='Account activated. You can now sign in using your email and password.';
+   formAccept.style.display='none';const done=document.createElement('button');done.textContent='Go to Clean Lanka';done.onclick=()=>location.assign('/');msg.after(done);
+  }catch(err){msg.textContent=err.message;}finally{btn.disabled=false;}
+ });
+})();
+</script>
 </body>
 
 <style id="clean-lanka-home-account-v042-style">
