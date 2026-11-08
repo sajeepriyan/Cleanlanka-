@@ -1095,158 +1095,66 @@ body:not(.worker-dashboard-mode):not(.customer-dashboard-mode):not(.admin-dashbo
 .cl-hero{background:#d9f3ff url("assets/clean-lanka-hero-real-1.jpg?v=085") center center/cover no-repeat!important}
 @media(max-width:700px){.cl-hero{background-position:55% center!important}}
 </style>
-<style id="cl087-reference-responsive-fix">
-/* Clear, distinct brand/nav; left-align hero copy away from worker faces. */
-.cl-home-nav-inner{display:grid!important;grid-template-columns:minmax(300px,1.1fr) minmax(0,1.7fr) auto auto!important;grid-template-areas:"brand links language actions"!important;gap:18px!important;align-items:center!important}
-.cl-home-brand{grid-area:brand!important;min-width:0!important;gap:13px!important}
-.cl-home-brand img{width:95px!important;height:86px!important;object-fit:contain!important}
-.cl-home-brand-name{font-size:clamp(30px,3.2vw,48px)!important;letter-spacing:-1px!important;white-space:nowrap!important}
-.cl-home-brand-sub{font-size:clamp(11px,1vw,15px)!important;white-space:nowrap!important}
-.cl-home-navlinks{grid-area:links!important;min-width:0!important;gap:clamp(11px,1.2vw,23px)!important;justify-content:center!important}
-.cl-home-navlinks a{font-size:clamp(12px,1vw,15px)!important;white-space:nowrap!important}
-.cl079-language{grid-area:language!important}
-.cl-home-nav-actions{grid-area:actions!important}
-.cl-hero{background-position:center center!important}
-.cl-hero-inner{align-items:flex-start!important;text-align:left!important;justify-content:flex-start!important;padding:54px clamp(20px,8vw,145px) 24px!important}
-.cl-hero h1,.cl-hero-sub,.cl-hero-tag{text-align:center!important;width:min(54%,730px)!important;max-width:730px!important;position:relative!important;z-index:1!important}
-.cl-hero h1{font-size:clamp(53px,6.7vw,103px)!important;line-height:1.04!important;letter-spacing:-2.5px!important}
-.cl-hero-sub{font-size:clamp(19px,2vw,30px)!important}
-.cl-hero-tag{font-size:clamp(19px,2vw,29px)!important;margin:12px 0 27px!important}
-#heroMarketplaceSearchForm{align-self:center!important;position:relative!important;z-index:2!important}
-#homeMarketplace .cl-market-grid{grid-template-columns:minmax(0,2.15fr) minmax(315px,1fr)!important}
-#homeMarketplace .cl-market-jobs,#homeMarketplace .cl-market-trust{font-size:15px!important}
-@media(max-width:1100px){
- .cl-home-nav-inner{grid-template-columns:minmax(230px,1fr) auto!important;grid-template-areas:"brand actions" "links links"!important;gap:6px 12px!important;padding:12px 20px!important}
- .cl-home-navlinks{grid-area:links!important;justify-content:center!important;gap:clamp(12px,2.6vw,30px)!important;overflow-x:auto!important;padding:10px 0!important}
- .cl-home-navlinks a{font-size:clamp(13px,1.5vw,16px)!important}
- .cl079-language{grid-area:actions!important;justify-self:end!important;margin-right:105px!important}
- .cl-home-nav-actions{grid-area:actions!important;justify-self:end!important}
- .cl-home-brand img{width:78px!important;height:72px!important}
- .cl-home-brand-name{font-size:36px!important}
- .cl-hero-inner{padding:46px 28px 22px!important}
- .cl-hero h1,.cl-hero-sub,.cl-hero-tag{width:57%!important}
- .cl-hero h1{font-size:clamp(49px,6.8vw,75px)!important}
-}
-@media(max-width:800px){
- .cl-home-nav-inner{grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand actions" "links links"!important;padding:11px 15px!important}
- .cl079-language{display:none!important}
- .cl-home-navlinks{justify-content:flex-start!important;gap:19px!important}
- .cl-home-navlinks a{flex:none!important;font-size:14px!important}
- .cl-hero{background-position:57% center!important}
- .cl-hero-inner{align-items:center!important;text-align:center!important;padding:34px 12px 20px!important}
- .cl-hero h1,.cl-hero-sub,.cl-hero-tag{width:100%!important;max-width:100%!important;text-align:center!important;text-shadow:0 2px 8px #fff,0 1px 2px #fff!important}
- .cl-hero h1{font-size:clamp(44px,9vw,67px)!important}
- .cl-hero-sub{font-size:clamp(18px,3vw,24px)!important}
- .cl-hero-tag{font-size:clamp(17px,3vw,23px)!important}
- #homeMarketplace .cl-market-grid{grid-template-columns:minmax(0,1fr)!important}
- #homeMarketplace .cl-market-trust.cl080-trust{grid-column:1!important;grid-row:auto!important}
-}
-@media(max-width:550px){
- .cl-home-brand img{width:60px!important;height:59px!important}
- .cl-home-brand-name{font-size:27px!important}
- .cl-home-brand-sub{font-size:10px!important}
- .cl-home-nav-actions .cl-home-login{font-size:12px!important;padding:9px 13px!important}
- .cl-home-navlinks{padding:9px 0!important}
- .cl-hero{background-position:57% center!important}
- .cl-hero-inner{padding:29px 10px 17px!important}
- .cl-hero h1{font-size:clamp(41px,10vw,54px)!important}
- .cl-hero-sub{font-size:17px!important}
- .cl-hero-tag{font-size:17px!important;margin:7px 0 19px!important}
- #heroMarketplaceSearchForm{grid-template-columns:minmax(0,1fr)!important}
- #heroMarketplaceSearchForm button{grid-column:1!important}
- .cl-home-cats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-}
-</style>
-<style id="cl088-phone-desktop-mode-legibility">
-/* Phones using browser Desktop Site report a wide viewport. Apply touch-friendly layout there too. */
-@media (pointer:coarse) and (max-width:1200px){
- .cl-home-nav{min-height:0!important;height:auto!important}
- .cl-home-nav-inner{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand actions" "links links"!important;gap:8px 12px!important;max-width:100%!important;padding:12px 18px!important}
- .cl-home-brand{grid-area:brand!important;min-width:0!important;display:flex!important;gap:10px!important;overflow:hidden!important}
- .cl-home-brand img{width:68px!important;height:64px!important;flex:none!important}
- .cl-home-brand-name{font-size:clamp(26px,3.4vw,37px)!important;white-space:nowrap!important}
- .cl-home-brand-sub{font-size:11px!important;white-space:nowrap!important}
- .cl-home-navlinks{grid-area:links!important;display:flex!important;justify-content:flex-start!important;gap:22px!important;overflow-x:auto!important;white-space:nowrap!important;min-width:0!important;max-width:100%!important;padding:9px 0!important;scrollbar-width:thin}
- .cl-home-navlinks a{font-size:15px!important;flex:none!important}
- .cl079-language{display:none!important}
- .cl-home-nav-actions{grid-area:actions!important;display:flex!important;align-items:center!important;justify-self:end!important;gap:6px!important}
- .cl-home-nav-actions .cl-home-login{font-size:13px!important;padding:10px 14px!important}
- .cl-hero{background-position:center center!important;min-height:390px!important}
- .cl-hero-inner{min-height:390px!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;padding:45px 22px 23px!important}
- .cl-hero h1,.cl-hero-sub,.cl-hero-tag{width:51%!important;max-width:51%!important;text-align:center!important;text-shadow:0 1px 8px #ffffff,0 1px 2px #ffffff!important}
- .cl-hero h1{font-size:clamp(46px,6vw,72px)!important;line-height:1.06!important;letter-spacing:-1.6px!important}
- .cl-hero-sub{font-size:clamp(16px,2vw,23px)!important}
- .cl-hero-tag{font-size:clamp(17px,2vw,23px)!important;margin:9px 0 30px!important}
- #heroMarketplaceSearchForm{align-self:center!important;width:100%!important;max-width:100%!important}
- #homeMarketplace .cl-market-grid{grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr)!important}
-}
-@media (pointer:coarse) and (max-width:600px){
- .cl-hero{background-position:59% center!important}
- .cl-hero-inner{align-items:center!important;padding:25px 10px 18px!important}
- .cl-hero h1,.cl-hero-sub,.cl-hero-tag{width:100%!important;max-width:100%!important;text-align:center!important}
- .cl-hero h1{font-size:clamp(40px,9vw,55px)!important}
- #homeMarketplace .cl-market-grid{grid-template-columns:minmax(0,1fr)!important}
-}
-</style>
-<style id="cl089-homepage-reference-layout">
-/* Homepage reference: large legible brand, organized navigation, hero and marketplace. */
-.cl-home-nav{background:#fff!important}
-.cl-home-nav-inner{max-width:1500px!important;margin:auto!important;display:grid!important;grid-template-columns:minmax(280px,1fr) auto!important;grid-template-areas:"brand actions" "links links"!important;align-items:center!important;gap:8px 20px!important;padding:12px 24px!important}
-.cl-home-brand{grid-area:brand!important;display:flex!important;align-items:center!important;min-width:0!important;gap:13px!important}
-.cl-home-brand img{width:88px!important;height:82px!important;flex:none!important;object-fit:contain!important}
-.cl-home-brand-name{font-size:clamp(33px,3.5vw,50px)!important;line-height:1.08!important;white-space:nowrap!important}
-.cl-home-brand-sub{font-size:clamp(12px,1.2vw,17px)!important;white-space:nowrap!important}
-.cl-home-navlinks{grid-area:links!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:clamp(16px,2.6vw,40px)!important;min-width:0!important;max-width:100%!important;overflow-x:auto!important;padding:10px 0!important;white-space:nowrap!important;scrollbar-width:thin}
-.cl-home-navlinks a{font-size:clamp(15px,1.4vw,19px)!important;flex:none!important}
-.cl-home-nav-actions{grid-area:actions!important;justify-self:end!important;display:flex!important;gap:8px!important}
-.cl-home-nav-actions .cl-home-login{font-size:15px!important;padding:12px 22px!important}
+
+
+
+<style id="cl090-contrast-and-navigation">
+/* Unified homepage visual rules: high-contrast text over real photo. */
+.cl-home-nav{height:auto!important;background:#fff!important}
+.cl-home-nav-inner{max-width:1480px!important;margin:0 auto!important;padding:12px 22px!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand actions" "links links"!important;gap:10px 18px!important;align-items:center!important}
+.cl-home-brand{grid-area:brand!important;display:flex!important;min-width:0!important;align-items:center!important;gap:13px!important}
+.cl-home-brand img{width:86px!important;height:80px!important;flex:none!important;object-fit:contain!important}
+.cl-home-brand-name{font-size:clamp(34px,3.7vw,49px)!important;white-space:nowrap!important;line-height:1.06!important}
+.cl-home-brand-sub{font-size:clamp(12px,1.25vw,17px)!important;white-space:nowrap!important}
+.cl-home-navlinks{grid-area:links!important;display:flex!important;justify-content:center!important;align-items:center!important;flex-wrap:wrap!important;gap:12px 30px!important;min-width:0!important;max-width:100%!important;overflow:visible!important;padding:9px 0!important}
+.cl-home-navlinks a{font-size:clamp(15px,1.35vw,19px)!important;font-weight:800!important;white-space:nowrap!important;color:#10234b!important}
 .cl079-language{grid-area:actions!important;justify-self:end!important;margin-right:190px!important}
-.cl-hero{min-height:435px!important;background-position:center center!important}
-.cl-hero-inner{min-height:435px!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;max-width:1500px!important;padding:36px 32px 26px!important}
-.cl-hero h1,.cl-hero-sub,.cl-hero-tag{width:55%!important;max-width:55%!important;text-align:center!important;position:relative!important;z-index:1!important;text-shadow:0 2px 10px #fff!important}
-.cl-hero h1{font-size:clamp(65px,7.1vw,108px)!important;line-height:1.02!important;letter-spacing:-3px!important}
-.cl-hero-sub{font-size:clamp(22px,2.25vw,33px)!important;line-height:1.3!important}
-.cl-hero-tag{font-size:clamp(22px,2.3vw,33px)!important;margin:10px 0 26px!important}
-#heroMarketplaceSearchForm{width:100%!important;max-width:1350px!important;align-self:center!important;grid-template-columns:minmax(0,1fr) minmax(160px,205px) minmax(180px,220px)!important}
-.cl-home-cats{max-width:1500px!important;gap:16px!important;padding:14px 22px 24px!important}
-.cl-home-cat{min-height:124px!important;font-size:18px!important}
-.cl-home-cat .material-symbols-outlined{font-size:43px!important}
-.cl-market-heading{font-size:clamp(23px,2.3vw,31px)!important}
-.cl-market-jobs,.cl-market-trust,.cl-market-workers{padding:24px!important}
-.cl-market-jobs,.cl-market-trust{font-size:16px!important}
+.cl-home-nav-actions{grid-area:actions!important;justify-self:end!important;display:flex!important;gap:8px!important}
+.cl-home-nav-actions .cl-home-login{padding:12px 18px!important;font-size:14px!important}
+.cl-hero{min-height:410px!important;background-image:linear-gradient(90deg,rgba(240,251,255,.93) 0%,rgba(240,251,255,.80) 29%,rgba(240,251,255,.36) 47%,rgba(240,251,255,0) 68%),url("assets/clean-lanka-hero-real-1.jpg?v=090")!important;background-position:center center!important;background-size:cover!important;background-repeat:no-repeat!important}
+.cl-hero-inner{max-width:1480px!important;min-height:410px!important;margin:auto!important;padding:36px 28px 26px!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important}
+.cl-hero h1,.cl-hero-sub,.cl-hero-tag{position:relative!important;z-index:1!important;width:54%!important;max-width:54%!important;text-align:center!important;text-shadow:none!important}
+.cl-hero h1{font-size:clamp(60px,7.2vw,105px)!important;font-weight:1000!important;line-height:1.04!important;letter-spacing:-2.5px!important;color:#06377c!important}
+.cl-hero h1 span{color:#007c38!important}
+.cl-hero-sub{font-size:clamp(21px,2.3vw,32px)!important;line-height:1.3!important;font-weight:900!important;color:#081d49!important}
+.cl-hero-tag{font-size:clamp(21px,2.3vw,30px)!important;font-weight:900!important;color:#006b2f!important;margin:12px 0 26px!important}
+#heroMarketplaceSearchForm{width:100%!important;max-width:1330px!important;align-self:center!important;position:relative!important;z-index:2!important}
+.cl-home-cats{max-width:1480px!important;gap:14px!important}
+.cl-home-cat{font-size:17px!important;min-height:120px!important}
+.cl-market-heading{font-size:clamp(23px,2.2vw,30px)!important;color:#0c214a!important}
+.cl-market-jobs,.cl-market-trust,.cl-market-workers{font-size:16px!important}
 @media(max-width:1100px){
- .cl-home-nav-inner{grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand actions" "links links"!important;padding:11px 18px!important}
- .cl079-language{display:none!important}
- .cl-home-navlinks{justify-content:space-around!important;gap:16px!important}
- .cl-home-navlinks a{font-size:15px!important}
- .cl-home-brand img{width:73px!important;height:69px!important}
- .cl-home-brand-name{font-size:37px!important}
+ .cl-home-nav-inner{padding:10px 16px!important}
+ .cl-home-brand img{width:66px!important;height:62px!important}
+ .cl-home-brand-name{font-size:34px!important}
  .cl-home-brand-sub{font-size:12px!important}
- .cl-hero{min-height:390px!important}
- .cl-hero-inner{min-height:390px!important;padding:26px 20px!important}
- .cl-hero h1,.cl-hero-sub,.cl-hero-tag{width:53%!important;max-width:53%!important}
- .cl-hero h1{font-size:clamp(54px,7vw,76px)!important}
- .cl-hero-sub{font-size:clamp(18px,2.2vw,25px)!important}
- .cl-hero-tag{font-size:clamp(19px,2.2vw,26px)!important}
- .cl-home-cat{font-size:16px!important}
+ .cl079-language{display:none!important}
+ .cl-home-navlinks{justify-content:space-around!important;gap:10px 16px!important}
+ .cl-home-navlinks a{font-size:15px!important}
+ .cl-hero{min-height:350px!important;background-image:linear-gradient(90deg,rgba(239,250,255,.92),rgba(239,250,255,.64) 35%,transparent 66%),url("assets/clean-lanka-hero-real-1.jpg?v=090")!important}
+ .cl-hero-inner{min-height:350px!important;padding:22px 17px!important}
+ .cl-hero h1,.cl-hero-sub,.cl-hero-tag{width:51%!important;max-width:51%!important}
+ .cl-hero h1{font-size:clamp(48px,6.5vw,72px)!important}
+ .cl-hero-sub{font-size:clamp(17px,2vw,23px)!important}
+ .cl-hero-tag{font-size:clamp(17px,2vw,23px)!important}
 }
 @media(max-width:700px){
- .cl-home-nav-inner{padding:12px!important;gap:8px!important}
- .cl-home-brand img{width:56px!important;height:55px!important}
- .cl-home-brand-name{font-size:clamp(25px,5vw,33px)!important}
+ .cl-home-nav-inner{grid-template-columns:minmax(0,1fr) auto!important}
+ .cl-home-brand img{width:53px!important;height:51px!important}
+ .cl-home-brand-name{font-size:26px!important}
  .cl-home-brand-sub{font-size:10px!important}
- .cl-home-nav-actions .cl-home-login{font-size:12px!important;padding:9px 12px!important}
- .cl-home-navlinks{justify-content:flex-start!important;gap:19px!important}
- .cl-home-navlinks a{font-size:14px!important}
- .cl-hero{min-height:390px!important;background-position:60% center!important}
- .cl-hero-inner{min-height:390px!important;justify-content:flex-start!important;align-items:center!important;padding:25px 12px!important}
+ .cl-home-nav-actions .cl-home-login{font-size:12px!important;padding:9px 11px!important}
+ .cl-home-navlinks{justify-content:center!important;gap:10px 16px!important}
+ .cl-home-navlinks a{font-size:13px!important}
+ .cl-hero{min-height:350px!important;background-image:linear-gradient(180deg,rgba(235,249,255,.96) 0%,rgba(235,249,255,.79) 36%,rgba(235,249,255,.06) 72%),url("assets/clean-lanka-hero-real-1.jpg?v=090")!important;background-position:60% center!important}
+ .cl-hero-inner{min-height:350px!important;align-items:center!important;justify-content:flex-start!important;padding:18px 12px!important}
  .cl-hero h1,.cl-hero-sub,.cl-hero-tag{width:100%!important;max-width:100%!important;text-align:center!important}
- .cl-hero h1{font-size:clamp(43px,9vw,61px)!important}
- .cl-hero-sub{font-size:19px!important}
- .cl-hero-tag{font-size:19px!important}
+ .cl-hero h1{font-size:clamp(40px,9vw,58px)!important}
+ .cl-hero-sub{font-size:18px!important}
+ .cl-hero-tag{font-size:18px!important}
  #heroMarketplaceSearchForm{grid-template-columns:minmax(0,1fr)!important}
  .cl-home-cats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
- .cl-market-grid,#homeMarketplace .cl-market-grid{grid-template-columns:minmax(0,1fr)!important}
+ #homeMarketplace .cl-market-grid{grid-template-columns:minmax(0,1fr)!important}
 }
 </style>
 </head>
