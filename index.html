@@ -3527,6 +3527,28 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
         ['adminTotalMembers','adminCustomerCount','adminWorkerCount','adminPendingWorkerCount','adminApprovedWorkerCount'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='Restricted';});
         dashboardMessage.textContent='Sub Admin signed in. Summary access is not included in your assigned permissions.';
       }
+      if(currentAdminRole==='sub_admin'){
+        const permittedStats={
+          adminTotalMembers:adminHasPermission('workers_view')&&adminHasPermission('customers_view'),
+          adminCustomerCount:adminHasPermission('customers_view'),
+          adminWorkerCount:adminHasPermission('workers_view'),
+          adminPendingWorkerCount:adminHasPermission('workers_view'),
+          adminApprovedWorkerCount:adminHasPermission('workers_view'),
+          adminAccessLabel:true
+        };
+        Object.entries(permittedStats).forEach(([id,allowed])=>{
+          const card=document.getElementById(id)?.closest('.admin-stat');
+          if(card)card.style.display=allowed?'':'none';
+        });
+        const needsWorkerAccess=adminHasPermission('approvals_approve')&&!adminHasPermission('workers_view');
+        if(needsWorkerAccess){
+          dashboardMessage.textContent='Worker approval permission is enabled, but Workers View permission is required to access the worker list. Ask Main Admin to enable Workers View.';
+        }
+      }else{
+        ['adminTotalMembers','adminCustomerCount','adminWorkerCount','adminPendingWorkerCount','adminApprovedWorkerCount','adminAccessLabel'].forEach(id=>{
+          const card=document.getElementById(id)?.closest('.admin-stat');if(card)card.style.display='';
+        });
+      }
       document.querySelectorAll('#adminDashboard .admin-nav a').forEach(link=>{
         const href=link.getAttribute('href');
         const permitted=href==='#adminSubAdminsHeading'?currentAdminRole==='main_admin':
