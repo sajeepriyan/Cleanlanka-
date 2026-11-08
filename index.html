@@ -1212,7 +1212,21 @@ body.admin-dashboard-mode #adminDashboard>.max-w-7xl{max-width:1480px!important;
 #adminDashboard input.cl-subadmin-checkbox {-webkit-appearance:checkbox!important;appearance:auto!important;display:inline-block!important;flex:0 0 22px!important;width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;margin:0!important;padding:0!important;border-radius:4px!important;accent-color:#047857!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;cursor:pointer!important}
 #adminDashboard label:has(> input.cl-subadmin-checkbox:checked) {background:#ecfdf5!important;border-color:#059669!important;color:#065f46!important}
 </style>
-</head>
+<style id="cl-admin-contrast-and-nav-v3">
+body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mode):not(.customer-dashboard-mode):not(.registration-mode):not(.login-page-mode):not(.password-recovery-mode) #clDashboardHomeButton[data-cl-admin-return="true"]{display:inline-flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;position:fixed!important;top:14px!important;left:14px!important;z-index:2147483000!important;background:#114e9c!important;color:white!important;font-size:16px!important;font-weight:800!important;padding:12px 18px!important}
+#adminDashboard{font-size:16px!important;color:#111827!important}
+#adminDashboard p,#adminDashboard label,#adminDashboard input,#adminDashboard select,#adminDashboard button,#adminDashboard td,#adminDashboard th,#adminDashboard a{font-size:clamp(15px,1.3vw,18px)!important;line-height:1.5!important}
+#adminDashboard h1{font-size:clamp(30px,3vw,40px)!important;color:white!important}
+#adminDashboard h2{font-size:clamp(23px,2.3vw,30px)!important;color:#123f85!important}
+#adminDashboard h3{font-size:clamp(19px,1.9vw,25px)!important;color:#123f85!important}
+#adminDashboard .admin-topbar{background:linear-gradient(110deg,#123f85,#155bb0)!important}
+#adminDashboard .admin-nav a{color:#123f85!important;background:white!important;border:2px solid #cbd5e1!important;font-weight:800!important}
+#adminDashboard section,#adminDashboard .admin-welcome{color:#111827!important}
+#adminDashboard .text-slate-500,#adminDashboard .text-slate-400,#adminDashboard .text-slate-600{color:#334155!important}
+#adminDashboard input,#adminDashboard select{background:white!important;color:#111827!important;border:2px solid #94a3b8!important}
+#adminDashboard button{font-weight:800!important}
+#adminDashboard .admin-topbar p,#adminDashboard .admin-topbar span{color:white!important}
+</style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
 <div class="bg-primary text-white py-2.5 px-4 sm:px-8 text-[15px] border-b border-primary-dark/30">
@@ -4309,6 +4323,8 @@ body.worker-dashboard-mode #clHomeProfileButton,body.customer-dashboard-mode #cl
 </style>
 <button id="clHomeProfileButton" type="button" aria-label="Open my Clean Lanka dashboard" title="My Dashboard"></button>
 <button id="clAdminReturnButton" type="button" aria-label="Return to Admin Dashboard" style="display:none;position:fixed;right:12px;bottom:90px;z-index:2147483000;border:0;border-radius:999px;background:#065f46;color:#fff;padding:13px 18px;font-weight:800;box-shadow:0 5px 22px #0004">⚙ Admin Dashboard</button>
+
+<button id="clDashboardHomeButton" type="button" aria-label="Back to the first Clean Lanka page" title="Back to first page">← Back to First Page</button>
 <script id="cl-admin-return-v2">
 (function(){
  const homeButton=document.getElementById('clDashboardHomeButton');
@@ -4322,6 +4338,7 @@ body.worker-dashboard-mode #clHomeProfileButton,body.customer-dashboard-mode #cl
  function update(){
    if(document.body.classList.contains('admin-dashboard-mode'))visited=true;
    const returnMode=visited&&isHome();
+   homeButton.dataset.clAdminReturn=returnMode?'true':'false';
    homeButton.textContent=returnMode?'← Admin Dashboard':'← Home Page';
    homeButton.setAttribute('aria-label',returnMode?'Return to Admin Dashboard':'Return to Home Page');
    homeButton.style.display=(returnMode||document.body.classList.contains('admin-dashboard-mode')||document.body.classList.contains('worker-dashboard-mode')||document.body.classList.contains('customer-dashboard-mode'))?'inline-flex':'none';
@@ -4353,7 +4370,6 @@ body.worker-dashboard-mode #clHomeProfileButton,body.customer-dashboard-mode #cl
  update();
 })();
 </script>
-<button id="clDashboardHomeButton" type="button" aria-label="Back to the first Clean Lanka page" title="Back to first page">← Back to First Page</button>
 <script id="clean-lanka-account-home-switch-v020-script">
 (function(){
   const avatarButton=document.getElementById('clHomeProfileButton');
@@ -4556,6 +4572,7 @@ body.worker-dashboard-mode > *:not(#workerDashboard):not(#clDashboardHomeButton)
   document.addEventListener('click',function(event){
     const button=event.target && event.target.closest ? event.target.closest('#clDashboardHomeButton') : null;
     if(!button) return;
+    if(button.getAttribute('data-cl-admin-return')==='true') return;
     event.preventDefault(); event.stopPropagation();
     if(event.stopImmediatePropagation) event.stopImmediatePropagation();
     if(typeof window.returnToPublicHome==='function') window.returnToPublicHome();
