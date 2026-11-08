@@ -645,6 +645,19 @@ body.customer-dashboard-mode > #customerDashboard{
 .cl073-meta{display:flex;flex-direction:column;align-items:flex-end;gap:9px;flex:none;color:#64748b;font-size:11px}.cl073-count{background:#16a34a;color:white;border-radius:99px;min-width:23px;height:23px;padding:2px 6px;text-align:center;font-size:13px;font-weight:900}.cl073-read{color:#64748b;font-size:15px}
 @media(max-width:600px){#customerConversationList .cl073-chat-row,#workerConversationList .cl073-chat-row{gap:9px!important;padding:10px!important}.cl073-avatar{width:40px;height:40px}.cl073-chat-info strong{font-size:15px!important}}
 </style>
+<style id="cl074-chat-navigation">
+#customerChatPanel.cl074-thread-open #customerConversationList,#workerChatPanel.cl074-thread-open #workerConversationList{display:none!important}
+#customerChatPanel:not(.cl074-thread-open) #customerChatWindow,#workerChatPanel:not(.cl074-thread-open) #workerChatWindow{display:none!important}
+#customerChatPanel.cl074-thread-open #customerChatWindow,#workerChatPanel.cl074-thread-open #workerChatWindow{display:block!important;margin-top:0!important;min-height:400px!important}
+#customerChatPanel.cl074-thread-open>h2,#workerChatPanel.cl074-thread-open>h3,#customerChatPanel.cl074-thread-open>p,#workerChatPanel.cl074-thread-open>div:first-of-type,#customerChatPanel.cl074-thread-open>div:first-of-type{display:none!important}
+#customerChatPanel.cl074-thread-open,#workerChatPanel.cl074-thread-open{padding:10px!important}
+.cl074-back{display:flex;align-items:center;gap:10px;width:100%;border:0;background:#fff;color:#0f5132;padding:10px 8px;margin-bottom:10px;font-size:16px;font-weight:800;text-align:left;border-radius:12px}
+.cl074-back span{font-size:24px}
+#customerChatMessages,#workerChatMessages{max-height:min(65vh,650px)!important;min-height:300px!important;overflow-y:auto!important}
+#customerConversationList .cl073-chat-row,#workerConversationList .cl073-chat-row{border:0!important;border-bottom:1px solid #e5e7eb!important;border-radius:0!important;margin:0!important;padding:14px 10px!important}
+#customerConversationList,#workerConversationList{max-height:none!important;background:#fff!important}
+@media(max-width:600px){#customerChatPanel,#workerChatPanel{padding:12px!important}#customerChatMessages,#workerChatMessages{max-height:57vh!important;min-height:290px!important}}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -3386,7 +3399,7 @@ body.customer-dashboard-mode > #customerDashboard{
       const {data:latest}=await supabaseClient.from('messages').select('message,created_at,sender_id').eq('conversation_id',c.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
       return {c,latest,unread:counts.get(c.id)||0,name:names.get(String(role==='worker'?c.customer_id:c.worker_id))|| (role==='worker'?'Customer':'Worker')};
     }));
-    rows.sort((a,b)=>(b.unread>0)-(a.unread>0)||new Date(b.latest?.created_at||b.c.created_at)-new Date(a.latest?.created_at||a.c.created_at));
+    rows.sort((a,b)=>new Date(b.latest?.created_at||b.c.created_at)-new Date(a.latest?.created_at||a.c.created_at));
     host.innerHTML='<div class="cl073-inbox-head"><strong>Messages</strong><span>'+rows.filter(r=>r.unread>0).length+' unread chats</span></div>'+rows.map(({c,latest,unread,name})=>{
       const time=new Date(latest?.created_at||c.created_at);
       const label=esc(String(name||'Contact'));const initials=esc(String(name||'C').trim().charAt(0).toUpperCase());
@@ -4905,6 +4918,36 @@ setInterval(refresh,6000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh()});
 window.addEventListener('focus',refresh);
 setTimeout(refresh,1000);
+})();
+</script>
+<script id="cl074-chat-navigation-script">
+(()=>{
+ const roles=['customer','worker'];
+ function showList(role){
+  const panel=document.getElementById(role+'ChatPanel');
+  if(!panel||!panel.classList.contains('cl074-thread-open'))return;
+  panel.classList.remove('cl074-thread-open');
+  document.getElementById(role+'ChatWindow')?.classList.add('hidden');
+  document.getElementById(role+'ConversationList')?.scrollIntoView({block:'nearest'});
+  if(history.state?.cl074Chat)history.replaceState({...history.state,cl074Chat:false},'');
+ }
+ function openThread(role,button){
+  const panel=document.getElementById(role+'ChatPanel'),win=document.getElementById(role+'ChatWindow');
+  if(!panel||!win)return;
+  panel.classList.add('cl074-thread-open');
+  let back=win.querySelector('.cl074-back');
+  if(!back){back=document.createElement('button');back.type='button';back.className='cl074-back';back.innerHTML='<span aria-hidden="true">‹</span> Back to messages';win.prepend(back);back.addEventListener('click',()=>showList(role))}
+  const name=button?.querySelector('.cl073-chat-info strong')?.textContent;
+  if(name){const title=document.getElementById(role+'ChatTitle');if(title)title.textContent=name}
+  win.scrollIntoView({behavior:'smooth',block:'start'});
+  if(!history.state?.cl074Chat)history.pushState({...history.state,cl074Chat:true,cl074Role:role},'','#'+role+'-conversation');
+ }
+ document.addEventListener('click',e=>{
+  const row=e.target.closest('[data-open-customer-chat],[data-open-worker-chat]');
+  if(row){const role=row.hasAttribute('data-open-customer-chat')?'customer':'worker';setTimeout(()=>openThread(role,row),60);return}
+  if(e.target.closest('[data-cl-go],.cl-dash-nav button,.cl-mobile-nav button')){for(const role of roles){const panel=document.getElementById(role+'ChatPanel');panel?.classList.remove('cl074-thread-open');document.getElementById(role+'ChatWindow')?.classList.add('hidden')}}
+ },true);
+ window.addEventListener('popstate',()=>{for(const role of roles)showList(role)});
 })();
 </script>
 </body>
