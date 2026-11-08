@@ -1226,6 +1226,36 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 #adminDashboard input,#adminDashboard select{background:white!important;color:#111827!important;border:2px solid #94a3b8!important}
 #adminDashboard button{font-weight:800!important}
 #adminDashboard .admin-topbar p,#adminDashboard .admin-topbar span{color:white!important}
+</style><style id="cl-premium-admin-v1">
+/* Clean Lanka premium admin theme: presentation only; all access controls stay unchanged */
+#adminDashboard{background:linear-gradient(135deg,#e8fff2 0%,#eef6ff 50%,#f4f0ff 100%)!important;min-height:100vh;color:#142d4d}
+#adminDashboard .admin-topbar{background:linear-gradient(112deg,#075c42 0%,#008d60 50%,#0757b4 100%)!important;border-radius:22px!important;box-shadow:0 16px 34px #075c4230!important}
+#adminDashboard .admin-nav{background:#fff!important;padding:13px!important;border-radius:17px!important;box-shadow:0 5px 20px #183c6b12}
+#adminDashboard .admin-nav a{border:1px solid #cfe3ed!important;border-radius:12px!important;background:#f5faff!important;color:#123d64!important;padding:12px 15px!important;font-size:14px!important;font-weight:800!important}
+#adminDashboard .admin-nav a.cl-admin-nav-selected{background:linear-gradient(100deg,#057f4d,#0c7bcb)!important;color:#fff!important}
+#adminDashboard #adminWorkerDetail{background:linear-gradient(145deg,#fff,#f4faff)!important;border:1px solid #c7e5ef!important;border-radius:24px!important;padding:clamp(14px,3vw,28px)!important;box-shadow:0 15px 38px #103b6220}
+#adminDashboard #adminWorkerDetail>h3{background:linear-gradient(110deg,#073e6a,#087d68)!important;color:white!important;padding:20px!important;border-radius:18px!important;font-size:clamp(20px,3vw,28px)!important;line-height:1.35}
+#adminDashboard #adminWorkerDetail>div.grid{gap:10px!important}
+#adminDashboard #adminWorkerDetail>div.grid:first-of-type>div{border:1px solid #d7e5f4!important;border-radius:13px!important;background:linear-gradient(110deg,#fff,#eff7ff)!important;padding:14px!important;box-shadow:0 2px 8px #0e366c0b}
+#adminDashboard #adminWorkerDetail>div.grid:first-of-type>div p:first-child{font-size:12px!important;font-weight:900!important;letter-spacing:.03em;color:#345c81!important}
+#adminDashboard #adminWorkerDetail>div.grid:first-of-type>div p:last-child{font-size:16px!important;font-weight:800!important;color:#112b48!important;overflow-wrap:anywhere}
+#adminDashboard #adminWorkerDetail .cl-status-card{border-width:2px!important}
+#adminDashboard #adminWorkerDetail .cl-status-card.cl-approved{background:#e2f9ea!important;border-color:#16a34a!important}
+#adminDashboard #adminWorkerDetail .cl-status-card.cl-rejected{background:#ffe7ec!important;border-color:#e11d48!important}
+#adminDashboard #adminWorkerDetail .cl-status-card.cl-pending{background:#fff2d6!important;border-color:#e99b16!important}
+#adminDashboard #adminWorkerDetail .cl-status-card.cl-info{background:#e6f2ff!important;border-color:#2584d8!important}
+#adminDashboard #adminWorkerDetail .cl-status-card.cl-approved p:last-child{color:#08733d!important}
+#adminDashboard #adminWorkerDetail .cl-status-card.cl-rejected p:last-child{color:#b01238!important}
+#adminDashboard #adminWorkerDetail .cl-status-card.cl-pending p:last-child{color:#925400!important}
+#adminDashboard #adminWorkerDetail .cl-status-card.cl-info p:last-child{color:#125d9d!important}
+#adminDashboard #adminWorkerDetail>h4{background:linear-gradient(90deg,#d6f7e3,#dceeff)!important;color:#0c3b5a!important;padding:14px 17px!important;border-radius:13px!important;font-size:20px!important}
+#adminDashboard #adminWorkerDetail>div.grid:nth-of-type(2)>div{background:white!important;border:1px solid #cde2f7!important;box-shadow:0 3px 12px #164e8010}
+#adminDashboard #adminWorkerDetail button{min-height:43px;border-radius:11px!important;font-size:14px!important}
+#adminDashboard #adminWorkerDetail button:disabled{opacity:.55!important;cursor:wait}
+#adminDashboard #adminWorkerList>article,#adminDashboard #adminWorkerList>div{border-radius:18px!important;box-shadow:0 7px 18px #143f6a16!important}
+#adminDashboard .admin-stat-card{border-radius:18px!important}
+@media(min-width:900px){#adminDashboard #adminWorkerDetail>div.grid:first-of-type{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:600px){#adminDashboard #adminWorkerDetail{padding:13px!important}#adminDashboard #adminWorkerDetail>div.grid:first-of-type{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}#adminDashboard #adminWorkerDetail>div.grid:first-of-type>div{padding:10px!important}#adminDashboard #adminWorkerDetail>div.grid:first-of-type>div p:last-child{font-size:13px!important}#adminDashboard #adminWorkerDetail>h3{font-size:18px!important}}
 </style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -3090,6 +3120,17 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       ['Reviewed At',w.reviewed_at ? new Date(w.reviewed_at).toLocaleString() : null],
       ['Phone visible publicly',w.show_phone_publicly ? 'Yes' : 'No'],['Profile Created',w.created_at ? new Date(w.created_at).toLocaleString() : null]
     ].forEach(([label,value]) => grid.append(adminField(label,value)));
+    // Highlight current verification and clearance status without changing database data.
+    [...grid.children].forEach((card) => {
+      const label=(card.firstElementChild?.textContent||'').trim().toLowerCase();
+      const value=(card.lastElementChild?.textContent||'').trim().toLowerCase();
+      if (!['verification status','police clearance status','gn certificate status','available for work','clearance label'].includes(label)) return;
+      card.classList.add('cl-status-card');
+      if (value==='approved'||value==='verified'||value==='yes'||value==='clearance verified') card.classList.add('cl-approved');
+      else if (value==='rejected'||value==='no') card.classList.add('cl-rejected');
+      else if (value.includes('pending')||value.includes('more_info')||value.includes('more info')) card.classList.add('cl-pending');
+      else card.classList.add('cl-info');
+    });
     adminWorkerDetail.append(grid);
     const docsTitle = document.createElement('h4');
     docsTitle.className = 'text-lg font-black text-slate-900 mt-6 mb-3';
