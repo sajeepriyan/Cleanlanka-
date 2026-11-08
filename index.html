@@ -1157,6 +1157,37 @@ body:not(.worker-dashboard-mode):not(.customer-dashboard-mode):not(.admin-dashbo
  .cl-home-cats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 }
 </style>
+<style id="cl088-phone-desktop-mode-legibility">
+/* Phones using browser Desktop Site report a wide viewport. Apply touch-friendly layout there too. */
+@media (pointer:coarse) and (max-width:1200px){
+ .cl-home-nav{min-height:0!important;height:auto!important}
+ .cl-home-nav-inner{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand actions" "links links"!important;gap:8px 12px!important;max-width:100%!important;padding:12px 18px!important}
+ .cl-home-brand{grid-area:brand!important;min-width:0!important;display:flex!important;gap:10px!important;overflow:hidden!important}
+ .cl-home-brand img{width:68px!important;height:64px!important;flex:none!important}
+ .cl-home-brand-name{font-size:clamp(26px,3.4vw,37px)!important;white-space:nowrap!important}
+ .cl-home-brand-sub{font-size:11px!important;white-space:nowrap!important}
+ .cl-home-navlinks{grid-area:links!important;display:flex!important;justify-content:flex-start!important;gap:22px!important;overflow-x:auto!important;white-space:nowrap!important;min-width:0!important;max-width:100%!important;padding:9px 0!important;scrollbar-width:thin}
+ .cl-home-navlinks a{font-size:15px!important;flex:none!important}
+ .cl079-language{display:none!important}
+ .cl-home-nav-actions{grid-area:actions!important;display:flex!important;align-items:center!important;justify-self:end!important;gap:6px!important}
+ .cl-home-nav-actions .cl-home-login{font-size:13px!important;padding:10px 14px!important}
+ .cl-hero{background-position:center center!important;min-height:390px!important}
+ .cl-hero-inner{min-height:390px!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;padding:45px 22px 23px!important}
+ .cl-hero h1,.cl-hero-sub,.cl-hero-tag{width:51%!important;max-width:51%!important;text-align:center!important;text-shadow:0 1px 8px #ffffff,0 1px 2px #ffffff!important}
+ .cl-hero h1{font-size:clamp(46px,6vw,72px)!important;line-height:1.06!important;letter-spacing:-1.6px!important}
+ .cl-hero-sub{font-size:clamp(16px,2vw,23px)!important}
+ .cl-hero-tag{font-size:clamp(17px,2vw,23px)!important;margin:9px 0 30px!important}
+ #heroMarketplaceSearchForm{align-self:center!important;width:100%!important;max-width:100%!important}
+ #homeMarketplace .cl-market-grid{grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr)!important}
+}
+@media (pointer:coarse) and (max-width:600px){
+ .cl-hero{background-position:59% center!important}
+ .cl-hero-inner{align-items:center!important;padding:25px 10px 18px!important}
+ .cl-hero h1,.cl-hero-sub,.cl-hero-tag{width:100%!important;max-width:100%!important;text-align:center!important}
+ .cl-hero h1{font-size:clamp(40px,9vw,55px)!important}
+ #homeMarketplace .cl-market-grid{grid-template-columns:minmax(0,1fr)!important}
+}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
