@@ -4309,30 +4309,48 @@ body.worker-dashboard-mode #clHomeProfileButton,body.customer-dashboard-mode #cl
 </style>
 <button id="clHomeProfileButton" type="button" aria-label="Open my Clean Lanka dashboard" title="My Dashboard"></button>
 <button id="clAdminReturnButton" type="button" aria-label="Return to Admin Dashboard" style="display:none;position:fixed;right:12px;bottom:90px;z-index:2147483000;border:0;border-radius:999px;background:#065f46;color:#fff;padding:13px 18px;font-weight:800;box-shadow:0 5px 22px #0004">⚙ Admin Dashboard</button>
-<script id="cl-admin-return-v1">
+<script id="cl-admin-return-v2">
 (function(){
- const btn=document.getElementById('clAdminReturnButton');
+ const homeButton=document.getElementById('clDashboardHomeButton');
+ const oldButton=document.getElementById('clAdminReturnButton');
  const dashboard=document.getElementById('adminDashboard');
  const login=document.getElementById('admin-login');
- if(!btn||!dashboard||!login)return;
- const inHome=()=>!['admin-dashboard-mode','admin-login-mode','worker-dashboard-mode','customer-dashboard-mode','registration-mode','login-page-mode'].some(c=>document.body.classList.contains(c));
- function update(){btn.style.display=(inHome()&&dashboard.dataset.clAdminVisited==='yes')?'inline-flex':'none'}
+ if(!homeButton||!dashboard||!login)return;
+ if(oldButton)oldButton.remove();
+ let visited=false;
+ const isHome=()=>!['admin-dashboard-mode','admin-login-mode','worker-dashboard-mode','customer-dashboard-mode','registration-mode','login-page-mode','password-recovery-mode'].some(c=>document.body.classList.contains(c));
+ function update(){
+   if(document.body.classList.contains('admin-dashboard-mode'))visited=true;
+   const returnMode=visited&&isHome();
+   homeButton.textContent=returnMode?'← Admin Dashboard':'← Home Page';
+   homeButton.setAttribute('aria-label',returnMode?'Return to Admin Dashboard':'Return to Home Page');
+   homeButton.style.display=(returnMode||document.body.classList.contains('admin-dashboard-mode')||document.body.classList.contains('worker-dashboard-mode')||document.body.classList.contains('customer-dashboard-mode'))?'inline-flex':'none';
+ }
+ async function returnAdmin(){
+  const client=window.supabaseClient;
+  if(!client)throw Error('Supabase unavailable');
+  const {data,error}=await client.auth.getUser();
+  const user=data?.user;
+  if(error||!user)throw Error('Admin sign in required');
+  const {data:row,error:roleError}=await client.from('admins').select('role,is_active').eq('user_id',user.id).maybeSingle();
+  if(roleError||!row?.is_active||!['main_admin','admin','sub_admin'].includes(row.role))throw Error('Admin sign in required');
+  document.body.classList.remove('admin-login-mode','login-page-mode','registration-mode','worker-dashboard-mode','customer-dashboard-mode','password-recovery-mode');
+  login.classList.add('hidden');
+  dashboard.classList.remove('hidden');
+  document.body.classList.add('admin-dashboard-mode');
+  dashboard.scrollTop=0;
+ }
+ homeButton.addEventListener('click',function(e){
+  if(!(visited&&isHome()))return;
+  e.stopImmediatePropagation();
+  homeButton.disabled=true;
+  returnAdmin().catch(()=>{
+   if(typeof window.openAdminLoginPage==='function')window.openAdminLoginPage();
+   else window.location.href='/admin';
+  }).finally(()=>{homeButton.disabled=false;update()});
+ },true);
  new MutationObserver(update).observe(document.body,{attributes:true,attributeFilter:['class']});
- document.addEventListener('click',function(e){if(e.target.closest('#adminLoginSubmit')||e.target.closest('#adminDashboard')){if(document.body.classList.contains('admin-dashboard-mode'))dashboard.dataset.clAdminVisited='yes';update()}});
- btn.addEventListener('click',async function(){
-  btn.disabled=true;
-  try{
-   const client=window.supabaseClient;
-   if(!client)throw Error('Supabase unavailable');
-   const {data:{user},error}=await client.auth.getUser();
-   if(error||!user)throw Error('Sign in again');
-   const {data:row,error:roleError}=await client.from('admins').select('role,is_active').eq('user_id',user.id).maybeSingle();
-   if(roleError||!row?.is_active||!['main_admin','admin','sub_admin'].includes(row.role))throw Error('Admin sign in required');
-   document.body.classList.remove('admin-login-mode','login-page-mode','registration-mode','worker-dashboard-mode','customer-dashboard-mode','password-recovery-mode');
-   login.classList.add('hidden');dashboard.classList.remove('hidden');document.body.classList.add('admin-dashboard-mode');dashboard.scrollTop=0;
-  }catch(err){if(typeof window.openAdminLoginPage==='function')window.openAdminLoginPage();else window.location.href='/admin';}
-  finally{btn.disabled=false;update()}
- });
+ update();
 })();
 </script>
 <button id="clDashboardHomeButton" type="button" aria-label="Back to the first Clean Lanka page" title="Back to first page">← Back to First Page</button>
