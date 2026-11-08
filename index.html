@@ -3137,36 +3137,36 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const actionButtons = document.createElement('div');
     actionButtons.className = 'flex flex-wrap gap-2';
     adminWorkerDetail.append(actionButtons);
-    if (currentAdminRole === 'sub_admin' || !adminHasPermission('workers_edit')) {
+    if (!adminHasPermission('approvals_approve')) {
       actionNote.textContent = 'You have view-only access. Worker approval and profile changes are restricted to an authorised administrator.';
       actionButtons.classList.add('hidden');
     }
 
     async function applyAdminWorkerDecision(label, changes, confirmText) {
+      if (!adminHasPermission('approvals_approve')) { actionMessage.textContent='Approval permission required.'; return; }
       if (confirmText && !window.confirm(confirmText)) return;
-      actionButtons.querySelectorAll('button').forEach(b => b.disabled = true);
-      actionMessage.textContent = `${label}...`;
-      try {
-        const { data: sessionData } = await supabaseClient.auth.getSession();
-        const adminUserId = sessionData?.session?.user?.id;
-        if (!adminUserId) throw new Error('Admin session expired. Please sign in again.');
-        const payload = {...changes, reviewed_at: new Date().toISOString(), reviewed_by: adminUserId};
-        const { error } = await supabaseClient.from('worker_profiles').update(payload).eq('id',w.id);
-        if (error) throw error;
-        Object.assign(w,payload);
-        const cachedIndex = adminWorkerCache.findIndex(item => item.id === w.id);
-        if (cachedIndex >= 0) adminWorkerCache[cachedIndex] = {...adminWorkerCache[cachedIndex],...payload};
-        actionMessage.textContent = `${label} completed successfully.`;
-        showAdminWorkerDetail(w);
-        renderAdminWorkerList();
-      } catch (error) {
-        actionMessage.textContent = `Could not ${label.toLowerCase()}: ${error.message || 'Database update failed.'}`;
-        actionButtons.querySelectorAll('button').forEach(b => b.disabled = false);
+      const action=label==='Worker approval'||label==='Temporary worker approval'?'approve':
+        label==='Worker rejection'?'reject':label==='More information request'?'more_info':
+        label==='Police Clearance verification'?'verify_police':label==='GN Certificate verification'?'verify_gn':null;
+      if(!action){actionMessage.textContent='Unknown worker action.';return;}
+      actionButtons.querySelectorAll('button').forEach(b=>b.disabled=true);
+      actionMessage.textContent=label+'...';
+      try{
+        const {data,error}=await supabaseClient.rpc('admin_decide_worker',{p_worker_id:w.id,p_action:action});
+        if(error)throw error;
+        if(!data?.ok)throw new Error('Worker decision was not confirmed.');
+        actionMessage.textContent=label+' completed successfully.';
+        await loadAdminWorkers();
+        const {data:updated,error:readError}=await supabaseClient.from('worker_profiles').select('*').eq('id',w.id).single();
+        if(!readError&&updated)showAdminWorkerDetail(updated);
+      }catch(error){
+        actionMessage.textContent='Could not '+label.toLowerCase()+': '+(error.message||'Database update failed.');
+        actionButtons.querySelectorAll('button').forEach(b=>b.disabled=false);
       }
     }
 
     function addAdminDecisionButton(text, style, handler) {
-      if (currentAdminRole === 'sub_admin' || !adminHasPermission('workers_edit')) return;
+      if (!adminHasPermission('approvals_approve')) return;
       const button = document.createElement('button');
       button.type = 'button';
       button.className = `rounded-xl px-4 py-3 text-sm font-bold text-white ${style}`;
