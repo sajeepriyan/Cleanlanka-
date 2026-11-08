@@ -1189,7 +1189,7 @@ body:not(.worker-dashboard-mode):not(.customer-dashboard-mode):not(.admin-dashbo
   <a class="cl-home-brand" href="#top" aria-label="Clean Lanka Home"><img alt="Clean Lanka Sri Lanka leaf logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSh7GcRie2m5v1OiH4IUu5lxi4Qmpn6h_Pep3G-39-hWm7AbRMjRiSaW8SsexcB7a_7tX9SAvOol6H691xnReL6mdZRfnbYcd-7BNMTw7Gg4htwndima_BEOAvVMt9HiksX1Ri23atqe1GVO1CKI16GOVKspLITaWrltY2U16g_mM9bw1hqxe2nZo7REvfttd1v1-sltMDGf-rk3tCAAVbMLB9FiHnjPpY0SBgHgnSEQYH5v3C8xoNg"><div><div class="cl-home-brand-name">Clean <span>Lanka</span></div><div class="cl-home-brand-sub">Home Services Marketplace</div></div></a>
   <button id="clHomeAccountName" type="button" class="hidden" aria-label="Open my dashboard" style="align-items:center;gap:8px;border:1px solid #cfe7d8;background:#f0fdf4;color:#0f5132;border-radius:999px;padding:10px 15px;font-weight:900;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Open my dashboard"><span aria-hidden="true">👤</span><span id="clHomeAccountNameText">My Dashboard</span></button>
   <nav class="cl-home-navlinks" aria-label="Main navigation"><a href="#top">⌂ Home</a><a href="#services-section">Services</a><a href="#homeMarketplace">Find Jobs</a><a href="#worker-register" onclick="openRegistration('worker');return false;">For Workers</a><a href="#customer-register" onclick="openRegistration('customer');return false;">For Customers</a><a href="#contact">Contact Us</a></nav>
-  <label class="cl079-language" aria-label="Choose language"><span aria-hidden="true">🌐</span><select id="cl079Language" aria-label="Language"><option value="en">English</option><option value="si">සිංහල</option><option value="ta">தமிழ்</option></select></label><div class="cl-home-nav-actions"><button type="button" class="cl-home-login" onclick="openLoginPage()"><span class="material-symbols-outlined align-middle">person</span> Login</button><button type="button" class="cl-home-login" onclick="openAdminLoginPage()" aria-label="Admin login" style="background:#fff;color:#0f5132;border:2px solid #0f5132"><span class="material-symbols-outlined align-middle">admin_panel_settings</span> Admin</button></div>
+  <label class="cl079-language" aria-label="Choose language"><span aria-hidden="true">🌐</span><select id="cl079Language" aria-label="Language"><option value="en">English</option><option value="si">සිංහල</option><option value="ta">தமிழ்</option></select></label><div class="cl-home-nav-actions"><button type="button" class="cl-home-login" onclick="openLoginPage()"><span class="material-symbols-outlined align-middle">person</span> Login</button></div>
  </div>
 </header>
 <p id="clLanguageStatus" class="sr-only" aria-live="polite">English selected</p>
@@ -5313,6 +5313,26 @@ document.addEventListener('DOMContentLoaded',()=>{
   }else select.addEventListener('change',()=>{const status=document.getElementById('clLanguageStatus');if(status)status.textContent='Selected '+select.options[select.selectedIndex].text});
  }
 });
+</script>
+<script id="cl-admin-private-route">
+(function(){
+  function routeAdmin(){
+    if(!/^\/admin\/?$/.test(window.location.pathname)) return;
+    if(document.body.classList.contains('admin-dashboard-mode')) return;
+    if(typeof window.openAdminLoginPage === 'function'){
+      window.openAdminLoginPage();
+    }else{
+      const form=document.getElementById('admin-login');
+      if(form){
+        document.body.classList.remove('login-page-mode','registration-mode','customer-dashboard-mode','worker-dashboard-mode');
+        form.classList.remove('hidden');
+        document.body.classList.add('admin-login-mode');
+      }
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',routeAdmin);
+  else routeAdmin();
+})();
 </script>
 </body>
 
