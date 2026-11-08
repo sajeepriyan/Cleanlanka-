@@ -658,6 +658,14 @@ body.customer-dashboard-mode > #customerDashboard{
 #customerConversationList,#workerConversationList{max-height:none!important;background:#fff!important}
 @media(max-width:600px){#customerChatPanel,#workerChatPanel{padding:12px!important}#customerChatMessages,#workerChatMessages{max-height:57vh!important;min-height:290px!important}}
 </style>
+<style id="cl075-chat-stack">
+#workerDashboard #workerConversationList,#customerDashboard #customerConversationList{display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;align-items:stretch!important;gap:0!important;width:100%!important;max-width:100%!important;overflow-x:hidden!important;box-sizing:border-box!important}
+#workerDashboard #workerConversationList>.cl073-inbox-head,#customerDashboard #customerConversationList>.cl073-inbox-head{width:100%!important;box-sizing:border-box!important;flex:none!important;border:0!important;background:transparent!important;margin:0!important}
+#workerDashboard #workerConversationList>button.cl073-chat-row,#customerDashboard #customerConversationList>button.cl073-chat-row{display:flex!important;flex-direction:row!important;flex:none!important;float:none!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;border:0!important;border-bottom:1px solid #e2e8f0!important;border-radius:0!important;padding:14px 12px!important}
+#workerDashboard #workerConversationList .cl073-chat-info,#customerDashboard #customerConversationList .cl073-chat-info{min-width:0!important;flex:1!important;overflow:hidden!important}
+#workerDashboard #workerConversationList .cl073-preview,#customerDashboard #customerConversationList .cl073-preview{display:block!important;white-space:nowrap!important;text-overflow:ellipsis!important;overflow:hidden!important}
+#workerDashboard #workerChatPanel,#customerDashboard #customerChatPanel{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important;box-sizing:border-box!important}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -3388,16 +3396,16 @@ body.customer-dashboard-mode > #customerDashboard{
     const {data,error}=await query;
     if(error){host.textContent='Could not load conversations: '+error.message;return;}
     if(!data?.length){host.innerHTML='<p class="text-sm text-slate-500">No conversations yet. New chats will appear here.</p>';return;}
-    const [unreadResult,profileResult]=await Promise.all([
+    const [unreadResult,contactResult]=await Promise.all([
       supabaseClient.from('notifications').select('related_conversation_id').eq('user_id',user.id).eq('notification_type','message').eq('is_read',false).not('related_conversation_id','is',null).limit(1000),
-      role==='worker'?supabaseClient.from('customer_profiles').select('user_id,full_name').in('user_id',[...new Set(data.map(c=>c.customer_id).filter(Boolean))]):
-      supabaseClient.from('worker_profiles').select('id,full_name').in('id',[...new Set(data.map(c=>c.worker_id).filter(Boolean))])
+      supabaseClient.rpc('clean_lanka_chat_contact_names',{p_conversation_ids:data.map(c=>c.id)})
     ]);
+    if(contactResult.error)console.warn('Chat contact names unavailable:',contactResult.error);
     const counts=new Map();for(const n of unreadResult.data||[])counts.set(n.related_conversation_id,(counts.get(n.related_conversation_id)||0)+1);
-    const names=new Map((profileResult.data||[]).map(p=>[String(role==='worker'?p.user_id:p.id),p.full_name]));
+    const names=new Map((contactResult.data||[]).map(p=>[String(p.conversation_id),p.contact_name]));
     const rows=await Promise.all(data.map(async c=>{
       const {data:latest}=await supabaseClient.from('messages').select('message,created_at,sender_id').eq('conversation_id',c.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
-      return {c,latest,unread:counts.get(c.id)||0,name:names.get(String(role==='worker'?c.customer_id:c.worker_id))|| (role==='worker'?'Customer':'Worker')};
+      return {c,latest,unread:counts.get(c.id)||0,name:names.get(String(c.id))|| (role==='worker'?'Customer':'Worker')};
     }));
     rows.sort((a,b)=>new Date(b.latest?.created_at||b.c.created_at)-new Date(a.latest?.created_at||a.c.created_at));
     host.innerHTML='<div class="cl073-inbox-head"><strong>Messages</strong><span>'+rows.filter(r=>r.unread>0).length+' unread chats</span></div>'+rows.map(({c,latest,unread,name})=>{
