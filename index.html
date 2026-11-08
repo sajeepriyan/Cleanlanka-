@@ -1279,6 +1279,36 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 #adminDashboard #adminWorkerDetail>h4{background:linear-gradient(100deg,#d3f7e2,#cfe2ff)!important;border-left:6px solid #07865e!important;padding:15px!important;color:#123b66!important;font-size:20px!important}
 #adminDashboard #adminWorkerDetail>div.flex.flex-wrap button{padding:12px 18px!important;font-size:15px!important;box-shadow:0 5px 13px #0c3a6020}
 @media(max-width:600px){#adminDashboard #adminWorkerDetail .cl-worker-hero{padding:12px}#adminDashboard #adminWorkerDetail .cl-worker-avatar{width:56px;height:56px;font-size:27px}#adminDashboard #adminWorkerDetail .cl-worker-status-hero{width:100%;min-width:0}#adminDashboard #adminWorkerDetail .cl-worker-fields>div{padding:10px!important}#adminDashboard #adminWorkerDetail .cl-worker-fields>div p:last-child{font-size:13px!important}}
+</style><style id="cl-admin-complete-workspace-v3">
+/* Responsive navigation layout. Existing permission-based nav hiding and actions remain unchanged. */
+#adminDashboard{background:linear-gradient(130deg,#e9f8ff,#e9fff2 58%,#f2edff)!important;padding:12px clamp(8px,2vw,24px) 32px!important}
+#adminDashboard>.max-w-7xl{max-width:1500px!important}
+#adminDashboard .admin-topbar{margin-bottom:18px!important;padding:22px!important;background:linear-gradient(105deg,#063f73,#07654c 60%,#0a9e80)!important;box-shadow:0 16px 30px #064b722e!important}
+#adminDashboard .admin-brand h1{font-size:clamp(24px,3vw,38px)!important;color:#fff!important}
+#adminDashboard .cl-admin-welcome-strip{background:linear-gradient(105deg,#fff,#e3f6ff)!important;border:1px solid #cde6f3!important;box-shadow:0 8px 25px #104b6a12!important;margin-bottom:16px!important}
+#adminDashboard .cl-admin-workspace{display:grid;grid-template-columns:245px minmax(0,1fr);align-items:start;gap:18px}
+#adminDashboard .cl-admin-workspace>.admin-nav{position:sticky;top:14px;display:flex!important;flex-direction:column!important;gap:10px!important;overflow:visible!important;background:linear-gradient(165deg,#083f70,#075d61 62%,#0b8559)!important;border-radius:23px!important;padding:20px 14px!important;min-height:490px;box-shadow:0 14px 30px #073e6330!important}
+#adminDashboard .cl-admin-side-heading{display:flex;align-items:center;gap:12px;color:#fff;font-size:17px;font-weight:950;line-height:1.2;padding:8px 10px 23px;border-bottom:1px solid #ffffff35;margin-bottom:8px}
+#adminDashboard .cl-admin-side-heading small{font-size:10px;letter-spacing:.12em;color:#c8e8ee}
+#adminDashboard .cl-admin-side-icon{font-size:26px;background:#ffffff25;padding:10px;border-radius:14px}
+#adminDashboard .cl-admin-workspace>.admin-nav>a{display:flex!important;align-items:center;white-space:normal!important;min-height:49px;border:1px solid #ffffff2b!important;border-radius:13px!important;background:#ffffff14!important;color:#fff!important;box-shadow:none!important;font-size:15px!important;font-weight:850!important;padding:13px 15px!important}
+#adminDashboard .cl-admin-workspace>.admin-nav>a:hover,#adminDashboard .cl-admin-workspace>.admin-nav>a.cl-admin-nav-selected{background:#fff!important;color:#075579!important}
+#adminDashboard .cl-admin-workspace>.admin-nav>a[style*="display: none"],#adminDashboard .cl-admin-workspace>.admin-nav>a.hidden{display:none!important}
+#adminDashboard .cl-admin-main{min-width:0}
+#adminDashboard .admin-stats{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important}
+#adminDashboard .admin-stat{min-height:128px!important;padding:20px!important;border-radius:20px!important;box-shadow:0 9px 22px #0d3c6815!important}
+#adminDashboard .admin-stat:nth-child(1){background:linear-gradient(125deg,#d9f8e8,#f9fffc)!important;border-left:5px solid #0f9e64!important}
+#adminDashboard .admin-stat:nth-child(2){background:linear-gradient(125deg,#dfeeff,#fff)!important;border-left:5px solid #2563eb!important}
+#adminDashboard .admin-stat:nth-child(3){background:linear-gradient(125deg,#f1e6ff,#fff)!important;border-left:5px solid #8b5cf6!important}
+#adminDashboard .admin-stat:nth-child(4){background:linear-gradient(125deg,#fff0cf,#fff)!important;border-left:5px solid #e69a0d!important}
+#adminDashboard .admin-stat:nth-child(5){background:linear-gradient(125deg,#d8fae9,#fff)!important;border-left:5px solid #0b9964!important}
+#adminDashboard .admin-stat:nth-child(6){background:linear-gradient(125deg,#ddf5ff,#fff)!important;border-left:5px solid #0891b2!important}
+#adminDashboard .admin-stat .stat-label{font-size:13px!important;color:#3d5974!important;font-weight:850!important}
+#adminDashboard .admin-stat .stat-value{font-size:clamp(24px,2.7vw,34px)!important;font-weight:950!important;color:#113452!important}
+#adminDashboard .admin-welcome{background:linear-gradient(110deg,#e0fff0,#e2efff)!important;border-radius:20px!important;border:1px solid #bce4db!important}
+#adminDashboard .cl-admin-main section{scroll-margin-top:18px}
+@media(max-width:850px){#adminDashboard .cl-admin-workspace{grid-template-columns:1fr!important;gap:12px}#adminDashboard .cl-admin-workspace>.admin-nav{position:relative!important;top:auto!important;min-height:0!important;display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;padding:13px!important;border-radius:16px!important}#adminDashboard .cl-admin-side-heading{width:100%;padding:5px 7px 12px;margin-bottom:0;font-size:14px}#adminDashboard .cl-admin-workspace>.admin-nav>a{font-size:13px!important;min-height:43px;padding:10px 12px!important}#adminDashboard .admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:480px){#adminDashboard{padding:8px!important}#adminDashboard .admin-topbar{padding:15px!important}#adminDashboard .cl-admin-workspace>.admin-nav{gap:7px!important}#adminDashboard .cl-admin-workspace>.admin-nav>a{font-size:12px!important}#adminDashboard .admin-stat{padding:13px!important;min-height:103px!important}#adminDashboard .admin-stat .stat-label{font-size:11px!important}#adminDashboard .admin-stat .stat-value{font-size:22px!important}}
 </style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -1711,7 +1741,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
  <div class="max-w-7xl mx-auto">
   <div class="admin-topbar"><div class="admin-brand"><div class="admin-brand-mark" aria-hidden="true">🏡</div><div><p class="text-xs font-black tracking-widest">CLEAN LANKA • CONTROL CENTRE</p><h1>Admin Dashboard</h1><p id="adminDashboardEmail" class="text-sm mt-1"></p></div></div><button id="adminDashboardLogoutButton" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold" type="button">Sign Out</button></div>
   <div class="cl-admin-welcome-strip"><div><span class="cl-admin-eyebrow">YOUR COMMAND CENTRE</span><h2>Manage Clean Lanka in one place</h2><p>Customers, workers, jobs, bookings, verification and public website preview.</p></div><a href="#clAdminPublicPreview" class="cl-admin-preview-link">🌐 View Homepage Preview</a></div>
-  <nav class="admin-nav" aria-label="Admin dashboard navigation"><a href="#adminOverview">▦ Overview</a><a href="#adminWorkersHeading">♙ Workers</a><a href="#adminCustomersHeading">♧ Customers</a><a href="#adminBookingsHeading">▤ Bookings</a><a href="#adminNotificationsHeading">♢ Notifications</a><a href="#adminSubAdminsHeading">⚙ Sub Admins</a><a href="#clAdminPublicPreview">🌐 Website Preview</a></nav>
+  <div class="cl-admin-workspace"><nav class="admin-nav" aria-label="Admin dashboard navigation"><div class="cl-admin-side-heading"><span class="cl-admin-side-icon">✦</span><span>CLEAN LANKA<br><small>ADMIN WORKSPACE</small></span></div><a href="#adminOverview">▦ Overview</a><a href="#adminWorkersHeading">♙ Workers</a><a href="#adminCustomersHeading">♧ Customers</a><a href="#adminBookingsHeading">▤ Bookings</a><a href="#adminNotificationsHeading">♢ Notifications</a><a href="#adminSubAdminsHeading">⚙ Sub Admins</a><a href="#clAdminPublicPreview">🌐 Website Preview</a></nav><main class="cl-admin-main">
   <section id="clAdminPublicPreview" class="cl-admin-preview-section" aria-labelledby="clAdminPreviewHeading">
 <div class="cl-admin-preview-heading"><div><span class="cl-admin-eyebrow">LIVE PUBLIC VIEW</span><h2 id="clAdminPreviewHeading">🌐 Clean Lanka Homepage Preview</h2><p>See the same public website visitors see, including job opportunities, service categories and approved worker listings. Admin tools remain above.</p></div><div class="cl-admin-preview-actions"><a href="/" target="_blank" rel="noopener">Open Homepage ↗</a><button type="button" id="clAdminPreviewRefresh">↻ Refresh Preview</button></div></div>
 <iframe id="clAdminHomepageFrame" title="Clean Lanka public homepage preview" loading="lazy" src="/" referrerpolicy="same-origin"></iframe>
@@ -1766,7 +1796,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
    <div id="adminWorkerList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
    <div id="adminWorkerDetail" class="hidden mt-6 border-t border-slate-200 pt-6"></div>
   </section>
- </div>
+ </main></div></div>
 </section>
 
 <!-- ADMIN: publish official Clean Lanka jobs -->
