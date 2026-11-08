@@ -5851,62 +5851,45 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
 #adminCustomerList article h3 button{background:none;border:0;padding:0;color:#12458c;text-align:left;font:inherit;font-weight:900;text-decoration:underline;cursor:pointer}
 #adminDashboard .admin-nav a.cl-admin-nav-selected{background:#dbeafe!important;color:#12458c!important;border-radius:12px}
 </style>
-<script id="cl-admin-pages-v1">
+<style id="cl-admin-clean-navigation">
+#adminDashboard .cl-admin-preview-link,#adminDashboard .cl-admin-preview-actions a{display:none!important}
+#adminDashboard.cl-admin-pages-active [data-cl-admin-page="true"]{display:none!important}
+#adminDashboard.cl-admin-pages-active [data-cl-admin-page="true"].cl-admin-page-current{display:block!important}
+#adminDashboard .admin-nav{display:flex!important;flex-wrap:wrap;gap:8px}
+#clAdminPageBack{background:#0e4c94;color:white;border:0;border-radius:12px;padding:12px 18px;font-weight:800;margin:16px 0}
+#clAdminPageTitle{color:#12386c;font-size:clamp(21px,3vw,29px);font-weight:900;margin:14px 0}
+#adminDashboard .cl-admin-preview-actions button{background:#0e8b67;color:#fff;padding:10px 16px;border-radius:10px}
+</style>
+<script id="cl-admin-pages-v2">
 (function(){
- const root=document.getElementById('adminDashboard');
- if(!root||document.getElementById('clAdminPageTitle'))return;
- const nav=root.querySelector('.admin-nav');
- const sections={
- overview:document.getElementById('adminOverview'),
- customers:document.getElementById('adminCustomersSection'),
- workers:document.getElementById('adminWorkersHeading')?.closest('section'),
- bookings:document.getElementById('adminBookingsSection'),
- notifications:document.getElementById('adminNotificationsSection'),
- subadmins:document.getElementById('adminSubAdminsSection'),
- website:document.getElementById('clAdminPublicPreview')
- };
- const managed=Object.values(sections).filter(Boolean);
- managed.forEach(el=>el.dataset.clAdminPage='true');
+ const root=document.getElementById('adminDashboard');if(!root)return;
+ const nav=root.querySelector('.admin-nav');if(!nav)return;
+ const pages={overview:document.getElementById('adminOverview'),workers:document.getElementById('adminWorkersHeading')?.closest('section'),customers:document.getElementById('adminCustomersSection'),bookings:document.getElementById('adminBookingsSection'),notifications:document.getElementById('adminNotificationsSection'),subadmins:document.getElementById('adminSubAdminsSection'),website:document.getElementById('clAdminPublicPreview')};
+ const labels={overview:'Overview',workers:'Worker Management',customers:'Customer Management',bookings:'Booking Management',notifications:'Notifications',subadmins:'Sub Admin Permissions',website:'Website Preview',customerprofile:'Customer Profile'};
+ const sections=Object.values(pages).filter(Boolean);sections.forEach(el=>el.dataset.clAdminPage='true');
  const title=document.createElement('h2');title.id='clAdminPageTitle';
- const back=document.createElement('button');back.id='clAdminPageBack';back.type='button';back.textContent='← Back to Admin Dashboard';
- nav.after(back,title);
- const profilePage=document.createElement('section');profilePage.id='clAdminCustomerPage';profilePage.dataset.clAdminPage='true';profilePage.innerHTML='<button id="clAdminCustomerBack" type="button">← Back to Customers</button><h2 style="font-size:24px;font-weight:900;color:#12458c;margin:12px 0">Customer Profile</h2>';
- title.after(profilePage);
- const detail=document.getElementById('adminCustomerDetail'),originalParent=detail?.parentElement;
+ const back=document.createElement('button');back.type='button';back.id='clAdminPageBack';nav.after(back,title);
+ const customerPage=document.createElement('section');customerPage.id='clAdminCustomerPage';customerPage.dataset.clAdminPage='true';title.after(customerPage);
+ const detail=document.getElementById('adminCustomerDetail');const originalParent=detail?.parentElement;
  let current='overview';
- const labels={overview:'Overview',customers:'Customer Profiles',workers:'Worker Profiles',bookings:'Bookings',notifications:'Notifications',subadmins:'Sub Admin Management',website:'Website Preview',customerprofile:'Customer Profile'};
  function go(page){
   if(!labels[page])page='overview';
   if(current==='customerprofile'&&page!=='customerprofile'&&detail&&originalParent)originalParent.appendChild(detail);
   current=page;root.classList.add('cl-admin-pages-active');
-  [...managed,profilePage].forEach(el=>el.classList.toggle('cl-admin-page-current',el===(page==='customerprofile'?profilePage:sections[page])));
-  title.textContent=labels[page];
-  back.style.display=page==='overview'?'none':'inline-flex';
+  [...sections,customerPage].forEach(el=>el.classList.toggle('cl-admin-page-current',el===(page==='customerprofile'?customerPage:pages[page])));
+  if(pages[page])pages[page].classList.remove('hidden');
+  title.textContent=labels[page];back.style.display=page==='overview'?'none':'inline-flex';
   back.textContent=page==='customerprofile'?'← Back to Customers':'← Back to Admin Dashboard';
-  if(page==='customerprofile'&&detail){profilePage.appendChild(detail);detail.classList.remove('hidden');}
+  if(page==='customerprofile'&&detail){customerPage.appendChild(detail);detail.classList.remove('hidden');}
   nav.querySelectorAll('a').forEach(a=>a.classList.toggle('cl-admin-nav-selected',a.dataset.clAdminTarget===page));
   root.scrollTop=0;
  }
  const targets=['overview','workers','customers','bookings','notifications','subadmins','website'];
- nav.querySelectorAll('a').forEach((a,i)=>{const page=targets[i];if(!page)return;a.dataset.clAdminTarget=page;a.addEventListener('click',e=>{e.preventDefault();go(page);});});
+ nav.querySelectorAll('a').forEach((a,i)=>{a.dataset.clAdminTarget=targets[i]||'overview';a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.clAdminTarget);});});
  back.addEventListener('click',()=>go(current==='customerprofile'?'customers':'overview'));
- profilePage.querySelector('#clAdminCustomerBack').addEventListener('click',()=>go('customers'));
  const list=document.getElementById('adminCustomerList');
- list?.addEventListener('click',e=>{
-  const card=e.target.closest('article');if(!card)return;
-  const button=card.querySelector('button');
-  if(!button)return;
-  if(e.target.closest('button')!==button)return;
-  setTimeout(()=>go('customerprofile'),0);
- });
- const observer=new MutationObserver(()=>{
-  list?.querySelectorAll('article').forEach(card=>{
-   const h=card.querySelector('h3');if(!h||h.querySelector('button'))return;
-   const name=h.textContent;h.textContent='';
-   const b=document.createElement('button');b.type='button';b.textContent=name;
-   b.addEventListener('click',()=>card.querySelector('button:not(h3 button)')?.click());h.appendChild(b);
-  });
- });
+ list?.addEventListener('click',e=>{if(e.target.closest('button')&&e.target.closest('article'))setTimeout(()=>go('customerprofile'),80);});
+ const observer=new MutationObserver(()=>{list?.querySelectorAll('article h3').forEach(h=>{if(h.querySelector('button'))return;const card=h.closest('article');const open=card?.querySelector('button');if(!open)return;const name=h.textContent;h.textContent='';const btn=document.createElement('button');btn.type='button';btn.textContent=name;btn.addEventListener('click',()=>open.click());h.appendChild(btn);});});
  if(list)observer.observe(list,{childList:true});
  go('overview');
 })();
