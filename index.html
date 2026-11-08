@@ -688,6 +688,145 @@ body.customer-dashboard-mode > #customerDashboard{
 .cl076-empty{padding:24px!important;color:#64748b!important;text-align:center}
 @media(max-width:600px){.cl076-chat-row .cl073-avatar{width:47px!important;height:47px!important}.cl076-chat-row .cl073-chat-info strong{font-size:16px!important}}
 </style>
+<style id="cl077-colorful-inbox">
+/* Strong scoped overrides for legacy dashboard flex/grid selectors */
+#workerDashboard #workerChatPanel #workerConversationList,
+#customerDashboard #customerChatPanel #customerConversationList{
+ display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;
+ align-items:stretch!important;justify-content:flex-start!important;
+ gap:0!important;width:100%!important;max-width:100%!important;min-width:0!important;
+ background:linear-gradient(160deg,#ffffff 0%,#f1faf7 100%)!important;
+ border:1px solid #cdece0!important;border-radius:22px!important;
+ padding:0 0 12px!important;margin:0!important;overflow:hidden!important;
+ box-shadow:0 10px 28px rgba(13,93,69,.09)!important
+}
+#workerDashboard #workerConversationList>.cl076-inbox-top,
+#customerDashboard #customerConversationList>.cl076-inbox-top{
+ display:flex!important;flex-direction:row!important;align-items:center!important;
+ justify-content:space-between!important;flex:none!important;width:100%!important;
+ padding:19px 19px 12px!important;margin:0!important;
+ background:linear-gradient(110deg,#075b47,#098b78 65%,#1768b6)!important;
+ border:0!important;border-radius:0!important;box-sizing:border-box!important
+}
+#workerDashboard #workerConversationList .cl076-inbox-top h2,
+#customerDashboard #customerConversationList .cl076-inbox-top h2{
+ font-size:25px!important;font-weight:900!important;color:#fff!important;letter-spacing:-.5px!important
+}
+#workerDashboard #workerConversationList .cl076-inbox-top>span,
+#customerDashboard #customerConversationList .cl076-inbox-top>span{
+ color:#fff!important;background:rgba(255,255,255,.2)!important;
+ border:1px solid rgba(255,255,255,.3)!important;border-radius:20px!important;
+ padding:5px 11px!important;font-weight:800!important;font-size:12px!important
+}
+#workerDashboard #workerConversationList>.cl076-search,
+#customerDashboard #customerConversationList>.cl076-search{
+ display:flex!important;flex-direction:row!important;align-items:center!important;
+ flex:none!important;width:calc(100% - 28px)!important;max-width:calc(100% - 28px)!important;
+ height:50px!important;margin:15px 14px 9px!important;padding:0 15px!important;
+ background:#fff!important;border:1px solid #cfe7e3!important;border-radius:16px!important;
+ box-shadow:0 3px 9px rgba(8,87,66,.05)!important;box-sizing:border-box!important
+}
+#workerDashboard #workerConversationList>.cl076-search input,
+#customerDashboard #customerConversationList>.cl076-search input{
+ display:block!important;flex:1!important;min-width:0!important;width:100%!important;
+ border:0!important;background:transparent!important;outline:0!important;
+ box-shadow:none!important;font-size:15px!important
+}
+#workerDashboard #workerConversationList>.cl076-filters,
+#customerDashboard #customerConversationList>.cl076-filters{
+ display:flex!important;flex-direction:row!important;align-items:center!important;
+ justify-content:flex-start!important;flex:none!important;width:100%!important;
+ gap:9px!important;padding:5px 14px 15px!important;margin:0!important;
+ background:transparent!important;border:0!important;box-sizing:border-box!important
+}
+#workerDashboard #workerConversationList .cl076-filters button,
+#customerDashboard #customerConversationList .cl076-filters button{
+ flex:none!important;min-width:75px!important;padding:9px 16px!important;
+ border-radius:24px!important;background:#fff!important;border:1px solid #c8dfdb!important;
+ color:#31665c!important;font-size:14px!important;font-weight:800!important
+}
+#workerDashboard #workerConversationList .cl076-filters button.selected,
+#customerDashboard #customerConversationList .cl076-filters button.selected{
+ background:linear-gradient(110deg,#0b865d,#147bc0)!important;color:#fff!important;
+ border-color:transparent!important;box-shadow:0 4px 10px #04785724!important
+}
+#workerDashboard #workerConversationList>.cl076-list,
+#customerDashboard #customerConversationList>.cl076-list{
+ display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;
+ align-items:stretch!important;flex:none!important;width:100%!important;max-width:100%!important;
+ min-width:0!important;gap:9px!important;padding:0 12px!important;margin:0!important;
+ background:transparent!important;border:0!important;box-sizing:border-box!important
+}
+#workerDashboard #workerConversationList>.cl076-list>button.cl076-chat-row,
+#customerDashboard #customerConversationList>.cl076-list>button.cl076-chat-row{
+ display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+ align-items:center!important;justify-content:flex-start!important;flex:none!important;
+ float:none!important;width:100%!important;max-width:100%!important;min-width:0!important;
+ min-height:82px!important;gap:12px!important;margin:0!important;padding:13px 12px!important;
+ background:#fff!important;border:1px solid #e0eeea!important;border-radius:16px!important;
+ box-shadow:0 3px 12px rgba(18,85,73,.055)!important;box-sizing:border-box!important;
+ text-align:left!important;transition:background .15s,transform .15s!important
+}
+#workerDashboard #workerConversationList>.cl076-list>button.cl076-chat-row.cl073-new,
+#customerDashboard #customerConversationList>.cl076-list>button.cl076-chat-row.cl073-new{
+ background:#eafff3!important;border-color:#a4e6c6!important
+}
+#workerDashboard #workerConversationList>.cl076-list>button.cl076-chat-row:active,
+#customerDashboard #customerConversationList>.cl076-list>button.cl076-chat-row:active{
+ transform:scale(.99)!important;background:#ecfdf5!important
+}
+#workerConversationList .cl076-chat-row .cl073-avatar,
+#customerConversationList .cl076-chat-row .cl073-avatar{
+ display:grid!important;place-items:center!important;flex:none!important;
+ width:53px!important;height:53px!important;border-radius:50%!important;
+ background:linear-gradient(135deg,#b9f3d0,#b8dbff)!important;color:#08624d!important;
+ border:2px solid #fff!important;box-shadow:0 0 0 2px #c4ebda!important;
+ font-size:21px!important;font-weight:900!important
+}
+#workerConversationList .cl076-chat-row:nth-child(3n+2) .cl073-avatar,
+#customerConversationList .cl076-chat-row:nth-child(3n+2) .cl073-avatar{
+ background:linear-gradient(135deg,#d9d1ff,#b8e4ff)!important;color:#4c3b9b!important
+}
+#workerConversationList .cl076-chat-row:nth-child(3n) .cl073-avatar,
+#customerConversationList .cl076-chat-row:nth-child(3n) .cl073-avatar{
+ background:linear-gradient(135deg,#ffe2b5,#ffd2d9)!important;color:#a54b29!important
+}
+#workerConversationList .cl076-chat-row .cl073-chat-info,
+#customerConversationList .cl076-chat-row .cl073-chat-info{
+ display:flex!important;flex-direction:column!important;align-items:flex-start!important;
+ justify-content:center!important;gap:5px!important;flex:1!important;min-width:0!important;
+ overflow:hidden!important
+}
+#workerConversationList .cl076-chat-row .cl073-chat-info strong,
+#customerConversationList .cl076-chat-row .cl073-chat-info strong{
+ font-size:17px!important;font-weight:900!important;color:#173f36!important;
+ max-width:100%!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important
+}
+#workerConversationList .cl076-chat-row .cl073-preview,
+#customerConversationList .cl076-chat-row .cl073-preview{
+ font-size:14px!important;color:#61758a!important;max-width:100%!important;
+ white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important
+}
+#workerConversationList .cl076-chat-row .cl073-meta,
+#customerConversationList .cl076-chat-row .cl073-meta{
+ display:flex!important;flex-direction:column!important;align-items:flex-end!important;
+ justify-content:center!important;gap:8px!important;flex:none!important;min-width:70px!important;
+ color:#688095!important;font-size:11px!important
+}
+#workerConversationList .cl076-chat-row .cl073-count,
+#customerConversationList .cl076-chat-row .cl073-count{
+ display:grid!important;place-items:center!important;background:#10b981!important;color:white!important;
+ border-radius:50%!important;min-width:25px!important;height:25px!important;
+ font-size:13px!important;font-weight:900!important;box-shadow:0 2px 6px #05966933!important
+}
+@media(max-width:600px){
+ #workerDashboard #workerChatPanel,#customerDashboard #customerChatPanel{padding:10px!important}
+ #workerConversationList .cl076-chat-row .cl073-chat-info strong,
+ #customerConversationList .cl076-chat-row .cl073-chat-info strong{font-size:16px!important}
+ #workerConversationList .cl076-chat-row .cl073-avatar,
+ #customerConversationList .cl076-chat-row .cl073-avatar{width:46px!important;height:46px!important}
+}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
