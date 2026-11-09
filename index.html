@@ -1857,7 +1857,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 <div class="flex flex-col gap-3">
 <h4 class="text-lg font-bold text-white uppercase tracking-wider">Platform</h4>
 <a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#how-it-works">How It Works</a>
-<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#verified-pros">Verified Trades Directory</a>
+<a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#homeWorkerResults">Verified Trades Directory</a>
 <a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="https://wa.me/94702805105" target="_blank">Join as a Service Worker</a>
 <a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#why-choose-us">NIC Safety Pledge</a>
 <a class="text-[16px] text-gray-400 hover:text-white transition-colors" href="#">Emergency Protocol</a>
@@ -4710,11 +4710,13 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const d=$('homeWorkerSearchDistrict')?.value||'';
     const rows=homeWorkerCache.filter(w=>(!d||String(w.district||'').toLowerCase()===d.toLowerCase())&&(!q||clMatchesMultilingual([w.full_name,w.skills,w.district],q)));
     const host=$('homeWorkerResults');if(!host)return;
-    if(!rows.length){host.innerHTML='<div class="sm:col-span-2 lg:col-span-3 rounded-xl bg-slate-50 p-5 text-slate-600">No approved workers match this search yet.</div>';return;}
+    if(!rows.length){host.innerHTML='<div class="sm:col-span-2 lg:col-span-3 rounded-xl bg-slate-50 p-5 text-slate-600">No approved workers match this search yet.</div>';const msg=$('homeWorkerMessage');if(msg)msg.textContent='0 approved worker profile(s) match this search.';return;}
     host.innerHTML=rows.map(w=>`<article class="cl-worker-card cl-worker-card-illustrated cl-directory-card flex flex-col"><div class="cl-worker-cartoon" aria-hidden="true"><span>👷</span></div><h4>${esc(w.full_name||'Service Professional')}</h4><p class="cl-directory-line">${esc(w.district||'Sri Lanka')} · ${esc(Array.isArray(w.skills)?w.skills.join(', '):(w.skills||'Home Services'))}</p><p class="cl-directory-line">${w.experience_years==null?'':esc(w.experience_years)+' years · '}${esc(money(w.service_price_lkr))}</p><p class="cl-directory-line" data-home-worker-online="${esc(w.worker_id)}">${onlineWorkerIds.has(String(w.worker_id))?'● Online':'● Offline'} · Approved</p><button type="button" class="cl-action" data-home-worker-profile="${esc(w.worker_id)}">View Full Profile</button></article>`).join('');
+    const msg=$('homeWorkerMessage');if(msg)msg.textContent=rows.length+' approved worker profile(s) match this search.';
   }
   function openHomeWorkerProfile(workerId){
     const w=homeWorkerCache.find(x=>String(x.worker_id)===String(workerId));if(!w)return;
+    const title=$('homeWorkerModalTitle');if(title)title.textContent=(w.full_name||'Worker')+' — Worker Profile';
     const body=$('homeWorkerModalBody');
     const phone=w.phone?`<div class="rounded-xl bg-emerald-50 p-3"><span class="block text-xs text-slate-500">Phone Number</span><a class="font-black text-emerald-800 underline" href="tel:${esc(w.phone)}">${esc(w.phone)}</a><p class="text-xs text-emerald-800 mt-1">This worker chose to show their number publicly.</p></div>`:'<div class="rounded-xl bg-slate-100 p-3 text-sm text-slate-700">🔒 Phone number is private. Contact this worker through Clean Lanka Live Chat.</div>';
     body.innerHTML=`<div class="space-y-4"><div><p class="text-xs uppercase font-bold tracking-wider text-slate-500">District</p><p class="font-bold text-slate-900">${esc(w.district||'Not listed')}</p></div><div><p class="text-xs uppercase font-bold tracking-wider text-slate-500">Skills & Services</p><p class="font-semibold text-slate-900">${esc(Array.isArray(w.skills)?w.skills.join(', '):(w.skills||'Not listed'))}</p></div><div class="grid grid-cols-2 gap-3"><div class="rounded-xl bg-blue-50 p-3"><p class="text-xs text-slate-500">Experience</p><p class="font-black">${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'}</p></div><div class="rounded-xl bg-emerald-50 p-3"><p class="text-xs text-slate-500">Service Price</p><p class="font-black">${esc(money(w.service_price_lkr))}</p></div></div>${phone}<div class="flex flex-wrap gap-2"><button type="button" class="cl-action flex-1" data-home-worker-chat="${esc(w.worker_id)}">Message via Clean Lanka</button>${w.phone?`<a class="cl-action blue flex-1 text-center" href="tel:${esc(w.phone)}">Call Worker</a>`:''}</div><p class="text-xs text-slate-500">Only approved profile information is displayed. Private contact details are not shown.</p></div>`;
@@ -4724,7 +4726,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const msg=$('homeWorkerMessage');if(msg)msg.textContent='Loading approved workers...';
     const {data,error}=await supabaseClient.rpc('get_public_worker_profiles');
     if(error){if(msg)msg.textContent='Could not load worker profiles: '+error.message;return;}
-    homeWorkerCache=data||[];renderHomeWorkers();if(msg)msg.textContent=homeWorkerCache.length+' approved worker profile(s) available.';
+    homeWorkerCache=data||[];renderHomeWorkers();
   }
   function renderHomeJobs(){
     const host=$('homeJobResults');if(!host)return;
@@ -4756,14 +4758,14 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     if($('homeWorkerSearchDistrict'))$('homeWorkerSearchDistrict').value=district;
     renderHomeWorkers();renderHomeJobs();
     $('homeMarketplace')?.scrollIntoView({behavior:'smooth',block:'start'});
-    const count=$('homeWorkerResults')?.children.length||0;
+    const count=$('homeWorkerResults')?.querySelectorAll('.cl-worker-card').length||0;
     if($('homeWorkerMessage'))$('homeWorkerMessage').textContent=`Search results for “${homeMarketplaceQuery||'all services'}”: ${count} approved worker profile(s). Job opportunities are filtered below.`;
   };
   window.setHomeSearch=function(term){if($('hero-service-search'))$('hero-service-search').value=term;if($('homeWorkerSearchText'))$('homeWorkerSearchText').value=term;window.runHomeMarketplaceSearch();};
   $('homeWorkerSearchButton')?.addEventListener('click',()=>{homeMarketplaceQuery=($('homeWorkerSearchText')?.value||'').trim();renderHomeWorkers();renderHomeJobs();});
   $('homeWorkerSearchText')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();homeMarketplaceQuery=e.currentTarget.value.trim();renderHomeWorkers();renderHomeJobs();}});
   $('homeWorkerSearchText')?.addEventListener('input',()=>{homeMarketplaceQuery=$('homeWorkerSearchText').value.trim();renderHomeWorkers();renderHomeJobs();});
-  $('homeWorkerSearchDistrict')?.addEventListener('change',renderHomeWorkers);
+  $('homeWorkerSearchDistrict')?.addEventListener('change',()=>{renderHomeWorkers();renderHomeJobs();});
   $('closeHomeWorkerModal')?.addEventListener('click',()=>$('homeWorkerProfileModal')?.classList.add('hidden'));
   $('homeWorkerProfileModal')?.addEventListener('click',e=>{if(e.target.id==='homeWorkerProfileModal')e.currentTarget.classList.add('hidden');});
   document.addEventListener('click',async e=>{
@@ -5229,7 +5231,11 @@ document.documentElement.classList.add('notranslate');
   const children=Array.from(root.children);root.insertBefore(layout,children[0]||null);layout.appendChild(main);
   children.forEach(node=>{if(node!==layout&&node.parentElement===root)main.appendChild(node)});
   const head=main.querySelector(role==='customer'?'.cl-accountbar':'.cv-top');
-  if(head&&nav.parentElement!==main)main.insertBefore(nav,head.nextSibling); else if(head)main.insertBefore(nav,head.nextSibling);
+  if(head){
+    let anchor=head;
+    while(anchor&&anchor.parentElement!==main)anchor=anchor.parentElement;
+    if(anchor&&anchor!==nav&&nav!==anchor.nextSibling)main.insertBefore(nav,anchor.nextSibling);
+  }
   const quick=main.querySelector('.cl-quick-grid');if(quick)quick.remove();
   const mobile=main.querySelector('.cl-mobile-nav');if(mobile)mobile.remove();
  }
