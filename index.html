@@ -1410,7 +1410,38 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 #customerDashboard .customer-card:has(#customerProfileForm) #customerProfileForm{max-width:760px}
 @media(max-width:700px){#customerDashboard .grid.md\\:grid-cols-2:has(> .customer-card > #customerProfileForm){padding:0!important}#customerDashboard .customer-card:has(#customerProfileForm){padding:18px!important}}
 </style>
-<style id="cl-customer-account-stack-direct">#customerDashboard #clCustomerAccountAndBookings{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;max-width:920px!important;gap:20px!important;margin:0 auto!important}#customerDashboard #clCustomerAccountAndBookings>.customer-card{width:100%!important;max-width:100%!important;min-width:0!important}#customerDashboard #clCustomerAccountAndBookings>.customer-card:nth-child(2){grid-column:1!important}</style></head>
+<style id="cl-customer-account-stack-direct">#customerDashboard #clCustomerAccountAndBookings{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;max-width:920px!important;gap:20px!important;margin:0 auto!important}#customerDashboard #clCustomerAccountAndBookings>.customer-card{width:100%!important;max-width:100%!important;min-width:0!important}#customerDashboard #clCustomerAccountAndBookings>.customer-card:nth-child(2){grid-column:1!important}</style>
+<style id="cl-customer-smart-colorful-20261109">
+/* Customer-only premium styling: no worker/admin/auth changes. */
+#customerDashboard{--cl-emerald:#087b5a;--cl-navy:#173e83;--cl-gold:#e8a83b;font-family:inherit}
+#customerDashboard .customer-shell{background:linear-gradient(145deg,#eafaf4 0%,#eaf2ff 53%,#f8f4ff 100%)!important;border-radius:24px;padding:clamp(12px,2.5vw,28px)!important}
+#customerDashboard .cl-accountbar{background:linear-gradient(115deg,#ffffff,#e9f5ff)!important;border:1px solid #d2e8ef!important;box-shadow:0 8px 28px #0b4b6b13!important}
+#customerDashboard .cl-dash-nav{display:flex!important;flex-wrap:wrap!important;gap:9px!important;background:#ffffffb5!important;border:1px solid #dbe9ed!important;border-radius:20px!important;padding:12px!important;box-shadow:0 6px 22px #0b4b6b10!important}
+#customerDashboard .cl-dash-nav button{background:linear-gradient(125deg,#e7f8ef,#e6f0ff)!important;border:1px solid #c8e7e4!important;color:#10496a!important;border-radius:13px!important;font-size:clamp(13px,1.6vw,16px)!important;font-weight:850!important;padding:12px 16px!important;min-height:47px!important;box-shadow:0 3px 9px #123a5c0d!important}
+#customerDashboard .cl-dash-nav button:hover,#customerDashboard .cl-dash-nav button.active{background:linear-gradient(110deg,#05845d,#2369cb)!important;color:#fff!important}
+#customerDashboard .customer-shell > .rounded-3xl{border-radius:24px!important;background:linear-gradient(110deg,#065f46 0%,#008e79 42%,#2458bf 82%,#6333a8 100%)!important;box-shadow:0 14px 35px #153d7c30!important;border:1px solid #ffffff44!important;padding:clamp(22px,4vw,38px)!important}
+#customerDashboard .customer-shell > .rounded-3xl h1{font-size:clamp(25px,3.8vw,39px)!important;letter-spacing:-.025em!important}
+#customerDashboard #clCustomerAccountAndBookings{max-width:1100px!important;gap:22px!important}
+#customerDashboard #clCustomerAccountAndBookings>.customer-card{background:#fff!important;border:1px solid #dcebe9!important;border-radius:24px!important;box-shadow:0 12px 34px #17416b14!important;padding:clamp(18px,3vw,30px)!important}
+#customerDashboard #clCustomerAccountAndBookings>.customer-card:first-child{background:linear-gradient(155deg,#ffffff 0%,#ffffff 67%,#f0f8ff 100%)!important}
+#customerDashboard #clCustomerAccountAndBookings>.customer-card h2{font-size:clamp(22px,3vw,29px)!important;color:#075c4a!important;margin-bottom:20px!important;letter-spacing:-.025em!important}
+#customerDashboard #clCustomerAccountAndBookings>.customer-card>p[id=customerDashName]{font-size:clamp(20px,2.4vw,25px)!important;color:#123c5c!important}
+#customerDashboard #clCustomerAccountAndBookings>.customer-card>div:has(#customerDashPublicId){background:linear-gradient(110deg,#d9f9e7,#e5f1ff)!important;border:1px solid #bce5d9!important;border-radius:18px!important;padding:20px!important}
+#customerDashboard #customerDashPublicId{color:#075b53!important;font-size:clamp(24px,4vw,35px)!important}
+#customerDashboard .cl-customer-photo-panel{background:linear-gradient(115deg,#dcfce7,#dcecff,#eee7ff)!important;border:1px solid #c9e2f4!important;border-radius:21px!important;padding:22px!important;box-shadow:0 6px 20px #17416b0c!important}
+#customerDashboard .cl-customer-photo-frame{width:112px!important;height:112px!important;flex-basis:112px!important;box-shadow:0 0 0 5px #ffffffb0,0 8px 22px #095e6633!important}
+#customerDashboard .cl-customer-photo-upload{background:linear-gradient(115deg,#008f69,#0a71b7)!important;color:white!important;border:0!important;box-shadow:0 5px 12px #007b7530!important}
+#customerDashboard .cl-customer-browse{background:linear-gradient(115deg,#2354c8,#6841c5)!important}
+#customerDashboard #customerProfileForm{max-width:100%!important;background:linear-gradient(145deg,#f0fdf8,#f1f6ff)!important;border:1px solid #dcebe9!important;border-radius:22px!important;padding:clamp(16px,3vw,27px)!important;margin-top:20px!important}
+#customerDashboard #customerProfileForm h3{font-size:clamp(19px,2.5vw,24px)!important;color:#0d6153!important;margin-bottom:16px!important}
+#customerDashboard #customerProfileForm label{font-size:15px!important;color:#245168!important}
+#customerDashboard #customerProfileForm input,#customerDashboard #customerProfileForm select,#customerDashboard #customerProfileForm textarea{background:#fff!important;border:1.5px solid #b9d8d5!important;border-radius:13px!important;box-shadow:0 2px 5px #1c506609!important;font-size:16px!important}
+#customerDashboard #saveCustomerProfileButton{background:linear-gradient(105deg,#008d66,#1565c0)!important;border-radius:14px!important;box-shadow:0 8px 18px #0c7b8b25!important;font-size:17px!important}
+#customerDashboard #clCustomerAccountAndBookings>.customer-card:nth-child(2){background:linear-gradient(110deg,#ecfdf5,#e8f1ff)!important;border-left:5px solid #12a878!important}
+@media(min-width:800px){#customerDashboard #customerProfileForm{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px 20px!important}#customerDashboard #customerProfileForm>h3,#customerDashboard #customerProfileForm>button,#customerDashboard #customerProfileForm>p,#customerDashboard #customerProfileForm>label[for=customerProfileAddress],#customerDashboard #customerProfileAddress{grid-column:1/-1!important}}
+@media(max-width:600px){#customerDashboard .cl-dash-nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}#customerDashboard .cl-dash-nav button{padding:10px 7px!important;font-size:13px!important}#customerDashboard .customer-shell{padding:10px!important}#customerDashboard #clCustomerAccountAndBookings>.customer-card{padding:17px!important}}
+</style>
+</head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
 <div class="bg-primary text-white py-2.5 px-4 sm:px-8 text-[15px] border-b border-primary-dark/30">
