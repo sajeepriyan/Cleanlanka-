@@ -4822,7 +4822,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
 
   function renderWorkerPresence(){
     if(typeof renderHomeWorkers==='function') renderHomeWorkers();
-    document.querySelectorAll('[data-worker-online],[data-home-worker-online]').forEach(el=>{const id=el.dataset.workerOnline||el.dataset.homeWorkerOnline;const online=onlineWorkerIds.has(String(id));el.textContent=online?'● Online':'● Offline';el.className=online?'text-xs font-bold text-emerald-700':'text-xs font-bold text-slate-500';});
+    document.querySelectorAll('[data-worker-online],[data-home-worker-online]').forEach(el=>{const id=el.dataset.workerOnline||el.dataset.homeWorkerOnline;const online=onlineWorkerIds.has(String(id));el.textContent=online?'● Online':'● Offline';el.className=(el.hasAttribute('data-home-worker-online')?'cl-worker-presence ':'')+(online?'text-xs font-bold text-emerald-700':'text-xs font-bold text-slate-500');});
   }
   async function ensureWorkerPresence(){
     if(!workerPresenceChannel){
