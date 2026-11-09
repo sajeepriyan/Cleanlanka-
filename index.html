@@ -2672,9 +2672,30 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
         document.getElementById('customerDashName').textContent = data.full_name || 'Customer';
         document.getElementById('customerDashPublicId').textContent = data.customer_public_id ? `CUS-${data.customer_public_id}` : 'CUS-PENDING';
         if (message) showMessage(message, 'Your saved customer profile has been loaded.');
-      } else if (message) {
-        document.getElementById('customerDashPublicId').textContent = 'CUS-PENDING';
-        showMessage(message, 'Please complete your district and address, then save your customer profile.');
+      } else {
+        // First confirmed sign-in: safely create only a complete registration profile.
+        // Never invent missing details or overwrite an existing customer profile.
+        const initialPhone = String(metadata.phone || metadata.Phone || '').trim();
+        const initialName = String(metadata.full_name || '').trim();
+        const initialDistrict = String(metadata.district || '').trim();
+        const initialAddress = String(metadata.address || '').trim();
+        if (initialName && /^[0-9]{10}$/.test(initialPhone) && initialDistrict && initialAddress) {
+          const { data: created, error: createError } = await supabaseClient
+            .from('customer_profiles')
+            .insert({
+              id: user.id, user_id: user.id, email: user.email,
+              full_name: initialName, phone: initialPhone,
+              district: initialDistrict, address: initialAddress,
+              gender: metadata.gender || null
+            })
+            .select('customer_public_id').single();
+          if (createError) throw createError;
+          document.getElementById('customerDashPublicId').textContent = created.customer_public_id ? `CUS-${created.customer_public_id}` : 'CUS-PENDING';
+          if (message) showMessage(message, 'Your customer profile has been created from your registration details.');
+        } else {
+          document.getElementById('customerDashPublicId').textContent = 'CUS-PENDING';
+          if (message) showMessage(message, 'Some registration details are missing. Use Edit My Profile to complete your phone, district and address, then save.');
+        }
       }
     } catch (error) {
       console.error('Customer profile load failed:', error);
@@ -2714,12 +2735,13 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       let result;
       if (existing) {
         result = await supabaseClient.from('customer_profiles').update(profile)
-          .eq('user_id', activeCustomerUserId).select('id').single();
+          .eq('user_id', activeCustomerUserId).select('id,customer_public_id').single();
       } else {
-        result = await supabaseClient.from('customer_profiles').insert({ ...profile, id: activeCustomerUserId }).select('id').single();
+        result = await supabaseClient.from('customer_profiles').insert({ ...profile, id: activeCustomerUserId }).select('id,customer_public_id').single();
       }
       if (result.error) throw result.error;
       document.getElementById('customerDashName').textContent = profile.full_name;
+      if (result.data?.customer_public_id) document.getElementById('customerDashPublicId').textContent = `CUS-${result.data.customer_public_id}`;
       clUpdateCustomerContactDetails();
       showMessage(message, 'Your customer profile has been saved successfully.');
     } catch (error) {
