@@ -3631,8 +3631,8 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
     const metadata = user.user_metadata || {};
 
     document.body.classList.add('worker-dashboard-mode');
-    window.cleanLankaEnterDashboard?.('worker');
     dashboard.classList.remove('hidden');
+    window.cleanLankaEnterDashboard?.('worker');
     dashboardMessage.textContent = 'Loading your worker profile...';
 
     // Read the row if the current user's SELECT policy permits it.
@@ -5288,16 +5288,22 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
   // returns to the public homepage instead of closing the installed site.
   window.cleanLankaEnterDashboard = function(role) {
     try {
-      if (window.cleanLankaHistoryDashboardRole !== role) {
-        window.history.pushState({ cleanLankaDashboardEntry: true, role }, '', window.location.href);
-        window.cleanLankaHistoryDashboardRole = role;
-      }
-      if (!window.history.state?.cleanLankaBackGuard) {
-        window.history.pushState({ cleanLankaBackGuard: true, role, at: Date.now() }, '', window.location.href);
-      }
-    } catch (error) {
-      console.warn('Clean Lanka dashboard Back navigation could not be armed:', error);
-    }
+      // Save the current dashboard as ONE history step; Android Back returns Home.
+      if(window.cleanLankaHistoryDashboardRole===role &&
+         window.history.state?.cleanLankaDashboardEntry)return;
+      const dashboardView=cleanLankaCaptureView();
+      const homeView=Object.assign({},dashboardView,{
+        bodyClasses:dashboardView.bodyClasses.filter(c=>![
+          'login-page-mode','registration-mode','admin-login-mode','worker-dashboard-mode',
+          'customer-dashboard-mode','admin-dashboard-mode','password-recovery-mode','cl-service-page-mode'
+        ].includes(c)),
+        visible:Object.fromEntries(Object.keys(dashboardView.visible).map(id=>[id,false])),
+        scrollY:0
+      });
+      window.history.replaceState(homeView,'',window.location.href);
+      window.history.pushState(Object.assign({},dashboardView,{cleanLankaDashboardEntry:true,role}),'',window.location.href);
+      window.cleanLankaHistoryDashboardRole=role;
+    }catch(error){console.warn('Clean Lanka dashboard Back navigation could not be armed:',error);}
   };
 
   // Keep one in-site history entry so Android/browser Back is handled by the site
@@ -5315,60 +5321,95 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
 
   // Back navigation restores the exact previous in-app screen instead of
   // forcing every dashboard Back action to the public homepage.
-  function cleanLankaCaptureView() {
-    const ids = ['account-login','registration-screen','admin-login','workerDashboard','customerDashboard','adminDashboard','customerChatWindow','workerChatWindow','homeWorkerProfileModal'];
-    const visible = {};
-    ids.forEach(function(id){ const el=document.getElementById(id); if(el) visible[id]=!el.classList.contains('hidden'); });
-    return { cleanLankaView:true, bodyClasses:Array.from(document.body.classList), visible:visible, scrollY:window.scrollY||0 };
+  function cleanLankaCaptureView(){
+    const ids=['account-login','registration-screen','admin-login','workerDashboard','customerDashboard',
+      'adminDashboard','customerChatWindow','workerChatWindow','homeWorkerProfileModal',
+      'adminWorkerDetail','newPasswordPanel','passwordResetPanel'];
+    const visible={};
+    ids.forEach(id=>{const el=document.getElementById(id);if(el)visible[id]=!el.classList.contains('hidden');});
+    return {
+      cleanLankaView:true,bodyClasses:Array.from(document.body.classList),
+      visible,
+      activeTabs:{
+        customer:document.getElementById('customerDashboard')?.dataset.activeTab||'profile',
+        worker:document.getElementById('workerDashboard')?.dataset.activeTab||'profile'
+      },
+      adminPage:document.getElementById('adminDashboard')?.dataset.clAdminPage||'overview',
+      scrollY:window.scrollY||0
+    };
   }
-  function cleanLankaRestoreView(state) {
-    if(!state || !state.cleanLankaView) return false;
-    const managed=['login-page-mode','registration-mode','admin-login-mode','worker-dashboard-mode','customer-dashboard-mode','admin-dashboard-mode','password-recovery-mode','cl-service-page-mode'];
-    managed.forEach(function(c){document.body.classList.remove(c);});
-    (state.bodyClasses||[]).forEach(function(c){document.body.classList.add(c);});
-    Object.keys(state.visible||{}).forEach(function(id){const el=document.getElementById(id);if(el)el.classList.toggle('hidden',!state.visible[id]);});
+  function cleanLankaRestoreView(state){
+    if(!state||!state.cleanLankaView)return false;
+    const managed=['login-page-mode','registration-mode','admin-login-mode','worker-dashboard-mode',
+      'customer-dashboard-mode','admin-dashboard-mode','password-recovery-mode','cl-service-page-mode'];
+    managed.forEach(c=>document.body.classList.remove(c));
+    (state.bodyClasses||[]).forEach(c=>document.body.classList.add(c));
+    Object.keys(state.visible||{}).forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)el.classList.toggle('hidden',!state.visible[id]);
+    });
+    if(document.body.classList.contains('customer-dashboard-mode'))
+      document.getElementById('customerDashboard')?._clShowTab?.(state.activeTabs?.customer||'profile');
+    if(document.body.classList.contains('worker-dashboard-mode'))
+      document.getElementById('workerDashboard')?._clShowTab?.(state.activeTabs?.worker||'profile');
+    if(document.body.classList.contains('admin-dashboard-mode'))
+      document.getElementById('adminDashboard')?._clGoAdminPage?.(state.adminPage||'overview');
     window.scrollTo({top:state.scrollY||0,left:0,behavior:'auto'});
     return true;
   }
+  window.cleanLankaCaptureView=cleanLankaCaptureView;
   try { window.history.replaceState(cleanLankaCaptureView(),'',''); } catch(e) {}
+  // One history checkpoint per visible screen, avoiding duplicate Back presses.
+  function viewKey(view){
+    return JSON.stringify({
+      bodyClasses:view.bodyClasses||[],visible:view.visible||{},
+      activeTabs:view.activeTabs||{},adminPage:view.adminPage||'overview'
+    });
+  }
+  let lastViewKey=viewKey(cleanLankaCaptureView());
+  let restoreInProgress=false;
+  let checkpointTimer=null;
+  function commitView(){
+    checkpointTimer=null;
+    if(restoreInProgress)return;
+    const view=cleanLankaCaptureView(),key=viewKey(view);
+    if(key===lastViewKey)return;
+    const previous=JSON.parse(lastViewKey);
+    lastViewKey=key;
+    const oldService=(previous.bodyClasses||[]).includes('cl-service-page-mode');
+    const newService=(view.bodyClasses||[]).includes('cl-service-page-mode');
+    if(oldService!==newService)return; // Service route pushes its own history.
+    if(window.history.state?.cl074Chat&&(view.visible?.customerChatWindow||view.visible?.workerChatWindow))return;
+    if(window.history.state?.cleanLankaView&&viewKey(window.history.state)===key)return;
+    try{window.history.pushState(view,'',window.location.href);}
+    catch(error){console.warn('Clean Lanka history checkpoint unavailable:',error);}
+  }
+  function scheduleViewCheckpoint(ms){
+    if(restoreInProgress)return;
+    if(checkpointTimer!==null)clearTimeout(checkpointTimer);
+    checkpointTimer=setTimeout(commitView,ms);
+  }
   document.addEventListener('click',function(event){
-    if(event.target && event.target.closest && event.target.closest('#clDashboardHomeButton, #clServiceBack, #services-section .cl-home-cat')) return;
-    const before=cleanLankaCaptureView();
-    window.setTimeout(function(){
-      const after=cleanLankaCaptureView();
-      const a=JSON.stringify(before), b=JSON.stringify(after);
-      if(a!==b){ try{window.history.pushState(after,'','');}catch(e){console.warn('Clean Lanka view history unavailable',e);} }
-    },0);
+    if(event.target?.closest?.('#clDashboardHomeButton, #clServiceBack, #services-section .cl-home-cat'))return;
+    scheduleViewCheckpoint(45);
   },true);
   window.addEventListener('popstate',function(event){
-    if(cleanLankaRestoreView(event.state)) return;
-    if(closeTopmostPanel()) { try{window.history.replaceState(cleanLankaCaptureView(),'','');}catch(e){} return; }
-    if(currentAppViewIsOpen()) { returnToPublicHome(); try{window.history.replaceState(cleanLankaCaptureView(),'','');}catch(e){} }
+    if(cleanLankaRestoreView(event.state))return;
+    if(closeTopmostPanel()){try{window.history.replaceState(cleanLankaCaptureView(),'','');}catch(e){}return;}
+    if(currentAppViewIsOpen()){returnToPublicHome();try{window.history.replaceState(cleanLankaCaptureView(),'','');}catch(e){}}
   });
-  // Authentication and dashboard loading may finish asynchronously after the
-  // login click. Observe view changes too, so those screens get history entries.
-  let lastViewKey=JSON.stringify(cleanLankaCaptureView());
-  let restoreInProgress=false;
-  const viewObserver=new MutationObserver(function(){
-    if(restoreInProgress) return;
-    window.setTimeout(function(){
-      const view=cleanLankaCaptureView(), key=JSON.stringify(view);
-      if(key!==lastViewKey){
-        const previous=JSON.parse(lastViewKey||'{}');
-        lastViewKey=key;
-        const oldService=(previous.bodyClasses||[]).includes('cl-service-page-mode');
-        const newService=(view.bodyClasses||[]).includes('cl-service-page-mode');
-        // The service page maintains one explicit browser-history entry.
-        // Do not add a second checkpoint for the same service transition.
-        if(oldService!==newService)return;
-        try{window.history.pushState(view,'','');}catch(e){console.warn('Clean Lanka view checkpoint unavailable',e);}
-      }
-    },80);
+  const viewObserver=new MutationObserver(function(){scheduleViewCheckpoint(100);});
+  viewObserver.observe(document.body,{
+    subtree:true,attributes:true,
+    attributeFilter:['class','hidden','data-active-tab','data-cl-admin-page']
   });
-  viewObserver.observe(document.body,{subtree:true,attributes:true,attributeFilter:['class','hidden']});
   window.addEventListener('popstate',function(){
     restoreInProgress=true;
-    window.setTimeout(function(){restoreInProgress=false;lastViewKey=JSON.stringify(cleanLankaCaptureView());},120);
+    if(checkpointTimer!==null){clearTimeout(checkpointTimer);checkpointTimer=null;}
+    window.setTimeout(function(){
+      lastViewKey=viewKey(cleanLankaCaptureView());
+      restoreInProgress=false;
+    },170);
   });
 
   // If the page is restored from the mobile browser's back-forward cache,
@@ -7232,7 +7273,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
  function go(page){
   if(!labels[page]||!allowed(page))page='overview';
   if(current==='customerprofile'&&page!=='customerprofile'&&detail&&originalParent)originalParent.appendChild(detail);
-  current=page;root.classList.add('cl-admin-pages-active');
+  current=page;root.dataset.clAdminPage=page;root.classList.add('cl-admin-pages-active');
   [...sections,customerPage].forEach(el=>el.classList.toggle('cl-admin-page-current',el===(page==='customerprofile'?customerPage:pages[page])));
   if(pages[page]&&allowed(page))pages[page].classList.remove('hidden');
   if(root.dataset.adminRole==='sub_admin')pages.subadmins?.classList.add('hidden');
@@ -7242,6 +7283,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   nav.querySelectorAll('a').forEach(a=>a.classList.toggle('cl-admin-nav-selected',a.dataset.clAdminTarget===page));
   root.scrollTop=0;
  }
+ root._clGoAdminPage=go;
  const targets=['overview','workers','customers','bookings','chats','notifications','subadmins','website'];
  nav.querySelectorAll('a').forEach((a,i)=>{a.dataset.clAdminTarget=targets[i]||'overview';a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.clAdminTarget);});});
  back.addEventListener('click',()=>go(current==='customerprofile'?'customers':'overview'));
