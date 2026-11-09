@@ -1644,6 +1644,33 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
  #clServiceDetailPage #clServiceJobs{grid-template-columns:1fr}
 }
 </style>
+
+<style id="cl-official-job-schedule-style-20261109">
+#clOfficialScheduleManager .cl-official-filter {
+  border:1px solid #bfdace;border-radius:999px;padding:9px 16px;
+  background:#fff;color:#155a3d;font-size:14px;font-weight:800;cursor:pointer
+}
+#clOfficialScheduleManager .cl-official-filter[aria-pressed="true"] {
+  background:#07643f;border-color:#07643f;color:white
+}
+#clOfficialScheduleManager .cl-official-filter:focus-visible,
+#clOfficialScheduleManager button:focus-visible {outline:3px solid #16a34a;outline-offset:3px}
+#clOfficialScheduleList .cl-official-record {
+  background:#fff;border:1px solid #d5e3dd;border-radius:17px;
+  padding:15px;box-shadow:0 3px 12px #0b4a2f0b;min-width:0
+}
+#clOfficialScheduleList .cl-official-record h4 {font-size:18px;font-weight:900;color:#10271e;overflow-wrap:anywhere}
+#clOfficialScheduleList .cl-official-status {display:inline-block;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:900}
+#clOfficialScheduleList .cl-official-status[data-status="active"] {background:#dcfce7;color:#166534}
+#clOfficialScheduleList .cl-official-status[data-status="scheduled"] {background:#dbeafe;color:#1d4ed8}
+#clOfficialScheduleList .cl-official-status[data-status="expired"] {background:#f3f4f6;color:#334155}
+#clOfficialScheduleList .cl-official-status[data-status="closed"] {background:#fef3c7;color:#92400e}
+#clOfficialScheduleList .cl-official-dates {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:13px}
+#clOfficialScheduleList label {display:flex;flex-direction:column;gap:5px;color:#374151;font-size:12px;font-weight:800;min-width:0}
+#clOfficialScheduleList input {width:100%;min-width:0;border:1px solid #cad5d0;border-radius:9px;padding:9px 7px;background:white;color:#111827;font-size:14px}
+#clOfficialScheduleList .cl-official-save {border-radius:10px;background:#09633f;color:white;font-weight:900;padding:9px 16px;margin-top:12px}
+@media(max-width:420px){#clOfficialScheduleList .cl-official-dates{grid-template-columns:1fr}}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -2417,10 +2444,45 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
   <textarea id="officialJobDescription" required maxlength="3000" rows="3" class="sm:col-span-2 rounded-xl border border-slate-200 p-3" placeholder="Describe the official job and requirements"></textarea>
   <input id="officialJobArea" required maxlength="180" class="rounded-xl border border-slate-200 p-3" placeholder="Town / area">
   <input id="officialJobBudget" type="number" min="0" step="1" class="rounded-xl border border-slate-200 p-3" placeholder="Budget in LKR (optional)">
-  <input id="officialJobDate" type="date" class="rounded-xl border border-slate-200 p-3">
+  <label class="flex flex-col gap-1 text-sm font-bold text-slate-800">Job Preferred Date (optional)
+    <input id="officialJobDate" type="date" class="rounded-xl border border-slate-200 p-3" aria-label="Preferred date for job work">
+  </label>
+  <div class="sm:col-span-2 border-t border-emerald-100 pt-4">
+    <h3 class="text-lg font-black text-slate-900">Publication Schedule</h3>
+    <p class="mt-1 text-sm text-slate-600">Select when this job appears on Clean Lanka. Expiry hides the post automatically; it does not delete applications. Dates use Sri Lanka time.</p>
+  </div>
+  <label class="flex flex-col gap-1 text-sm font-bold text-slate-800">Publish From (Sri Lanka Date)
+    <input id="officialJobPublishOn" type="date" required class="rounded-xl border border-emerald-300 p-3" aria-label="First date job is publicly visible">
+  </label>
+  <label class="flex flex-col gap-1 text-sm font-bold text-slate-800">Visible Through (Expiry Date)
+    <input id="officialJobExpiresOn" type="date" required class="rounded-xl border border-emerald-300 p-3" aria-label="Last date job is publicly visible">
+  </label>
+  <label class="sm:col-span-2 flex flex-col gap-1 text-sm font-bold text-slate-800">Duration (calendar days, inclusive)
+    <select id="officialJobDuration" class="rounded-xl border border-slate-200 p-3">
+      <option value="1">1 Day</option><option value="3">3 Days</option>
+      <option value="7" selected>7 Days</option><option value="14">14 Days</option>
+      <option value="30">30 Days</option><option value="custom">Custom Dates</option>
+    </select>
+  </label>
+  <p id="officialJobScheduleNote" class="sm:col-span-2 text-sm text-emerald-800 font-bold" aria-live="polite"></p>
   <button type="submit" class="sm:col-span-2 rounded-xl bg-emerald-800 text-white p-3 font-bold">Publish Official Clean Lanka Job</button>
  </form>
  <p id="adminOfficialJobMessage" class="text-sm mt-3" role="status" aria-live="polite"></p>
+ <section id="clOfficialScheduleManager" class="mt-6 border-t border-emerald-100 pt-5" aria-labelledby="clOfficialScheduleHeading">
+   <div class="flex flex-wrap gap-3 items-center justify-between mb-4">
+     <div><h3 id="clOfficialScheduleHeading" class="text-xl font-black text-slate-950">Official Job Post Schedule</h3>
+     <p class="text-sm text-slate-600 mt-1">Scheduled, Active and Expired posts stay in Admin records. Dates use Sri Lanka time.</p></div>
+     <button id="clOfficialScheduleRefresh" type="button" class="rounded-xl border border-emerald-500 bg-white text-emerald-900 px-4 py-3 font-bold">Refresh Posts</button>
+   </div>
+   <div class="flex flex-wrap gap-2 mb-3" role="group" aria-label="Filter official job posts by schedule status">
+     <button type="button" data-cl-official-filter="active" class="cl-official-filter" aria-pressed="true">Active</button>
+     <button type="button" data-cl-official-filter="scheduled" class="cl-official-filter" aria-pressed="false">Scheduled</button>
+     <button type="button" data-cl-official-filter="expired" class="cl-official-filter" aria-pressed="false">Expired</button>
+     <button type="button" data-cl-official-filter="all" class="cl-official-filter" aria-pressed="false">All Posts</button>
+   </div>
+   <p id="clOfficialScheduleMessage" class="text-sm text-slate-600 my-3" role="status" aria-live="polite">Open Admin Dashboard to view official posts.</p>
+   <div id="clOfficialScheduleList" class="grid grid-cols-1 lg:grid-cols-2 gap-3"></div>
+ </section>
 </section>
 
 <!-- CUSTOMER DASHBOARD: dedicated profile page -->
@@ -4438,6 +4500,9 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
         });
       }
       document.getElementById('adminDashboard').dataset.adminRole=currentAdminRole;
+      const officialPostEditor=document.getElementById('adminOfficialJobsSection');
+      if(officialPostEditor)officialPostEditor.classList.toggle('hidden',!['main_admin','admin'].includes(currentAdminRole));
+      if(['main_admin','admin'].includes(currentAdminRole))window.clRefreshOfficialSchedules?.();
       document.getElementById('adminAccessLabel').textContent=currentAdminRole==='main_admin'?'Main Admin':currentAdminRole==='sub_admin'?'Sub Admin':'Admin';
       document.getElementById('adminSubAdminsSection').classList.toggle('hidden',currentAdminRole!=='main_admin');
       document.getElementById('adminWorkersHeading').closest('section').classList.toggle('hidden',!adminHasPermission('workers_view'));
@@ -5170,10 +5235,34 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
   });
   $('adminOfficialJobForm')?.addEventListener('submit',async e=>{
     e.preventDefault();const user=await getUser();if(!user){say('adminOfficialJobMessage','Admin session not found. Please sign in again.',true);return;}
-    const payload={customer_id:user.id,service_title:$('officialJobTitle').value.trim(),description:$('officialJobDescription').value.trim(),district:$('officialJobDistrict').value,address:$('officialJobArea').value.trim(),budget_lkr:$('officialJobBudget').value?Number($('officialJobBudget').value):null,preferred_date:$('officialJobDate').value||null,status:'open',post_source:'clean_lanka'};
+    const publishOn=$('officialJobPublishOn')?.value||'';
+    const expiresOn=$('officialJobExpiresOn')?.value||'';
+    const sriLankaToday=window.clSriLankaToday?.()||new Date().toISOString().slice(0,10);
+    if(!publishOn||!expiresOn||publishOn<sriLankaToday||expiresOn<publishOn){
+      say('adminOfficialJobMessage','Choose a valid publication start date (today or later) and an expiry date on or after it.',true);
+      return;
+    }
+    const payload={customer_id:user.id,service_title:$('officialJobTitle').value.trim(),description:$('officialJobDescription').value.trim(),district:$('officialJobDistrict').value,address:$('officialJobArea').value.trim(),budget_lkr:$('officialJobBudget').value?Number($('officialJobBudget').value):null,preferred_date:$('officialJobDate').value||null,publish_on:publishOn,expires_on:expiresOn,status:'open',post_source:'clean_lanka'};
     const {error}=await supabaseClient.from('job_posts').insert(payload);if(error){say('adminOfficialJobMessage','Could not publish official job: '+error.message,true);return;}
-    $('adminOfficialJobForm').reset();say('adminOfficialJobMessage','Official Clean Lanka job published successfully.');await loadHomeJobs();
+    $('adminOfficialJobForm').reset();
+    window.clOfficialScheduleSetDefaults?.();
+    say('adminOfficialJobMessage',publishOn>sriLankaToday?'Official Clean Lanka job scheduled successfully. It will appear automatically on the publish date.':'Official Clean Lanka job published successfully. It will hide after the expiry date.');
+    await loadHomeJobs();
+    window.clRefreshOfficialSchedules?.();
   });
+  // At the Sri Lankan date boundary, public jobs and worker jobs refresh without requiring a page reload.
+  window.clRefreshHomePublicJobs=loadHomeJobs;
+  let clLastJobScheduleDay=window.clSriLankaToday?.()||new Date().toISOString().slice(0,10);
+  function clRefreshOnSriLankaDateChange(){
+    const today=window.clSriLankaToday?.()||new Date().toISOString().slice(0,10);
+    if(today===clLastJobScheduleDay)return;
+    clLastJobScheduleDay=today;
+    loadHomeJobs();
+    if(activeWorkerProfileId&&!document.getElementById('workerDashboard')?.classList.contains('hidden'))loadWorkerJobs();
+    window.clRefreshOfficialSchedules?.();
+  }
+  setInterval(clRefreshOnSriLankaDateChange,60000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)clRefreshOnSriLankaDateChange();});
   ensureWorkerPresence();
   loadHomeWorkers();loadHomeJobs();
   window.addEventListener('pageshow',()=>{if(!document.hidden)loadHomeWorkers();});
@@ -7456,5 +7545,184 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     }
     setTimeout(updateVisibility,0);
   });
+})();
+</script>
+<script id="cl-official-job-schedule-script-20261109">
+(function(){
+  'use strict';
+  const form=document.getElementById('adminOfficialJobForm');
+  const publishInput=document.getElementById('officialJobPublishOn');
+  const expiryInput=document.getElementById('officialJobExpiresOn');
+  const durationInput=document.getElementById('officialJobDuration');
+  const note=document.getElementById('officialJobScheduleNote');
+  const host=document.getElementById('clOfficialScheduleList');
+  const message=document.getElementById('clOfficialScheduleMessage');
+  const refreshButton=document.getElementById('clOfficialScheduleRefresh');
+  const admin=document.getElementById('adminDashboard');
+  if(!form||!publishInput||!expiryInput||!durationInput||!note||!host||!message||!admin)return;
+
+  // Always use Sri Lanka's date, not the visitor's local device timezone.
+  function sriLankaToday(){
+    const parts=new Intl.DateTimeFormat('en-GB',{
+      timeZone:'Asia/Colombo',year:'numeric',month:'2-digit',day:'2-digit'
+    }).formatToParts(new Date());
+    const map=Object.fromEntries(parts.map(p=>[p.type,p.value]));
+    return map.year+'-'+map.month+'-'+map.day;
+  }
+  window.clSriLankaToday=sriLankaToday;
+  function addDays(iso,additional){
+    const date=new Date(iso+'T12:00:00Z');
+    if(Number.isNaN(date.getTime()))return iso;
+    date.setUTCDate(date.getUTCDate()+additional);
+    return date.toISOString().slice(0,10);
+  }
+  function setDefaults(){
+    const today=sriLankaToday();
+    publishInput.min=today;
+    publishInput.value=today;
+    durationInput.value='7';
+    expiryInput.min=today;
+    expiryInput.value=addDays(today,6);
+    refreshNote();
+  }
+  function refreshNote(){
+    const start=publishInput.value,end=expiryInput.value;
+    expiryInput.min=start||sriLankaToday();
+    if(start&&end&&start<=end){
+      const today=sriLankaToday();
+      note.textContent=(start>today?'Scheduled from ':'Visible from ')+start+' through '+end+' (Sri Lanka time). Post hides at midnight after '+end+'.';
+    }else note.textContent='Please select a valid start and end date.';
+  }
+  function updateDuration(){
+    if(durationInput.value!=='custom'&&publishInput.value){
+      expiryInput.value=addDays(publishInput.value,Number(durationInput.value)-1);
+    }
+    refreshNote();
+  }
+  publishInput.addEventListener('change',updateDuration);
+  expiryInput.addEventListener('change',()=>{
+    durationInput.value='custom';refreshNote();
+  });
+  durationInput.addEventListener('change',updateDuration);
+  window.clOfficialScheduleSetDefaults=setDefaults;
+  setDefaults();
+
+  const filterButtons=Array.from(document.querySelectorAll('[data-cl-official-filter]'));
+  let selectedFilter='active',rows=[],loading=false;
+
+  function stateOf(job){
+    if(job.status!=='open')return 'closed';
+    if(!job.publish_on||!job.expires_on)return 'closed';
+    const now=sriLankaToday();
+    if(job.publish_on>now)return 'scheduled';
+    if(job.expires_on<now)return 'expired';
+    return 'active';
+  }
+  function make(tag,className,text){
+    const el=document.createElement(tag);
+    if(className)el.className=className;
+    if(text!==undefined)el.textContent=String(text);
+    return el;
+  }
+  function canManage(){
+    return !admin.classList.contains('hidden') &&
+      document.body.classList.contains('admin-dashboard-mode') &&
+      ['main_admin','admin'].includes(admin.dataset.adminRole||'');
+  }
+  function render(){
+    if(!canManage())return;
+    host.replaceChildren();
+    const counts={active:0,scheduled:0,expired:0,closed:0};
+    rows.forEach(job=>{counts[stateOf(job)]++});
+    filterButtons.forEach(button=>{
+      const filter=button.dataset.clOfficialFilter;
+      button.setAttribute('aria-pressed',filter===selectedFilter?'true':'false');
+      const title=filter==='all'?'All Posts':filter.charAt(0).toUpperCase()+filter.slice(1);
+      button.textContent=title+' ('+(filter==='all'?rows.length:(counts[filter]||0))+')';
+    });
+    const selected=rows.filter(job=>selectedFilter==='all'||stateOf(job)===selectedFilter);
+    message.textContent=selected.length+' '+selectedFilter+' official job(s). Expired posts are hidden from the public, not deleted.';
+    if(!selected.length){
+      host.append(make('p','rounded-xl bg-slate-50 border border-slate-200 p-4 text-slate-600','No official posts in this category.'));
+      return;
+    }
+    selected.forEach(job=>{
+      const status=stateOf(job);
+      const card=make('article','cl-official-record');
+      const heading=make('h4','',job.service_title||'Untitled Official Job');
+      const badge=make('span','cl-official-status',status.charAt(0).toUpperCase()+status.slice(1));
+      badge.dataset.status=status;
+      const meta=make('p','mt-2 text-sm text-slate-600',
+        (job.district||'Sri Lanka')+' · Job Status: '+String(job.status||'unknown')+
+        ' · '+(job.created_at?new Date(job.created_at).toLocaleDateString('en-GB'):'Date not provided'));
+      card.append(heading,badge,meta);
+      const dates=make('div','cl-official-dates');
+      const startLabel=make('label','','Publish From');
+      const endLabel=make('label','','Visible Through');
+      const start=make('input'),end=make('input');
+      start.type='date';end.type='date';
+      start.value=job.publish_on||'';end.value=job.expires_on||'';
+      start.disabled=end.disabled=status==='closed';
+      startLabel.append(start);endLabel.append(end);dates.append(startLabel,endLabel);
+      card.append(dates);
+      if(status!=='closed'){
+        const save=make('button','cl-official-save','Save Dates');
+        save.type='button';
+        const hint=make('p','text-sm text-slate-600 mt-2');
+        save.addEventListener('click',async()=>{
+          if(!start.value||!end.value||start.value>end.value){
+            hint.textContent='Select valid dates; expiry must be on or after publish date.';
+            return;
+          }
+          save.disabled=true;
+          hint.textContent='Saving schedule…';
+          try{
+            const client=window.supabaseClient;
+            if(!client)throw Error('Connection unavailable');
+            const {data,error}=await client.from('job_posts')
+              .update({publish_on:start.value,expires_on:end.value})
+              .eq('id',job.id).eq('post_source','clean_lanka').eq('status','open')
+              .select('id').single();
+            if(error)throw error;
+            if(!data?.id)throw Error('Job is not editable.');
+            hint.textContent='Saved.';
+            window.clRefreshHomePublicJobs?.();
+            await refresh();
+          }catch(error){
+            hint.textContent='Could not save dates: '+(error?.message||'Please try again.');
+          }finally{save.disabled=false;}
+        });
+        card.append(save,hint);
+      }else card.append(make('p','text-xs text-slate-500 mt-2','Closed job: schedule editing is disabled.'));
+      host.append(card);
+    });
+  }
+  async function refresh(){
+    if(!canManage()||loading)return;
+    const client=window.supabaseClient;
+    if(!client){message.textContent='Cannot connect to Supabase.';return;}
+    loading=true;
+    message.textContent='Loading official job schedule…';
+    try{
+      const {data,error}=await client.from('job_posts')
+        .select('id,service_title,district,status,created_at,post_source,publish_on,expires_on')
+        .eq('post_source','clean_lanka')
+        .order('created_at',{ascending:false})
+        .limit(250);
+      if(error)throw error;
+      rows=data||[];
+      render();
+    }catch(error){
+      message.textContent='Unable to load official posts: '+(error?.message||'Unknown error');
+    }finally{loading=false;}
+  }
+  window.clRefreshOfficialSchedules=refresh;
+  refreshButton?.addEventListener('click',refresh);
+  filterButtons.forEach(button=>button.addEventListener('click',()=>{
+    selectedFilter=button.dataset.clOfficialFilter||'active';render();
+  }));
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&canManage())refresh();});
+  setInterval(()=>{if(canManage())render();},60000);
+  if(canManage())refresh();
 })();
 </script>
