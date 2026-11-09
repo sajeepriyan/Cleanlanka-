@@ -3921,71 +3921,95 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     } catch (error) { showMessage(message, error.message || 'Could not send reset email.', true); }
     finally { button.disabled = false; }
   });
-  // Restore recovery sessions before allowing password changes.
-  async function clPreparePasswordRecovery(){
-    const url=new URL(window.location.href);
-    const code=url.searchParams.get('code');
-    const tokenHash=url.searchParams.get('token_hash');
-    const type=url.searchParams.get('type');
-    const recovery=url.searchParams.get('cl_recovery')==='1'||type==='recovery'||window.location.hash.includes('type=recovery')||document.body.classList.contains('password-recovery-mode');
-    if(!recovery&&!code)return;
-    const message=document.getElementById('newPasswordMessage');
+  // Recovery-only state; do not alter normal customer/worker/admin navigation.
+  let clRecoveryVerified = false;
+  const clRecoveryButton = document.getElementById('saveNewPasswordButton');
+  clRecoveryButton.disabled = true;
+  function clShowRecovery(messageText, isError = false) {
     document.getElementById('account-login').classList.remove('hidden');
     document.getElementById('newPasswordPanel').classList.remove('hidden');
-    document.body.classList.add('login-page-mode','password-recovery-mode');
-    showMessage(message,'Verifying your secure password-reset link…');
-    try{
-      if(tokenHash&&type==='recovery'){
-        const {error}=await supabaseClient.auth.verifyOtp({token_hash:tokenHash,type:'recovery'});
-        if(error)throw error;
-      }else if(code){
-        const {data:existing}=await supabaseClient.auth.getSession();
-        if(!existing?.session){
-          const {error}=await supabaseClient.auth.exchangeCodeForSession(code);
-          if(error)throw error;
-        }
-      }
-      const {data,error}=await supabaseClient.auth.getSession();
-      if(error)throw error;
-      if(!data?.session?.user)throw new Error('Recovery session unavailable. Request a fresh reset link and open it in the same browser.');
-      showMessage(message,'Secure link verified. Enter and save your new password.');
-      if(code||tokenHash){url.searchParams.delete('code');url.searchParams.delete('token_hash');url.searchParams.delete('type');history.replaceState(null,'',url.pathname+url.search+url.hash);}
-    }catch(e){showMessage(message,e.message||'Reset link expired or invalid. Please request a new link.',true);}
+    document.body.classList.add('login-page-mode', 'password-recovery-mode');
+    if (messageText) showMessage(document.getElementById('newPasswordMessage'), messageText, isError);
   }
-  clPreparePasswordRecovery();
+  // Register the listener before awaiting any session recovery work.
   supabaseClient.auth.onAuthStateChange((event) => {
     if (event === 'PASSWORD_RECOVERY') {
-      document.getElementById('account-login').classList.remove('hidden');
-      document.getElementById('newPasswordPanel').classList.remove('hidden');
-      document.body.classList.add('login-page-mode');
-      document.body.classList.add('password-recovery-mode');
+      clRecoveryVerified = true;
+      clRecoveryButton.disabled = false;
+      clShowRecovery('Secure reset link verified. Enter your new password.');
     }
   });
-  if (window.location.hash.includes('type=recovery')) {
-    document.getElementById('account-login').classList.remove('hidden');
-    document.getElementById('newPasswordPanel').classList.remove('hidden');
-    document.body.classList.add('login-page-mode');
-    document.body.classList.add('password-recovery-mode');
+  async function clPreparePasswordRecovery() {
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get('code');
+    const tokenHash = url.searchParams.get('token_hash');
+    const type = url.searchParams.get('type');
+    const hashRecovery = window.location.hash.includes('type=recovery');
+    const recovery = url.searchParams.get('cl_recovery') === '1' || type === 'recovery' || hashRecovery;
+    if (!recovery && !code) return;
+    clShowRecovery('Checking your password-reset link…');
+    try {
+      if (tokenHash && type === 'recovery') {
+        const { error } = await supabaseClient.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' });
+        if (error) throw error;
+        clRecoveryVerified = true;
+      } else if (code) {
+        // The Supabase client may have already exchanged the PKCE code automatically.
+        const { data: existing } = await supabaseClient.auth.getSession();
+        if (!existing?.session) {
+          const { error } = await supabaseClient.auth.exchangeCodeForSession(code);
+          if (error) throw error;
+        }
+        // A pre-existing login alone must not authorize a password reset.
+        if (!clRecoveryVerified && !existing?.session) clRecoveryVerified = true;
+      }
+      const { data, error } = await supabaseClient.auth.getUser();
+      if (error) throw error;
+      if (!data?.user || !clRecoveryVerified) {
+        throw new Error('Recovery link not verified. Please request a fresh password-reset email.');
+      }
+      clRecoveryButton.disabled = false;
+      clShowRecovery('Secure link verified. Enter and save your new password.');
+      if (code || tokenHash) {
+        url.searchParams.delete('code');
+        url.searchParams.delete('token_hash');
+        url.searchParams.delete('type');
+        history.replaceState(null, '', url.pathname + url.search + url.hash);
+      }
+    } catch (e) {
+      clRecoveryVerified = false;
+      clRecoveryButton.disabled = true;
+      clShowRecovery(e.message || 'Reset link invalid or expired. Request a new link.', true);
+    }
   }
+  clPreparePasswordRecovery();
   document.getElementById('saveNewPasswordButton').addEventListener('click', async () => {
     const password = document.getElementById('newPassword').value;
     const confirm = document.getElementById('confirmNewPassword').value;
     const message = document.getElementById('newPasswordMessage');
+    if (!clRecoveryVerified) {
+      showMessage(message, 'Recovery link not verified. Please request a new reset email.', true);
+      return;
+    }
     if (password.length < 8) { showMessage(message, 'Password must contain at least 8 characters.', true); return; }
     if (password !== confirm) { showMessage(message, 'The passwords do not match.', true); return; }
     const button = document.getElementById('saveNewPasswordButton');
     button.disabled = true;
     try {
-      const {data:current,error:sessionError}=await supabaseClient.auth.getSession();
-      if(sessionError)throw sessionError;
-      if(!current?.session?.user)throw new Error('Secure recovery session not found. Please request a new reset email and open the latest link in the same browser.');
-      const { error } = await supabaseClient.auth.updateUser({password});
+      const { data: verified, error: authError } = await supabaseClient.auth.getUser();
+      if (authError || !verified?.user) throw authError || new Error('Secure recovery session expired.');
+      const { error } = await supabaseClient.auth.updateUser({ password });
       if (error) throw error;
-      showMessage(message, 'Your password has been updated. You can now sign in with your new password.');
+      clRecoveryVerified = false;
       document.getElementById('newPassword').value = '';
       document.getElementById('confirmNewPassword').value = '';
-    } catch (error) { showMessage(message, error.message || 'Could not update password. Open the latest reset email link.', true); }
-    finally { button.disabled = false; }
+      showMessage(message, 'Password updated successfully. Return to Login to sign in with your new password.');
+      const cleanUrl = new URL(location.href);
+      cleanUrl.searchParams.delete('cl_recovery');
+      history.replaceState(null, '', cleanUrl.pathname + cleanUrl.search);
+    } catch (error) {
+      showMessage(message, error.message || 'Password update failed. Request a new recovery link.', true);
+    } finally { button.disabled = !clRecoveryVerified; }
   });
   document.getElementById('manageEmailButton').addEventListener('click', () => {
     document.getElementById('emailSettingsPanel').classList.toggle('hidden');
