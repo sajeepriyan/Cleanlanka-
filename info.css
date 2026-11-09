@@ -1,0 +1,50 @@
+/* Clean Lanka public information pages – 9 Nov 2026. */
+:root{--ink:#152b25;--green:#0d6947;--green2:#108554;--mist:#edf9f2;--border:#d9e8de}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#f5faf7;color:var(--ink);font:16px/1.75 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:#086c47;text-underline-offset:3px}
+a:hover{color:#064f35}
+a:focus-visible,button:focus-visible{outline:3px solid #f2a900;outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+header{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;box-shadow:0 4px 18px #074c3110}
+.head{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;min-height:85px;padding-top:12px;padding-bottom:12px}
+.brand{font-size:clamp(22px,3vw,29px);font-weight:900;letter-spacing:-1px;color:#0f5132;text-decoration:none;line-height:1.15}
+.brand span{color:#16a34a}
+.eyebrow{display:block;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#547366}
+header nav{display:flex;flex-wrap:wrap;gap:9px 16px;font-size:14px;font-weight:750}
+header nav a{text-decoration:none;color:#224937}
+header nav a[aria-current="page"]{color:#086a43;text-decoration:underline;text-decoration-thickness:2px}
+.hero{background:linear-gradient(125deg,#0a5237,#0b8550);color:#fff;padding:58px 0 60px}
+.hero .kicker{font-weight:800;text-transform:uppercase;letter-spacing:.16em;color:#aff1c6;font-size:12px}
+.hero h1{font-size:clamp(32px,5vw,52px);font-weight:900;line-height:1.13;letter-spacing:-1.6px;margin:10px 0 14px}
+.hero p{font-size:clamp(16px,2vw,19px);opacity:.95;max-width:780px;margin:0}
+.meta{font-size:13px;opacity:.9;margin-top:17px}
+.layout{display:grid;grid-template-columns:minmax(200px,245px) minmax(0,1fr);align-items:start;gap:24px;padding-top:30px;padding-bottom:70px}
+.toc{background:#fff;border:1px solid var(--border);border-radius:17px;padding:19px;position:sticky;top:110px}
+.toc h2{margin:0 0 8px;color:#0f5132;font-size:16px}
+.toc a{display:block;padding:7px 0;color:#27523c;font-size:14px;text-decoration:none;line-height:1.4}
+.content{min-width:0}
+.content section,.content article,.notice,.cta{background:#fff;border:1px solid var(--border);border-radius:18px;padding:clamp(18px,3vw,32px);margin:0 0 19px;box-shadow:0 5px 22px #054d2910}
+.content h2{font-size:clamp(21px,3vw,26px);line-height:1.25;color:#0f5132;margin:0 0 12px;letter-spacing:-.5px}
+.content h3{font-size:18px;color:#173d2e;margin:16px 0 5px;line-height:1.35}
+.content p,.content ul{margin:10px 0}
+.content ul{padding-left:23px}
+.content li{margin-bottom:6px}
+.notice{background:#edfaf1;border-color:#bde5ca}
+.notice strong{color:#0a6740}
+.cta{background:#0e5b3c;color:#fff}
+.cta a{color:#fff;font-weight:850}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.grid article{margin:0}
+.grid h2{font-size:21px}
+.tag{font-size:12px;font-weight:800;color:#13724c;letter-spacing:.06em;text-transform:uppercase}
+.button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:11px;background:#0f7b50;color:white!important;text-decoration:none;padding:11px 18px;font-weight:850;margin-top:10px}
+.button:hover{background:#06553a}
+footer{background:#0b2920;color:#dce9e2;padding:35px 0;font-size:14px}
+footer .footer-nav{display:flex;flex-wrap:wrap;gap:12px 22px;margin:12px 0}
+footer a{color:#e4fff0}
+footer p{margin:9px 0}
+small{font-size:13px}
+@media(max-width:800px){.layout{grid-template-columns:1fr;padding-top:18px}.toc{position:static}.toc a{display:inline-block;margin:0 15px 4px 0}.grid{grid-template-columns:1fr}.hero{padding:40px 0 45px}}
+@media(max-width:480px){.wrap{padding:0 15px}.head{align-items:flex-start}header nav{font-size:13px;gap:8px 12px}.content section,.content article{padding:20px}.hero h1{letter-spacing:-1px}}
