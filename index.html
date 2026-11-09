@@ -1398,6 +1398,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 #customerDashboard .cl-accountbar{background:#fff;border:1px solid #d9e9e3;padding:12px 18px}
 #customerDashboard .customer-card{border-radius:20px}
 @media(max-width:600px){#customerDashboard .cl-customer-identity-label{display:none}#customerDashboard .cl-customer-photo-panel{justify-content:center;text-align:center}#customerDashboard .cl-customer-photo-controls{width:100%}}
+#customerDashboard .cl-customer-browse{background:#1d4ed8;color:#fff}
 </style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
@@ -1946,7 +1947,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     <p class="text-xs uppercase font-bold text-slate-500">Email Address</p><p id="customerDashEmail" class="text-lg font-bold text-slate-900 mb-4 break-all">—</p>
     <p class="text-xs uppercase font-bold text-slate-500">Account Type</p><p class="text-lg font-bold text-emerald-700">Registered Customer</p>
     <div class="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-xs font-black uppercase tracking-widest text-emerald-800">Your Customer ID</p><p id="customerDashPublicId" class="mt-1 text-2xl sm:text-3xl font-black tracking-wider text-emerald-950">CUS-000000</p><p class="mt-1 text-xs text-emerald-800">Your unique Clean Lanka customer reference</p></div>
-    <div class="cl-customer-photo-panel"><div class="cl-customer-photo-frame"><img id="customerProfileAvatar" alt="Your profile photo" hidden><span id="customerProfileInitial">C</span></div><div class="cl-customer-photo-controls"><strong>Profile Photo</strong><p>Optional · JPG, PNG or WebP · Max 2 MB · Private to your account</p><label class="cl-customer-photo-upload" for="customerAvatarFile">Upload / Change Photo</label><input type="file" id="customerAvatarFile" accept="image/jpeg,image/png,image/webp" hidden><button type="button" id="customerRemoveAvatar" class="cl-customer-photo-remove">Remove Photo</button><p id="customerAvatarMessage" role="status" aria-live="polite"></p></div></div>
+    <div class="cl-customer-photo-panel"><div class="cl-customer-photo-frame"><img id="customerProfileAvatar" alt="Your profile photo" hidden><span id="customerProfileInitial">C</span></div><div class="cl-customer-photo-controls"><strong>Profile Photo</strong><p>Optional · JPG, PNG or WebP · Max 2 MB · Private to your account</p><label class="cl-customer-photo-upload" for="customerAvatarFile">Choose from Photos</label><input type="file" id="customerAvatarFile" accept="image/*" hidden><label class="cl-customer-photo-upload cl-customer-browse" for="customerAvatarBrowseFile">Browse Files / Gallery</label><input type="file" id="customerAvatarBrowseFile" accept="*/*" hidden><button type="button" id="customerRemoveAvatar" class="cl-customer-photo-remove">Remove Photo</button><p id="customerAvatarMessage" role="status" aria-live="polite"></p></div></div>
     <form id="customerProfileForm" class="mt-5 border-t border-slate-200 pt-5 space-y-3">
      <h3 class="text-lg font-extrabold text-emerald-900">Complete / Update Your Profile</h3>
      <label class="block text-sm font-bold text-slate-700" for="customerProfileFullName">Full Name</label>
@@ -2469,7 +2470,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     if(!error&&data?.signedUrl&&activeCustomerUserId===uid)clSetCustomerAvatar(data.signedUrl);
   }
   const clAvatarFile=document.getElementById('customerAvatarFile');
-  if(clAvatarFile)clAvatarFile.addEventListener('change',async(e)=>{
+  async function clHandleCustomerAvatarFile(e){
     const file=e.target.files?.[0],status=document.getElementById('customerAvatarMessage'),uid=activeCustomerUserId;
     if(!file||!uid)return;
     if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>2097152||!file.size){status.textContent='Choose a JPG, PNG or WebP photo smaller than 2 MB.';e.target.value='';return;}
@@ -2477,7 +2478,9 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     try{const {error}=await supabaseClient.storage.from(clCustomerPhotoBucket).upload(uid+'/avatar',file,{upsert:true,contentType:file.type,cacheControl:'60'});if(error)throw error;await clLoadCustomerAvatar(uid);status.textContent='Profile photo saved successfully.';}
     catch(err){console.error('Customer photo upload:',err);status.textContent='Photo upload failed. Please try again.';}
     e.target.value='';
-  });
+  }
+  if(clAvatarFile)clAvatarFile.addEventListener('change',clHandleCustomerAvatarFile);
+  document.getElementById('customerAvatarBrowseFile')?.addEventListener('change',clHandleCustomerAvatarFile);
   document.getElementById('customerRemoveAvatar')?.addEventListener('click',async()=>{
     const uid=activeCustomerUserId,status=document.getElementById('customerAvatarMessage');if(!uid)return;
     status.textContent='Removing photo...';
