@@ -3915,7 +3915,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     button.disabled = true;
     showMessage(message, 'Sending secure reset link...');
     try {
-      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {redirectTo:'https://cleanlanka.lk/#account-login'});
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {redirectTo:'https://cleanlanka.lk/?cl_recovery=1'});
       if (error) throw error;
       showMessage(message, 'If an account exists for this email, a password-reset link will be sent. Check your inbox and spam folder.');
     } catch (error) { showMessage(message, error.message || 'Could not send reset email.', true); }
@@ -3927,7 +3927,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const code=url.searchParams.get('code');
     const tokenHash=url.searchParams.get('token_hash');
     const type=url.searchParams.get('type');
-    const recovery=type==='recovery'||window.location.hash.includes('type=recovery')||document.body.classList.contains('password-recovery-mode');
+    const recovery=url.searchParams.get('cl_recovery')==='1'||type==='recovery'||window.location.hash.includes('type=recovery')||document.body.classList.contains('password-recovery-mode');
     if(!recovery&&!code)return;
     const message=document.getElementById('newPasswordMessage');
     document.getElementById('account-login').classList.remove('hidden');
