@@ -1613,6 +1613,16 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 @media(min-width:768px){
  #homeMarketplace #homeWorkerResults,#homeMarketplace #homeJobResults{max-height:730px!important}
 }
+</style><style id="cl-worker-compact-final-20261109">
+#homeMarketplace #homeWorkerResults{grid-auto-rows:210px!important;max-height:calc(210px * 4 + 30px)!important}
+#homeMarketplace #homeWorkerResults>article.cl-directory-tile{height:210px!important;min-height:0!important;max-height:210px!important;padding:10px!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;gap:3px!important}
+#homeMarketplace #homeWorkerResults .cl-directory-tile .cl-worker-cartoon{height:44px!important;width:44px!important;margin:0 auto 3px!important;flex-shrink:0!important}
+#homeMarketplace #homeWorkerResults .cl-directory-tile .cl-worker-cartoon span{font-size:27px!important}
+#homeMarketplace #homeWorkerResults .cl-directory-tile h4{font-size:13px!important;line-height:1.2!important;max-height:32px;overflow:hidden}
+#homeMarketplace #homeWorkerResults .cl-directory-tile p.cl-tile-meta{font-size:11px!important;line-height:1.25!important;margin:0!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#homeMarketplace #homeWorkerResults .cl-directory-tile p.cl-tile-status{font-size:10px!important;line-height:1.2!important;margin:0!important}
+#homeMarketplace #homeWorkerResults .cl-directory-tile .cl-action{font-size:11px!important;line-height:1.1!important;min-height:32px!important;padding:8px 3px!important;margin-top:auto!important;flex-shrink:0!important}
+@media(min-width:768px){#homeMarketplace #homeWorkerResults{max-height:calc(210px * 2 + 10px)!important}}
 </style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -4736,7 +4746,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const host=$('homeWorkerResults');if(!host)return;
     host.classList.toggle('cl-list-empty',!rows.length);
     if(!rows.length){host.innerHTML='<div class="sm:col-span-2 lg:col-span-3 rounded-xl bg-slate-50 p-5 text-slate-600">No approved workers match this search yet.</div>';return;}
-    host.innerHTML=rows.map(w=>`<article class="cl-worker-card cl-worker-card-illustrated flex flex-col"><div class="cl-worker-cartoon" aria-hidden="true"><span>👷</span></div><div class="flex items-start justify-between gap-2"><div><p class="text-xs font-black uppercase tracking-wider text-emerald-700">Verified Clean Lanka Worker</p><h4 class="font-black text-emerald-950 text-xl mt-1">${esc(w.full_name||'Service Professional')}</h4></div><span class="text-xs rounded-full bg-emerald-100 text-emerald-800 px-2 py-1 font-bold">Approved</span></div><p data-home-worker-online="${esc(w.worker_id)}" class="text-xs font-bold mt-1 ${onlineWorkerIds.has(String(w.worker_id))?'text-emerald-700':'text-slate-500'}">${onlineWorkerIds.has(String(w.worker_id))?'● Online':'● Offline'}</p><p class="text-sm text-slate-600 mt-2">${esc(w.district||'Sri Lanka')}</p><p class="text-sm font-semibold text-slate-800 mt-2">${esc(Array.isArray(w.skills)?w.skills.join(', '):(w.skills||'Home Services'))}</p><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div class="rounded-lg bg-emerald-50 p-2"><span class="block text-xs text-slate-500">Experience</span><strong>${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'}</strong></div><div class="rounded-lg bg-blue-50 p-2"><span class="block text-xs text-slate-500">Service Price</span><strong>${esc(money(w.service_price_lkr))}</strong></div></div><button type="button" class="cl-action mt-4 w-full" data-home-worker-profile="${esc(w.worker_id)}">View Full Profile</button></article>`).join('');
+    host.innerHTML=rows.map(w=>`<article class="cl-worker-card cl-worker-card-illustrated cl-directory-tile flex flex-col"><div class="cl-worker-cartoon" aria-hidden="true"><span>👷</span></div><h4 class="font-black text-emerald-950">${esc(w.full_name||'Service Professional')}</h4><p class="cl-tile-meta">${esc(w.district||'Sri Lanka')} · ${esc(Array.isArray(w.skills)?w.skills.join(', '):(w.skills||'Home Services'))}</p><p class="cl-tile-meta">${w.experience_years==null?'':esc(w.experience_years)+' years · '}${esc(money(w.service_price_lkr))}</p><p data-home-worker-online="${esc(w.worker_id)}" class="cl-tile-status">${onlineWorkerIds.has(String(w.worker_id))?'● Online':'● Offline'} · Approved</p><button type="button" class="cl-action w-full" data-home-worker-profile="${esc(w.worker_id)}">View Full Profile</button></article>`).join(''););
   }
   function openHomeWorkerProfile(workerId){
     const w=homeWorkerCache.find(x=>String(x.worker_id)===String(workerId));if(!w)return;
