@@ -5390,7 +5390,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
     checkpointTimer=setTimeout(commitView,ms);
   }
   document.addEventListener('click',function(event){
-    if(event.target?.closest?.('#clDashboardHomeButton, #clServiceBack, #services-section .cl-home-cat'))return;
+    if(event.target?.closest?.('#clDashboardHomeButton, #clServiceBack, #services-section .cl-home-cat, [data-open-customer-chat], [data-open-worker-chat]'))return;
     scheduleViewCheckpoint(45);
   },true);
   window.addEventListener('popstate',function(event){
@@ -6539,31 +6539,39 @@ setTimeout(refresh,1000);
 <script id="cl074-chat-navigation-script">
 (()=>{
  const roles=['customer','worker'];
- function showList(role){
+ function showList(role,fromPopstate=false){
   const panel=document.getElementById(role+'ChatPanel');
   if(!panel||!panel.classList.contains('cl074-thread-open'))return;
+  if(!fromPopstate&&history.state?.cl074Chat&&history.state.cl074Role===role){
+    history.back(); // On-screen and Android Back both return to the same list.
+    return;
+  }
   panel.classList.remove('cl074-thread-open');
   document.getElementById(role+'ChatWindow')?.classList.add('hidden');
   document.getElementById(role+'ConversationList')?.scrollIntoView({block:'nearest'});
-  if(history.state?.cl074Chat)history.replaceState({...history.state,cl074Chat:false},'');
  }
  function openThread(role,button){
   const panel=document.getElementById(role+'ChatPanel'),win=document.getElementById(role+'ChatWindow');
   if(!panel||!win)return;
   panel.classList.add('cl074-thread-open');
+  win.classList.remove('hidden');
   let back=win.querySelector('.cl074-back');
   if(!back){back=document.createElement('button');back.type='button';back.className='cl074-back';back.innerHTML='<span aria-hidden="true">‹</span> Back to messages';win.prepend(back);back.addEventListener('click',()=>showList(role))}
   const name=button?.querySelector('.cl073-chat-info strong')?.textContent;
   if(name){const title=document.getElementById(role+'ChatTitle');if(title)title.textContent=name}
   win.scrollIntoView({behavior:'smooth',block:'start'});
-  if(!history.state?.cl074Chat)history.pushState({...history.state,cl074Chat:true,cl074Role:role},'','#'+role+'-conversation');
+  if(!history.state?.cl074Chat){
+    const view=typeof window.cleanLankaCaptureView==='function'
+      ? window.cleanLankaCaptureView() : (history.state||{});
+    history.pushState({...view,cl074Chat:true,cl074Role:role},'','#'+role+'-conversation');
+  }
  }
  document.addEventListener('click',e=>{
   const row=e.target.closest('[data-open-customer-chat],[data-open-worker-chat]');
   if(row){const role=row.hasAttribute('data-open-customer-chat')?'customer':'worker';setTimeout(()=>openThread(role,row),60);return}
   if(e.target.closest('[data-cl-go],.cl-dash-nav button,.cl-mobile-nav button')){for(const role of roles){const panel=document.getElementById(role+'ChatPanel');panel?.classList.remove('cl074-thread-open');document.getElementById(role+'ChatWindow')?.classList.add('hidden')}}
  },true);
- window.addEventListener('popstate',()=>{for(const role of roles)showList(role)});
+ window.addEventListener('popstate',()=>{for(const role of roles)showList(role,true)});
 })();
 </script>
 <script id="cl079-homepage-script">
