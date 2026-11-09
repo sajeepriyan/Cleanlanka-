@@ -6342,8 +6342,8 @@ body.admin-dashboard-mode #adminDashboard{background:#f0f8f3!important;color:#12
         photo=data.avatar_url||data.profile_photo_url||data.profile_image_url||data.photo_url||photo;
       }
     }catch(e){}
+    document.querySelectorAll('#customerDashboard .cl-dashboard-profile-identity').forEach(el=>el.remove());
     const roots=[
-      {root:document.getElementById('customerDashboard'),selector:'.cl-accountbar'},
       {root:document.getElementById('workerDashboard'),selector:'.cv-top'}
     ];
     roots.forEach(({root,selector})=>{
