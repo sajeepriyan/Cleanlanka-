@@ -3921,6 +3921,38 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     } catch (error) { showMessage(message, error.message || 'Could not send reset email.', true); }
     finally { button.disabled = false; }
   });
+  // Restore recovery sessions before allowing password changes.
+  async function clPreparePasswordRecovery(){
+    const url=new URL(window.location.href);
+    const code=url.searchParams.get('code');
+    const tokenHash=url.searchParams.get('token_hash');
+    const type=url.searchParams.get('type');
+    const recovery=type==='recovery'||window.location.hash.includes('type=recovery')||document.body.classList.contains('password-recovery-mode');
+    if(!recovery&&!code)return;
+    const message=document.getElementById('newPasswordMessage');
+    document.getElementById('account-login').classList.remove('hidden');
+    document.getElementById('newPasswordPanel').classList.remove('hidden');
+    document.body.classList.add('login-page-mode','password-recovery-mode');
+    showMessage(message,'Verifying your secure password-reset link…');
+    try{
+      if(tokenHash&&type==='recovery'){
+        const {error}=await supabaseClient.auth.verifyOtp({token_hash:tokenHash,type:'recovery'});
+        if(error)throw error;
+      }else if(code){
+        const {data:existing}=await supabaseClient.auth.getSession();
+        if(!existing?.session){
+          const {error}=await supabaseClient.auth.exchangeCodeForSession(code);
+          if(error)throw error;
+        }
+      }
+      const {data,error}=await supabaseClient.auth.getSession();
+      if(error)throw error;
+      if(!data?.session?.user)throw new Error('Recovery session unavailable. Request a fresh reset link and open it in the same browser.');
+      showMessage(message,'Secure link verified. Enter and save your new password.');
+      if(code||tokenHash){url.searchParams.delete('code');url.searchParams.delete('token_hash');url.searchParams.delete('type');history.replaceState(null,'',url.pathname+url.search+url.hash);}
+    }catch(e){showMessage(message,e.message||'Reset link expired or invalid. Please request a new link.',true);}
+  }
+  clPreparePasswordRecovery();
   supabaseClient.auth.onAuthStateChange((event) => {
     if (event === 'PASSWORD_RECOVERY') {
       document.getElementById('account-login').classList.remove('hidden');
@@ -3944,6 +3976,9 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const button = document.getElementById('saveNewPasswordButton');
     button.disabled = true;
     try {
+      const {data:current,error:sessionError}=await supabaseClient.auth.getSession();
+      if(sessionError)throw sessionError;
+      if(!current?.session?.user)throw new Error('Secure recovery session not found. Please request a new reset email and open the latest link in the same browser.');
       const { error } = await supabaseClient.auth.updateUser({password});
       if (error) throw error;
       showMessage(message, 'Your password has been updated. You can now sign in with your new password.');
