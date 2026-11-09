@@ -1561,6 +1561,22 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 @media(max-width:1000px){#services-section .cl-home-cats{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:15px!important}}
 @media(max-width:700px){#services-section.cl-cartoon-services{padding:18px 12px 22px!important}#services-section .cl-cartoon-heading{font-size:23px!important;margin-bottom:14px!important}#services-section .cl-home-cats{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px 10px!important}#services-section .cl-cartoon-frame{border-radius:17px!important;padding:2px!important}#services-section .cl-cartoon-name{font-size:14px!important;font-weight:550!important;min-height:20px!important}#services-section .cl-home-cat{gap:6px!important}}
 @media(max-width:360px){#services-section .cl-home-cats{gap:9px 7px!important}#services-section .cl-cartoon-name{font-size:12.5px!important}}
+
+/* November 9 requested layout: six visible characters per row, including phones. */
+@media(max-width:1000px){
+ #services-section .cl-home-cats{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:9px!important}
+}
+@media(max-width:700px){
+ #services-section.cl-cartoon-services{padding:12px 6px 20px!important}
+ #services-section .cl-home-cats{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:5px!important}
+ #services-section .cl-cartoon-frame{border-radius:11px!important;padding:1px!important}
+ #services-section .cl-cartoon-name{font-size:clamp(9px,2.4vw,11px)!important;font-weight:650!important;line-height:1.1!important;min-height:2.2em!important;overflow-wrap:anywhere}
+ #services-section .cl-home-cat{gap:4px!important}
+}
+@media(max-width:360px){
+ #services-section .cl-home-cats{gap:3px!important}
+ #services-section .cl-cartoon-name{font-size:9px!important}
+}
 </style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
