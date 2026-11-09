@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Clean Lanka</string>
+    <string name="upload_choose_file">Choose file or capture photo</string>
+    <string name="offline_title">Unable to connect to Clean Lanka</string>
+    <string name="offline_message">Check your internet connection and try again. Your website account and data have not been changed.</string>
+    <string name="retry">Retry</string>
+    <string name="back_again">Press Back again to close Clean Lanka</string>
+    <string name="outside_browser">Opening in browser</string>
+</resources>
