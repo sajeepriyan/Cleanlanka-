@@ -1453,7 +1453,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 #customerDashboard .cl-customer-edit #customerProfileForm{margin:0!important;padding:20px!important;border:0!important}
 #customerDashboard .cl-customer-edit:not([open]) #customerProfileForm{display:none!important}
 #customerDashboard #clCustomerAccountAndBookings>.customer-card:first-child>h2{margin-top:4px!important}
-</style></head>
+</style><style id="cl-customer-contact-details-20261109">#customerDashboard .cl-customer-contact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0 18px}#customerDashboard .cl-customer-contact-grid>div{padding:13px 15px;border:1px solid #d4e8e4;border-radius:13px;background:linear-gradient(115deg,#f0fdf8,#eff6ff);min-width:0}#customerDashboard .cl-customer-contact-grid span{display:block;font-size:11px;text-transform:uppercase;font-weight:800;letter-spacing:.05em;color:#527186;margin-bottom:5px}#customerDashboard .cl-customer-contact-grid strong{display:block;font-size:16px;color:#164a52;overflow-wrap:anywhere;white-space:pre-wrap}#customerDashboard .cl-customer-contact-grid .cl-customer-address{grid-column:1/-1}@media(max-width:450px){#customerDashboard .cl-customer-contact-grid{grid-template-columns:1fr}}</style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
 <div class="bg-primary text-white py-2.5 px-4 sm:px-8 text-[15px] border-b border-primary-dark/30">
@@ -2001,6 +2001,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 <h2 class="text-xl font-extrabold text-emerald-900 mb-4">Your Account Details</h2>
     <p class="text-xs uppercase font-bold text-slate-500">Full Name</p><p id="customerDashName" class="text-lg font-bold text-slate-900 mb-4">—</p>
     <p class="text-xs uppercase font-bold text-slate-500">Email Address</p><p id="customerDashEmail" class="text-lg font-bold text-slate-900 mb-4 break-all">—</p>
+    <div class="cl-customer-contact-grid" aria-label="Customer contact details"><div><span>Phone Number</span><strong id="customerDashPhone">—</strong></div><div><span>District</span><strong id="customerDashDistrict">—</strong></div><div class="cl-customer-address"><span>Address</span><strong id="customerDashAddress">—</strong></div></div>
     <p class="text-xs uppercase font-bold text-slate-500">Account Type</p><p class="text-lg font-bold text-emerald-700">Registered Customer</p>
     <div class="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-xs font-black uppercase tracking-widest text-emerald-800">Your Customer ID</p><p id="customerDashPublicId" class="mt-1 text-2xl sm:text-3xl font-black tracking-wider text-emerald-950">CUS-000000</p><p class="mt-1 text-xs text-emerald-800">Your unique Clean Lanka customer reference</p></div>
     <details class="cl-customer-edit" id="clCustomerEditDetails"><summary><span class="material-symbols-outlined">edit</span> Edit My Profile</summary>
@@ -2547,6 +2548,10 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     clSetCustomerAvatar(null);status.textContent='Profile photo removed.';
   });
 
+  function clUpdateCustomerContactDetails(){
+    const fields=[['customerDashPhone','customerProfilePhone'],['customerDashDistrict','customerProfileDistrict'],['customerDashAddress','customerProfileAddress']];
+    for(const [output,input] of fields){const display=document.getElementById(output),source=document.getElementById(input);if(display&&source)display.textContent=(source.value||'').trim()||'Not provided';}
+  }
   async function loadCustomerProfile(user) {
     const metadata = user.user_metadata || {};
     const message = document.getElementById('customerProfileMessage');
@@ -2586,6 +2591,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       console.error('Customer profile load failed:', error);
       if (message) showMessage(message, 'Could not load your saved profile. Please refresh and try again.', true);
     }
+    clUpdateCustomerContactDetails();
   }
 
   document.getElementById('customerProfileForm').addEventListener('submit', async (event) => {
@@ -2625,6 +2631,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       }
       if (result.error) throw result.error;
       document.getElementById('customerDashName').textContent = profile.full_name;
+      clUpdateCustomerContactDetails();
       showMessage(message, 'Your customer profile has been saved successfully.');
     } catch (error) {
       console.error('Customer profile save failed:', error);
