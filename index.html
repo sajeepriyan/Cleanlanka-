@@ -1809,7 +1809,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
  <div class="max-w-7xl mx-auto">
   <div class="admin-topbar"><div class="admin-brand"><div class="admin-brand-mark" aria-hidden="true">🏡</div><div><p class="text-xs font-black tracking-widest">CLEAN LANKA • CONTROL CENTRE</p><h1 id="clAdminDashboardTitle">Admin Dashboard</h1><p id="clAdminDashboardEmailName" class="text-sm font-bold mt-1"></p><p id="adminDashboardEmail" class="text-sm mt-1"></p></div></div><button id="adminDashboardLogoutButton" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold" type="button">Sign Out</button></div>
   <section id="clGrantedPermissions" class="hidden rounded-2xl bg-white border border-blue-200 p-4 my-4" aria-label="Granted permissions"><h2 class="font-black text-blue-900 text-lg">My Granted Permissions</h2><p class="text-sm text-slate-600">Only the Main Admin can change these permissions.</p><div id="clGrantedPermissionsList" class="grid sm:grid-cols-2 gap-2 mt-3"></div></section><div class="cl-admin-welcome-strip"><div><span class="cl-admin-eyebrow">YOUR COMMAND CENTRE</span><h2>Manage Clean Lanka in one place</h2><p>Customers, workers, jobs, bookings, verification and public website preview.</p></div><a href="#clAdminPublicPreview" class="cl-admin-preview-link">🌐 View Homepage Preview</a></div>
-  <div class="cl-admin-workspace"><nav class="admin-nav" aria-label="Admin dashboard navigation"><div class="cl-admin-side-heading"><span class="cl-admin-side-icon">✦</span><span>CLEAN LANKA<br><small>ADMIN WORKSPACE</small></span></div><a href="#adminOverview">▦ Overview</a><a href="#adminWorkersHeading">♙ Workers</a><a href="#adminCustomersHeading">♧ Customers</a><a href="#adminBookingsHeading">▤ Bookings</a><a href="#adminNotificationsHeading">♢ Notifications</a><a href="#adminSubAdminsHeading">⚙ Sub Admins</a><a href="#clAdminPublicPreview">🌐 Website Preview</a></nav><main class="cl-admin-main">
+  <div class="cl-admin-workspace"><nav class="admin-nav" aria-label="Admin dashboard navigation"><div class="cl-admin-side-heading"><span class="cl-admin-side-icon">✦</span><span>CLEAN LANKA<br><small>ADMIN WORKSPACE</small></span></div><a href="#adminOverview">▦ Overview</a><a href="#adminWorkersHeading">♙ Workers</a><a href="#adminCustomersHeading">♧ Customers</a><a href="#adminBookingsHeading">▤ Bookings</a><a href="#adminChatsHeading" id="clAdminChatsNav" style="display:none">💬 All Chats</a><a href="#adminNotificationsHeading">♢ Notifications</a><a href="#adminSubAdminsHeading">⚙ Sub Admins</a><a href="#clAdminPublicPreview">🌐 Website Preview</a></nav><main class="cl-admin-main">
   <section id="clAdminPublicPreview" class="cl-admin-preview-section" aria-labelledby="clAdminPreviewHeading">
 <div class="cl-admin-preview-heading"><div><span class="cl-admin-eyebrow">LIVE PUBLIC VIEW</span><h2 id="clAdminPreviewHeading">🌐 Clean Lanka Homepage Preview</h2><p>See the same public website visitors see, including job opportunities, service categories and approved worker listings. Admin tools remain above.</p></div><div class="cl-admin-preview-actions"><a href="/" target="_blank" rel="noopener">Open Homepage ↗</a><button type="button" id="clAdminPreviewRefresh">↻ Refresh Preview</button></div></div>
 <iframe id="clAdminHomepageFrame" title="Clean Lanka public homepage preview" loading="lazy" src="/" referrerpolicy="same-origin"></iframe>
@@ -1845,6 +1845,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4"><div class="rounded-xl bg-slate-50 p-3"><p class="text-xs font-bold text-slate-500">Total Requests</p><p id="adminBookingTotal" class="text-2xl font-black text-slate-900">—</p></div><div class="rounded-xl bg-blue-50 p-3"><p class="text-xs font-bold text-blue-700">Open</p><p id="adminBookingOpen" class="text-2xl font-black text-blue-900">—</p></div><div class="rounded-xl bg-emerald-50 p-3"><p class="text-xs font-bold text-emerald-700">Assigned</p><p id="adminBookingAssigned" class="text-2xl font-black text-emerald-900">—</p></div><div class="rounded-xl bg-violet-50 p-3"><p class="text-xs font-bold text-violet-700">Completed</p><p id="adminBookingCompleted" class="text-2xl font-black text-violet-900">—</p></div><div class="rounded-xl bg-rose-50 p-3"><p class="text-xs font-bold text-rose-700">Cancelled</p><p id="adminBookingCancelled" class="text-2xl font-black text-rose-900">—</p></div></div>
    <p id="adminBookingListMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite">Booking records have not been loaded.</p><div id="adminBookingList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
   </section>
+  <section id="adminChatsSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminChatsHeading"><div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminChatsHeading" class="text-xl font-black text-slate-900">Customer–Worker Chat History</h2><p class="text-sm text-slate-600">Main Admin only. Read-only access is logged. Inform users of administrative chat access in your privacy notice.</p></div><button id="adminChatsRefresh" type="button" class="rounded-xl bg-blue-700 text-white px-5 py-3 font-bold">Refresh Chats</button></div><input id="adminChatsSearch" type="search" placeholder="Search customer, worker or messages" class="w-full border border-slate-300 rounded-xl px-4 py-3 mb-3"><p id="adminChatsStatus" role="status" class="text-sm text-slate-600 mb-3">Select Refresh Chats to load conversations.</p><div id="adminChatsList" class="space-y-4"></div></section>
   <section id="adminNotificationsSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminNotificationsHeading">
    <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminNotificationsHeading" class="text-xl font-black text-slate-900">Notifications Centre</h2><p class="text-sm text-slate-500 mt-1">Send a one-off account notification using the recipient's Supabase Auth User ID and review recent notifications. Automatic event alerts require database triggers.</p></div><button id="adminRefreshNotifications" type="button" class="rounded-xl border border-slate-300 px-4 py-3 font-bold">Refresh Notifications</button></div>
    <form id="adminNotificationForm" class="grid sm:grid-cols-2 gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 mb-5">
@@ -3808,6 +3809,8 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       document.getElementById('adminWorkersHeading').closest('section').classList.toggle('hidden',!adminHasPermission('workers_view'));
       document.getElementById('adminCustomersSection').classList.toggle('hidden',!adminHasPermission('customers_view'));
       document.getElementById('adminBookingsSection').classList.toggle('hidden',!adminHasPermission('bookings_view'));
+      document.getElementById('adminChatsSection').classList.toggle('hidden',currentAdminRole!=='main_admin');
+      document.getElementById('clAdminChatsNav').style.display=currentAdminRole==='main_admin'?'':'none';
       document.getElementById('adminNotificationsSection').classList.toggle('hidden',!['main_admin','admin'].includes(currentAdminRole));
       const dashboardMessage=document.getElementById('adminDashboardMessage');
       const canViewSummary=adminHasPermission('workers_view')||adminHasPermission('customers_view');
@@ -6315,12 +6318,24 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
 #adminDashboard .cl-admin-preview-actions button{background:#0e8b67;color:#fff;padding:10px 16px;border-radius:10px}
 </style>
 <style>#adminDashboard .admin-topbar{position:relative;padding-top:32px!important}#adminDashboard #clGrantedPermissionsList p{font-size:14px;line-height:1.5}#adminDashboard #clAdminDashboardEmailName:empty{display:none}</style>
+<script id="cl-admin-chat-monitor">
+(function(){
+ const root=document.getElementById('adminDashboard'),list=document.getElementById('adminChatsList'),status=document.getElementById('adminChatsStatus'),search=document.getElementById('adminChatsSearch'),refresh=document.getElementById('adminChatsRefresh');
+ if(!root||!list||!refresh)return;
+ let rows=[];
+ function el(tag,txt,cls){const x=document.createElement(tag);x.textContent=txt;if(cls)x.className=cls;return x;}
+ function render(){list.replaceChildren();const q=search.value.trim().toLowerCase();const groups=new Map();for(const r of rows){const id=r.conversation_id;if(!groups.has(id))groups.set(id,[]);groups.get(id).push(r);}
+ let shown=0;for(const messages of groups.values()){const first=messages[0],filtered=messages.filter(m=>[m.customer_name,m.worker_name,m.message_text].some(v=>String(v||'').toLowerCase().includes(q)));if(q&&!filtered.length)continue;shown++;const card=el('article','','rounded-xl border border-slate-200 bg-slate-50 p-4');card.append(el('h3',String(first.customer_name||'Customer')+' ↔ '+String(first.worker_name||'Worker'),'font-bold text-lg text-blue-900 mb-2'));for(const m of messages){if(!m.message_id)continue;const who=m.sender_id===null?'Unknown':String(m.sender_id);const when=m.sent_at?new Date(m.sent_at).toLocaleString():'';const item=el('div','','border-t border-slate-200 py-2');item.append(el('p',when+' · Sender ID: '+who,'text-xs text-slate-500'));item.append(el('p',String(m.message_text||''),'text-base text-slate-900 whitespace-pre-wrap break-words'));card.append(item);}list.append(card);}status.textContent=shown+' conversation(s) shown. Read-only.';}
+ refresh.addEventListener('click',async()=>{if(root.dataset.adminRole!=='main_admin'){status.textContent='Main Admin access required.';return;}refresh.disabled=true;status.textContent='Loading chat history…';try{const client=window.supabaseClient||window.cleanLankaSupabase||null;if(!client){status.textContent='Chat client not available. Please refresh the page.';return;}const {data,error}=await client.rpc('admin_read_all_chats');if(error)throw error;rows=data||[];render();}catch(e){status.textContent='Unable to load chats: '+(e.message||e);}finally{refresh.disabled=false;}});
+ search.addEventListener('input',render);
+})();
+</script>
 <script id="cl-admin-pages-v2">
 (function(){
  const root=document.getElementById('adminDashboard');if(!root)return;
  const nav=root.querySelector('.admin-nav');if(!nav)return;
- const pages={overview:document.getElementById('adminOverview'),workers:document.getElementById('adminWorkersHeading')?.closest('section'),customers:document.getElementById('adminCustomersSection'),bookings:document.getElementById('adminBookingsSection'),notifications:document.getElementById('adminNotificationsSection'),subadmins:document.getElementById('adminSubAdminsSection'),website:document.getElementById('clAdminPublicPreview')};
- const labels={overview:'Overview',workers:'Worker Management',customers:'Customer Management',bookings:'Booking Management',notifications:'Notifications',subadmins:'Sub Admin Permissions',website:'Website Preview',customerprofile:'Customer Profile'};
+ const pages={chats:document.getElementById('adminChatsSection'),overview:document.getElementById('adminOverview'),workers:document.getElementById('adminWorkersHeading')?.closest('section'),customers:document.getElementById('adminCustomersSection'),bookings:document.getElementById('adminBookingsSection'),notifications:document.getElementById('adminNotificationsSection'),subadmins:document.getElementById('adminSubAdminsSection'),website:document.getElementById('clAdminPublicPreview')};
+ const labels={chats:'All Customer–Worker Chats',overview:'Overview',workers:'Worker Management',customers:'Customer Management',bookings:'Booking Management',notifications:'Notifications',subadmins:'Sub Admin Permissions',website:'Website Preview',customerprofile:'Customer Profile'};
  const sections=Object.values(pages).filter(Boolean);sections.forEach(el=>el.dataset.clAdminPage='true');
  const title=document.createElement('h2');title.id='clAdminPageTitle';
  const back=document.createElement('button');back.type='button';back.id='clAdminPageBack';nav.after(back,title);
@@ -6329,7 +6344,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
  let current='overview';
  function allowed(page){
   const isMain=root.dataset.adminRole==='main_admin';
-  if(page==='subadmins')return isMain;
+  if(page==='subadmins'||page==='chats')return isMain;
   const link=nav.querySelector('[data-cl-admin-target="'+page+'"]');
   if(link&&link.style.display==='none')return false;
   return true;
@@ -6347,7 +6362,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   nav.querySelectorAll('a').forEach(a=>a.classList.toggle('cl-admin-nav-selected',a.dataset.clAdminTarget===page));
   root.scrollTop=0;
  }
- const targets=['overview','workers','customers','bookings','notifications','subadmins','website'];
+ const targets=['overview','workers','customers','bookings','chats','notifications','subadmins','website'];
  nav.querySelectorAll('a').forEach((a,i)=>{a.dataset.clAdminTarget=targets[i]||'overview';a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.clAdminTarget);});});
  back.addEventListener('click',()=>go(current==='customerprofile'?'customers':'overview'));
  const list=document.getElementById('adminCustomerList');
