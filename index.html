@@ -1973,22 +1973,27 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
    <button class="cl-quick-card" data-cl-go="customerProfileForm"><span class="cl-quick-icon"><span class="material-symbols-outlined">manage_accounts</span></span><span>Edit Profile</span></button>
    <button class="cl-quick-card" data-cl-go="customerJobsList"><span class="cl-quick-icon"><span class="material-symbols-outlined">assignment</span></span><span>Applications</span></button>
   </div>
-  <div class="rounded-3xl p-7 sm:p-10 text-white bg-gradient-to-r from-emerald-800 via-green-700 to-blue-800 shadow-xl mb-6">
-   <p class="text-sm font-bold uppercase tracking-widest text-emerald-100">Welcome to Clean Lanka</p>
-   <h1 class="text-3xl sm:text-4xl font-black mt-2">Your Customer Profile</h1>
-   <p class="mt-3 text-emerald-50">Manage your account and find trusted home services across Sri Lanka.</p>
-  </div>
+  <section class="cl-customer-welcome" aria-label="Customer dashboard overview">
+    <div class="cl-customer-welcome-top"><div class="cl-customer-welcome-avatar"><img id="clWelcomeAvatar" alt="Your profile photo" hidden><span id="clWelcomeInitial">C</span></div><div class="cl-customer-welcome-text"><span class="cl-customer-eyebrow">WELCOME BACK TO CLEAN LANKA</span><h1>My Dashboard</h1><p id="clWelcomeName">Your personal home services hub</p><div class="cl-customer-welcome-id" id="clWelcomeId">Customer Account</div></div></div>
+    <div class="cl-customer-action-grid" aria-label="Quick access">
+      <button type="button" class="cl-customer-action cl-customer-action-green" data-cl-go="customerMarketplace"><span class="material-symbols-outlined">person_search</span><strong>Find Workers</strong><small>Trusted professionals</small></button>
+      <button type="button" class="cl-customer-action cl-customer-action-blue" data-cl-go="customerJobBoard"><span class="material-symbols-outlined">work</span><strong>My Jobs</strong><small>Posts & applications</small></button>
+      <button type="button" class="cl-customer-action cl-customer-action-purple" data-cl-go="customerChatPanel"><span class="material-symbols-outlined">forum</span><strong>Messages</strong><small>Customer support & chat</small></button>
+      <button type="button" class="cl-customer-action cl-customer-action-orange" data-cl-go="customerNotificationsPanel"><span class="material-symbols-outlined">notifications</span><strong>Notifications</strong><small>Your latest updates</small></button>
+    </div>
+  </section>
   <section class="customer-card mb-6" id="customerNotificationsPanel" aria-labelledby="customerNotificationsHeading">
    <div class="flex items-center justify-between gap-3 flex-wrap"><div><h2 id="customerNotificationsHeading" class="text-xl font-extrabold text-emerald-900">My Notifications</h2><p class="text-sm text-slate-500">Private updates for your account.</p></div><button id="customerRefreshNotifications" type="button" class="rounded-xl border border-slate-300 px-4 py-2 font-bold">Refresh</button></div>
    <p id="customerNotificationsMessage" class="text-sm text-slate-600 mt-3" role="status" aria-live="polite"></p><div id="customerNotificationsList" class="grid md:grid-cols-2 gap-3 mt-3"></div>
   </section>
   <div id="clCustomerAccountAndBookings" class="grid gap-5" style="display:grid!important;grid-template-columns:minmax(0,1fr)!important;max-width:920px;width:100%;margin:0 auto;">
-   <div class="customer-card"><h2 class="text-xl font-extrabold text-emerald-900 mb-4">Your Account Details</h2>
+   <div class="customer-card"><h2 class="text-xl font-extrabold text-emerald-900 mb-4">Account & Profile</h2>
     <p class="text-xs uppercase font-bold text-slate-500">Full Name</p><p id="customerDashName" class="text-lg font-bold text-slate-900 mb-4">—</p>
     <p class="text-xs uppercase font-bold text-slate-500">Email Address</p><p id="customerDashEmail" class="text-lg font-bold text-slate-900 mb-4 break-all">—</p>
     <p class="text-xs uppercase font-bold text-slate-500">Account Type</p><p class="text-lg font-bold text-emerald-700">Registered Customer</p>
     <div class="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-xs font-black uppercase tracking-widest text-emerald-800">Your Customer ID</p><p id="customerDashPublicId" class="mt-1 text-2xl sm:text-3xl font-black tracking-wider text-emerald-950">CUS-000000</p><p class="mt-1 text-xs text-emerald-800">Your unique Clean Lanka customer reference</p></div>
     <div class="cl-customer-photo-panel"><div class="cl-customer-photo-frame"><img id="customerProfileAvatar" alt="Your profile photo" hidden><span id="customerProfileInitial">C</span></div><div class="cl-customer-photo-controls"><strong>Profile Photo</strong><p>Optional · JPG, PNG or WebP · Max 2 MB · Private to your account</p><label class="cl-customer-photo-upload" for="customerAvatarFile">Choose from Photos</label><input type="file" id="customerAvatarFile" accept="image/*" hidden><label class="cl-customer-photo-upload cl-customer-browse" for="customerAvatarBrowseFile">Browse Files / Gallery</label><input type="file" id="customerAvatarBrowseFile" accept="*/*" hidden><button type="button" id="customerRemoveAvatar" class="cl-customer-photo-remove">Remove Photo</button><p id="customerAvatarMessage" role="status" aria-live="polite"></p></div></div>
+    <details id="clCustomerEditDetails" class="cl-customer-edit-details"><summary><span class="material-symbols-outlined">edit_square</span> Edit My Profile <span class="cl-customer-edit-hint">Tap to update your details</span></summary>
     <form id="customerProfileForm" class="mt-5 border-t border-slate-200 pt-5 space-y-3">
      <h3 class="text-lg font-extrabold text-emerald-900">Complete / Update Your Profile</h3>
      <label class="block text-sm font-bold text-slate-700" for="customerProfileFullName">Full Name</label>
@@ -2003,10 +2008,9 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
      <button id="saveCustomerProfileButton" type="submit" class="w-full rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white p-3 font-bold">Save Customer Profile</button>
      <p id="customerProfileMessage" class="text-sm" role="status" aria-live="polite"></p>
     </form>
+    </details>
    </div>
-   <div class="customer-card"><h2 class="text-xl font-extrabold text-emerald-900 mb-3">Service Bookings</h2>
-    <p class="text-slate-600 leading-relaxed">Your service requests, booking status and worker applications are available in the “My Job Posts & Applications” section below.</p>
-   </div>
+
    </div>
 
   <section class="customer-card mt-6" id="customerMarketplace">
@@ -6121,6 +6125,49 @@ document.addEventListener('DOMContentLoaded',function(){
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
+</script>
+
+<style id="cl-customer-real-dashboard-20261109">
+#customerDashboard .cl-customer-welcome{padding:clamp(18px,3.5vw,32px);background:linear-gradient(120deg,#064d3e,#087e66 48%,#1946a5 100%);border-radius:26px;color:#fff;margin:18px 0 24px;box-shadow:0 14px 35px #103d7333}
+#customerDashboard .cl-customer-welcome-top{display:flex;align-items:center;gap:20px;margin-bottom:24px}
+#customerDashboard .cl-customer-welcome-avatar{width:98px;height:98px;flex:0 0 98px;border:4px solid #ffffffb5;border-radius:50%;background:#e2fff0;color:#076148;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900;overflow:hidden;box-shadow:0 7px 20px #001d2c44}
+#customerDashboard .cl-customer-welcome-avatar img{width:100%;height:100%;object-fit:cover}
+#customerDashboard .cl-customer-welcome-avatar img[hidden],#customerDashboard .cl-customer-welcome-avatar span[hidden]{display:none!important}
+#customerDashboard .cl-customer-eyebrow{font-size:11px;letter-spacing:.13em;font-weight:850;color:#c7fce7}
+#customerDashboard .cl-customer-welcome-text h1{font-size:clamp(27px,4vw,42px);font-weight:950;line-height:1.15;margin:5px 0}
+#customerDashboard #clWelcomeName{font-size:clamp(15px,2vw,19px);font-weight:750;color:#fff}
+#customerDashboard .cl-customer-welcome-id{display:inline-block;margin-top:10px;padding:6px 12px;background:#ffffff26;border:1px solid #ffffff55;border-radius:999px;font-size:13px;font-weight:850}
+#customerDashboard .cl-customer-action-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+#customerDashboard .cl-customer-action{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:5px;min-width:0;min-height:126px;padding:17px;border-radius:18px;border:1px solid #ffffff66;box-shadow:0 7px 18px #001d2b20;color:#fff;cursor:pointer;transition:transform .15s}
+#customerDashboard .cl-customer-action:hover{transform:translateY(-2px)}
+#customerDashboard .cl-customer-action .material-symbols-outlined{font-size:32px;background:#ffffff30;padding:8px;border-radius:12px}
+#customerDashboard .cl-customer-action strong{font-size:16px;line-height:1.2}
+#customerDashboard .cl-customer-action small{font-size:12px;opacity:.95}
+#customerDashboard .cl-customer-action-green{background:linear-gradient(140deg,#08a76e,#03724d)}
+#customerDashboard .cl-customer-action-blue{background:linear-gradient(140deg,#2d8deb,#164cbd)}
+#customerDashboard .cl-customer-action-purple{background:linear-gradient(140deg,#9563ec,#6336b9)}
+#customerDashboard .cl-customer-action-orange{background:linear-gradient(140deg,#f7aa32,#d96b17)}
+#customerDashboard .cl-customer-edit-details{margin-top:20px;border:1px solid #b9dcd6;border-radius:18px;background:#f2fbff;overflow:hidden}
+#customerDashboard .cl-customer-edit-details>summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer;padding:16px 18px;font-weight:900;color:#075d55;background:linear-gradient(105deg,#d9fae7,#dfeaff)}
+#customerDashboard .cl-customer-edit-details>summary::-webkit-details-marker{display:none}
+#customerDashboard .cl-customer-edit-hint{margin-left:auto;font-size:12px;font-weight:650;color:#345b75}
+#customerDashboard .cl-customer-edit-details:not([open]) #customerProfileForm{display:none!important}
+#customerDashboard .cl-customer-edit-details #customerProfileForm{margin:0!important;border:0!important;border-radius:0!important}
+#customerDashboard #clCustomerAccountAndBookings{max-width:1100px!important}
+#customerDashboard #clCustomerAccountAndBookings>.customer-card{padding:clamp(18px,3vw,28px)!important}
+#customerDashboard .cl-dash-nav{display:none!important}
+@media(max-width:700px){#customerDashboard .cl-customer-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#customerDashboard .cl-customer-action{min-height:116px;padding:14px}#customerDashboard .cl-customer-welcome-avatar{width:75px;height:75px;flex-basis:75px;font-size:31px}#customerDashboard .cl-customer-welcome-top{gap:12px}#customerDashboard .cl-customer-edit-hint{display:none}}
+</style>
+<script id="cl-customer-welcome-binding-20261109">
+(function(){function init(){
+ const src=document.getElementById('customerDashName'),cid=document.getElementById('customerDashPublicId'),photo=document.getElementById('customerProfileAvatar'),initial=document.getElementById('customerProfileInitial');
+ const name=document.getElementById('clWelcomeName'),id=document.getElementById('clWelcomeId'),avatar=document.getElementById('clWelcomeAvatar'),letter=document.getElementById('clWelcomeInitial');
+ if(!src||!name||!id||!avatar)return;
+ function sync(){name.textContent=(src.textContent||'').trim()||'Your account';id.textContent=(cid?.textContent||'').trim()||'Customer Account';if(photo&&!photo.hidden&&photo.getAttribute('src')){avatar.src=photo.src;avatar.hidden=false;letter.hidden=true;}else{avatar.hidden=true;letter.hidden=false;letter.textContent=(name.textContent.trim().charAt(0)||'C').toUpperCase();}}
+ sync();const obs=new MutationObserver(sync);obs.observe(src,{childList:true,subtree:true,characterData:true});if(cid)obs.observe(cid,{childList:true,subtree:true,characterData:true});if(photo)obs.observe(photo,{attributes:true,attributeFilter:['src','hidden']});
+ document.querySelectorAll('#customerDashboard .cl-customer-action[data-cl-go]').forEach(btn=>btn.addEventListener('click',()=>{const target=document.getElementById(btn.dataset.clGo);if(target){target.scrollIntoView({behavior:'smooth',block:'start'});}}));
+ document.querySelectorAll('#customerDashboard [data-cl-go="customerProfileForm"]').forEach(btn=>btn.addEventListener('click',()=>{document.getElementById('clCustomerEditDetails')?.setAttribute('open','');}));
+ }if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
 </script>
 </body>
 
