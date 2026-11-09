@@ -1441,7 +1441,19 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 @media(min-width:800px){#customerDashboard #customerProfileForm{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px 20px!important}#customerDashboard #customerProfileForm>h3,#customerDashboard #customerProfileForm>button,#customerDashboard #customerProfileForm>p,#customerDashboard #customerProfileForm>label[for=customerProfileAddress],#customerDashboard #customerProfileAddress{grid-column:1/-1!important}}
 @media(max-width:600px){#customerDashboard .cl-dash-nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}#customerDashboard .cl-dash-nav button{padding:10px 7px!important;font-size:13px!important}#customerDashboard .customer-shell{padding:10px!important}#customerDashboard #clCustomerAccountAndBookings>.customer-card{padding:17px!important}}
 </style>
-</head>
+<style id="cl-customer-photo-first-20261109">
+#customerDashboard .cl-customer-profile-top{display:flex;justify-content:center;align-items:center;margin-bottom:20px}
+#customerDashboard .cl-customer-profile-top .cl-customer-photo-panel{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,#d6fae8,#e4edff,#f2e5ff)!important;padding:26px 16px!important;margin:0!important;border-radius:22px!important}
+#customerDashboard .cl-customer-profile-top .cl-customer-photo-frame{width:128px!important;height:128px!important;flex:0 0 128px!important;margin:0 auto 15px!important}
+#customerDashboard .cl-customer-profile-top .cl-customer-photo-controls{width:100%;text-align:center}
+#customerDashboard .cl-customer-profile-top .cl-customer-photo-controls strong{font-size:20px!important}
+#customerDashboard .cl-customer-edit{margin-top:22px;border:1px solid #bcded9;border-radius:16px;overflow:hidden;background:#f4fbff}
+#customerDashboard .cl-customer-edit>summary{display:flex;align-items:center;justify-content:center;gap:9px;padding:17px;cursor:pointer;background:linear-gradient(110deg,#078a65,#216bc8);color:white;font-size:17px;font-weight:850;list-style:none}
+#customerDashboard .cl-customer-edit>summary::-webkit-details-marker{display:none}
+#customerDashboard .cl-customer-edit #customerProfileForm{margin:0!important;padding:20px!important;border:0!important}
+#customerDashboard .cl-customer-edit:not([open]) #customerProfileForm{display:none!important}
+#customerDashboard #clCustomerAccountAndBookings>.customer-card:first-child>h2{margin-top:4px!important}
+</style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
 <div class="bg-primary text-white py-2.5 px-4 sm:px-8 text-[15px] border-b border-primary-dark/30">
@@ -1983,12 +1995,15 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
    <p id="customerNotificationsMessage" class="text-sm text-slate-600 mt-3" role="status" aria-live="polite"></p><div id="customerNotificationsList" class="grid md:grid-cols-2 gap-3 mt-3"></div>
   </section>
   <div id="clCustomerAccountAndBookings" class="grid gap-5" style="display:grid!important;grid-template-columns:minmax(0,1fr)!important;max-width:920px;width:100%;margin:0 auto;">
-   <div class="customer-card"><h2 class="text-xl font-extrabold text-emerald-900 mb-4">Your Account Details</h2>
+   <div class="customer-card">
+    <div class="cl-customer-profile-top">    <div class="cl-customer-photo-panel"><div class="cl-customer-photo-frame"><img id="customerProfileAvatar" alt="Your profile photo" hidden><span id="customerProfileInitial">C</span></div><div class="cl-customer-photo-controls"><strong>Profile Photo</strong><p>Optional · JPG, PNG or WebP · Max 2 MB · Private to your account</p><label class="cl-customer-photo-upload" for="customerAvatarFile">Choose from Photos</label><input type="file" id="customerAvatarFile" accept="image/*" hidden><label class="cl-customer-photo-upload cl-customer-browse" for="customerAvatarBrowseFile">Browse Files / Gallery</label><input type="file" id="customerAvatarBrowseFile" accept="*/*" hidden><button type="button" id="customerRemoveAvatar" class="cl-customer-photo-remove">Remove Photo</button><p id="customerAvatarMessage" role="status" aria-live="polite"></p></div></div>
+</div>
+<h2 class="text-xl font-extrabold text-emerald-900 mb-4">Your Account Details</h2>
     <p class="text-xs uppercase font-bold text-slate-500">Full Name</p><p id="customerDashName" class="text-lg font-bold text-slate-900 mb-4">—</p>
     <p class="text-xs uppercase font-bold text-slate-500">Email Address</p><p id="customerDashEmail" class="text-lg font-bold text-slate-900 mb-4 break-all">—</p>
     <p class="text-xs uppercase font-bold text-slate-500">Account Type</p><p class="text-lg font-bold text-emerald-700">Registered Customer</p>
     <div class="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-xs font-black uppercase tracking-widest text-emerald-800">Your Customer ID</p><p id="customerDashPublicId" class="mt-1 text-2xl sm:text-3xl font-black tracking-wider text-emerald-950">CUS-000000</p><p class="mt-1 text-xs text-emerald-800">Your unique Clean Lanka customer reference</p></div>
-    <div class="cl-customer-photo-panel"><div class="cl-customer-photo-frame"><img id="customerProfileAvatar" alt="Your profile photo" hidden><span id="customerProfileInitial">C</span></div><div class="cl-customer-photo-controls"><strong>Profile Photo</strong><p>Optional · JPG, PNG or WebP · Max 2 MB · Private to your account</p><label class="cl-customer-photo-upload" for="customerAvatarFile">Choose from Photos</label><input type="file" id="customerAvatarFile" accept="image/*" hidden><label class="cl-customer-photo-upload cl-customer-browse" for="customerAvatarBrowseFile">Browse Files / Gallery</label><input type="file" id="customerAvatarBrowseFile" accept="*/*" hidden><button type="button" id="customerRemoveAvatar" class="cl-customer-photo-remove">Remove Photo</button><p id="customerAvatarMessage" role="status" aria-live="polite"></p></div></div>
+    <details class="cl-customer-edit" id="clCustomerEditDetails"><summary><span class="material-symbols-outlined">edit</span> Edit My Profile</summary>
     <form id="customerProfileForm" class="mt-5 border-t border-slate-200 pt-5 space-y-3">
      <h3 class="text-lg font-extrabold text-emerald-900">Complete / Update Your Profile</h3>
      <label class="block text-sm font-bold text-slate-700" for="customerProfileFullName">Full Name</label>
@@ -2003,6 +2018,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
      <button id="saveCustomerProfileButton" type="submit" class="w-full rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white p-3 font-bold">Save Customer Profile</button>
      <p id="customerProfileMessage" class="text-sm" role="status" aria-live="polite"></p>
     </form>
+    </details>
    </div>
    <div class="customer-card"><h2 class="text-xl font-extrabold text-emerald-900 mb-3">Service Bookings</h2>
     <p class="text-slate-600 leading-relaxed">Your service requests, booking status and worker applications are available in the “My Job Posts & Applications” section below.</p>
@@ -6122,7 +6138,7 @@ document.addEventListener('DOMContentLoaded',function(){
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
-</body>
+<script id="cl-customer-profile-edit-navigation-20261109">(function(){function init(){document.querySelectorAll('#customerDashboard [data-cl-go="customerProfileForm"]').forEach(function(el){el.addEventListener('click',function(){document.getElementById('clCustomerEditDetails')?.setAttribute('open','');},true);});}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();</script></body>
 
 <style id="clean-lanka-home-account-v042-style">
 #clHomeAccountName{display:none;align-items:center;gap:9px;max-width:260px;min-width:0}
