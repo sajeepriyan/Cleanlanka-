@@ -2397,7 +2397,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
    <p id="adminCustomerListMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite"></p><div id="adminCustomerList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div><div id="adminCustomerDetail" class="hidden mt-5 rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-5" aria-live="polite"></div>
   </section>
   <section id="adminSubAdminsSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminSubAdminsHeading">
-   <div class="mb-4"><h2 id="adminSubAdminsHeading" class="text-xl font-black text-slate-900">Sub Admin Permission Management</h2><p class="text-sm text-slate-500 mt-1">Create Sub Admin access, control permissions and activate or deactivate accounts.</p></div>
+   <div class="mb-4"><h2 id="adminSubAdminsHeading" class="text-xl font-black text-slate-900">Sub Admin Permission Management</h2><p class="text-sm text-slate-500 mt-1">Create Sub Admin access, control permissions and activate or deactivate accounts.</p><p class="text-sm font-semibold text-emerald-800 mt-2">Official Jobs: Main Admin can grant Create and Edit/Expiry independently. Sub Admins cannot cancel Official Jobs.</p></div>
    <form id="adminCreateSubAdminForm" class="rounded-xl bg-slate-50 border border-slate-200 p-4 mb-5 space-y-3">
     <label class="block text-sm font-bold text-slate-700" for="newSubAdminEmail">Registered Sub Admin Email</label><input id="newSubAdminEmail" required type="email" autocomplete="off" class="w-full rounded-xl border border-slate-300 px-3 py-3" placeholder="Enter registered account email"><p class="text-xs text-slate-500">Only the Main Admin can look up a registered account. The selected account receives only the permissions you tick.</p>
     <p class="text-sm font-bold text-slate-700">Permissions</p><div id="newSubAdminPermissions" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
@@ -3920,7 +3920,9 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
     workers_view:'View workers', workers_edit:'Edit worker profiles',
     customers_view:'View customers', customers_edit:'Edit customer profiles',
     approvals_view:'View approvals', approvals_approve:'Approve / reject workers',
-    bookings_view:'View bookings', bookings_manage:'Manage bookings', reports_view:'View reports'
+    bookings_view:'View bookings', bookings_manage:'Manage bookings', reports_view:'View reports',
+    official_jobs_create:'Create Official Job Posts',
+    official_jobs_edit:'Edit Official Jobs & Expiry Dates'
   };
   function adminHasPermission(permission) {
     return ['main_admin','admin'].includes(currentAdminRole) || (currentAdminRole==='sub_admin' && currentAdminPermissions?.[permission] === true);
@@ -4445,7 +4447,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
   }
   const createSubAdminForm=document.getElementById('adminCreateSubAdminForm');
   if(createSubAdminForm){
-    renderSubAdminPermissionInputs(document.getElementById('newSubAdminPermissions'));
+    renderSubAdminPermissionInputs(document.getElementById('newSubAdminPermissions'),{official_jobs_create:true,official_jobs_edit:true});
     createSubAdminForm.addEventListener('submit',async(event)=>{
       event.preventDefault(); const msg=document.getElementById('subAdminFormMessage'); const button=document.getElementById('createSubAdminButton');
       const email=document.getElementById('newSubAdminEmail').value.trim();
@@ -4457,7 +4459,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
         if(!matches?.length)throw new Error('No registered account found for this email.');
         const userId=matches[0].user_id;
         msg.textContent='Creating Sub Admin...';
-        const {error}=await supabaseClient.rpc('create_sub_admin',{p_user_id:userId,p_permissions:readSubAdminPermissions(document.getElementById('newSubAdminPermissions'))});if(error)throw error;msg.textContent='Sub Admin created successfully.';createSubAdminForm.reset();renderSubAdminPermissionInputs(document.getElementById('newSubAdminPermissions'));await loadSubAdmins();}
+        const {error}=await supabaseClient.rpc('create_sub_admin',{p_user_id:userId,p_permissions:readSubAdminPermissions(document.getElementById('newSubAdminPermissions'))});if(error)throw error;msg.textContent='Sub Admin created successfully.';createSubAdminForm.reset();renderSubAdminPermissionInputs(document.getElementById('newSubAdminPermissions'),{official_jobs_create:true,official_jobs_edit:true});await loadSubAdmins();}
       catch(error){msg.textContent=`Could not create Sub Admin: ${error.message||'Please check the User ID and permissions.'}`;}
       finally{button.disabled=false;}
     });
@@ -4500,9 +4502,14 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
         });
       }
       document.getElementById('adminDashboard').dataset.adminRole=currentAdminRole;
+      const officialJobCanCreate=adminHasPermission('official_jobs_create');
+      const officialJobCanEdit=adminHasPermission('official_jobs_edit');
+      window.clOfficialJobAccess={create:officialJobCanCreate,edit:officialJobCanEdit};
       const officialPostEditor=document.getElementById('adminOfficialJobsSection');
-      if(officialPostEditor)officialPostEditor.classList.toggle('hidden',!['main_admin','admin'].includes(currentAdminRole));
-      if(['main_admin','admin'].includes(currentAdminRole))window.clRefreshOfficialSchedules?.();
+      if(officialPostEditor)officialPostEditor.classList.toggle('hidden',!officialJobCanCreate&&!officialJobCanEdit);
+      document.getElementById('adminOfficialJobForm')?.classList.toggle('hidden',!officialJobCanCreate);
+      document.getElementById('clOfficialScheduleManager')?.classList.toggle('hidden',!officialJobCanCreate&&!officialJobCanEdit);
+      if(officialJobCanCreate||officialJobCanEdit)window.clRefreshOfficialSchedules?.();
       document.getElementById('adminAccessLabel').textContent=currentAdminRole==='main_admin'?'Main Admin':currentAdminRole==='sub_admin'?'Sub Admin':'Admin';
       document.getElementById('adminSubAdminsSection').classList.toggle('hidden',currentAdminRole!=='main_admin');
       document.getElementById('adminWorkersHeading').closest('section').classList.toggle('hidden',!adminHasPermission('workers_view'));
@@ -5102,7 +5109,9 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
   document.getElementById('customerRefreshNotifications')?.addEventListener('click',async()=>{const user=window.clCurrentUser||await getUser();if(user)await loadUserNotifications(user.id,'customerNotificationsList','customerNotificationsMessage');});
   document.getElementById('workerRefreshNotifications')?.addEventListener('click',async()=>{const user=window.clCurrentUser||await getUser();if(user)await loadUserNotifications(user.id,'workerNotificationsList','workerNotificationsMessage');});
   // Move the official job editor into the authenticated Admin Dashboard.
-  const officialJobsSection=$('adminOfficialJobsSection');const officialJobsMount=$('adminOfficialJobsMount');if(officialJobsSection&&officialJobsMount)officialJobsMount.appendChild(officialJobsSection);if(officialJobsSection&&!['main_admin','admin'].includes(String(currentAdminRole||'')))officialJobsSection.classList.add('hidden');
+  const officialJobsSection=$('adminOfficialJobsSection');const officialJobsMount=$('adminOfficialJobsMount');
+  if(officialJobsSection&&officialJobsMount)officialJobsMount.appendChild(officialJobsSection);
+  if(officialJobsSection&&!adminHasPermission('official_jobs_create')&&!adminHasPermission('official_jobs_edit'))officialJobsSection.classList.add('hidden');
   // Public Home Page marketplace: approved worker directory and public job board.
   let homeWorkerCache=[];
   let homeJobCache=[];
@@ -5234,7 +5243,12 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
     const filter=e.target.closest('[data-job-filter]');if(filter){homeJobFilter=filter.dataset.jobFilter;document.querySelectorAll('.home-job-filter').forEach(b=>{b.className='home-job-filter rounded-full px-4 py-2 text-sm font-bold '+(b===filter?'bg-blue-700 text-white':'bg-slate-100 text-slate-700');});renderHomeJobs();}
   });
   $('adminOfficialJobForm')?.addEventListener('submit',async e=>{
-    e.preventDefault();const user=await getUser();if(!user){say('adminOfficialJobMessage','Admin session not found. Please sign in again.',true);return;}
+    e.preventDefault();
+    if(!adminHasPermission('official_jobs_create')){
+      say('adminOfficialJobMessage','Main Admin has not granted Official Job Posting permission.',true);
+      return;
+    }
+    const user=await getUser();if(!user){say('adminOfficialJobMessage','Admin session not found. Please sign in again.',true);return;}
     const publishOn=$('officialJobPublishOn')?.value||'';
     const expiresOn=$('officialJobExpiresOn')?.value||'';
     const sriLankaToday=window.clSriLankaToday?.()||new Date().toISOString().slice(0,10);
@@ -7624,10 +7638,16 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     if(text!==undefined)el.textContent=String(text);
     return el;
   }
+  function canCreate(){
+    return window.clOfficialJobAccess?.create===true;
+  }
+  function canEdit(){
+    return window.clOfficialJobAccess?.edit===true;
+  }
   function canManage(){
     return !admin.classList.contains('hidden') &&
       document.body.classList.contains('admin-dashboard-mode') &&
-      ['main_admin','admin'].includes(admin.dataset.adminRole||'');
+      (canCreate()||canEdit());
   }
   function render(){
     if(!canManage())return;
@@ -7662,11 +7682,38 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
       const start=make('input'),end=make('input');
       start.type='date';end.type='date';
       start.value=job.publish_on||'';end.value=job.expires_on||'';
-      start.disabled=end.disabled=status==='closed';
+      start.disabled=end.disabled=status==='closed'||!canEdit();
       startLabel.append(start);endLabel.append(end);dates.append(startLabel,endLabel);
       card.append(dates);
-      if(status!=='closed'){
-        const save=make('button','cl-official-save','Save Dates');
+      if(status!=='closed'&&canEdit()){
+        const detailsEditor=make('details','mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3');
+        const editorSummary=make('summary','cursor-pointer font-extrabold text-blue-900','Edit Job Details');
+        detailsEditor.append(editorSummary);
+        const controls=make('div','grid sm:grid-cols-2 gap-3 mt-3');
+        function field(label,el){
+          const wrapper=make('label','flex flex-col gap-1 text-sm font-semibold text-slate-800',label);
+          wrapper.append(el);controls.append(wrapper);return el;
+        }
+        const titleField=field('Job Title',make('input'));
+        titleField.type='text';titleField.maxLength=120;titleField.required=true;
+        titleField.value=job.service_title||'';
+        const descField=field('Job Description',make('textarea'));
+        descField.rows=3;descField.maxLength=3000;descField.required=true;
+        descField.value=job.description||'';
+        const districtField=make('select');
+        const originalDistrict=document.getElementById('officialJobDistrict');
+        if(originalDistrict)districtField.replaceChildren(...Array.from(originalDistrict.options).map(o=>o.cloneNode(true)));
+        districtField.value=job.district||'';
+        field('District',districtField);
+        const areaField=field('Town / Area',make('input'));
+        areaField.type='text';areaField.maxLength=180;areaField.value=job.address||'';
+        const budgetField=field('Budget (LKR)',make('input'));
+        budgetField.type='number';budgetField.min='0';budgetField.step='1';
+        budgetField.value=job.budget_lkr==null?'':String(job.budget_lkr);
+        const preferredField=field('Preferred Job Date',make('input'));
+        preferredField.type='date';preferredField.value=job.preferred_date||'';
+        detailsEditor.append(controls);card.append(detailsEditor);
+        const save=make('button','cl-official-save','Save Dates / Job Details');
         save.type='button';
         const hint=make('p','text-sm text-slate-600 mt-2');
         save.addEventListener('click',async()=>{
@@ -7674,13 +7721,36 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
             hint.textContent='Select valid dates; expiry must be on or after publish date.';
             return;
           }
+          if(!canEdit()){
+            hint.textContent='Edit permission was not granted by Main Admin.';
+            return;
+          }
+          if(detailsEditor.open&&(
+            !titleField.value.trim()||!descField.value.trim()||
+            !districtField.value||!areaField.value.trim()||
+            (budgetField.value!==''&&(!Number.isFinite(Number(budgetField.value))||Number(budgetField.value)<0))
+          )){
+            hint.textContent='Complete the title, description, district and area; budget must be positive or blank.';
+            return;
+          }
           save.disabled=true;
           hint.textContent='Saving schedule…';
           try{
             const client=window.supabaseClient;
             if(!client)throw Error('Connection unavailable');
+            const changes={publish_on:start.value,expires_on:end.value};
+            if(detailsEditor.open){
+              Object.assign(changes,{
+                service_title:titleField.value.trim(),
+                description:descField.value.trim(),
+                district:districtField.value,
+                address:areaField.value.trim(),
+                budget_lkr:budgetField.value===''?null:Number(budgetField.value),
+                preferred_date:preferredField.value||null
+              });
+            }
             const {data,error}=await client.from('job_posts')
-              .update({publish_on:start.value,expires_on:end.value})
+              .update(changes)
               .eq('id',job.id).eq('post_source','clean_lanka').eq('status','open')
               .select('id').single();
             if(error)throw error;
@@ -7693,7 +7763,9 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
           }finally{save.disabled=false;}
         });
         card.append(save,hint);
-      }else card.append(make('p','text-xs text-slate-500 mt-2','Closed job: schedule editing is disabled.'));
+      }else card.append(make('p','text-xs text-slate-500 mt-2',status==='closed'?
+        'Closed job: schedule editing is disabled.':
+        'Read only: Main Admin has not granted edit permission.'));
       host.append(card);
     });
   }
@@ -7705,7 +7777,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     message.textContent='Loading official job schedule…';
     try{
       const {data,error}=await client.from('job_posts')
-        .select('id,service_title,district,status,created_at,post_source,publish_on,expires_on')
+        .select('id,service_title,description,district,address,budget_lkr,preferred_date,status,created_at,post_source,publish_on,expires_on')
         .eq('post_source','clean_lanka')
         .order('created_at',{ascending:false})
         .limit(250);
