@@ -6370,7 +6370,13 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
    const back=el('button','← Back to Contacts','rounded-lg bg-blue-700 text-white px-4 py-2 font-semibold mb-4');back.type='button';back.addEventListener('click',()=>{selected={type:'person',person:selected.person};render();});list.append(back);
    list.append(el('h3',(d.customer_name||'Customer')+' ↔ '+(d.worker_name||'Worker'),'text-xl font-black text-slate-900 mb-1'));
    list.append(el('p',(d.customer_email||'')+' · '+(d.worker_email||''),'text-sm text-slate-600 break-all mb-3'));
-   const panel=el('div',null,'rounded-2xl bg-[#e9f2eb] border border-slate-200 p-3 sm:p-5 space-y-3');
+   const panel=el('div',null,'rounded-2xl bg-[#e9f2eb] border border-slate-200 p-3 sm:p-5 space-y-3 overflow-y-auto overscroll-contain');
+   panel.style.height='min(65dvh, 620px)';
+   panel.style.minHeight='280px';
+   panel.style.touchAction='pan-y';
+   panel.setAttribute('role','region');
+   panel.setAttribute('aria-label','Scrollable customer and worker chat messages');
+   panel.tabIndex=0;
    const chat=messages.filter(m=>m.conversation_id===d.conversation_id&&m.message_id).sort((a,b)=>new Date(a.sent_at)-new Date(b.sent_at));
    for(const m of chat){
     const fromCustomer=m.sender_id===d.customer_user_id;
@@ -6382,6 +6388,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
    }
    if(!chat.length)panel.append(el('p','No messages in this conversation.','text-slate-600'));
    list.append(panel);
+   requestAnimationFrame(()=>{panel.scrollTop=panel.scrollHeight;});
   }
  }
  refresh.addEventListener('click',async()=>{
