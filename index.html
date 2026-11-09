@@ -3428,6 +3428,12 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     try {
       const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
       if (error) throw error;
+      // Defense in depth: a session alone must not open a customer/worker dashboard
+      // until Supabase confirms the email address.
+      if (!data.user?.email_confirmed_at && !data.user?.confirmed_at) {
+        await supabaseClient.auth.signOut();
+        throw new Error('Please confirm your email address before signing in. Check your inbox or request a new confirmation email.');
+      }
 
       const actualRole = data.user?.user_metadata?.account_type;
       if (actualRole !== role) {
