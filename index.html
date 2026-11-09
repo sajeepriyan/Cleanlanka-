@@ -1793,8 +1793,8 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 </section>
 <section id="adminDashboard" class="hidden">
  <div class="max-w-7xl mx-auto">
-  <div class="admin-topbar"><div class="admin-brand"><div class="admin-brand-mark" aria-hidden="true">🏡</div><div><p class="text-xs font-black tracking-widest">CLEAN LANKA • CONTROL CENTRE</p><h1>Admin Dashboard</h1><p id="adminDashboardEmail" class="text-sm mt-1"></p></div></div><button id="adminDashboardLogoutButton" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold" type="button">Sign Out</button></div>
-  <div class="cl-admin-welcome-strip"><div><span class="cl-admin-eyebrow">YOUR COMMAND CENTRE</span><h2>Manage Clean Lanka in one place</h2><p>Customers, workers, jobs, bookings, verification and public website preview.</p></div><a href="#clAdminPublicPreview" class="cl-admin-preview-link">🌐 View Homepage Preview</a></div>
+  <div class="admin-topbar"><div class="admin-brand"><div class="admin-brand-mark" aria-hidden="true">🏡</div><div><p class="text-xs font-black tracking-widest">CLEAN LANKA • CONTROL CENTRE</p><h1 id="clAdminDashboardTitle">Admin Dashboard</h1><p id="clAdminDashboardEmailName" class="text-sm font-bold mt-1"></p><p id="adminDashboardEmail" class="text-sm mt-1"></p></div></div><button id="adminDashboardLogoutButton" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold" type="button">Sign Out</button></div>
+  <section id="clGrantedPermissions" class="hidden rounded-2xl bg-white border border-blue-200 p-4 my-4" aria-label="Granted permissions"><h2 class="font-black text-blue-900 text-lg">My Granted Permissions</h2><p class="text-sm text-slate-600">Only the Main Admin can change these permissions.</p><div id="clGrantedPermissionsList" class="grid sm:grid-cols-2 gap-2 mt-3"></div></section><div class="cl-admin-welcome-strip"><div><span class="cl-admin-eyebrow">YOUR COMMAND CENTRE</span><h2>Manage Clean Lanka in one place</h2><p>Customers, workers, jobs, bookings, verification and public website preview.</p></div><a href="#clAdminPublicPreview" class="cl-admin-preview-link">🌐 View Homepage Preview</a></div>
   <div class="cl-admin-workspace"><nav class="admin-nav" aria-label="Admin dashboard navigation"><div class="cl-admin-side-heading"><span class="cl-admin-side-icon">✦</span><span>CLEAN LANKA<br><small>ADMIN WORKSPACE</small></span></div><a href="#adminOverview">▦ Overview</a><a href="#adminWorkersHeading">♙ Workers</a><a href="#adminCustomersHeading">♧ Customers</a><a href="#adminBookingsHeading">▤ Bookings</a><a href="#adminNotificationsHeading">♢ Notifications</a><a href="#adminSubAdminsHeading">⚙ Sub Admins</a><a href="#clAdminPublicPreview">🌐 Website Preview</a></nav><main class="cl-admin-main">
   <section id="clAdminPublicPreview" class="cl-admin-preview-section" aria-labelledby="clAdminPreviewHeading">
 <div class="cl-admin-preview-heading"><div><span class="cl-admin-eyebrow">LIVE PUBLIC VIEW</span><h2 id="clAdminPreviewHeading">🌐 Clean Lanka Homepage Preview</h2><p>See the same public website visitors see, including job opportunities, service categories and approved worker listings. Admin tools remain above.</p></div><div class="cl-admin-preview-actions"><a href="/" target="_blank" rel="noopener">Open Homepage ↗</a><button type="button" id="clAdminPreviewRefresh">↻ Refresh Preview</button></div></div>
@@ -3191,7 +3191,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     bookings_view:'View bookings', bookings_manage:'Manage bookings', reports_view:'View reports'
   };
   function adminHasPermission(permission) {
-    return ['main_admin','admin'].includes(currentAdminRole) || currentAdminPermissions?.all === true || currentAdminPermissions?.[permission] === true;
+    return ['main_admin','admin'].includes(currentAdminRole) || (currentAdminRole==='sub_admin' && currentAdminPermissions?.[permission] === true);
   }
   function adminSafeText(value, fallback = 'Not provided') {
     if (value === null || value === undefined || value === '') return fallback;
@@ -3756,6 +3756,21 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       document.getElementById('adminDashboard').classList.remove('hidden');
       document.body.classList.add('admin-dashboard-mode');
       document.getElementById('adminDashboardEmail').textContent = `${data.user.email || ''} • ${currentAdminRole.replace('_',' ').toUpperCase()}`;
+      document.getElementById('clAdminDashboardTitle').textContent=currentAdminRole==='sub_admin'?'Sub Admin Dashboard':currentAdminRole==='main_admin'?'Main Admin Dashboard':'Admin Dashboard';
+      const displayName=String(data.user.user_metadata?.full_name||data.user.user_metadata?.name||'').trim();
+      document.getElementById('clAdminDashboardEmailName').textContent=displayName;
+      const grantedPanel=document.getElementById('clGrantedPermissions');
+      const grantedList=document.getElementById('clGrantedPermissionsList');
+      grantedPanel.classList.toggle('hidden',currentAdminRole!=='sub_admin');
+      grantedList.replaceChildren();
+      if(currentAdminRole==='sub_admin'){
+        Object.entries(ADMIN_PERMISSION_LABELS).forEach(([key,label])=>{
+          const allowed=currentAdminPermissions[key]===true;
+          const line=document.createElement('p');line.className='rounded-xl border p-3 text-sm font-bold '+(allowed?'border-emerald-200 bg-emerald-50 text-emerald-900':'border-slate-200 bg-slate-50 text-slate-500');
+          line.textContent=(allowed?'✓ ':'— ')+label+(allowed?' · Granted':' · Not granted');
+          grantedList.append(line);
+        });
+      }
       document.getElementById('adminDashboard').dataset.adminRole=currentAdminRole;
       document.getElementById('adminAccessLabel').textContent=currentAdminRole==='main_admin'?'Main Admin':currentAdminRole==='sub_admin'?'Sub Admin':'Admin';
       document.getElementById('adminSubAdminsSection').classList.toggle('hidden',currentAdminRole!=='main_admin');
@@ -6229,6 +6244,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
 #clAdminPageTitle{color:#12386c;font-size:clamp(21px,3vw,29px);font-weight:900;margin:14px 0}
 #adminDashboard .cl-admin-preview-actions button{background:#0e8b67;color:#fff;padding:10px 16px;border-radius:10px}
 </style>
+<style>#adminDashboard .admin-topbar{position:relative;padding-top:32px!important}#adminDashboard #clGrantedPermissionsList p{font-size:14px;line-height:1.5}#adminDashboard #clAdminDashboardEmailName:empty{display:none}</style>
 <script id="cl-admin-pages-v2">
 (function(){
  const root=document.getElementById('adminDashboard');if(!root)return;
