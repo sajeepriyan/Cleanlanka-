@@ -1400,6 +1400,16 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 @media(max-width:600px){#customerDashboard .cl-customer-identity-label{display:none}#customerDashboard .cl-customer-photo-panel{justify-content:center;text-align:center}#customerDashboard .cl-customer-photo-controls{width:100%}}
 #customerDashboard .cl-customer-browse{background:#1d4ed8;color:#fff}
 </style>
+
+<style id="cl-customer-single-column-20261109">
+/* Customer account details and service bookings must stack, not display side by side. */
+#customerDashboard .grid.md\\:grid-cols-2:has(> .customer-card > #customerProfileForm){display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:18px!important;max-width:920px;margin-left:auto;margin-right:auto}
+#customerDashboard .grid.md\\:grid-cols-2:has(> .customer-card > #customerProfileForm)> .customer-card{width:100%!important;min-width:0!important}
+#customerDashboard .customer-card:has(#customerProfileForm){order:0}
+#customerDashboard .customer-card:has(#customerProfileForm) + .customer-card{order:1}
+#customerDashboard .customer-card:has(#customerProfileForm) #customerProfileForm{max-width:760px}
+@media(max-width:700px){#customerDashboard .grid.md\\:grid-cols-2:has(> .customer-card > #customerProfileForm){padding:0!important}#customerDashboard .customer-card:has(#customerProfileForm){padding:18px!important}}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
