@@ -6,6 +6,10 @@ android {
     namespace 'lk.cleanlanka.mobile'
     compileSdk 36
 
+    buildFeatures {
+        buildConfig true
+    }
+
     defaultConfig {
         applicationId 'lk.cleanlanka.mobile'
         minSdk 26
