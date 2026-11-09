@@ -6182,7 +6182,25 @@ document.addEventListener('DOMContentLoaded',function(){
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
-<script id="cl-customer-profile-edit-navigation-20261109">(function(){function init(){document.querySelectorAll('#customerDashboard [data-cl-go="customerProfileForm"]').forEach(function(el){el.addEventListener('click',function(){document.getElementById('clCustomerEditDetails')?.setAttribute('open','');},true);});}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();</script></body>
+<script id="cl-customer-profile-edit-navigation-20261109">(function(){function init(){document.querySelectorAll('#customerDashboard [data-cl-go="customerProfileForm"]').forEach(function(el){el.addEventListener('click',function(){document.getElementById('clCustomerEditDetails')?.setAttribute('open','');},true);});}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();</script>
+<style id="cl-customer-no-duplicate-g-final">
+/* Hide the extra left identity in every customer header variant, including legacy final header. */
+#customerDashboard .cl-dashboard-profile-identity,
+#customerDashboard .cl-final-header .cl-dashboard-profile-identity,
+#customerDashboard .cl-dashboard-profile-initials,
+#customerDashboard .cl-dashboard-profile-name{display:none!important;visibility:hidden!important}
+</style>
+<script id="cl-customer-no-duplicate-g-final-script">
+(function(){
+ function removeExtraIdentity(){
+  const root=document.getElementById('customerDashboard');if(!root)return;
+  root.querySelectorAll('.cl-dashboard-profile-identity').forEach(el=>el.remove());
+ }
+ function init(){const root=document.getElementById('customerDashboard');if(!root)return;removeExtraIdentity();const observer=new MutationObserver(removeExtraIdentity);observer.observe(root,{childList:true,subtree:true});}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+</body>
 
 <style id="clean-lanka-home-account-v042-style">
 #clHomeAccountName{display:none;align-items:center;gap:9px;max-width:260px;min-width:0}
