@@ -5323,7 +5323,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
   }
   function cleanLankaRestoreView(state) {
     if(!state || !state.cleanLankaView) return false;
-    const managed=['login-page-mode','registration-mode','admin-login-mode','worker-dashboard-mode','customer-dashboard-mode','admin-dashboard-mode','password-recovery-mode'];
+    const managed=['login-page-mode','registration-mode','admin-login-mode','worker-dashboard-mode','customer-dashboard-mode','admin-dashboard-mode','password-recovery-mode','cl-service-page-mode'];
     managed.forEach(function(c){document.body.classList.remove(c);});
     (state.bodyClasses||[]).forEach(function(c){document.body.classList.add(c);});
     Object.keys(state.visible||{}).forEach(function(id){const el=document.getElementById(id);if(el)el.classList.toggle('hidden',!state.visible[id]);});
@@ -5332,7 +5332,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
   }
   try { window.history.replaceState(cleanLankaCaptureView(),'',''); } catch(e) {}
   document.addEventListener('click',function(event){
-    if(event.target && event.target.closest && event.target.closest('#clDashboardHomeButton')) return;
+    if(event.target && event.target.closest && event.target.closest('#clDashboardHomeButton, #clServiceBack, #services-section .cl-home-cat')) return;
     const before=cleanLankaCaptureView();
     window.setTimeout(function(){
       const after=cleanLankaCaptureView();
@@ -5354,7 +5354,13 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
     window.setTimeout(function(){
       const view=cleanLankaCaptureView(), key=JSON.stringify(view);
       if(key!==lastViewKey){
+        const previous=JSON.parse(lastViewKey||'{}');
         lastViewKey=key;
+        const oldService=(previous.bodyClasses||[]).includes('cl-service-page-mode');
+        const newService=(view.bodyClasses||[]).includes('cl-service-page-mode');
+        // The service page maintains one explicit browser-history entry.
+        // Do not add a second checkpoint for the same service transition.
+        if(oldService!==newService)return;
         try{window.history.pushState(view,'','');}catch(e){console.warn('Clean Lanka view checkpoint unavailable',e);}
       }
     },80);
@@ -7300,25 +7306,72 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     searchButton.click(); // Existing public search filters approved workers + public jobs.
     sync();
   }
+  // Mirror the site's existing view snapshot so Android Back/Forward can
+  // restore both the service page and the previous homepage scroll position.
+  function captureView(){
+    const ids=['account-login','registration-screen','admin-login','workerDashboard','customerDashboard','adminDashboard','customerChatWindow','workerChatWindow','homeWorkerProfileModal'];
+    const visible={};
+    ids.forEach(function(id){
+      const el=document.getElementById(id);
+      if(el)visible[id]=!el.classList.contains('hidden');
+    });
+    return Object.assign({},window.history.state||{},{
+      cleanLankaView:true,
+      bodyClasses:Array.from(document.body.classList),
+      visible:visible,
+      scrollY:window.scrollY||0
+    });
+  }
+  function setServiceHeading(term){
+    const label=titles[term]||term;
+    document.getElementById('clServiceTitle').textContent=label+' Services';
+    document.getElementById('clServiceIntro').textContent='Explore approved '+label.toLowerCase()+' workers and matching job opportunities in Sri Lanka.';
+  }
   function open(term){
     if(!term)return;
     const roleModes=['login-page-mode','registration-mode','admin-login-mode','customer-dashboard-mode','worker-dashboard-mode','admin-dashboard-mode','password-recovery-mode'];
     if(roleModes.some(mode=>document.body.classList.contains(mode)))return;
-    if(!isActive())previousScroll=window.scrollY||0;
+    const entering=!isActive();
+    if(entering){
+      previousScroll=window.scrollY||0;
+      // Preserve the homepage as the previous history entry.
+      try{
+        const homeState=captureView();
+        delete homeState.clServiceRoute;
+        window.history.replaceState(homeState,'',window.location.href);
+      }catch(error){console.warn('Could not save service previous view:',error);}
+    }
     currentService=String(term).trim();
-    document.getElementById('clServiceTitle').textContent=(titles[currentService]||currentService)+' Services';
-    document.getElementById('clServiceIntro').textContent='Explore approved '+(titles[currentService]||currentService).toLowerCase()+' workers and matching job opportunities in Sri Lanka.';
+    setServiceHeading(currentService);
     district.value=heroDistrict?.value||sourceDistricts?.value||'';
     document.body.classList.add('cl-service-page-mode');
     filterService();
     updateVisibility();
-    window.scrollTo({top:0,left:0,behavior:'instant'});
+    window.scrollTo({top:0,left:0,behavior:'auto'});
+    try{
+      const serviceState=Object.assign(captureView(),{
+        clServiceRoute:currentService,
+        clServicePreviousScroll:previousScroll,
+        scrollY:0
+      });
+      if(entering)window.history.pushState(serviceState,'',window.location.href);
+      else window.history.replaceState(serviceState,'',window.location.href);
+    }catch(error){console.warn('Could not save service history entry:',error);}
   }
-  function close(){
+  function closeDirect(){
     if(!isActive())return;
     document.body.classList.remove('cl-service-page-mode');
     updateVisibility();
     window.scrollTo({top:previousScroll,left:0,behavior:'auto'});
+  }
+  function close(){
+    if(!isActive())return;
+    // Browser Back and the on-screen Back button now use the same entry.
+    if(window.history.state?.clServiceRoute){
+      window.history.back();
+      return;
+    }
+    closeDirect();
   }
   // Each existing cartoon button uses setHomeSearch(term). Keep the markup and search backend unchanged.
   window.setHomeSearch=function(term){open(term);};
@@ -7326,7 +7379,12 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   district.addEventListener('change',filterService);
   document.addEventListener('click',function(event){
     const anchor=event.target.closest('.cl-home-nav a[href^="#"]');
-    if(isActive()&&anchor)close();
+    if(isActive()&&anchor){
+      event.preventDefault();
+      const hash=anchor.getAttribute('href');
+      close();
+      if(hash&&hash.length>1)setTimeout(function(){document.getElementById(hash.slice(1))?.scrollIntoView({block:'start'});},100);
+    }
   });
   new MutationObserver(sync).observe(workerSource,{childList:true});
   new MutationObserver(sync).observe(jobSource,{childList:true});
@@ -7336,7 +7394,17 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     }
     updateVisibility();
   }).observe(document.body,{attributes:true,attributeFilter:['class']});
-  // The existing site-wide history handler snapshots body classes, including this service view.
-  window.addEventListener('popstate',function(){setTimeout(updateVisibility,0)});
+  // The earlier site-wide popstate listener restores body classes.
+  // Synchronize heading/filter when the browser goes forward into a service.
+  window.addEventListener('popstate',function(event){
+    if(event.state?.clServiceRoute){
+      currentService=String(event.state.clServiceRoute);
+      previousScroll=Number(event.state.clServicePreviousScroll)||0;
+      setServiceHeading(currentService);
+      district.value=sourceDistricts?.value||'';
+      filterService();
+    }
+    setTimeout(updateVisibility,0);
+  });
 })();
 </script>
