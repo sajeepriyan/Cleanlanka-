@@ -4003,10 +4003,20 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       clRecoveryVerified = false;
       document.getElementById('newPassword').value = '';
       document.getElementById('confirmNewPassword').value = '';
-      showMessage(message, 'Password updated successfully. Return to Login to sign in with your new password.');
+      showMessage(message, 'Password updated successfully. Opening Login…');
+      const { error: signOutError } = await supabaseClient.auth.signOut();
+      if (signOutError) console.warn('Post-reset sign out:', signOutError.message);
       const cleanUrl = new URL(location.href);
       cleanUrl.searchParams.delete('cl_recovery');
+      cleanUrl.searchParams.delete('code');
+      cleanUrl.searchParams.delete('token_hash');
+      cleanUrl.searchParams.delete('type');
       history.replaceState(null, '', cleanUrl.pathname + cleanUrl.search);
+      document.body.classList.remove('password-recovery-mode');
+      document.getElementById('newPasswordPanel').classList.add('hidden');
+      document.getElementById('passwordResetPanel').classList.add('hidden');
+      document.getElementById('loginForm').classList.remove('hidden');
+      openLoginPage();
     } catch (error) {
       showMessage(message, error.message || 'Password update failed. Request a new recovery link.', true);
     } finally { button.disabled = !clRecoveryVerified; }
