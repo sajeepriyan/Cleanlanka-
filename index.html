@@ -2428,6 +2428,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     <label class="flex items-start gap-3 text-sm text-slate-700"><input id="customerTermsAccepted" name="customerTermsAccepted" type="checkbox" required aria-label="Agree to Customer Terms and Privacy Policy" style="appearance:auto;-webkit-appearance:checkbox;accent-color:#047857;width:22px;height:22px;min-width:22px;min-height:22px;flex-shrink:0;cursor:pointer;margin-top:2px;outline:none;box-shadow:none;"><span>I have read and agree to the Customer Terms &amp; Conditions and Privacy Policy.</span></label>
     <button id="customerSubmit" type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white p-3 rounded-lg font-bold">Create Customer Account</button>
     <p id="customerRegisterMessage" class="text-center text-sm" aria-live="polite"></p>
+    <button id="customerResendConfirmation" type="button" class="hidden w-full rounded-lg border-2 border-emerald-700 bg-white text-emerald-800 p-3 font-bold">Resend Confirmation Email</button>
   </form>
   <p class="text-xs text-gray-500 mt-3 text-center">Email confirmation is required before sign-in.</p>
 </section>
@@ -2820,6 +2821,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
           return;
         }
         showMessage(message, 'Registration submitted. Please confirm your email, then sign in using the Login section.');
+        if (role === 'customer') { const resend = document.getElementById('customerResendConfirmation'); if (resend) { resend.dataset.email = email; resend.classList.remove('hidden'); } }
         form.reset();
       } catch (error) {
         showMessage(message, error.message || 'Registration failed. Please try again.', true);
@@ -2828,6 +2830,24 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       }
     });
   }
+
+  // Resend is separate from account creation; it never creates a duplicate account.
+  const customerResend = document.getElementById('customerResendConfirmation');
+  if (customerResend) customerResend.addEventListener('click', async () => {
+    const email = customerResend.dataset.email || document.getElementById('customerEmail').value.trim();
+    const message = document.getElementById('customerRegisterMessage');
+    if (!email) { showMessage(message, 'Enter your registered email address first.', true); return; }
+    customerResend.disabled = true;
+    try {
+      const { error } = await supabaseClient.auth.resend({
+        type: 'signup', email, options: { emailRedirectTo: 'https://cleanlanka.lk' }
+      });
+      if (error) throw error;
+      showMessage(message, 'Confirmation email requested again. Check Inbox and Spam. If it does not arrive, email delivery settings must be checked.');
+    } catch (error) {
+      showMessage(message, error.message || 'Could not resend confirmation email.', true);
+    } finally { customerResend.disabled = false; }
+  });
 
   registerAccount({
     formId: 'customerRegisterForm', nameId: 'customerName', emailId: 'customerEmail',
