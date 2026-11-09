@@ -3842,7 +3842,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
   // A browser refresh retains Supabase's existing session. Revalidate the
   // role from the database; never restore admin access from local storage alone.
   async function clRestoreAdminOnRefresh(){
-    if(!/^\\/admin\\/?$/.test(location.pathname))return;
+    if(!/^\/admin\/?$/.test(location.pathname))return;
     const message=document.getElementById('adminLoginMessage');
     try{
       const {data,error}=await supabaseClient.auth.getSession();
