@@ -1511,6 +1511,22 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 .cl-market-workers .cl-worker-card-illustrated p{font-size:15px!important;line-height:1.5!important}
 .cl-market-workers .cl-worker-card-illustrated .cl-action{font-size:17px!important;padding:14px!important;background:#087c48!important;border-radius:12px!important}
 .cl-market-workers .cl-worker-card-illustrated strong{font-size:17px!important;color:#123c2b!important}
+</style><style id="cl-compact-worker-directory">
+/* Clean Lanka compact public worker directory — isolated from dashboards */
+#homeMarketplace .cl-market-workers #homeWorkerResults{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+@media(min-width:768px){#homeMarketplace .cl-market-workers #homeWorkerResults{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(min-width:1200px){#homeMarketplace .cl-market-workers #homeWorkerResults{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated{padding:12px!important;border-radius:14px!important;border-width:1px!important;box-shadow:0 3px 12px #164b2c10!important;gap:0!important}
+#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-cartoon{width:64px!important;height:64px!important;margin:0 auto 8px!important;border-width:2px!important}
+#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-cartoon span{font-size:38px!important}
+#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated h4{font-size:15px!important;line-height:1.3!important;margin-top:3px!important}
+#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated p{font-size:12px!important;line-height:1.35!important;margin-top:5px!important}
+#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated .text-xs.uppercase{font-size:9px!important;letter-spacing:0!important}
+#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated .grid{grid-template-columns:1fr 1fr!important;gap:5px!important;margin-top:8px!important}
+#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated .grid>div{padding:6px!important;min-width:0;overflow-wrap:anywhere}
+#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated strong{font-size:12px!important}
+#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated .cl-action{font-size:12px!important;padding:9px 5px!important;margin-top:auto!important;border-radius:9px!important}
+@media(max-width:600px){#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated{padding:9px!important}#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated h4{font-size:13px!important}#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated .flex.items-start.justify-between{flex-wrap:wrap!important}#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-cartoon{width:52px!important;height:52px!important}#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-cartoon span{font-size:30px!important}}
 </style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -1608,7 +1624,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     <button id="homeWorkerSearchButton" type="button" class="rounded-xl bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 font-bold min-h-[50px]">Search Workers</button>
    </div>
    <p id="homeWorkerMessage" class="text-sm text-slate-500 mb-3" role="status" aria-live="polite">Loading approved workers...</p>
-   <div id="homeWorkerResults" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+   <div id="homeWorkerResults" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3"></div>
   </section>
  </div>
 </section>
