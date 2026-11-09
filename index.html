@@ -1546,7 +1546,23 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
  outline:2px solid #047857!important;outline-offset:2px!important;
  box-shadow:none!important;--tw-ring-shadow:0 0 #0000!important;
 }
-</style></head>
+</style>
+<style id="cl-cartoon-category-20261109">
+/* Clean Lanka: visual-only cartoon category upgrade. No auth, routing, job or chat changes. */
+#services-section.cl-cartoon-services{background:#fff!important;padding:24px 14px 30px!important}
+#services-section .cl-cartoon-heading{max-width:1350px;margin:0 auto 16px!important;font-family:inherit!important;font-size:clamp(22px,2.3vw,32px)!important;color:#111827!important;font-weight:850!important;letter-spacing:-.4px}
+#services-section .cl-home-cats{display:grid!important;max-width:1350px!important;width:100%!important;margin:0 auto!important;padding:0!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:18px!important;align-items:start!important}
+#services-section .cl-home-cat{box-shadow:none!important;border:0!important;background:transparent!important;border-radius:0!important;padding:0!important;margin:0!important;min-height:0!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:center!important;gap:8px!important;min-width:0!important;color:#151d2c!important;transform:none!important;text-align:center!important;cursor:pointer}
+#services-section .cl-cartoon-frame{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;aspect-ratio:1/1!important;min-height:0!important;padding:6px!important;border:1px solid #e8ecef!important;border-radius:21px!important;background:#fbfcff!important;overflow:hidden!important;box-shadow:0 2px 5px #0f172a07!important}
+#services-section .cl-cartoon-frame svg{display:block!important;width:100%!important;height:100%!important;max-height:100%!important}
+#services-section .cl-cartoon-name{display:block!important;font-size:clamp(13px,1.25vw,18px)!important;font-weight:600!important;line-height:1.22!important;color:#141824!important;white-space:normal!important}
+#services-section .cl-home-cat:focus-visible .cl-cartoon-frame{outline:3px solid #087d40!important;outline-offset:3px!important}
+#services-section .cl-home-cat:hover .cl-cartoon-frame{border-color:#58ad7b!important;box-shadow:0 6px 16px #064d3020!important}
+@media(max-width:1000px){#services-section .cl-home-cats{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:15px!important}}
+@media(max-width:700px){#services-section.cl-cartoon-services{padding:18px 12px 22px!important}#services-section .cl-cartoon-heading{font-size:23px!important;margin-bottom:14px!important}#services-section .cl-home-cats{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px 10px!important}#services-section .cl-cartoon-frame{border-radius:17px!important;padding:2px!important}#services-section .cl-cartoon-name{font-size:14px!important;font-weight:550!important;min-height:20px!important}#services-section .cl-home-cat{gap:6px!important}}
+@media(max-width:360px){#services-section .cl-home-cats{gap:9px 7px!important}#services-section .cl-cartoon-name{font-size:12.5px!important}}
+</style>
+</head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
 <div class="bg-primary text-white py-2.5 px-4 sm:px-8 text-[15px] border-b border-primary-dark/30">
@@ -1602,14 +1618,273 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     </div>
  </div>
 </section>
-<section id="services-section" aria-label="Home service categories">
+<section id="services-section" class="cl-cartoon-services" aria-label="Home service categories">
+ <h2 class="cl-cartoon-heading">Service Categories</h2>
  <div class="cl-home-cats">
-  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Electrician')"><span class="material-symbols-outlined">bolt</span>Electrician</button>
-  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Plumber')"><span class="material-symbols-outlined">plumbing</span>Plumber</button>
-  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Cleaning')"><span class="material-symbols-outlined">cleaning_services</span>Cleaning</button>
-  <button type="button" class="cl-home-cat" onclick="setHomeSearch('General Work')"><span class="material-symbols-outlined">home_repair_service</span>General Work</button>
-  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Cooking')"><span class="material-symbols-outlined">soup_kitchen</span>Cooking</button>
-  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Support Services')"><span class="material-symbols-outlined">verified_user</span>Support Services</button>
+  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Electrician')" aria-label="Search Electrician services"><span class="cl-cartoon-frame"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="clshirt0" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#2479b9"/><stop offset="1" stop-color="#172d55" stop-opacity=".75"/></linearGradient><linearGradient id="clface0" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffe1b4" stop-opacity=".9"/><stop offset=".7" stop-color="#b8754e"/><stop offset="1" stop-color="#a3654b"/></linearGradient></defs>
+<ellipse cx="81" cy="151" rx="49" ry="6" fill="#132c49" opacity=".08"/>
+<path d="M57 108v35q0 10 13 10h5l5-27 5 27h6q12 0 12-10v-35" fill="#2c4767"/>
+<path d="M52 145h23v8H52zm35 0h23v8H87z" fill="#263240"/>
+<path d="M53 84q-19-2-24 24l-5 23q-1 7 7 8 7 1 10-7l11-28zM107 84q18-1 23 24l4 20q1 8-7 9-7 0-10-8l-10-27z" fill="#2479b9" stroke="#294667" stroke-opacity=".25" stroke-width="2"/>
+<path d="M53 80q27-12 54 1l11 44q-39 15-77-1z" fill="url(#clshirt0)" stroke="#30506f" stroke-opacity=".25" stroke-width="2"/>
+<path d="M72 77l8 15 9-15" fill="white" stroke="#d1d9e3" stroke-width="2"/><path d="M79 92v34" stroke="#edf2f7" stroke-width="3" opacity=".7"/>
+<path d="M55 88h14v10H55zm36 0h14v10H91z" fill="#fff" opacity=".25"/>
+<path d="M54 52q-3-28 26-31 26 0 26 28l-10-14Q72 45 60 47z" fill="#403136"/>
+<ellipse cx="57" cy="59" rx="7" ry="10" fill="#b8754e"/><ellipse cx="104" cy="59" rx="7" ry="10" fill="#b8754e"/>
+<ellipse cx="80" cy="54" rx="27" ry="34" fill="url(#clface0)"/>
+<path d="M61 51q8-5 15-1m9 0q8-4 15 1" stroke="#4b3234" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="69" cy="56" rx="4" ry="5.5" fill="#292d3b"/><ellipse cx="92" cy="56" rx="4" ry="5.5" fill="#292d3b"/>
+<circle cx="70" cy="54" r="1.6" fill="#fff"/><circle cx="93" cy="54" r="1.6" fill="#fff"/>
+<path d="M80 59l-3 10h6" fill="none" stroke="#9c5f44" stroke-width="2" stroke-linecap="round"/>
+<path d="M69 74q11 10 23-1" fill="none" stroke="#8d3d41" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="68" r="5" fill="#f88e83" opacity=".32"/><circle cx="100" cy="68" r="5" fill="#f88e83" opacity=".32"/>
+<path d="M49 47q2-34 30-34t30 34z" fill="#f6b923" stroke="#bc8724" stroke-width="2"/><path d="M79 17v27" stroke="#fbe68a" stroke-width="5"/><path d="M47 46h66v8H47z" rx="3" fill="#f6b923"/>
+<ellipse cx="111" cy="121" rx="8" ry="10" fill="url(#clface0)"/>
+<path d="M116 58l8 19-5 0-3 21-9-1 3-20-5-5z" fill="#ffcd32" stroke="#c89400" stroke-width="2"/><path d="M112 59l8-11" stroke="#616c7a" stroke-width="4" stroke-linecap="round"/><circle cx="113" cy="78" r="3" fill="#376dca"/>
+</svg></span><span class="cl-cartoon-name">Electrician</span></button>
+  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Plumber')" aria-label="Search Plumber services"><span class="cl-cartoon-frame"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="clshirt1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#1878aa"/><stop offset="1" stop-color="#172d55" stop-opacity=".75"/></linearGradient><linearGradient id="clface1" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffe1b4" stop-opacity=".9"/><stop offset=".7" stop-color="#df9a68"/><stop offset="1" stop-color="#a3654b"/></linearGradient></defs>
+<ellipse cx="81" cy="151" rx="49" ry="6" fill="#132c49" opacity=".08"/>
+<path d="M57 108v35q0 10 13 10h5l5-27 5 27h6q12 0 12-10v-35" fill="#2c4767"/>
+<path d="M52 145h23v8H52zm35 0h23v8H87z" fill="#263240"/>
+<path d="M53 84q-19-2-24 24l-5 23q-1 7 7 8 7 1 10-7l11-28zM107 84q18-1 23 24l4 20q1 8-7 9-7 0-10-8l-10-27z" fill="#1878aa" stroke="#294667" stroke-opacity=".25" stroke-width="2"/>
+<path d="M53 80q27-12 54 1l11 44q-39 15-77-1z" fill="url(#clshirt1)" stroke="#30506f" stroke-opacity=".25" stroke-width="2"/>
+<path d="M72 77l8 15 9-15" fill="white" stroke="#d1d9e3" stroke-width="2"/><path d="M79 92v34" stroke="#edf2f7" stroke-width="3" opacity=".7"/>
+<path d="M55 88h14v10H55zm36 0h14v10H91z" fill="#fff" opacity=".25"/>
+<path d="M54 52q-3-28 26-31 26 0 26 28l-10-14Q72 45 60 47z" fill="#403136"/>
+<ellipse cx="57" cy="59" rx="7" ry="10" fill="#df9a68"/><ellipse cx="104" cy="59" rx="7" ry="10" fill="#df9a68"/>
+<ellipse cx="80" cy="54" rx="27" ry="34" fill="url(#clface1)"/>
+<path d="M61 51q8-5 15-1m9 0q8-4 15 1" stroke="#4b3234" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="69" cy="56" rx="4" ry="5.5" fill="#292d3b"/><ellipse cx="92" cy="56" rx="4" ry="5.5" fill="#292d3b"/>
+<circle cx="70" cy="54" r="1.6" fill="#fff"/><circle cx="93" cy="54" r="1.6" fill="#fff"/>
+<path d="M80 59l-3 10h6" fill="none" stroke="#9c5f44" stroke-width="2" stroke-linecap="round"/>
+<path d="M69 74q11 10 23-1" fill="none" stroke="#8d3d41" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="68" r="5" fill="#f88e83" opacity=".32"/><circle cx="100" cy="68" r="5" fill="#f88e83" opacity=".32"/>
+<path d="M54 34Q61 18 82 20Q102 18 108 39L104 48H54z" fill="#218ee9" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><path d="M52 45q30-8 65 0v7q-36 5-65-1z" fill="#218ee9" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><circle cx="82" cy="31" r="5" fill="#f7de6f" opacity=".5"/>
+<ellipse cx="111" cy="121" rx="8" ry="10" fill="url(#clface1)"/>
+<path d="M112 50a15 15 0 0 1 18-4l-10 10 5 7 11-5a15 15 0 0 1-18 14l-11 38-9-3 14-37" fill="#d2d9e5" stroke="#6f7e92" stroke-width="2.5"/><circle cx="102" cy="103" r="2.8" fill="#64748b"/>
+</svg></span><span class="cl-cartoon-name">Plumber</span></button>
+  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Cleaning')" aria-label="Search Cleaning services"><span class="cl-cartoon-frame"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="clshirt2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#2771d3"/><stop offset="1" stop-color="#172d55" stop-opacity=".75"/></linearGradient><linearGradient id="clface2" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffe1b4" stop-opacity=".9"/><stop offset=".7" stop-color="#b97b55"/><stop offset="1" stop-color="#a3654b"/></linearGradient></defs>
+<ellipse cx="81" cy="151" rx="49" ry="6" fill="#132c49" opacity=".08"/>
+<path d="M57 108v35q0 10 13 10h5l5-27 5 27h6q12 0 12-10v-35" fill="#2c4767"/>
+<path d="M52 145h23v8H52zm35 0h23v8H87z" fill="#263240"/>
+<path d="M53 84q-19-2-24 24l-5 23q-1 7 7 8 7 1 10-7l11-28zM107 84q18-1 23 24l4 20q1 8-7 9-7 0-10-8l-10-27z" fill="#2771d3" stroke="#294667" stroke-opacity=".25" stroke-width="2"/>
+<path d="M53 80q27-12 54 1l11 44q-39 15-77-1z" fill="url(#clshirt2)" stroke="#30506f" stroke-opacity=".25" stroke-width="2"/>
+<path d="M72 77l8 15 9-15" fill="white" stroke="#d1d9e3" stroke-width="2"/><path d="M79 92v34" stroke="#edf2f7" stroke-width="3" opacity=".7"/>
+<path d="M55 88h14v10H55zm36 0h14v10H91z" fill="#fff" opacity=".25"/>
+<path d="M57 45q1-25 24-27 25 0 25 29l-5 25q-3 17-15 21l-8-12 20-30z" fill="#3c2e34"/>
+<ellipse cx="57" cy="59" rx="7" ry="10" fill="#b97b55"/><ellipse cx="104" cy="59" rx="7" ry="10" fill="#b97b55"/>
+<ellipse cx="80" cy="54" rx="27" ry="34" fill="url(#clface2)"/>
+<path d="M61 51q8-5 15-1m9 0q8-4 15 1" stroke="#4b3234" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="69" cy="56" rx="4" ry="5.5" fill="#292d3b"/><ellipse cx="92" cy="56" rx="4" ry="5.5" fill="#292d3b"/>
+<circle cx="70" cy="54" r="1.6" fill="#fff"/><circle cx="93" cy="54" r="1.6" fill="#fff"/>
+<path d="M80 59l-3 10h6" fill="none" stroke="#9c5f44" stroke-width="2" stroke-linecap="round"/>
+<path d="M69 74q11 10 23-1" fill="none" stroke="#8d3d41" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="68" r="5" fill="#f88e83" opacity=".32"/><circle cx="100" cy="68" r="5" fill="#f88e83" opacity=".32"/>
+<path d="M54 34Q61 18 82 20Q102 18 108 39L104 48H54z" fill="#75b9f2" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><path d="M52 45q30-8 65 0v7q-36 5-65-1z" fill="#75b9f2" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><circle cx="82" cy="31" r="5" fill="#f7de6f" opacity=".5"/>
+<ellipse cx="111" cy="121" rx="8" ry="10" fill="url(#clface2)"/>
+<path d="M121 45v87" stroke="#a47947" stroke-width="5" stroke-linecap="round"/><path d="M108 119h26l8 15h-42z" fill="#4e90dc"/><path d="M112 130l4 9m12-9-4 9" stroke="#2c63a8" stroke-width="2"/><path d="M93 126h18v15H93z" rx="3" fill="#ffdb64" stroke="#bb8b29" stroke-width="2"/>
+</svg></span><span class="cl-cartoon-name">Cleaning</span></button>
+  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Hotel Staff')" aria-label="Search Hotel Staff services"><span class="cl-cartoon-frame"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="clshirt3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#a33b4b"/><stop offset="1" stop-color="#172d55" stop-opacity=".75"/></linearGradient><linearGradient id="clface3" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffe1b4" stop-opacity=".9"/><stop offset=".7" stop-color="#e1a36e"/><stop offset="1" stop-color="#a3654b"/></linearGradient></defs>
+<ellipse cx="81" cy="151" rx="49" ry="6" fill="#132c49" opacity=".08"/>
+<path d="M57 108v35q0 10 13 10h5l5-27 5 27h6q12 0 12-10v-35" fill="#2c4767"/>
+<path d="M52 145h23v8H52zm35 0h23v8H87z" fill="#263240"/>
+<path d="M53 84q-19-2-24 24l-5 23q-1 7 7 8 7 1 10-7l11-28zM107 84q18-1 23 24l4 20q1 8-7 9-7 0-10-8l-10-27z" fill="#a33b4b" stroke="#294667" stroke-opacity=".25" stroke-width="2"/>
+<path d="M53 80q27-12 54 1l11 44q-39 15-77-1z" fill="url(#clshirt3)" stroke="#30506f" stroke-opacity=".25" stroke-width="2"/>
+<path d="M72 77l8 15 9-15" fill="white" stroke="#d1d9e3" stroke-width="2"/><path d="M79 92v34" stroke="#edf2f7" stroke-width="3" opacity=".7"/>
+<path d="M55 88h14v10H55zm36 0h14v10H91z" fill="#fff" opacity=".25"/>
+<path d="M54 52q-3-28 26-31 26 0 26 28l-10-14Q72 45 60 47z" fill="#403136"/>
+<ellipse cx="57" cy="59" rx="7" ry="10" fill="#e1a36e"/><ellipse cx="104" cy="59" rx="7" ry="10" fill="#e1a36e"/>
+<ellipse cx="80" cy="54" rx="27" ry="34" fill="url(#clface3)"/>
+<path d="M61 51q8-5 15-1m9 0q8-4 15 1" stroke="#4b3234" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="69" cy="56" rx="4" ry="5.5" fill="#292d3b"/><ellipse cx="92" cy="56" rx="4" ry="5.5" fill="#292d3b"/>
+<circle cx="70" cy="54" r="1.6" fill="#fff"/><circle cx="93" cy="54" r="1.6" fill="#fff"/>
+<path d="M80 59l-3 10h6" fill="none" stroke="#9c5f44" stroke-width="2" stroke-linecap="round"/>
+<path d="M69 74q11 10 23-1" fill="none" stroke="#8d3d41" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="68" r="5" fill="#f88e83" opacity=".32"/><circle cx="100" cy="68" r="5" fill="#f88e83" opacity=".32"/>
+<path d="M58 21h45l4 24H54z" fill="#822d40" stroke="#5d1834" stroke-width="2"/><path d="M50 45h61v9H50z" fill="#822d40" stroke="#5d1834" stroke-width="1"/><path d="M60 30h39" stroke="#e3bc5e" stroke-width="4"/>
+<ellipse cx="111" cy="121" rx="8" ry="10" fill="url(#clface3)"/>
+<path d="M113 98h26l-3 22h-20z" fill="#bb514f" stroke="#842c32" stroke-width="2"/><path d="M117 95v-10h18v10" fill="none" stroke="#842c32" stroke-width="3"/><ellipse cx="125" cy="67" rx="17" ry="7" fill="#e5ae25"/><path d="M110 64c2-13 28-13 30 0" fill="#f4c53d"/><circle cx="125" cy="55" r="4" fill="#e8ac20"/>
+</svg></span><span class="cl-cartoon-name">Hotel Staff</span></button>
+  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Security')" aria-label="Search Security services"><span class="cl-cartoon-frame"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="clshirt4" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#285783"/><stop offset="1" stop-color="#172d55" stop-opacity=".75"/></linearGradient><linearGradient id="clface4" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffe1b4" stop-opacity=".9"/><stop offset=".7" stop-color="#8b523c"/><stop offset="1" stop-color="#a3654b"/></linearGradient></defs>
+<ellipse cx="81" cy="151" rx="49" ry="6" fill="#132c49" opacity=".08"/>
+<path d="M57 108v35q0 10 13 10h5l5-27 5 27h6q12 0 12-10v-35" fill="#2c4767"/>
+<path d="M52 145h23v8H52zm35 0h23v8H87z" fill="#263240"/>
+<path d="M53 84q-19-2-24 24l-5 23q-1 7 7 8 7 1 10-7l11-28zM107 84q18-1 23 24l4 20q1 8-7 9-7 0-10-8l-10-27z" fill="#285783" stroke="#294667" stroke-opacity=".25" stroke-width="2"/>
+<path d="M53 80q27-12 54 1l11 44q-39 15-77-1z" fill="url(#clshirt4)" stroke="#30506f" stroke-opacity=".25" stroke-width="2"/>
+<path d="M72 77l8 15 9-15" fill="white" stroke="#d1d9e3" stroke-width="2"/><path d="M79 92v34" stroke="#edf2f7" stroke-width="3" opacity=".7"/>
+<path d="M55 88h14v10H55zm36 0h14v10H91z" fill="#fff" opacity=".25"/>
+<path d="M54 52q-3-28 26-31 26 0 26 28l-10-14Q72 45 60 47z" fill="#403136"/>
+<ellipse cx="57" cy="59" rx="7" ry="10" fill="#8b523c"/><ellipse cx="104" cy="59" rx="7" ry="10" fill="#8b523c"/>
+<ellipse cx="80" cy="54" rx="27" ry="34" fill="url(#clface4)"/>
+<path d="M61 51q8-5 15-1m9 0q8-4 15 1" stroke="#4b3234" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="69" cy="56" rx="4" ry="5.5" fill="#292d3b"/><ellipse cx="92" cy="56" rx="4" ry="5.5" fill="#292d3b"/>
+<circle cx="70" cy="54" r="1.6" fill="#fff"/><circle cx="93" cy="54" r="1.6" fill="#fff"/>
+<path d="M80 59l-3 10h6" fill="none" stroke="#9c5f44" stroke-width="2" stroke-linecap="round"/>
+<path d="M69 74q11 10 23-1" fill="none" stroke="#8d3d41" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="68" r="5" fill="#f88e83" opacity=".32"/><circle cx="100" cy="68" r="5" fill="#f88e83" opacity=".32"/>
+<path d="M54 34Q61 18 82 20Q102 18 108 39L104 48H54z" fill="#163b6a" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><path d="M52 45q30-8 65 0v7q-36 5-65-1z" fill="#163b6a" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><circle cx="82" cy="31" r="5" fill="#f7de6f" opacity=".9"/>
+<ellipse cx="111" cy="121" rx="8" ry="10" fill="url(#clface4)"/>
+<path d="M121 94l15 7-3 15-12 7-12-7-3-15z" fill="#d8edf7" stroke="#2062a5" stroke-width="3"/><path d="M116 107l5 5 9-10" stroke="#198a65" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span><span class="cl-cartoon-name">Security</span></button>
+  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Driver')" aria-label="Search Driver services"><span class="cl-cartoon-frame"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="clshirt5" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#273d54"/><stop offset="1" stop-color="#172d55" stop-opacity=".75"/></linearGradient><linearGradient id="clface5" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffe1b4" stop-opacity=".9"/><stop offset=".7" stop-color="#935a40"/><stop offset="1" stop-color="#a3654b"/></linearGradient></defs>
+<ellipse cx="81" cy="151" rx="49" ry="6" fill="#132c49" opacity=".08"/>
+<path d="M57 108v35q0 10 13 10h5l5-27 5 27h6q12 0 12-10v-35" fill="#2c4767"/>
+<path d="M52 145h23v8H52zm35 0h23v8H87z" fill="#263240"/>
+<path d="M53 84q-19-2-24 24l-5 23q-1 7 7 8 7 1 10-7l11-28zM107 84q18-1 23 24l4 20q1 8-7 9-7 0-10-8l-10-27z" fill="#273d54" stroke="#294667" stroke-opacity=".25" stroke-width="2"/>
+<path d="M53 80q27-12 54 1l11 44q-39 15-77-1z" fill="url(#clshirt5)" stroke="#30506f" stroke-opacity=".25" stroke-width="2"/>
+<path d="M72 77l8 15 9-15" fill="white" stroke="#d1d9e3" stroke-width="2"/><path d="M79 92v34" stroke="#edf2f7" stroke-width="3" opacity=".7"/>
+<path d="M55 88h14v10H55zm36 0h14v10H91z" fill="#fff" opacity=".25"/>
+<path d="M54 52q-3-28 26-31 26 0 26 28l-10-14Q72 45 60 47z" fill="#403136"/>
+<ellipse cx="57" cy="59" rx="7" ry="10" fill="#935a40"/><ellipse cx="104" cy="59" rx="7" ry="10" fill="#935a40"/>
+<ellipse cx="80" cy="54" rx="27" ry="34" fill="url(#clface5)"/>
+<path d="M61 51q8-5 15-1m9 0q8-4 15 1" stroke="#4b3234" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="69" cy="56" rx="4" ry="5.5" fill="#292d3b"/><ellipse cx="92" cy="56" rx="4" ry="5.5" fill="#292d3b"/>
+<circle cx="70" cy="54" r="1.6" fill="#fff"/><circle cx="93" cy="54" r="1.6" fill="#fff"/>
+<path d="M80 59l-3 10h6" fill="none" stroke="#9c5f44" stroke-width="2" stroke-linecap="round"/>
+<path d="M69 74q11 10 23-1" fill="none" stroke="#8d3d41" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="68" r="5" fill="#f88e83" opacity=".32"/><circle cx="100" cy="68" r="5" fill="#f88e83" opacity=".32"/>
+<path d="M54 34Q61 18 82 20Q102 18 108 39L104 48H54z" fill="#222a33" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><path d="M52 45q30-8 65 0v7q-36 5-65-1z" fill="#222a33" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><circle cx="82" cy="31" r="5" fill="#f7de6f" opacity=".9"/>
+<ellipse cx="111" cy="121" rx="8" ry="10" fill="url(#clface5)"/>
+<circle cx="121" cy="101" r="24" fill="none" stroke="#273443" stroke-width="7"/><circle cx="121" cy="101" r="5" fill="#273443"/><path d="M121 101v-21m0 21-19 12m19-12 19 12" stroke="#273443" stroke-width="4" stroke-linecap="round"/>
+</svg></span><span class="cl-cartoon-name">Driver</span></button>
+  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Cooking')" aria-label="Search Cooking services"><span class="cl-cartoon-frame"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="clshirt6" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#f1f3f4"/><stop offset="1" stop-color="#172d55" stop-opacity=".75"/></linearGradient><linearGradient id="clface6" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffe1b4" stop-opacity=".9"/><stop offset=".7" stop-color="#d28b61"/><stop offset="1" stop-color="#a3654b"/></linearGradient></defs>
+<ellipse cx="81" cy="151" rx="49" ry="6" fill="#132c49" opacity=".08"/>
+<path d="M57 108v35q0 10 13 10h5l5-27 5 27h6q12 0 12-10v-35" fill="#2c4767"/>
+<path d="M52 145h23v8H52zm35 0h23v8H87z" fill="#263240"/>
+<path d="M53 84q-19-2-24 24l-5 23q-1 7 7 8 7 1 10-7l11-28zM107 84q18-1 23 24l4 20q1 8-7 9-7 0-10-8l-10-27z" fill="#f1f3f4" stroke="#294667" stroke-opacity=".25" stroke-width="2"/>
+<path d="M53 80q27-12 54 1l11 44q-39 15-77-1z" fill="url(#clshirt6)" stroke="#30506f" stroke-opacity=".25" stroke-width="2"/>
+<path d="M72 77l8 15 9-15" fill="white" stroke="#d1d9e3" stroke-width="2"/><path d="M79 92v34" stroke="#edf2f7" stroke-width="3" opacity=".7"/>
+<path d="M55 88h14v10H55zm36 0h14v10H91z" fill="#fff" opacity=".25"/>
+<path d="M54 52q-3-28 26-31 26 0 26 28l-10-14Q72 45 60 47z" fill="#403136"/>
+<ellipse cx="57" cy="59" rx="7" ry="10" fill="#d28b61"/><ellipse cx="104" cy="59" rx="7" ry="10" fill="#d28b61"/>
+<ellipse cx="80" cy="54" rx="27" ry="34" fill="url(#clface6)"/>
+<path d="M61 51q8-5 15-1m9 0q8-4 15 1" stroke="#4b3234" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="69" cy="56" rx="4" ry="5.5" fill="#292d3b"/><ellipse cx="92" cy="56" rx="4" ry="5.5" fill="#292d3b"/>
+<circle cx="70" cy="54" r="1.6" fill="#fff"/><circle cx="93" cy="54" r="1.6" fill="#fff"/>
+<path d="M80 59l-3 10h6" fill="none" stroke="#9c5f44" stroke-width="2" stroke-linecap="round"/>
+<path d="M69 74q11 10 23-1" fill="none" stroke="#8d3d41" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="68" r="5" fill="#f88e83" opacity=".32"/><circle cx="100" cy="68" r="5" fill="#f88e83" opacity=".32"/>
+<path d="M52 42Q45 29 55 20Q49 7 67 11Q81-2 94 13Q114 5 109 25Q121 39 105 45L105 57H55V45Z" fill="#fff" stroke="#cfd6dc" stroke-width="2"/><path d="M55 44h50v12H55z" fill="#edf1f3" stroke="#cbd5e1" stroke-width="1"/>
+<ellipse cx="111" cy="121" rx="8" ry="10" fill="url(#clface6)"/>
+<path d="M107 85h36v7h-36z" fill="#596b7b"/><path d="M113 92v14q0 13 12 13t12-13V92" fill="#a5b8c8" stroke="#657787" stroke-width="2"/><path d="M115 105h18" stroke="#f0f5f8" stroke-width="3"/><path d="M107 79q17-19 35 0" fill="none" stroke="#adb7c4" stroke-width="6"/><path d="M123 69q-5-10 0-14" stroke="#bec6ca" fill="none" stroke-width="2"/>
+</svg></span><span class="cl-cartoon-name">Cooking</span></button>
+  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Carpenter')" aria-label="Search Carpenter services"><span class="cl-cartoon-frame"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="clshirt7" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#d78b35"/><stop offset="1" stop-color="#172d55" stop-opacity=".75"/></linearGradient><linearGradient id="clface7" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffe1b4" stop-opacity=".9"/><stop offset=".7" stop-color="#a76c4b"/><stop offset="1" stop-color="#a3654b"/></linearGradient></defs>
+<ellipse cx="81" cy="151" rx="49" ry="6" fill="#132c49" opacity=".08"/>
+<path d="M57 108v35q0 10 13 10h5l5-27 5 27h6q12 0 12-10v-35" fill="#2c4767"/>
+<path d="M52 145h23v8H52zm35 0h23v8H87z" fill="#263240"/>
+<path d="M53 84q-19-2-24 24l-5 23q-1 7 7 8 7 1 10-7l11-28zM107 84q18-1 23 24l4 20q1 8-7 9-7 0-10-8l-10-27z" fill="#d78b35" stroke="#294667" stroke-opacity=".25" stroke-width="2"/>
+<path d="M53 80q27-12 54 1l11 44q-39 15-77-1z" fill="url(#clshirt7)" stroke="#30506f" stroke-opacity=".25" stroke-width="2"/>
+<path d="M72 77l8 15 9-15" fill="white" stroke="#d1d9e3" stroke-width="2"/><path d="M79 92v34" stroke="#edf2f7" stroke-width="3" opacity=".7"/>
+<path d="M55 88h14v10H55zm36 0h14v10H91z" fill="#fff" opacity=".25"/>
+<path d="M54 52q-3-28 26-31 26 0 26 28l-10-14Q72 45 60 47z" fill="#403136"/>
+<ellipse cx="57" cy="59" rx="7" ry="10" fill="#a76c4b"/><ellipse cx="104" cy="59" rx="7" ry="10" fill="#a76c4b"/>
+<ellipse cx="80" cy="54" rx="27" ry="34" fill="url(#clface7)"/>
+<path d="M61 51q8-5 15-1m9 0q8-4 15 1" stroke="#4b3234" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="69" cy="56" rx="4" ry="5.5" fill="#292d3b"/><ellipse cx="92" cy="56" rx="4" ry="5.5" fill="#292d3b"/>
+<circle cx="70" cy="54" r="1.6" fill="#fff"/><circle cx="93" cy="54" r="1.6" fill="#fff"/>
+<path d="M80 59l-3 10h6" fill="none" stroke="#9c5f44" stroke-width="2" stroke-linecap="round"/>
+<path d="M69 74q11 10 23-1" fill="none" stroke="#8d3d41" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="68" r="5" fill="#f88e83" opacity=".32"/><circle cx="100" cy="68" r="5" fill="#f88e83" opacity=".32"/>
+<path d="M54 34Q61 18 82 20Q102 18 108 39L104 48H54z" fill="#e4a936" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><path d="M52 45q30-8 65 0v7q-36 5-65-1z" fill="#e4a936" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><circle cx="82" cy="31" r="5" fill="#f7de6f" opacity=".5"/>
+<ellipse cx="111" cy="121" rx="8" ry="10" fill="url(#clface7)"/>
+<path d="M118 76l12 40" stroke="#986b3e" stroke-width="5" stroke-linecap="round"/><path d="M111 70l24-8 6 17-24 8z" fill="#9ba5ab" stroke="#5d6870" stroke-width="3"/><path d="M108 118l19 0" stroke="#9e7c52" stroke-width="5" stroke-linecap="round"/>
+</svg></span><span class="cl-cartoon-name">Carpenter</span></button>
+  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Gardening')" aria-label="Search Gardening services"><span class="cl-cartoon-frame"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="clshirt8" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#36a866"/><stop offset="1" stop-color="#172d55" stop-opacity=".75"/></linearGradient><linearGradient id="clface8" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffe1b4" stop-opacity=".9"/><stop offset=".7" stop-color="#b16d44"/><stop offset="1" stop-color="#a3654b"/></linearGradient></defs>
+<ellipse cx="81" cy="151" rx="49" ry="6" fill="#132c49" opacity=".08"/>
+<path d="M57 108v35q0 10 13 10h5l5-27 5 27h6q12 0 12-10v-35" fill="#2c4767"/>
+<path d="M52 145h23v8H52zm35 0h23v8H87z" fill="#263240"/>
+<path d="M53 84q-19-2-24 24l-5 23q-1 7 7 8 7 1 10-7l11-28zM107 84q18-1 23 24l4 20q1 8-7 9-7 0-10-8l-10-27z" fill="#36a866" stroke="#294667" stroke-opacity=".25" stroke-width="2"/>
+<path d="M53 80q27-12 54 1l11 44q-39 15-77-1z" fill="url(#clshirt8)" stroke="#30506f" stroke-opacity=".25" stroke-width="2"/>
+<path d="M72 77l8 15 9-15" fill="white" stroke="#d1d9e3" stroke-width="2"/><path d="M79 92v34" stroke="#edf2f7" stroke-width="3" opacity=".7"/>
+<path d="M55 88h14v10H55zm36 0h14v10H91z" fill="#fff" opacity=".25"/>
+<path d="M54 52q-3-28 26-31 26 0 26 28l-10-14Q72 45 60 47z" fill="#403136"/>
+<ellipse cx="57" cy="59" rx="7" ry="10" fill="#b16d44"/><ellipse cx="104" cy="59" rx="7" ry="10" fill="#b16d44"/>
+<ellipse cx="80" cy="54" rx="27" ry="34" fill="url(#clface8)"/>
+<path d="M61 51q8-5 15-1m9 0q8-4 15 1" stroke="#4b3234" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="69" cy="56" rx="4" ry="5.5" fill="#292d3b"/><ellipse cx="92" cy="56" rx="4" ry="5.5" fill="#292d3b"/>
+<circle cx="70" cy="54" r="1.6" fill="#fff"/><circle cx="93" cy="54" r="1.6" fill="#fff"/>
+<path d="M80 59l-3 10h6" fill="none" stroke="#9c5f44" stroke-width="2" stroke-linecap="round"/>
+<path d="M69 74q11 10 23-1" fill="none" stroke="#8d3d41" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="68" r="5" fill="#f88e83" opacity=".32"/><circle cx="100" cy="68" r="5" fill="#f88e83" opacity=".32"/>
+<path d="M54 34Q61 18 82 20Q102 18 108 39L104 48H54z" fill="#e38d29" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><path d="M52 45q30-8 65 0v7q-36 5-65-1z" fill="#e38d29" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><circle cx="82" cy="31" r="5" fill="#f7de6f" opacity=".5"/>
+<ellipse cx="111" cy="121" rx="8" ry="10" fill="url(#clface8)"/>
+<path d="M122 82l-6 34" stroke="#967044" stroke-width="5" stroke-linecap="round"/><path d="M113 75l20 3 7 14-21-3z" fill="#53a564" stroke="#2f7f40" stroke-width="2"/><path d="M132 73l9-22" stroke="#659b52" stroke-width="3"/><path d="M138 61q-14-5-14-17 14 1 14 17" fill="#49b65b"/>
+</svg></span><span class="cl-cartoon-name">Gardening</span></button>
+  <button type="button" class="cl-home-cat" onclick="setHomeSearch('AC Repair')" aria-label="Search AC Repair services"><span class="cl-cartoon-frame"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="clshirt9" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#2d78bd"/><stop offset="1" stop-color="#172d55" stop-opacity=".75"/></linearGradient><linearGradient id="clface9" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffe1b4" stop-opacity=".9"/><stop offset=".7" stop-color="#a96c4d"/><stop offset="1" stop-color="#a3654b"/></linearGradient></defs>
+<ellipse cx="81" cy="151" rx="49" ry="6" fill="#132c49" opacity=".08"/>
+<path d="M57 108v35q0 10 13 10h5l5-27 5 27h6q12 0 12-10v-35" fill="#2c4767"/>
+<path d="M52 145h23v8H52zm35 0h23v8H87z" fill="#263240"/>
+<path d="M53 84q-19-2-24 24l-5 23q-1 7 7 8 7 1 10-7l11-28zM107 84q18-1 23 24l4 20q1 8-7 9-7 0-10-8l-10-27z" fill="#2d78bd" stroke="#294667" stroke-opacity=".25" stroke-width="2"/>
+<path d="M53 80q27-12 54 1l11 44q-39 15-77-1z" fill="url(#clshirt9)" stroke="#30506f" stroke-opacity=".25" stroke-width="2"/>
+<path d="M72 77l8 15 9-15" fill="white" stroke="#d1d9e3" stroke-width="2"/><path d="M79 92v34" stroke="#edf2f7" stroke-width="3" opacity=".7"/>
+<path d="M55 88h14v10H55zm36 0h14v10H91z" fill="#fff" opacity=".25"/>
+<path d="M54 52q-3-28 26-31 26 0 26 28l-10-14Q72 45 60 47z" fill="#403136"/>
+<ellipse cx="57" cy="59" rx="7" ry="10" fill="#a96c4d"/><ellipse cx="104" cy="59" rx="7" ry="10" fill="#a96c4d"/>
+<ellipse cx="80" cy="54" rx="27" ry="34" fill="url(#clface9)"/>
+<path d="M61 51q8-5 15-1m9 0q8-4 15 1" stroke="#4b3234" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="69" cy="56" rx="4" ry="5.5" fill="#292d3b"/><ellipse cx="92" cy="56" rx="4" ry="5.5" fill="#292d3b"/>
+<circle cx="70" cy="54" r="1.6" fill="#fff"/><circle cx="93" cy="54" r="1.6" fill="#fff"/>
+<path d="M80 59l-3 10h6" fill="none" stroke="#9c5f44" stroke-width="2" stroke-linecap="round"/>
+<path d="M69 74q11 10 23-1" fill="none" stroke="#8d3d41" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="68" r="5" fill="#f88e83" opacity=".32"/><circle cx="100" cy="68" r="5" fill="#f88e83" opacity=".32"/>
+<path d="M54 34Q61 18 82 20Q102 18 108 39L104 48H54z" fill="#79bae7" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><path d="M52 45q30-8 65 0v7q-36 5-65-1z" fill="#79bae7" stroke="#334155" stroke-opacity=".3" stroke-width="1.5"/><circle cx="82" cy="31" r="5" fill="#f7de6f" opacity=".5"/>
+<ellipse cx="111" cy="121" rx="8" ry="10" fill="url(#clface9)"/>
+<rect x="106" y="64" width="41" height="24" rx="5" fill="#eef8fc" stroke="#87a8bc" stroke-width="2"/><path d="M112 77h29m-29 5h29" stroke="#b0d1e2" stroke-width="2"/><path d="M119 99l4-8 4 8 8-4-4 9 7 6-10-1-3 9-4-9-10 1 8-6-4-9z" fill="#75c8f2"/>
+</svg></span><span class="cl-cartoon-name">AC Repair</span></button>
+  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Construction')" aria-label="Search Construction services"><span class="cl-cartoon-frame"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="clshirt10" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#d29d31"/><stop offset="1" stop-color="#172d55" stop-opacity=".75"/></linearGradient><linearGradient id="clface10" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffe1b4" stop-opacity=".9"/><stop offset=".7" stop-color="#ad724f"/><stop offset="1" stop-color="#a3654b"/></linearGradient></defs>
+<ellipse cx="81" cy="151" rx="49" ry="6" fill="#132c49" opacity=".08"/>
+<path d="M57 108v35q0 10 13 10h5l5-27 5 27h6q12 0 12-10v-35" fill="#2c4767"/>
+<path d="M52 145h23v8H52zm35 0h23v8H87z" fill="#263240"/>
+<path d="M53 84q-19-2-24 24l-5 23q-1 7 7 8 7 1 10-7l11-28zM107 84q18-1 23 24l4 20q1 8-7 9-7 0-10-8l-10-27z" fill="#d29d31" stroke="#294667" stroke-opacity=".25" stroke-width="2"/>
+<path d="M53 80q27-12 54 1l11 44q-39 15-77-1z" fill="url(#clshirt10)" stroke="#30506f" stroke-opacity=".25" stroke-width="2"/>
+<path d="M72 77l8 15 9-15" fill="white" stroke="#d1d9e3" stroke-width="2"/><path d="M79 92v34" stroke="#edf2f7" stroke-width="3" opacity=".7"/>
+<path d="M55 88h14v10H55zm36 0h14v10H91z" fill="#fff" opacity=".25"/>
+<path d="M54 52q-3-28 26-31 26 0 26 28l-10-14Q72 45 60 47z" fill="#403136"/>
+<ellipse cx="57" cy="59" rx="7" ry="10" fill="#ad724f"/><ellipse cx="104" cy="59" rx="7" ry="10" fill="#ad724f"/>
+<ellipse cx="80" cy="54" rx="27" ry="34" fill="url(#clface10)"/>
+<path d="M61 51q8-5 15-1m9 0q8-4 15 1" stroke="#4b3234" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="69" cy="56" rx="4" ry="5.5" fill="#292d3b"/><ellipse cx="92" cy="56" rx="4" ry="5.5" fill="#292d3b"/>
+<circle cx="70" cy="54" r="1.6" fill="#fff"/><circle cx="93" cy="54" r="1.6" fill="#fff"/>
+<path d="M80 59l-3 10h6" fill="none" stroke="#9c5f44" stroke-width="2" stroke-linecap="round"/>
+<path d="M69 74q11 10 23-1" fill="none" stroke="#8d3d41" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="68" r="5" fill="#f88e83" opacity=".32"/><circle cx="100" cy="68" r="5" fill="#f88e83" opacity=".32"/>
+<path d="M49 47q2-34 30-34t30 34z" fill="#e7a41e" stroke="#bc8724" stroke-width="2"/><path d="M79 17v27" stroke="#fbe68a" stroke-width="5"/><path d="M47 46h66v8H47z" rx="3" fill="#e7a41e"/>
+<ellipse cx="111" cy="121" rx="8" ry="10" fill="url(#clface10)"/>
+<rect x="107" y="104" width="20" height="13" rx="2" fill="#d78a5a" stroke="#9b563b" stroke-width="2"/><rect x="127" y="104" width="19" height="13" rx="2" fill="#d78a5a" stroke="#9b563b" stroke-width="2"/><rect x="118" y="91" width="20" height="13" rx="2" fill="#e09c6c" stroke="#9b563b" stroke-width="2"/><path d="M110 122h36" stroke="#bd6e45" stroke-width="3"/>
+</svg></span><span class="cl-cartoon-name">Construction</span></button>
+  <button type="button" class="cl-home-cat" onclick="setHomeSearch('Caregiver')" aria-label="Search Caregiver services"><span class="cl-cartoon-frame"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="clshirt11" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#5c94be"/><stop offset="1" stop-color="#172d55" stop-opacity=".75"/></linearGradient><linearGradient id="clface11" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffe1b4" stop-opacity=".9"/><stop offset=".7" stop-color="#c98b64"/><stop offset="1" stop-color="#a3654b"/></linearGradient></defs>
+<ellipse cx="81" cy="151" rx="49" ry="6" fill="#132c49" opacity=".08"/>
+<path d="M57 108v35q0 10 13 10h5l5-27 5 27h6q12 0 12-10v-35" fill="#2c4767"/>
+<path d="M52 145h23v8H52zm35 0h23v8H87z" fill="#263240"/>
+<path d="M53 84q-19-2-24 24l-5 23q-1 7 7 8 7 1 10-7l11-28zM107 84q18-1 23 24l4 20q1 8-7 9-7 0-10-8l-10-27z" fill="#5c94be" stroke="#294667" stroke-opacity=".25" stroke-width="2"/>
+<path d="M53 80q27-12 54 1l11 44q-39 15-77-1z" fill="url(#clshirt11)" stroke="#30506f" stroke-opacity=".25" stroke-width="2"/>
+<path d="M72 77l8 15 9-15" fill="white" stroke="#d1d9e3" stroke-width="2"/><path d="M79 92v34" stroke="#edf2f7" stroke-width="3" opacity=".7"/>
+<path d="M55 88h14v10H55zm36 0h14v10H91z" fill="#fff" opacity=".25"/>
+<path d="M57 45q1-25 24-27 25 0 25 29l-5 25q-3 17-15 21l-8-12 20-30z" fill="#3c2e34"/>
+<ellipse cx="57" cy="59" rx="7" ry="10" fill="#c98b64"/><ellipse cx="104" cy="59" rx="7" ry="10" fill="#c98b64"/>
+<ellipse cx="80" cy="54" rx="27" ry="34" fill="url(#clface11)"/>
+<path d="M61 51q8-5 15-1m9 0q8-4 15 1" stroke="#4b3234" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="69" cy="56" rx="4" ry="5.5" fill="#292d3b"/><ellipse cx="92" cy="56" rx="4" ry="5.5" fill="#292d3b"/>
+<circle cx="70" cy="54" r="1.6" fill="#fff"/><circle cx="93" cy="54" r="1.6" fill="#fff"/>
+<path d="M80 59l-3 10h6" fill="none" stroke="#9c5f44" stroke-width="2" stroke-linecap="round"/>
+<path d="M69 74q11 10 23-1" fill="none" stroke="#8d3d41" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="68" r="5" fill="#f88e83" opacity=".32"/><circle cx="100" cy="68" r="5" fill="#f88e83" opacity=".32"/>
+<path d="M49 42Q58 16 81 17Q103 16 110 48L105 66Q104 35 78 32Q58 31 53 64z" fill="#38303b"/><circle cx="104" cy="41" r="11" fill="#343039"/>
+<ellipse cx="111" cy="121" rx="8" ry="10" fill="url(#clface11)"/>
+<path d="M124 78v46" stroke="#6f7a88" stroke-width="5"/><circle cx="124" cy="120" r="16" fill="#f0f5f9" stroke="#7b8d9c" stroke-width="2"/><circle cx="124" cy="120" r="6" fill="#cbd8e2"/><path d="M123 91l4 9 10-5-5 11 7 7-12-1-4 10-4-10-10 1 7-9-4-10 10 5z" fill="#e96070"/>
+</svg></span><span class="cl-cartoon-name">Caregiver</span></button>
  </div>
 </section>
 <section id="homeMarketplace" class="bg-slate-50">
