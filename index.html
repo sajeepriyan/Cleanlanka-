@@ -3945,7 +3945,14 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     document.getElementById('adminDashboard').classList.add('hidden');
     document.getElementById('admin-login').classList.add('hidden');
     document.getElementById('emailConfirmationHint').classList.remove('hidden');
+    // After logout return to the public homepage, not an exposed login panel below the footer.
+    document.body.classList.remove('registration-mode','password-recovery-mode');
+    document.getElementById('account-login').classList.add('hidden');
+    document.getElementById('registration-screen').classList.add('hidden');
+    const passwordField=document.getElementById('loginPassword');
+    if(passwordField)passwordField.value='';
     showMessage(message, 'You have signed out successfully.');
+    window.scrollTo({top:0,left:0,behavior:'auto'});
   }
 
   document.getElementById('logoutButton').addEventListener('click', cleanLankaSignOut);
