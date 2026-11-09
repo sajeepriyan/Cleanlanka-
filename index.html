@@ -3736,33 +3736,24 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
   document.getElementById('adminWorkerSearch')?.addEventListener('input', renderAdminWorkerList);
   document.getElementById('adminWorkerStatusFilter')?.addEventListener('change', renderAdminWorkerList);
 
-  document.getElementById('adminLoginForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const button = document.getElementById('adminLoginSubmit');
-    const message = document.getElementById('adminLoginMessage');
-    const email = document.getElementById('adminLoginEmail').value.trim();
-    const password = document.getElementById('adminLoginPassword').value;
-    button.disabled = true;
-    showMessage(message, 'Verifying administrator credentials...');
-    try {
-      const { data, error } = await supabaseClient.auth.signInWithPassword({email, password});
-      if (error) throw error;
+  async function clOpenVerifiedAdminDashboard(user) {
+    if(!user?.id)throw new Error('No authenticated session.');
       const { data: adminRow, error: adminError } = await supabaseClient
-        .from('admins').select('user_id,role,is_active,permissions').eq('user_id', data.user.id).maybeSingle();
+        .from('admins').select('user_id,role,is_active,permissions').eq('user_id', user.id).maybeSingle();
       if (adminError) throw new Error('Could not verify admin access. Check the admins table SELECT policy: ' + adminError.message);
       if (!adminRow || adminRow.is_active !== true) {
         await supabaseClient.auth.signOut();
         throw new Error('Access denied. This account is not an active Clean Lanka administrator.');
       }
-      currentAdminUser=data.user; currentAdminRole=adminRow.role||''; currentAdminPermissions=adminRow.permissions||{};
+      currentAdminUser=user; currentAdminRole=adminRow.role||''; currentAdminPermissions=adminRow.permissions||{};
       if(!['main_admin','admin','sub_admin'].includes(currentAdminRole)) { await supabaseClient.auth.signOut(); throw new Error('Access denied. Invalid administrator role.'); }
       document.body.classList.remove('admin-login-mode','login-page-mode','registration-mode','worker-dashboard-mode','customer-dashboard-mode');
       document.getElementById('admin-login').classList.add('hidden');
       document.getElementById('adminDashboard').classList.remove('hidden');
       document.body.classList.add('admin-dashboard-mode');
-      document.getElementById('adminDashboardEmail').textContent = `${data.user.email || ''} • ${currentAdminRole.replace('_',' ').toUpperCase()}`;
+      document.getElementById('adminDashboardEmail').textContent = `${user.email || ''} • ${currentAdminRole.replace('_',' ').toUpperCase()}`;
       document.getElementById('clAdminDashboardTitle').textContent=currentAdminRole==='sub_admin'?'Sub Admin Dashboard':currentAdminRole==='main_admin'?'Main Admin Dashboard':'Admin Dashboard';
-      const displayName=String(data.user.user_metadata?.full_name||data.user.user_metadata?.name||'').trim();
+      const displayName=String(user.user_metadata?.full_name||user.user_metadata?.name||'').trim();
       document.getElementById('clAdminDashboardEmailName').textContent=displayName;
       const grantedPanel=document.getElementById('clGrantedPermissions');
       const grantedList=document.getElementById('clGrantedPermissionsList');
@@ -3832,10 +3823,42 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       if(currentAdminRole==='main_admin') tasks.push(loadSubAdmins());
       await Promise.all(tasks);
       window.scrollTo(0,0);
-    } catch (error) {
-      showMessage(message, error.message || 'Admin sign-in failed.', true);
-    } finally { button.disabled = false; }
+  }
+  document.getElementById('adminLoginForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const button=document.getElementById('adminLoginSubmit');
+    const message=document.getElementById('adminLoginMessage');
+    button.disabled=true;
+    showMessage(message,'Verifying administrator credentials...');
+    try{
+      const email=document.getElementById('adminLoginEmail').value.trim();
+      const password=document.getElementById('adminLoginPassword').value;
+      const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+      if(error)throw error;
+      await clOpenVerifiedAdminDashboard(data.user);
+    }catch(error){showMessage(message,error.message||'Admin sign-in failed.',true);}
+    finally{button.disabled=false;}
   });
+  // A browser refresh retains Supabase's existing session. Revalidate the
+  // role from the database; never restore admin access from local storage alone.
+  async function clRestoreAdminOnRefresh(){
+    if(!/^\\/admin\\/?$/.test(location.pathname))return;
+    const message=document.getElementById('adminLoginMessage');
+    try{
+      const {data,error}=await supabaseClient.auth.getSession();
+      if(error)throw error;
+      if(!data?.session?.user)return;
+      showMessage(message,'Restoring your secure admin session...');
+      const verified=await supabaseClient.auth.getUser();
+      if(verified.error||!verified.data?.user)throw verified.error||new Error('Session expired');
+      await clOpenVerifiedAdminDashboard(verified.data.user);
+    }catch(error){
+      console.warn('Admin session restore failed:',error);
+      showMessage(message,'Please sign in again. '+(error.message||''),true);
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',clRestoreAdminOnRefresh);
+  else clRestoreAdminOnRefresh();
 
   document.getElementById('forgotPasswordButton').addEventListener('click', () => {
     document.getElementById('passwordResetPanel').classList.toggle('hidden');
