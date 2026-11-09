@@ -6950,6 +6950,394 @@ document.addEventListener('DOMContentLoaded',function(){
   });
 })();
 </script>
+
+</body>
+
+<style id="clean-lanka-home-account-v042-style">
+#clHomeAccountName{display:none;align-items:center;gap:9px;max-width:260px;min-width:0}
+#clHomeAccountName .cl-home-user-photo{width:38px;height:38px;flex:0 0 38px;border-radius:50%;object-fit:cover;border:2px solid #16a34a;background:#e8f5ec}
+#clHomeAccountName .cl-home-user-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:155px}
+#clHomeLogoutButton{display:none;border:1px solid #fecaca;background:#fff1f2;color:#9f1239;border-radius:999px;padding:10px 14px;font-weight:900;white-space:nowrap}
+@media(max-width:760px){.cl-home-nav-inner{flex-wrap:wrap}.cl-home-navlinks{order:3;width:100%;overflow-x:auto;gap:14px}.cl-home-nav-actions{margin-left:auto}.cl-home-nav-actions .cl-home-login{padding:9px 12px}}
+#workerDashboard .cl-tab-page[hidden],#customerDashboard .cl-tab-page[hidden]{display:none!important}
+</style>
+<script id="clean-lanka-account-home-v042">
+(function(){
+ const nameBtn=document.getElementById('clHomeAccountName');
+ const nameText=document.getElementById('clHomeAccountNameText');
+ const actions=document.querySelector('.cl-home-nav-actions');
+ if(!nameBtn||!nameText||!actions||!window.supabaseClient)return;
+ let current=null,profilePhotoUrl='',refreshToken=0;
+ const roleOf=u=>String(u?.user_metadata?.account_type||'').toLowerCase();
+ let logout=document.getElementById('clHomeLogoutButton');
+ if(!logout){logout=document.createElement('button');logout.type='button';logout.id='clHomeLogoutButton';logout.textContent='Logout';logout.setAttribute('aria-label','Sign out of Clean Lanka');actions.prepend(logout);}
+ function onPublicHome(){const b=document.body;return !['login-page-mode','registration-mode','admin-login-mode','worker-dashboard-mode','customer-dashboard-mode','admin-dashboard-mode','password-recovery-mode'].some(c=>b.classList.contains(c));}
+ function render(){const role=roleOf(current),ok=!!current&&(role==='customer'||role==='worker'),home=onPublicHome();nameBtn.classList.toggle('hidden',!(ok&&home));nameBtn.style.display=(ok&&home)?'inline-flex':'none';logout.style.display=(ok&&home)?'inline-flex':'none';
+   if(ok){const meta=current.user_metadata||{};const nm=String(meta.full_name||current.email?.split('@')[0]||'My Dashboard').trim();nameText.textContent=nm;nameBtn.title=(role==='worker'?'Worker':'Customer')+' Dashboard';
+     let img=nameBtn.querySelector('img.cl-home-user-photo');if(!img){img=document.createElement('img');img.className='cl-home-user-photo';img.alt='Profile photo';nameBtn.prepend(img);}if(profilePhotoUrl){img.src=profilePhotoUrl;img.style.display='block';let fb=nameBtn.querySelector('.cl-home-user-fallback');if(fb)fb.remove();}else{img.removeAttribute('src');img.style.display='none';let fb=nameBtn.querySelector('.cl-home-user-fallback');if(!fb){fb=document.createElement('span');fb.className='cl-home-user-fallback';fb.setAttribute('aria-label','Profile initials');nameBtn.insertBefore(fb,nameText);}fb.textContent=(nm.trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('')||'U').toUpperCase();}
+   }
+   const login=actions.querySelector('.cl-home-login[onclick*="openLoginPage"]');if(login)login.style.display=ok&&home?'none':'';
+ }
+ async function loadAccountPhoto(user){const token=++refreshToken;profilePhotoUrl='';const role=roleOf(user);try{
+   if(role==='worker'){
+     // Never expose the private verification selfie/ID documents as a public avatar.
+     // Use only an explicitly public profile image URL, if the schema has one.
+     const {data,error}=await window.supabaseClient.from('worker_profiles').select('*').eq('user_id',user.id).maybeSingle();
+     if(error)throw error;
+     profilePhotoUrl=data?.avatar_url||data?.profile_photo_url||data?.profile_image_url||data?.photo_url||user.user_metadata?.avatar_url||user.user_metadata?.picture||'';
+     if(data?.full_name){current={...current,user_metadata:{...(current.user_metadata||{}),full_name:data.full_name}};}
+   } else if(role==='customer'){
+     const {data,error}=await window.supabaseClient.from('customer_profiles').select('avatar_url,profile_photo_url').eq('user_id',user.id).maybeSingle();
+     if(error)throw error;profilePhotoUrl=data?.avatar_url||data?.profile_photo_url||user.user_metadata?.avatar_url||user.user_metadata?.picture||'';
+   }
+ }catch(e){console.warn('Homepage profile photo could not be loaded:',e);profilePhotoUrl=user.user_metadata?.avatar_url||user.user_metadata?.picture||user.user_metadata?.profile_photo_url||'';}
+ if(token===refreshToken)render();}
+ async function openOwnDashboard(){let u=current;try{if(!u){const r=await window.supabaseClient.auth.getUser();u=r.data?.user||null;}}catch(e){}if(!u)return;current=u;const role=roleOf(u);if(role==='customer'&&typeof window.loadCustomerDashboard==='function')await window.loadCustomerDashboard(u);else if(role==='worker'&&typeof window.loadWorkerDashboard==='function')await window.loadWorkerDashboard(u);render();}
+ nameBtn.addEventListener('click',openOwnDashboard);
+ logout.addEventListener('click',async()=>{logout.disabled=true;logout.textContent='Signing out...';try{const {error}=await window.supabaseClient.auth.signOut();if(error)throw error;current=null;profilePhotoUrl='';document.body.classList.remove('login-page-mode','registration-mode','admin-login-mode','worker-dashboard-mode','customer-dashboard-mode','admin-dashboard-mode','password-recovery-mode');['account-login','registration-screen','admin-login','workerDashboard','customerDashboard','adminDashboard'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));render();window.scrollTo({top:0,left:0,behavior:'auto'});}catch(e){alert('Logout failed: '+(e.message||'Please try again.'));}finally{logout.disabled=false;logout.textContent='Logout';}});
+ async function sync(){try{const {data,error}=await window.supabaseClient.auth.getUser();if(error)throw error;current=data?.user||null;render();if(current)await loadAccountPhoto(current);}catch(e){console.warn('Homepage account sync failed:',e);}}
+ window.supabaseClient.auth.onAuthStateChange((event,session)=>{current=session?.user||null;profilePhotoUrl='';Promise.resolve().then(()=>{render();if(current)loadAccountPhoto(current);});});
+ const mo=new MutationObserver(render);mo.observe(document.body,{attributes:true,attributeFilter:['class']});
+ sync();
+ // Ensure Find Jobs actually loads when its dashboard tab is opened.
+ document.addEventListener('click',function(e){const b=e.target.closest('#workerDashboard [data-cl-go="workerJobBoard"]');if(!b)return;setTimeout(()=>{if(typeof window.cleanLankaLoadWorkerFeatures==='function'&&current)window.cleanLankaLoadWorkerFeatures(current).catch(err=>console.warn('Worker job refresh failed:',err));},80);},true);
+})();
+</script>
+</html>
+
+
+<!-- Clean Lanka Index 040: History-based Back navigation + refined Customer Dashboard -->
+<style id="clean-lanka-dashboard-refine-039">
+  /* Customer has one navigation only: the top dashboard tab bar. */
+  #customerDashboard .cl-account-menu-wrap { display:none !important; }
+  #customerDashboard .cl-quick-grid,
+  #customerDashboard .cl-mobile-nav { display:none !important; }
+  #customerDashboard .cl-accountbar { display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; padding:18px 20px; margin-bottom:14px; border:1px solid #d9eee3; border-radius:20px; background:linear-gradient(110deg,#fff 0%,#f1fbf5 65%,#eef6ff 100%); box-shadow:0 8px 24px #164e3b0c; }
+  #customerDashboard .cl-accountbrand { font-size:clamp(22px,3vw,30px); font-weight:950; letter-spacing:-.7px; color:#0f5132; }
+  #customerDashboard .cl-accountbrand span { color:#1674c7; }
+  #customerDashboard .cl-dash-nav { position:sticky!important; top:0!important; }
+  #customerDashboard .cl-tab-page { width:100%; }
+  #customerDashboard .cl-tab-page[data-cl-page="profile"] > .rounded-3xl { margin-bottom:18px!important; }
+  #customerDashboard .cl-tab-page[data-cl-page="profile"] .grid.md\:grid-cols-2 { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr); gap:18px; align-items:start; }
+  #customerDashboard .customer-card { min-width:0; padding:clamp(16px,2.2vw,24px)!important; border:1px solid #dcebe4!important; border-radius:20px!important; background:#fff!important; box-shadow:0 8px 24px #164e3b0b!important; }
+  #customerDashboard #customerProfileForm { background:linear-gradient(145deg,#f7fcf8,#f5f9ff); border:1px solid #e0eee7; border-radius:16px; padding:16px; }
+  #customerDashboard #customerMarketplace,#customerDashboard #customerJobBoard,#customerDashboard #customerChatPanel,#customerDashboard #customerNotificationsPanel { margin-top:0!important; }
+  #customerDashboard #customerChatMessages { overscroll-behavior:contain; }
+  @media(max-width:760px){
+    #customerDashboard .cl-accountbar { padding:14px; }
+    #customerDashboard .cl-tab-page[data-cl-page="profile"] .grid.md\:grid-cols-2 { grid-template-columns:minmax(0,1fr); }
+    #customerDashboard .cl-dash-nav { position:relative!important; top:auto!important; grid-template-columns:repeat(2,minmax(0,1fr))!important; }
+    #customerDashboard .cl-dash-nav button { min-height:46px; }
+  }
+  #clDashboardHomeButton { max-width:calc(100vw - 20px); white-space:nowrap; }
+  @media(max-width:600px){#clDashboardHomeButton{font-size:12px!important;padding:9px 12px!important}}
+</style>
+<script id="clean-lanka-dashboard-refine-039-script">
+(function(){
+  // Keep the account menu from becoming a second navigation; the top tab bar is authoritative.
+  const customer=document.getElementById('customerDashboard');
+  if(customer){
+    const duplicate=customer.querySelector('.cl-account-menu-wrap');
+    if(duplicate) duplicate.setAttribute('aria-hidden','true');
+    const extras=customer.querySelectorAll('.cl-quick-grid,#customerMobileNav');
+    extras.forEach(el=>el.remove());
+  }
+  // Keep the Back action available after dashboard tab changes and restore the
+  // first public page through the browser history checkpoint without auth sign-out.
+  const back=document.getElementById('clDashboardHomeButton');
+  if(back){back.textContent='← Back to First Page';back.setAttribute('aria-label','Back to the first Clean Lanka page');}
+})();
+</script>
+
+<!-- Index 042: worker homepage account photo/name, persistent session Home, explicit Logout, Find Jobs refresh -->
+
+<!-- CLEAN LANKA INDEX 044: align profile identity left, restore green admin theme, and keep customer jobs in the left marketplace column. -->
+<style id="clean-lanka-index044-layout">
+/* Homepage: profile photo + name are grouped at the far left. */
+.cl-home-nav-inner{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:16px!important}
+#clHomeAccountName{order:0!important;flex:0 1 auto!important;margin:0!important;justify-content:flex-start!important;text-align:left!important}
+.cl-home-brand{order:1!important;flex:0 0 auto!important}
+.cl-home-navlinks{order:2!important;flex:1 1 auto!important}
+.cl-home-nav-actions{order:3!important;flex:0 0 auto!important;margin-left:auto!important}
+#clHomeAccountName .cl-home-user-photo{width:44px!important;height:44px!important;min-width:44px!important;border-radius:50%!important;object-fit:cover!important;border:2px solid #16a34a!important}
+#clHomeAccountName .cl-home-user-name{font-size:14px!important;font-weight:900!important;color:#0f5132!important;max-width:170px!important}
+@media(max-width:760px){
+ .cl-home-nav-inner{display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;justify-content:flex-start!important;gap:8px!important}
+ #clHomeAccountName{order:0!important;max-width:48%!important}
+ .cl-home-brand{order:1!important;margin-left:auto!important}
+ .cl-home-nav-actions{order:2!important;margin-left:auto!important;width:auto!important}
+ .cl-home-navlinks{order:3!important;width:100%!important}
+ #clHomeAccountName .cl-home-user-photo{width:40px!important;height:40px!important;min-width:40px!important}
+ #clHomeAccountName .cl-home-user-name{max-width:115px!important;font-size:12px!important}
+}
+/* Keep public customer job opportunities in the left-hand panel; dashboard remains below the homepage. */
+#homeMarketplace .cl-market-grid{display:grid!important;grid-template-columns:minmax(0,2.05fr) minmax(280px,.95fr)!important;align-items:stretch!important}
+#homeMarketplace .cl-market-jobs{grid-column:1!important;grid-row:1!important;min-width:0!important}
+#homeMarketplace .cl-market-trust{grid-column:2!important;grid-row:1!important;min-width:0!important}
+#homeMarketplace .cl-market-workers{grid-column:1/-1!important}
+@media(max-width:1000px){
+ #homeMarketplace .cl-market-grid{grid-template-columns:minmax(0,1fr)!important}
+ #homeMarketplace .cl-market-jobs,#homeMarketplace .cl-market-trust{grid-column:1!important;grid-row:auto!important}
+}
+/* Restore the Admin dashboard to Clean Lanka's emerald-green brand, not blue/teal. */
+body.admin-dashboard-mode #adminDashboard{background:#f0f8f3!important;color:#123b2b!important}
+#adminDashboard .admin-topbar{background:linear-gradient(115deg,#064e3b 0%,#087a45 58%,#16a34a 100%)!important}
+#adminDashboard .admin-brand-mark{background:#ffffff20!important;border-color:#ffffff55!important}
+#adminDashboard .admin-stat:nth-child(3) .stat-value{color:#0f5132!important}
+#adminDashboard .admin-welcome{background:linear-gradient(110deg,#e4f5eb,#f0fdf4)!important;border-color:#ccebd7!important}
+#adminDashboard .admin-nav a{color:#14532d!important;border-color:#cfe7d8!important}
+#adminDashboard .admin-nav a:hover{background:#e8f7ed!important}
+</style>
+<script id="clean-lanka-index044-profile-identity">
+(function(){
+  async function addDashboardIdentity(){
+    const sb=window.supabaseClient;
+    if(!sb)return;
+    let user=null;
+    try{const r=await sb.auth.getUser();user=r.data&&r.data.user;}catch(e){}
+    if(!user)return;
+    const meta=user.user_metadata||{};
+    const role=String(meta.account_type||'').toLowerCase();
+    if(role!=='customer'&&role!=='worker')return;
+    let fullName=String(meta.full_name||user.email||'Clean Lanka Member');
+    let photo=meta.avatar_url||meta.picture||meta.profile_photo_url||'';
+    try{
+      const table=role==='customer'?'customer_profiles':'worker_profiles';
+      const cols=role==='customer'?'*':'*';
+      const key=role==='customer'?'user_id':'user_id';
+      const {data}=await sb.from(table).select(cols).eq(key,user.id).maybeSingle();
+      if(data){
+        fullName=data.full_name||fullName;
+        photo=data.avatar_url||data.profile_photo_url||data.profile_image_url||data.photo_url||photo;
+      }
+    }catch(e){}
+    document.querySelectorAll('#customerDashboard .cl-dashboard-profile-identity').forEach(el=>el.remove());
+    const roots=[
+      {root:document.getElementById('workerDashboard'),selector:'.cv-top'}
+    ];
+    roots.forEach(({root,selector})=>{
+      if(!root)return;
+      const header=root.querySelector(selector);
+      if(!header||header.querySelector('.cl-dashboard-profile-identity'))return;
+      const identity=document.createElement('div');
+      identity.className='cl-dashboard-profile-identity';
+      const img=document.createElement('img');
+      img.alt='Profile photo';img.src=photo||'';
+      if(!photo)img.style.display='none';
+      const initials=document.createElement('span');
+      initials.className='cl-dashboard-profile-initials';
+      initials.textContent=(fullName.trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('')||'U').toUpperCase();
+      if(photo)initials.style.display='none';
+      const info=document.createElement('span');
+      info.className='cl-dashboard-profile-name';
+      info.textContent=fullName;
+      identity.append(img,initials,info);
+      header.insertBefore(identity,header.firstChild);
+    });
+  }
+  function run(){addDashboardIdentity();}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
+  window.addEventListener('load',run,{once:true});
+  document.addEventListener('click',e=>{
+    if(e.target.closest('#clHomeAccountName'))setTimeout(run,500);
+  });
+})();
+</script>
+<style id="clean-lanka-index044-dashboard-profile-style">
+.cl-dashboard-profile-identity{display:flex;align-items:center;gap:11px;min-width:0;margin-right:auto;order:-1}
+.cl-dashboard-profile-identity img,.cl-dashboard-profile-initials{width:58px;height:58px;min-width:58px;border-radius:50%;object-fit:cover;border:3px solid #16a34a;background:#e8f5ec}
+.cl-dashboard-profile-initials{display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,#08784b,#1554a6);font-size:19px;font-weight:950}
+.cl-dashboard-profile-name{font-size:clamp(15px,2vw,19px);line-height:1.25;font-weight:950;color:#0f5132;overflow-wrap:anywhere;max-width:230px}
+#customerDashboard .cl-accountbar{justify-content:flex-start!important}
+#customerDashboard .cl-accountbar>div:first-child{margin-right:auto}
+#workerDashboard .cv-top{justify-content:flex-start!important;flex-wrap:wrap}
+@media(max-width:600px){
+ .cl-dashboard-profile-identity img,.cl-dashboard-profile-initials{width:46px;height:46px;min-width:46px}
+ .cl-dashboard-profile-name{font-size:14px;max-width:170px}
+}
+</style>
+
+
+<!-- CLEAN LANKA INDEX 048: keep Customer Dashboard navigation at the top, before account/profile content. -->
+
+
+
+
+<!-- CLEAN LANKA INDEX 049: place the actual Customer navigation element first in the dashboard main column. -->
+
+
+
+
+<!-- INDEX 050: Worker session, home identity and navigation reliability -->
+<style id="clean-lanka-index050-style">
+.cl-home-nav-inner{position:relative}
+#clHomeAccountName{display:none;order:-2!important;max-width:min(310px,52vw)!important;gap:9px!important;cursor:pointer}
+#clHomeAccountName .cl-home-user-fallback{display:grid;place-items:center;width:38px;height:38px;min-width:38px;border-radius:50%;background:#0f5132;color:white;font-size:13px}
+#clHomeAccountName img.cl-home-user-photo{display:block;width:38px;height:38px;border-radius:50%;object-fit:cover}
+#clHomeLogoutButton{display:none!important}
+body.cl-auth-home #clHomeLogoutButton{display:inline-flex!important;align-items:center;justify-content:center}
+body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{display:none!important}
+#workerDashboard .cl-tab-page[hidden],#customerDashboard .cl-tab-page[hidden]{display:none!important}
+@media(max-width:700px){.cl-home-nav-inner{flex-wrap:wrap!important}.cl-home-nav-actions{margin-left:auto!important}.cl-home-brand{flex:1 1 auto!important}.cl-home-nav-inner>#clHomeAccountName{order:3!important;max-width:65vw!important}.cl-home-nav-actions{order:4!important}}
+</style>
+<script id="clean-lanka-index050-script">
+(function(){
+ const sb=window.supabaseClient;
+ const btn=document.getElementById('clHomeAccountName');
+ const name=document.getElementById('clHomeAccountNameText');
+ const actions=document.querySelector('.cl-home-nav-actions');
+ if(!sb||!btn||!name||!actions)return;
+ let user=null,avatar='',profileName='',seq=0;
+ const logout=document.getElementById('clHomeLogoutButton');
+ const isHome=()=>!['worker-dashboard-mode','customer-dashboard-mode','admin-dashboard-mode','login-page-mode','registration-mode','admin-login-mode','password-recovery-mode'].some(c=>document.body.classList.contains(c));
+ const role=()=>String(user?.user_metadata?.account_type||'').toLowerCase();
+ function draw(){
+  const ok=!!user && ['worker','customer'].includes(role()) && isHome();
+  document.body.classList.toggle('cl-auth-home',ok);
+  btn.classList.toggle('hidden',!ok);
+  btn.style.display=ok?'inline-flex':'none';
+  if(!ok)return;
+  const label=profileName||user.user_metadata?.full_name||user.email?.split('@')[0]||'My Dashboard';
+  name.textContent=label;
+  btn.querySelectorAll('img.cl-home-user-photo,.cl-home-user-fallback').forEach(e=>e.remove());
+  const oldIcon=btn.querySelector('span[aria-hidden="true"]');if(oldIcon)oldIcon.style.display='none';
+  if(avatar && /^https:\/\//i.test(avatar)){
+   const img=document.createElement('img');img.className='cl-home-user-photo';img.alt='Profile';img.src=avatar;
+   img.onerror=()=>{img.remove();fallback();};btn.insertBefore(img,name);
+  }else fallback();
+  function fallback(){if(btn.querySelector('.cl-home-user-fallback'))return;const s=document.createElement('span');s.className='cl-home-user-fallback';s.textContent=(label.split(/\s+/).slice(0,2).map(x=>x[0]).join('')||'W').toUpperCase();btn.insertBefore(s,name);}
+ }
+ async function setUser(u){const my=++seq;user=u;avatar='';profileName='';draw();if(!u)return;
+  const r=String(u.user_metadata?.account_type||'').toLowerCase();if(r!=='worker'&&r!=='customer')return;
+  try{const {data,error}=await sb.from(r==='worker'?'worker_profiles':'customer_profiles').select('*').eq('user_id',u.id).maybeSingle();
+   if(my!==seq)return;
+   if(!error&&data){profileName=String(data.full_name||data.name||'').trim();avatar=data.avatar_url||data.profile_photo_url||data.profile_image_url||data.photo_url||'';}
+  }catch(e){console.warn('Profile header:',e);}
+  if(!avatar)avatar=u.user_metadata?.avatar_url||u.user_metadata?.picture||u.user_metadata?.profile_photo_url||'';
+  draw();
+ }
+ btn.addEventListener('click',async()=>{
+  let u=user;
+  if(!u){const {data}=await sb.auth.getUser();u=data?.user;}
+  if(!u){if(typeof window.openLoginPage==='function')window.openLoginPage();return;}
+  const r=String(u.user_metadata?.account_type||'').toLowerCase();
+  if(r==='worker'&&typeof window.loadWorkerDashboard==='function')await window.loadWorkerDashboard(u);
+  else if(r==='customer'&&typeof window.loadCustomerDashboard==='function')await window.loadCustomerDashboard(u);
+  else alert('Dashboard unavailable. Please refresh the page and try again.');
+  draw();
+ },true);
+ // A single explicit sign-out, not Home, ends the session.
+ if(logout)logout.addEventListener('click',()=>{document.body.classList.remove('cl-auth-home');},false);
+ sb.auth.onAuthStateChange((event,session)=>{Promise.resolve().then(()=>setUser(session?.user||null));});
+ sb.auth.getUser().then(({data,error})=>{if(!error)setUser(data?.user||null);}).catch(console.warn);
+ new MutationObserver(draw).observe(document.body,{attributes:true,attributeFilter:['class']});
+ const home=document.getElementById('clDashboardHomeButton');
+ if(home)home.addEventListener('click',()=>{setTimeout(draw,0);},false);
+})();
+</script>
+
+<!-- INDEX 051: customer identity/header above tabs, English-first job form -->
+<style id="clean-lanka-index051-fix">
+#customerDashboard .cl-reference-main{display:flex!important;flex-direction:column!important;align-items:stretch!important}
+#customerDashboard .cl-reference-main > .cl-accountbar{order:0!important;position:relative!important;display:flex!important;visibility:visible!important;margin:0 0 12px!important;flex-wrap:wrap!important}
+#customerDashboard .cl-reference-main > .cl-dash-nav{order:1!important;position:relative!important;inset:auto!important;display:flex!important;visibility:visible!important;margin:0 0 14px!important}
+#customerDashboard .cl-reference-main > .cl-tab-page{order:2!important}
+#customerDashboard .cl-accountbar .cl-dashboard-profile-identity{display:flex!important;align-items:center!important}
+#customerDashboard .cl-accountbar .cl-dashboard-profile-name{font-size:clamp(15px,3vw,20px)!important}
+#customerDashboard .cl-accountbar .cl-account-actions{margin-left:auto!important}
+#customerDashboard .cl-reference-main > .cl-tab-page[hidden]{display:none!important}
+#customerDashboard #customerJobForm .cl-optional-languages{grid-column:1/-1;border:1px solid #dbe9e2;border-radius:13px;background:#f7fbf9;padding:12px}
+#customerDashboard #customerJobForm .cl-optional-languages summary{cursor:pointer;font-size:14px;font-weight:800;color:#14532d}
+#customerDashboard #customerJobForm .cl-optional-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+@media(max-width:700px){#customerDashboard .cl-reference-main > .cl-dash-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:7px!important;padding:9px!important;scrollbar-width:thin}#customerDashboard .cl-reference-main > .cl-dash-nav button{flex:0 0 auto!important;min-width:110px!important}#customerDashboard #customerJobForm .cl-optional-fields{grid-template-columns:1fr}#customerDashboard .cl-accountbar{gap:10px!important}}
+</style>
+<script id="clean-lanka-index051-fix-script">
+(function(){
+ function fix(){
+  const root=document.getElementById('customerDashboard');if(!root)return;
+  const main=root.querySelector('.cl-reference-main');if(!main)return;
+  const head=main.querySelector(':scope > .cl-accountbar');
+  const nav=main.querySelector(':scope > .cl-dash-nav');
+  if(head&&nav){if(main.firstElementChild!==head)main.insertBefore(head,main.firstElementChild);if(head.nextElementSibling!==nav)main.insertBefore(nav,head.nextElementSibling);}
+  const form=document.getElementById('customerJobForm');
+  if(form&&!form.querySelector('.cl-optional-languages')){
+   const ids=['jobTitleEnglish','jobTitleTamil','jobTitleSinhala','jobSearchTerms'];
+   const fields=ids.map(id=>document.getElementById(id)).filter(Boolean);
+   if(fields.length){
+    const details=document.createElement('details');details.className='cl-optional-languages';
+    const summary=document.createElement('summary');summary.textContent='Optional translations and search keywords';
+    const group=document.createElement('div');group.className='cl-optional-fields';
+    fields.forEach(el=>group.appendChild(el));details.append(summary,group);
+    const title=document.getElementById('jobTitle');
+    if(title&&title.parentElement===form)title.insertAdjacentElement('afterend',details);else form.insertBefore(details,form.firstChild.nextSibling);
+   }
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fix,{once:true});else fix();
+ window.addEventListener('load',fix,{once:true});
+})();
+</script>
+
+
+<style id="cl062-chat-high-contrast">
+/* High-contrast conversation: white surfaces, large black message text. */
+#workerDashboard #workerChatWindow,
+#workerDashboard #workerChatMessages,
+#workerDashboard #workerChatMessages .cl-chat-bubble,
+#workerDashboard #workerChatMessages .cl-chat-bubble.mine,
+#workerDashboard #workerConversationList button {
+ background:#ffffff!important;color:#000000!important;
+ opacity:1!important;filter:none!important;
+}
+#workerDashboard #workerChatWindow{border:2px solid #d1d5db!important;box-shadow:0 6px 18px #00000012!important}
+#workerDashboard #workerChatMessages{border:1px solid #cbd5e1!important;height:380px!important;max-height:55vh!important;padding:10px!important}
+#workerDashboard #workerChatMessages .cl-chat-bubble,
+#workerDashboard #workerChatMessages .cl-chat-bubble.mine {
+ max-width:100%!important;border:1px solid #d1d5db!important;
+ border-left:4px solid #2563eb!important;border-radius:12px!important;
+ padding:12px!important;margin:10px 0!important;
+}
+#workerDashboard #workerChatMessages .cl-chat-bubble p,
+#workerDashboard #workerChatMessages .cl-chat-bubble p.text-sm,
+#workerDashboard #workerChatMessages .cl-chat-bubble *:not(.cl-muted) {
+ font-size:19px!important;font-weight:750!important;line-height:1.65!important;
+ color:#000000!important;opacity:1!important;text-shadow:none!important;
+}
+#workerDashboard #workerChatMessages .cl-chat-bubble .cl-muted,
+#workerDashboard #workerChatMessages .cl-chat-bubble span.cl-muted {
+ font-size:14px!important;font-weight:650!important;color:#111827!important;opacity:1!important;
+}
+#workerDashboard #workerChatTitle{font-size:20px!important;color:#000000!important;font-weight:900!important}
+#workerDashboard #workerConversationList button strong,
+#workerDashboard #workerConversationList button span{color:#000000!important;font-size:16px!important;opacity:1!important}
+#workerDashboard #workerConversationList button span:last-child{font-size:18px!important;font-weight:900!important;color:#000000!important}
+#workerDashboard #workerChatInput{font-size:18px!important;color:#000000!important;border:2px solid #64748b!important}
+#workerDashboard #workerChatForm button{font-size:17px!important;font-weight:850!important}
+@media(max-width:600px){#workerDashboard #workerChatMessages{height:340px!important;max-height:55vh!important}}
+</style>
+<style id="cl-admin-pages-v1-style">
+#adminDashboard.cl-admin-pages-active [data-cl-admin-page]{display:none!important}
+#adminDashboard.cl-admin-pages-active [data-cl-admin-page].cl-admin-page-current{display:block!important}
+#clAdminPageBack,#clAdminCustomerBack{border:0;border-radius:13px;padding:12px 18px;background:#12458c;color:#fff;font-weight:800;font-size:15px;margin:12px 0;cursor:pointer}
+#clAdminPageTitle{font-size:clamp(22px,3vw,30px);font-weight:900;color:#102b57;margin:12px 0}
+#clAdminCustomerPage{background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:2px solid #b9d5ec;border-radius:22px;padding:clamp(15px,3vw,30px);min-height:360px}
+#clAdminCustomerPage #adminCustomerDetail{display:block!important;background:white!important;color:#142c4c!important;border-radius:18px}
+#adminCustomerList article h3 button{background:none;border:0;padding:0;color:#12458c;text-align:left;font:inherit;font-weight:900;text-decoration:underline;cursor:pointer}
+#adminDashboard .admin-nav a.cl-admin-nav-selected{background:#dbeafe!important;color:#12458c!important;border-radius:12px}
+</style>
+<style id="cl-admin-clean-navigation">
+#adminDashboard .cl-admin-preview-link,#adminDashboard .cl-admin-preview-actions a{display:none!important}
+#adminDashboard.cl-admin-pages-active [data-cl-admin-page="true"]{display:none!important}
+#adminDashboard.cl-admin-pages-active [data-cl-admin-page="true"].cl-admin-page-current{display:block!important}
+#adminDashboard #adminSubAdminsSection:not(.cl-admin-page-current){display:none!important}
+#adminDashboard[data-admin-role="sub_admin"] #adminSubAdminsSection{display:none!important}
+#adminDashboard[data-admin-role="sub_admin"] .admin-nav a[href="#adminSubAdminsHeading"]{display:none!important}
+#adminDashboard .admin-nav{display:flex!important;flex-wrap:wrap;gap:8px}
+#clAdminPageBack{background:#0e4c94;color:white;border:0;border-radius:12px;padding:12px 18px;font-weight:800;margin:16px 0}
+#clAdminPageTitle{color:#12386c;font-size:clamp(21px,3vw,29px);font-weight:900;margin:14px 0}
+#adminDashboard .cl-admin-preview-actions button{background:#0e8b67;color:#fff;padding:10px 16px;border-radius:10px}
+</style>
+<style>#adminDashboard .admin-topbar{position:relative;padding-top:32px!important}#adminDashboard #clGrantedPermissionsList p{font-size:14px;line-height:1.5}#adminDashboard #clAdminDashboardEmailName:empty{display:none}</style>
 <style id="cl-responsiveness-20261109">
 /* Clean Lanka responsive marketplace — 9 Nov 2026.
    Scoped to public homepage. Dashboard, Auth, Chat and Admin are untouched. */
@@ -7385,393 +7773,7 @@ document.addEventListener('DOMContentLoaded',function(){
  #homeMarketplace .cl-worker-join-cta{width:100%!important}
 }
 </style>
-</body>
 
-<style id="clean-lanka-home-account-v042-style">
-#clHomeAccountName{display:none;align-items:center;gap:9px;max-width:260px;min-width:0}
-#clHomeAccountName .cl-home-user-photo{width:38px;height:38px;flex:0 0 38px;border-radius:50%;object-fit:cover;border:2px solid #16a34a;background:#e8f5ec}
-#clHomeAccountName .cl-home-user-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:155px}
-#clHomeLogoutButton{display:none;border:1px solid #fecaca;background:#fff1f2;color:#9f1239;border-radius:999px;padding:10px 14px;font-weight:900;white-space:nowrap}
-@media(max-width:760px){.cl-home-nav-inner{flex-wrap:wrap}.cl-home-navlinks{order:3;width:100%;overflow-x:auto;gap:14px}.cl-home-nav-actions{margin-left:auto}.cl-home-nav-actions .cl-home-login{padding:9px 12px}}
-#workerDashboard .cl-tab-page[hidden],#customerDashboard .cl-tab-page[hidden]{display:none!important}
-</style>
-<script id="clean-lanka-account-home-v042">
-(function(){
- const nameBtn=document.getElementById('clHomeAccountName');
- const nameText=document.getElementById('clHomeAccountNameText');
- const actions=document.querySelector('.cl-home-nav-actions');
- if(!nameBtn||!nameText||!actions||!window.supabaseClient)return;
- let current=null,profilePhotoUrl='',refreshToken=0;
- const roleOf=u=>String(u?.user_metadata?.account_type||'').toLowerCase();
- let logout=document.getElementById('clHomeLogoutButton');
- if(!logout){logout=document.createElement('button');logout.type='button';logout.id='clHomeLogoutButton';logout.textContent='Logout';logout.setAttribute('aria-label','Sign out of Clean Lanka');actions.prepend(logout);}
- function onPublicHome(){const b=document.body;return !['login-page-mode','registration-mode','admin-login-mode','worker-dashboard-mode','customer-dashboard-mode','admin-dashboard-mode','password-recovery-mode'].some(c=>b.classList.contains(c));}
- function render(){const role=roleOf(current),ok=!!current&&(role==='customer'||role==='worker'),home=onPublicHome();nameBtn.classList.toggle('hidden',!(ok&&home));nameBtn.style.display=(ok&&home)?'inline-flex':'none';logout.style.display=(ok&&home)?'inline-flex':'none';
-   if(ok){const meta=current.user_metadata||{};const nm=String(meta.full_name||current.email?.split('@')[0]||'My Dashboard').trim();nameText.textContent=nm;nameBtn.title=(role==='worker'?'Worker':'Customer')+' Dashboard';
-     let img=nameBtn.querySelector('img.cl-home-user-photo');if(!img){img=document.createElement('img');img.className='cl-home-user-photo';img.alt='Profile photo';nameBtn.prepend(img);}if(profilePhotoUrl){img.src=profilePhotoUrl;img.style.display='block';let fb=nameBtn.querySelector('.cl-home-user-fallback');if(fb)fb.remove();}else{img.removeAttribute('src');img.style.display='none';let fb=nameBtn.querySelector('.cl-home-user-fallback');if(!fb){fb=document.createElement('span');fb.className='cl-home-user-fallback';fb.setAttribute('aria-label','Profile initials');nameBtn.insertBefore(fb,nameText);}fb.textContent=(nm.trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('')||'U').toUpperCase();}
-   }
-   const login=actions.querySelector('.cl-home-login[onclick*="openLoginPage"]');if(login)login.style.display=ok&&home?'none':'';
- }
- async function loadAccountPhoto(user){const token=++refreshToken;profilePhotoUrl='';const role=roleOf(user);try{
-   if(role==='worker'){
-     // Never expose the private verification selfie/ID documents as a public avatar.
-     // Use only an explicitly public profile image URL, if the schema has one.
-     const {data,error}=await window.supabaseClient.from('worker_profiles').select('*').eq('user_id',user.id).maybeSingle();
-     if(error)throw error;
-     profilePhotoUrl=data?.avatar_url||data?.profile_photo_url||data?.profile_image_url||data?.photo_url||user.user_metadata?.avatar_url||user.user_metadata?.picture||'';
-     if(data?.full_name){current={...current,user_metadata:{...(current.user_metadata||{}),full_name:data.full_name}};}
-   } else if(role==='customer'){
-     const {data,error}=await window.supabaseClient.from('customer_profiles').select('avatar_url,profile_photo_url').eq('user_id',user.id).maybeSingle();
-     if(error)throw error;profilePhotoUrl=data?.avatar_url||data?.profile_photo_url||user.user_metadata?.avatar_url||user.user_metadata?.picture||'';
-   }
- }catch(e){console.warn('Homepage profile photo could not be loaded:',e);profilePhotoUrl=user.user_metadata?.avatar_url||user.user_metadata?.picture||user.user_metadata?.profile_photo_url||'';}
- if(token===refreshToken)render();}
- async function openOwnDashboard(){let u=current;try{if(!u){const r=await window.supabaseClient.auth.getUser();u=r.data?.user||null;}}catch(e){}if(!u)return;current=u;const role=roleOf(u);if(role==='customer'&&typeof window.loadCustomerDashboard==='function')await window.loadCustomerDashboard(u);else if(role==='worker'&&typeof window.loadWorkerDashboard==='function')await window.loadWorkerDashboard(u);render();}
- nameBtn.addEventListener('click',openOwnDashboard);
- logout.addEventListener('click',async()=>{logout.disabled=true;logout.textContent='Signing out...';try{const {error}=await window.supabaseClient.auth.signOut();if(error)throw error;current=null;profilePhotoUrl='';document.body.classList.remove('login-page-mode','registration-mode','admin-login-mode','worker-dashboard-mode','customer-dashboard-mode','admin-dashboard-mode','password-recovery-mode');['account-login','registration-screen','admin-login','workerDashboard','customerDashboard','adminDashboard'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));render();window.scrollTo({top:0,left:0,behavior:'auto'});}catch(e){alert('Logout failed: '+(e.message||'Please try again.'));}finally{logout.disabled=false;logout.textContent='Logout';}});
- async function sync(){try{const {data,error}=await window.supabaseClient.auth.getUser();if(error)throw error;current=data?.user||null;render();if(current)await loadAccountPhoto(current);}catch(e){console.warn('Homepage account sync failed:',e);}}
- window.supabaseClient.auth.onAuthStateChange((event,session)=>{current=session?.user||null;profilePhotoUrl='';Promise.resolve().then(()=>{render();if(current)loadAccountPhoto(current);});});
- const mo=new MutationObserver(render);mo.observe(document.body,{attributes:true,attributeFilter:['class']});
- sync();
- // Ensure Find Jobs actually loads when its dashboard tab is opened.
- document.addEventListener('click',function(e){const b=e.target.closest('#workerDashboard [data-cl-go="workerJobBoard"]');if(!b)return;setTimeout(()=>{if(typeof window.cleanLankaLoadWorkerFeatures==='function'&&current)window.cleanLankaLoadWorkerFeatures(current).catch(err=>console.warn('Worker job refresh failed:',err));},80);},true);
-})();
-</script>
-</html>
-
-
-<!-- Clean Lanka Index 040: History-based Back navigation + refined Customer Dashboard -->
-<style id="clean-lanka-dashboard-refine-039">
-  /* Customer has one navigation only: the top dashboard tab bar. */
-  #customerDashboard .cl-account-menu-wrap { display:none !important; }
-  #customerDashboard .cl-quick-grid,
-  #customerDashboard .cl-mobile-nav { display:none !important; }
-  #customerDashboard .cl-accountbar { display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; padding:18px 20px; margin-bottom:14px; border:1px solid #d9eee3; border-radius:20px; background:linear-gradient(110deg,#fff 0%,#f1fbf5 65%,#eef6ff 100%); box-shadow:0 8px 24px #164e3b0c; }
-  #customerDashboard .cl-accountbrand { font-size:clamp(22px,3vw,30px); font-weight:950; letter-spacing:-.7px; color:#0f5132; }
-  #customerDashboard .cl-accountbrand span { color:#1674c7; }
-  #customerDashboard .cl-dash-nav { position:sticky!important; top:0!important; }
-  #customerDashboard .cl-tab-page { width:100%; }
-  #customerDashboard .cl-tab-page[data-cl-page="profile"] > .rounded-3xl { margin-bottom:18px!important; }
-  #customerDashboard .cl-tab-page[data-cl-page="profile"] .grid.md\:grid-cols-2 { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr); gap:18px; align-items:start; }
-  #customerDashboard .customer-card { min-width:0; padding:clamp(16px,2.2vw,24px)!important; border:1px solid #dcebe4!important; border-radius:20px!important; background:#fff!important; box-shadow:0 8px 24px #164e3b0b!important; }
-  #customerDashboard #customerProfileForm { background:linear-gradient(145deg,#f7fcf8,#f5f9ff); border:1px solid #e0eee7; border-radius:16px; padding:16px; }
-  #customerDashboard #customerMarketplace,#customerDashboard #customerJobBoard,#customerDashboard #customerChatPanel,#customerDashboard #customerNotificationsPanel { margin-top:0!important; }
-  #customerDashboard #customerChatMessages { overscroll-behavior:contain; }
-  @media(max-width:760px){
-    #customerDashboard .cl-accountbar { padding:14px; }
-    #customerDashboard .cl-tab-page[data-cl-page="profile"] .grid.md\:grid-cols-2 { grid-template-columns:minmax(0,1fr); }
-    #customerDashboard .cl-dash-nav { position:relative!important; top:auto!important; grid-template-columns:repeat(2,minmax(0,1fr))!important; }
-    #customerDashboard .cl-dash-nav button { min-height:46px; }
-  }
-  #clDashboardHomeButton { max-width:calc(100vw - 20px); white-space:nowrap; }
-  @media(max-width:600px){#clDashboardHomeButton{font-size:12px!important;padding:9px 12px!important}}
-</style>
-<script id="clean-lanka-dashboard-refine-039-script">
-(function(){
-  // Keep the account menu from becoming a second navigation; the top tab bar is authoritative.
-  const customer=document.getElementById('customerDashboard');
-  if(customer){
-    const duplicate=customer.querySelector('.cl-account-menu-wrap');
-    if(duplicate) duplicate.setAttribute('aria-hidden','true');
-    const extras=customer.querySelectorAll('.cl-quick-grid,#customerMobileNav');
-    extras.forEach(el=>el.remove());
-  }
-  // Keep the Back action available after dashboard tab changes and restore the
-  // first public page through the browser history checkpoint without auth sign-out.
-  const back=document.getElementById('clDashboardHomeButton');
-  if(back){back.textContent='← Back to First Page';back.setAttribute('aria-label','Back to the first Clean Lanka page');}
-})();
-</script>
-
-<!-- Index 042: worker homepage account photo/name, persistent session Home, explicit Logout, Find Jobs refresh -->
-
-<!-- CLEAN LANKA INDEX 044: align profile identity left, restore green admin theme, and keep customer jobs in the left marketplace column. -->
-<style id="clean-lanka-index044-layout">
-/* Homepage: profile photo + name are grouped at the far left. */
-.cl-home-nav-inner{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:16px!important}
-#clHomeAccountName{order:0!important;flex:0 1 auto!important;margin:0!important;justify-content:flex-start!important;text-align:left!important}
-.cl-home-brand{order:1!important;flex:0 0 auto!important}
-.cl-home-navlinks{order:2!important;flex:1 1 auto!important}
-.cl-home-nav-actions{order:3!important;flex:0 0 auto!important;margin-left:auto!important}
-#clHomeAccountName .cl-home-user-photo{width:44px!important;height:44px!important;min-width:44px!important;border-radius:50%!important;object-fit:cover!important;border:2px solid #16a34a!important}
-#clHomeAccountName .cl-home-user-name{font-size:14px!important;font-weight:900!important;color:#0f5132!important;max-width:170px!important}
-@media(max-width:760px){
- .cl-home-nav-inner{display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;justify-content:flex-start!important;gap:8px!important}
- #clHomeAccountName{order:0!important;max-width:48%!important}
- .cl-home-brand{order:1!important;margin-left:auto!important}
- .cl-home-nav-actions{order:2!important;margin-left:auto!important;width:auto!important}
- .cl-home-navlinks{order:3!important;width:100%!important}
- #clHomeAccountName .cl-home-user-photo{width:40px!important;height:40px!important;min-width:40px!important}
- #clHomeAccountName .cl-home-user-name{max-width:115px!important;font-size:12px!important}
-}
-/* Keep public customer job opportunities in the left-hand panel; dashboard remains below the homepage. */
-#homeMarketplace .cl-market-grid{display:grid!important;grid-template-columns:minmax(0,2.05fr) minmax(280px,.95fr)!important;align-items:stretch!important}
-#homeMarketplace .cl-market-jobs{grid-column:1!important;grid-row:1!important;min-width:0!important}
-#homeMarketplace .cl-market-trust{grid-column:2!important;grid-row:1!important;min-width:0!important}
-#homeMarketplace .cl-market-workers{grid-column:1/-1!important}
-@media(max-width:1000px){
- #homeMarketplace .cl-market-grid{grid-template-columns:minmax(0,1fr)!important}
- #homeMarketplace .cl-market-jobs,#homeMarketplace .cl-market-trust{grid-column:1!important;grid-row:auto!important}
-}
-/* Restore the Admin dashboard to Clean Lanka's emerald-green brand, not blue/teal. */
-body.admin-dashboard-mode #adminDashboard{background:#f0f8f3!important;color:#123b2b!important}
-#adminDashboard .admin-topbar{background:linear-gradient(115deg,#064e3b 0%,#087a45 58%,#16a34a 100%)!important}
-#adminDashboard .admin-brand-mark{background:#ffffff20!important;border-color:#ffffff55!important}
-#adminDashboard .admin-stat:nth-child(3) .stat-value{color:#0f5132!important}
-#adminDashboard .admin-welcome{background:linear-gradient(110deg,#e4f5eb,#f0fdf4)!important;border-color:#ccebd7!important}
-#adminDashboard .admin-nav a{color:#14532d!important;border-color:#cfe7d8!important}
-#adminDashboard .admin-nav a:hover{background:#e8f7ed!important}
-</style>
-<script id="clean-lanka-index044-profile-identity">
-(function(){
-  async function addDashboardIdentity(){
-    const sb=window.supabaseClient;
-    if(!sb)return;
-    let user=null;
-    try{const r=await sb.auth.getUser();user=r.data&&r.data.user;}catch(e){}
-    if(!user)return;
-    const meta=user.user_metadata||{};
-    const role=String(meta.account_type||'').toLowerCase();
-    if(role!=='customer'&&role!=='worker')return;
-    let fullName=String(meta.full_name||user.email||'Clean Lanka Member');
-    let photo=meta.avatar_url||meta.picture||meta.profile_photo_url||'';
-    try{
-      const table=role==='customer'?'customer_profiles':'worker_profiles';
-      const cols=role==='customer'?'*':'*';
-      const key=role==='customer'?'user_id':'user_id';
-      const {data}=await sb.from(table).select(cols).eq(key,user.id).maybeSingle();
-      if(data){
-        fullName=data.full_name||fullName;
-        photo=data.avatar_url||data.profile_photo_url||data.profile_image_url||data.photo_url||photo;
-      }
-    }catch(e){}
-    document.querySelectorAll('#customerDashboard .cl-dashboard-profile-identity').forEach(el=>el.remove());
-    const roots=[
-      {root:document.getElementById('workerDashboard'),selector:'.cv-top'}
-    ];
-    roots.forEach(({root,selector})=>{
-      if(!root)return;
-      const header=root.querySelector(selector);
-      if(!header||header.querySelector('.cl-dashboard-profile-identity'))return;
-      const identity=document.createElement('div');
-      identity.className='cl-dashboard-profile-identity';
-      const img=document.createElement('img');
-      img.alt='Profile photo';img.src=photo||'';
-      if(!photo)img.style.display='none';
-      const initials=document.createElement('span');
-      initials.className='cl-dashboard-profile-initials';
-      initials.textContent=(fullName.trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('')||'U').toUpperCase();
-      if(photo)initials.style.display='none';
-      const info=document.createElement('span');
-      info.className='cl-dashboard-profile-name';
-      info.textContent=fullName;
-      identity.append(img,initials,info);
-      header.insertBefore(identity,header.firstChild);
-    });
-  }
-  function run(){addDashboardIdentity();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
-  window.addEventListener('load',run,{once:true});
-  document.addEventListener('click',e=>{
-    if(e.target.closest('#clHomeAccountName'))setTimeout(run,500);
-  });
-})();
-</script>
-<style id="clean-lanka-index044-dashboard-profile-style">
-.cl-dashboard-profile-identity{display:flex;align-items:center;gap:11px;min-width:0;margin-right:auto;order:-1}
-.cl-dashboard-profile-identity img,.cl-dashboard-profile-initials{width:58px;height:58px;min-width:58px;border-radius:50%;object-fit:cover;border:3px solid #16a34a;background:#e8f5ec}
-.cl-dashboard-profile-initials{display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,#08784b,#1554a6);font-size:19px;font-weight:950}
-.cl-dashboard-profile-name{font-size:clamp(15px,2vw,19px);line-height:1.25;font-weight:950;color:#0f5132;overflow-wrap:anywhere;max-width:230px}
-#customerDashboard .cl-accountbar{justify-content:flex-start!important}
-#customerDashboard .cl-accountbar>div:first-child{margin-right:auto}
-#workerDashboard .cv-top{justify-content:flex-start!important;flex-wrap:wrap}
-@media(max-width:600px){
- .cl-dashboard-profile-identity img,.cl-dashboard-profile-initials{width:46px;height:46px;min-width:46px}
- .cl-dashboard-profile-name{font-size:14px;max-width:170px}
-}
-</style>
-
-
-<!-- CLEAN LANKA INDEX 048: keep Customer Dashboard navigation at the top, before account/profile content. -->
-
-
-
-
-<!-- CLEAN LANKA INDEX 049: place the actual Customer navigation element first in the dashboard main column. -->
-
-
-
-
-<!-- INDEX 050: Worker session, home identity and navigation reliability -->
-<style id="clean-lanka-index050-style">
-.cl-home-nav-inner{position:relative}
-#clHomeAccountName{display:none;order:-2!important;max-width:min(310px,52vw)!important;gap:9px!important;cursor:pointer}
-#clHomeAccountName .cl-home-user-fallback{display:grid;place-items:center;width:38px;height:38px;min-width:38px;border-radius:50%;background:#0f5132;color:white;font-size:13px}
-#clHomeAccountName img.cl-home-user-photo{display:block;width:38px;height:38px;border-radius:50%;object-fit:cover}
-#clHomeLogoutButton{display:none!important}
-body.cl-auth-home #clHomeLogoutButton{display:inline-flex!important;align-items:center;justify-content:center}
-body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{display:none!important}
-#workerDashboard .cl-tab-page[hidden],#customerDashboard .cl-tab-page[hidden]{display:none!important}
-@media(max-width:700px){.cl-home-nav-inner{flex-wrap:wrap!important}.cl-home-nav-actions{margin-left:auto!important}.cl-home-brand{flex:1 1 auto!important}.cl-home-nav-inner>#clHomeAccountName{order:3!important;max-width:65vw!important}.cl-home-nav-actions{order:4!important}}
-</style>
-<script id="clean-lanka-index050-script">
-(function(){
- const sb=window.supabaseClient;
- const btn=document.getElementById('clHomeAccountName');
- const name=document.getElementById('clHomeAccountNameText');
- const actions=document.querySelector('.cl-home-nav-actions');
- if(!sb||!btn||!name||!actions)return;
- let user=null,avatar='',profileName='',seq=0;
- const logout=document.getElementById('clHomeLogoutButton');
- const isHome=()=>!['worker-dashboard-mode','customer-dashboard-mode','admin-dashboard-mode','login-page-mode','registration-mode','admin-login-mode','password-recovery-mode'].some(c=>document.body.classList.contains(c));
- const role=()=>String(user?.user_metadata?.account_type||'').toLowerCase();
- function draw(){
-  const ok=!!user && ['worker','customer'].includes(role()) && isHome();
-  document.body.classList.toggle('cl-auth-home',ok);
-  btn.classList.toggle('hidden',!ok);
-  btn.style.display=ok?'inline-flex':'none';
-  if(!ok)return;
-  const label=profileName||user.user_metadata?.full_name||user.email?.split('@')[0]||'My Dashboard';
-  name.textContent=label;
-  btn.querySelectorAll('img.cl-home-user-photo,.cl-home-user-fallback').forEach(e=>e.remove());
-  const oldIcon=btn.querySelector('span[aria-hidden="true"]');if(oldIcon)oldIcon.style.display='none';
-  if(avatar && /^https:\/\//i.test(avatar)){
-   const img=document.createElement('img');img.className='cl-home-user-photo';img.alt='Profile';img.src=avatar;
-   img.onerror=()=>{img.remove();fallback();};btn.insertBefore(img,name);
-  }else fallback();
-  function fallback(){if(btn.querySelector('.cl-home-user-fallback'))return;const s=document.createElement('span');s.className='cl-home-user-fallback';s.textContent=(label.split(/\s+/).slice(0,2).map(x=>x[0]).join('')||'W').toUpperCase();btn.insertBefore(s,name);}
- }
- async function setUser(u){const my=++seq;user=u;avatar='';profileName='';draw();if(!u)return;
-  const r=String(u.user_metadata?.account_type||'').toLowerCase();if(r!=='worker'&&r!=='customer')return;
-  try{const {data,error}=await sb.from(r==='worker'?'worker_profiles':'customer_profiles').select('*').eq('user_id',u.id).maybeSingle();
-   if(my!==seq)return;
-   if(!error&&data){profileName=String(data.full_name||data.name||'').trim();avatar=data.avatar_url||data.profile_photo_url||data.profile_image_url||data.photo_url||'';}
-  }catch(e){console.warn('Profile header:',e);}
-  if(!avatar)avatar=u.user_metadata?.avatar_url||u.user_metadata?.picture||u.user_metadata?.profile_photo_url||'';
-  draw();
- }
- btn.addEventListener('click',async()=>{
-  let u=user;
-  if(!u){const {data}=await sb.auth.getUser();u=data?.user;}
-  if(!u){if(typeof window.openLoginPage==='function')window.openLoginPage();return;}
-  const r=String(u.user_metadata?.account_type||'').toLowerCase();
-  if(r==='worker'&&typeof window.loadWorkerDashboard==='function')await window.loadWorkerDashboard(u);
-  else if(r==='customer'&&typeof window.loadCustomerDashboard==='function')await window.loadCustomerDashboard(u);
-  else alert('Dashboard unavailable. Please refresh the page and try again.');
-  draw();
- },true);
- // A single explicit sign-out, not Home, ends the session.
- if(logout)logout.addEventListener('click',()=>{document.body.classList.remove('cl-auth-home');},false);
- sb.auth.onAuthStateChange((event,session)=>{Promise.resolve().then(()=>setUser(session?.user||null));});
- sb.auth.getUser().then(({data,error})=>{if(!error)setUser(data?.user||null);}).catch(console.warn);
- new MutationObserver(draw).observe(document.body,{attributes:true,attributeFilter:['class']});
- const home=document.getElementById('clDashboardHomeButton');
- if(home)home.addEventListener('click',()=>{setTimeout(draw,0);},false);
-})();
-</script>
-
-<!-- INDEX 051: customer identity/header above tabs, English-first job form -->
-<style id="clean-lanka-index051-fix">
-#customerDashboard .cl-reference-main{display:flex!important;flex-direction:column!important;align-items:stretch!important}
-#customerDashboard .cl-reference-main > .cl-accountbar{order:0!important;position:relative!important;display:flex!important;visibility:visible!important;margin:0 0 12px!important;flex-wrap:wrap!important}
-#customerDashboard .cl-reference-main > .cl-dash-nav{order:1!important;position:relative!important;inset:auto!important;display:flex!important;visibility:visible!important;margin:0 0 14px!important}
-#customerDashboard .cl-reference-main > .cl-tab-page{order:2!important}
-#customerDashboard .cl-accountbar .cl-dashboard-profile-identity{display:flex!important;align-items:center!important}
-#customerDashboard .cl-accountbar .cl-dashboard-profile-name{font-size:clamp(15px,3vw,20px)!important}
-#customerDashboard .cl-accountbar .cl-account-actions{margin-left:auto!important}
-#customerDashboard .cl-reference-main > .cl-tab-page[hidden]{display:none!important}
-#customerDashboard #customerJobForm .cl-optional-languages{grid-column:1/-1;border:1px solid #dbe9e2;border-radius:13px;background:#f7fbf9;padding:12px}
-#customerDashboard #customerJobForm .cl-optional-languages summary{cursor:pointer;font-size:14px;font-weight:800;color:#14532d}
-#customerDashboard #customerJobForm .cl-optional-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
-@media(max-width:700px){#customerDashboard .cl-reference-main > .cl-dash-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:7px!important;padding:9px!important;scrollbar-width:thin}#customerDashboard .cl-reference-main > .cl-dash-nav button{flex:0 0 auto!important;min-width:110px!important}#customerDashboard #customerJobForm .cl-optional-fields{grid-template-columns:1fr}#customerDashboard .cl-accountbar{gap:10px!important}}
-</style>
-<script id="clean-lanka-index051-fix-script">
-(function(){
- function fix(){
-  const root=document.getElementById('customerDashboard');if(!root)return;
-  const main=root.querySelector('.cl-reference-main');if(!main)return;
-  const head=main.querySelector(':scope > .cl-accountbar');
-  const nav=main.querySelector(':scope > .cl-dash-nav');
-  if(head&&nav){if(main.firstElementChild!==head)main.insertBefore(head,main.firstElementChild);if(head.nextElementSibling!==nav)main.insertBefore(nav,head.nextElementSibling);}
-  const form=document.getElementById('customerJobForm');
-  if(form&&!form.querySelector('.cl-optional-languages')){
-   const ids=['jobTitleEnglish','jobTitleTamil','jobTitleSinhala','jobSearchTerms'];
-   const fields=ids.map(id=>document.getElementById(id)).filter(Boolean);
-   if(fields.length){
-    const details=document.createElement('details');details.className='cl-optional-languages';
-    const summary=document.createElement('summary');summary.textContent='Optional translations and search keywords';
-    const group=document.createElement('div');group.className='cl-optional-fields';
-    fields.forEach(el=>group.appendChild(el));details.append(summary,group);
-    const title=document.getElementById('jobTitle');
-    if(title&&title.parentElement===form)title.insertAdjacentElement('afterend',details);else form.insertBefore(details,form.firstChild.nextSibling);
-   }
-  }
- }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fix,{once:true});else fix();
- window.addEventListener('load',fix,{once:true});
-})();
-</script>
-
-
-<style id="cl062-chat-high-contrast">
-/* High-contrast conversation: white surfaces, large black message text. */
-#workerDashboard #workerChatWindow,
-#workerDashboard #workerChatMessages,
-#workerDashboard #workerChatMessages .cl-chat-bubble,
-#workerDashboard #workerChatMessages .cl-chat-bubble.mine,
-#workerDashboard #workerConversationList button {
- background:#ffffff!important;color:#000000!important;
- opacity:1!important;filter:none!important;
-}
-#workerDashboard #workerChatWindow{border:2px solid #d1d5db!important;box-shadow:0 6px 18px #00000012!important}
-#workerDashboard #workerChatMessages{border:1px solid #cbd5e1!important;height:380px!important;max-height:55vh!important;padding:10px!important}
-#workerDashboard #workerChatMessages .cl-chat-bubble,
-#workerDashboard #workerChatMessages .cl-chat-bubble.mine {
- max-width:100%!important;border:1px solid #d1d5db!important;
- border-left:4px solid #2563eb!important;border-radius:12px!important;
- padding:12px!important;margin:10px 0!important;
-}
-#workerDashboard #workerChatMessages .cl-chat-bubble p,
-#workerDashboard #workerChatMessages .cl-chat-bubble p.text-sm,
-#workerDashboard #workerChatMessages .cl-chat-bubble *:not(.cl-muted) {
- font-size:19px!important;font-weight:750!important;line-height:1.65!important;
- color:#000000!important;opacity:1!important;text-shadow:none!important;
-}
-#workerDashboard #workerChatMessages .cl-chat-bubble .cl-muted,
-#workerDashboard #workerChatMessages .cl-chat-bubble span.cl-muted {
- font-size:14px!important;font-weight:650!important;color:#111827!important;opacity:1!important;
-}
-#workerDashboard #workerChatTitle{font-size:20px!important;color:#000000!important;font-weight:900!important}
-#workerDashboard #workerConversationList button strong,
-#workerDashboard #workerConversationList button span{color:#000000!important;font-size:16px!important;opacity:1!important}
-#workerDashboard #workerConversationList button span:last-child{font-size:18px!important;font-weight:900!important;color:#000000!important}
-#workerDashboard #workerChatInput{font-size:18px!important;color:#000000!important;border:2px solid #64748b!important}
-#workerDashboard #workerChatForm button{font-size:17px!important;font-weight:850!important}
-@media(max-width:600px){#workerDashboard #workerChatMessages{height:340px!important;max-height:55vh!important}}
-</style>
-<style id="cl-admin-pages-v1-style">
-#adminDashboard.cl-admin-pages-active [data-cl-admin-page]{display:none!important}
-#adminDashboard.cl-admin-pages-active [data-cl-admin-page].cl-admin-page-current{display:block!important}
-#clAdminPageBack,#clAdminCustomerBack{border:0;border-radius:13px;padding:12px 18px;background:#12458c;color:#fff;font-weight:800;font-size:15px;margin:12px 0;cursor:pointer}
-#clAdminPageTitle{font-size:clamp(22px,3vw,30px);font-weight:900;color:#102b57;margin:12px 0}
-#clAdminCustomerPage{background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:2px solid #b9d5ec;border-radius:22px;padding:clamp(15px,3vw,30px);min-height:360px}
-#clAdminCustomerPage #adminCustomerDetail{display:block!important;background:white!important;color:#142c4c!important;border-radius:18px}
-#adminCustomerList article h3 button{background:none;border:0;padding:0;color:#12458c;text-align:left;font:inherit;font-weight:900;text-decoration:underline;cursor:pointer}
-#adminDashboard .admin-nav a.cl-admin-nav-selected{background:#dbeafe!important;color:#12458c!important;border-radius:12px}
-</style>
-<style id="cl-admin-clean-navigation">
-#adminDashboard .cl-admin-preview-link,#adminDashboard .cl-admin-preview-actions a{display:none!important}
-#adminDashboard.cl-admin-pages-active [data-cl-admin-page="true"]{display:none!important}
-#adminDashboard.cl-admin-pages-active [data-cl-admin-page="true"].cl-admin-page-current{display:block!important}
-#adminDashboard #adminSubAdminsSection:not(.cl-admin-page-current){display:none!important}
-#adminDashboard[data-admin-role="sub_admin"] #adminSubAdminsSection{display:none!important}
-#adminDashboard[data-admin-role="sub_admin"] .admin-nav a[href="#adminSubAdminsHeading"]{display:none!important}
-#adminDashboard .admin-nav{display:flex!important;flex-wrap:wrap;gap:8px}
-#clAdminPageBack{background:#0e4c94;color:white;border:0;border-radius:12px;padding:12px 18px;font-weight:800;margin:16px 0}
-#clAdminPageTitle{color:#12386c;font-size:clamp(21px,3vw,29px);font-weight:900;margin:14px 0}
-#adminDashboard .cl-admin-preview-actions button{background:#0e8b67;color:#fff;padding:10px 16px;border-radius:10px}
-</style>
-<style>#adminDashboard .admin-topbar{position:relative;padding-top:32px!important}#adminDashboard #clGrantedPermissionsList p{font-size:14px;line-height:1.5}#adminDashboard #clAdminDashboardEmailName:empty{display:none}</style>
 <script id="cl-admin-chat-monitor">
 (function(){
  const root=document.getElementById('adminDashboard');
