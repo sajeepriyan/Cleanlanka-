@@ -1685,13 +1685,13 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
 <span class="hidden md:inline text-emerald-100">Support: cleanlankaa@gmail.com</span>
 <span class="hidden md:inline opacity-40">|</span>
 <span class="inline-flex items-center gap-1 bg-white/10 px-2.5 py-0.5 rounded-full text-xs font-semibold text-emerald-100">
-<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> 24/7 Island Dispatch Active
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Sri Lanka Service Marketplace
         </span>
 </div>
 <div class="flex items-center gap-4 text-xs sm:text-[14px] text-emerald-100">
 <span class="flex items-center gap-1 font-medium">
 <span class="material-symbols-outlined text-[16px] text-emerald-300" style="font-variation-settings: 'FILL' 1;">verified</span>
-          100% Background Screened
+          Worker Profiles Reviewed
         </span>
 <span>Serving All 25 Districts</span>
 </div>
@@ -1702,7 +1702,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
  <div class="cl-home-nav-inner">
   <a class="cl-home-brand" href="#top" aria-label="Clean Lanka Home"><img alt="Clean Lanka Sri Lanka leaf logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSh7GcRie2m5v1OiH4IUu5lxi4Qmpn6h_Pep3G-39-hWm7AbRMjRiSaW8SsexcB7a_7tX9SAvOol6H691xnReL6mdZRfnbYcd-7BNMTw7Gg4htwndima_BEOAvVMt9HiksX1Ri23atqe1GVO1CKI16GOVKspLITaWrltY2U16g_mM9bw1hqxe2nZo7REvfttd1v1-sltMDGf-rk3tCAAVbMLB9FiHnjPpY0SBgHgnSEQYH5v3C8xoNg"><div><div class="cl-home-brand-name">Clean <span>Lanka</span></div><div class="cl-home-brand-sub">Home Services Marketplace</div></div></a>
   <button id="clHomeAccountName" type="button" class="hidden" aria-label="Open my dashboard" style="align-items:center;gap:8px;border:1px solid #cfe7d8;background:#f0fdf4;color:#0f5132;border-radius:999px;padding:10px 15px;font-weight:900;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Open my dashboard"><span aria-hidden="true">👤</span><span id="clHomeAccountNameText">My Dashboard</span></button>
-  <nav class="cl-home-navlinks" aria-label="Main navigation"><a href="#top">⌂ Home</a><a href="#services-section">Services</a><a href="#homeMarketplace">Find Jobs</a><a href="#worker-register" onclick="openRegistration('worker');return false;">For Workers</a><a href="#customer-register" onclick="openRegistration('customer');return false;">For Customers</a><button type="button" data-cl-open-live-chat class="font-extrabold text-blue-800" aria-label="Open Live Chat">Live Chat</button><a href="#contact">Contact Us</a></nav>
+  <nav class="cl-home-navlinks" aria-label="Main navigation"><a href="#top">⌂ Home</a><a href="#services-section">Services</a><a href="#homeWorkersHeading">Find Workers</a><a href="#homeJobsHeading">Job Opportunities</a><a href="#worker-register" onclick="openRegistration('worker');return false;">For Workers</a><a href="#customer-register" onclick="openRegistration('customer');return false;">For Customers</a><button type="button" data-cl-open-live-chat class="font-extrabold text-blue-800" aria-label="Open Live Chat">Live Chat</button><a href="#contact">Contact Us</a></nav>
   <label class="cl079-language" aria-label="Choose language"><span aria-hidden="true">🌐</span><select id="cl079Language" aria-label="Language"><option value="en">English</option><option value="si">සිංහල</option><option value="ta">தமிழ்</option></select></label><div class="cl-home-nav-actions"><button type="button" class="cl-home-login" onclick="openLoginPage()"><span class="material-symbols-outlined align-middle">person</span> Login</button></div>
  </div>
 </header>
@@ -1710,9 +1710,9 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
 <main id="top">
 <section class="cl-hero">
  <div class="cl-hero-inner">
-  <h1><span>Clean</span> Lanka</h1>
-  <p class="cl-hero-sub">Find Skilled Home Services Near You</p>
-  <p class="cl-hero-tag">Book · Work · Live Better</p>
+  <h1><span>Home Services</span> Across Sri Lanka</h1>
+  <p class="cl-hero-sub">Find skilled professionals for your home, family and everyday needs.</p>
+  <p class="cl-hero-tag">Find Workers · Explore Jobs · Connect with Confidence</p>
   <form id="heroMarketplaceSearchForm" class="cl-hero-search" onsubmit="event.preventDefault();runHomeMarketplaceSearch();">
    <input id="hero-service-search" type="search" list="cleanLankaSearchSuggestions" autocomplete="off" placeholder="Search for services... (e.g. Electrician, Plumber, Cleaner, House Driver)" aria-label="Search any service or job">
    <datalist id="cleanLankaSearchSuggestions"><option value="House driver"><option value="House security guard"><option value="House maid"><option value="Home cleaning"><option value="Electrician"><option value="Plumber"><option value="Van driver"><option value="Car washing"><option value="Pet care"></datalist>
@@ -2001,35 +2001,53 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
  <div class="cl-market-wrap">
   <div class="cl-market-grid">
    <section class="cl-market-jobs" aria-labelledby="homeJobsHeading">
-    <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><h2 id="homeJobsHeading" class="cl-market-heading"><span class="material-symbols-outlined align-middle text-emerald-700">work</span> Latest Job Opportunities</h2><a href="#homeJobResults" class="font-black text-emerald-800" onclick="openLoginPage();return false;">Worker Login to Apply →</a></div>
-    <p class="text-sm text-slate-500 mb-4">Customer-posted jobs and official Clean Lanka jobs. Private customer contact details are protected.</p>
-    <div class="flex flex-wrap gap-2 mb-4"><button type="button" class="home-job-filter rounded-full bg-blue-700 text-white px-4 py-2 text-sm font-bold" data-job-filter="all">All Jobs</button><button type="button" class="home-job-filter rounded-full bg-slate-100 text-slate-700 px-4 py-2 text-sm font-bold" data-job-filter="customer">Customer Jobs</button><button type="button" class="home-job-filter rounded-full bg-slate-100 text-slate-700 px-4 py-2 text-sm font-bold" data-job-filter="official">Official Jobs</button></div>
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><h2 id="homeJobsHeading" class="cl-market-heading"><span class="material-symbols-outlined align-middle text-emerald-700" aria-hidden="true">work_outline</span> Latest Job Opportunities</h2><a href="#homeJobResults" class="cl-jobs-login" onclick="openLoginPage();return false;">Worker Login to Apply <span aria-hidden="true">→</span></a></div>
+    <p class="cl-jobs-intro">Customer-posted opportunities and official Clean Lanka jobs. Private customer details stay protected.</p>
+    <div class="cl-job-tabs flex flex-wrap gap-2 mb-4" role="group" aria-label="Filter public job opportunities"><button type="button" class="home-job-filter rounded-full bg-blue-700 text-white px-4 py-2 text-sm font-bold" data-job-filter="all">All Jobs</button><button type="button" class="home-job-filter rounded-full bg-slate-100 text-slate-700 px-4 py-2 text-sm font-bold" data-job-filter="customer">Customer Jobs</button><button type="button" class="home-job-filter rounded-full bg-slate-100 text-slate-700 px-4 py-2 text-sm font-bold" data-job-filter="official">Official Jobs</button></div>
     <p id="homeJobMessage" class="text-sm text-slate-500 mb-3" role="status" aria-live="polite">Loading job opportunities...</p>
-    <div id="homeJobResults" class="grid md:grid-cols-2 gap-4"></div>
+    <div id="homeJobResults" class="cl-compact-jobs" aria-label="Public job opportunity listings"></div>
    </section>
    <aside class="cl-market-trust cl080-trust" aria-labelledby="cl080TrustTitle">
     <div class="cl080-trust-decor" aria-hidden="true"><span class="material-symbols-outlined">eco</span><span class="material-symbols-outlined">home</span></div>
     <div class="cl080-trust-heading"><span class="cl080-shield material-symbols-outlined" aria-hidden="true">verified_user</span><h2 id="cl080TrustTitle">Why Choose Clean Lanka?</h2></div>
     <ul class="cl080-trust-list">
-      <li><span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Trusted &amp; Verified Workers</span></li>
-      <li><span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Secure Booking System</span></li>
+      <li><span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Admin-Reviewed Worker Profiles</span></li>
+      <li><span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Private In-App Messaging</span></li>
       <li><span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Multiple Languages</span></li>
-      <li><span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Islandwide Service</span></li>
-      <li><span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Professional Support</span></li>
+      <li><span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Search All 25 Districts</span></li>
+      <li><span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Customer &amp; Worker Support</span></li>
     </ul>
     <a href="#register" class="cl-market-register cl080-register" onclick="openRegistration('choose');return false;"><span class="material-symbols-outlined" aria-hidden="true">person_add</span><span><strong>Register Now</strong><small>Customer / Worker</small></span></a>
    </aside>
   </div>
   <section class="cl-market-workers" aria-labelledby="homeWorkersHeading">
-   <div class="flex flex-wrap items-end justify-between gap-3 mb-5"><div><h2 id="homeWorkersHeading" class="cl-market-heading">Find Approved Workers</h2><p class="text-sm text-slate-500 mt-1">Only Admin-approved worker profiles are listed. Private phone numbers stay hidden.</p></div><a href="#worker-register" onclick="openRegistration('worker');return false;" class="rounded-xl bg-emerald-700 text-white px-4 py-3 font-bold">Join as a Worker</a></div>
-   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_220px_150px] gap-3 mb-5 items-stretch">
-    <input id="homeWorkerSearchText" type="search" class="w-full min-w-0 rounded-xl border border-slate-200 p-3.5" placeholder="Search services, skills or job titles" aria-label="Search any service, job title or skill">
-    <select id="homeWorkerSearchDistrict" class="w-full rounded-xl border border-slate-200 p-3" aria-label="Filter workers by district"><option value="">All districts</option><option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option></select>
-    <button id="homeWorkerSearchButton" type="button" class="rounded-xl bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 font-bold min-h-[50px]">Search Workers</button>
-   </div>
-   <p id="homeWorkerMessage" class="text-sm text-slate-500 mb-3" role="status" aria-live="polite">Loading approved workers...</p>
-   <div id="homeWorkerResults" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3"></div>
+    <div class="cl-find-worker-banner">
+      <div class="cl-find-worker-brand"><span class="cl-find-worker-mark material-symbols-outlined" aria-hidden="true">groups</span>
+      <div><h2 id="homeWorkersHeading">Find Workers</h2><p>Find the right service professional in your district.</p></div></div>
+      <span class="cl-find-worker-banner-note"><span class="material-symbols-outlined" aria-hidden="true">verified_user</span> Admin-reviewed listings</span>
+    </div>
+    <div class="cl-find-worker-inner">
+      <div class="cl-find-worker-fields" role="search" aria-label="Search approved workers">
+        <label class="cl-worker-query-field"><span class="material-symbols-outlined" aria-hidden="true">search</span><span class="sr-only">Search workers by skill or service</span>
+        <input id="homeWorkerSearchText" type="search" autocomplete="off" placeholder="Search by skill, service or name" aria-label="Search by skill, service or worker name"></label>
+        <label class="cl-worker-district-field"><span class="material-symbols-outlined" aria-hidden="true">location_on</span><span class="sr-only">Filter workers by district</span>
+        <select id="homeWorkerSearchDistrict" class="w-full rounded-xl border border-slate-200 p-3" aria-label="Filter workers by district"><option value="">All districts</option><option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option></select></label>
+        <button id="homeWorkerSearchButton" type="button" class="cl-find-worker-submit"><span class="material-symbols-outlined" aria-hidden="true">search</span> Search Workers</button>
+      </div>
+      <p class="cl-worker-privacy"><span class="material-symbols-outlined" aria-hidden="true">shield</span> Approved listings only · Private phone numbers stay hidden</p>
+      <p id="homeWorkerMessage" class="cl-worker-count" role="status" aria-live="polite">Loading approved workers...</p>
+      <div id="homeWorkerResults" class="cl-compact-workers" aria-label="Approved worker profiles"></div>
+      <div class="cl-find-worker-join">
+        <div class="cl-worker-join-intro"><span class="material-symbols-outlined" aria-hidden="true">engineering</span><div><strong>Offer your skills?</strong><small>Reach customers across Sri Lanka</small></div></div>
+        <a href="#worker-register" onclick="openRegistration('worker');return false;" class="cl-worker-join-cta">Join as a Worker <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
   </section>
+  <div class="cl-market-proof" aria-label="Clean Lanka platform highlights">
+    <span><span class="material-symbols-outlined" aria-hidden="true">location_on</span><strong>25 Districts</strong><small>Find local services</small></span>
+    <span><span class="material-symbols-outlined" aria-hidden="true">verified_user</span><strong>Reviewed Profiles</strong><small>Approval-based listings</small></span>
+    <span><span class="material-symbols-outlined" aria-hidden="true">chat_bubble_outline</span><strong>In-App Chat</strong><small>Contact through Clean Lanka</small></span>
+  </div>
  </div>
 </section>
 <section class="py-20 bg-white" id="how-it-works">
