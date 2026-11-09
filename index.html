@@ -1449,7 +1449,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       <li><span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Islandwide Service</span></li>
       <li><span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Professional Support</span></li>
     </ul>
-    <a href="#register" class="cl-market-register cl080-register" onclick="openRegistration('customer');return false;"><span class="material-symbols-outlined" aria-hidden="true">person_add</span><span><strong>Register Now</strong><small>Customer / Worker</small></span></a>
+    <a href="#register" class="cl-market-register cl080-register" onclick="openRegistration('choose');return false;"><span class="material-symbols-outlined" aria-hidden="true">person_add</span><span><strong>Register Now</strong><small>Customer / Worker</small></span></a>
    </aside>
   </div>
   <section class="cl-market-workers" aria-labelledby="homeWorkersHeading">
@@ -2208,6 +2208,25 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 <!-- SECOND SCREEN: selected registration form -->
 <div id="registration-screen" class="hidden max-w-4xl mx-auto my-8 px-4">
   <button type="button" onclick="closeRegistration()" class="mb-5 inline-flex items-center gap-2 rounded-full bg-slate-100 hover:bg-slate-200 px-5 py-3 font-bold text-slate-700">← Back to Home</button>
+<section id="clRegistrationRoleChoice" class="hidden max-w-2xl mx-auto my-10 rounded-3xl bg-white p-6 sm:p-9 shadow-xl border border-emerald-100" aria-labelledby="clRegistrationRoleHeading">
+  <p class="text-center text-sm font-black uppercase tracking-widest text-emerald-700">Welcome to Clean Lanka</p>
+  <h2 id="clRegistrationRoleHeading" class="text-2xl sm:text-3xl font-black text-center text-slate-900 mt-2">Choose Your Registration</h2>
+  <p class="text-center text-slate-600 mt-2 mb-7">Select how you want to join Clean Lanka.</p>
+  <div class="grid sm:grid-cols-2 gap-4">
+    <button type="button" onclick="openRegistration('customer')" class="text-left rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-6 hover:border-emerald-600 focus-visible:outline-4 focus-visible:outline-emerald-500">
+      <span class="material-symbols-outlined text-4xl text-emerald-700" aria-hidden="true">home</span>
+      <span class="block text-xl font-black text-emerald-900 mt-3">Customer Registration</span>
+      <span class="block text-sm text-emerald-800 mt-2">Find and book home services.</span>
+      <span class="block mt-4 font-black text-emerald-800">Register as Customer →</span>
+    </button>
+    <button type="button" onclick="openRegistration('worker')" class="text-left rounded-2xl border-2 border-blue-200 bg-blue-50 p-6 hover:border-blue-600 focus-visible:outline-4 focus-visible:outline-blue-500">
+      <span class="material-symbols-outlined text-4xl text-blue-700" aria-hidden="true">engineering</span>
+      <span class="block text-xl font-black text-blue-900 mt-3">Worker Registration</span>
+      <span class="block text-sm text-blue-800 mt-2">Create your professional worker profile.</span>
+      <span class="block mt-4 font-black text-blue-800">Register as Worker →</span>
+    </button>
+  </div>
+</section>
 <!-- CUSTOMER REGISTRATION -->
 <section id="customer-register" class="max-w-xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg scroll-mt-28">
   <h2 class="text-2xl font-bold text-center text-emerald-700">Customer Registration</h2>
@@ -2375,6 +2394,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     document.body.classList.add('login-page-mode');
     document.getElementById('account-login').classList.remove('hidden');
     document.getElementById('registration-screen').classList.add('hidden');
+    document.getElementById('clRegistrationRoleChoice').classList.add('hidden');
     window.scrollTo(0, 0);
   }
   function closeLoginPage() {
@@ -2506,6 +2526,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     document.body.classList.add('registration-mode');
     const screen = document.getElementById('registration-screen');
     screen.classList.remove('hidden');
+    document.getElementById('clRegistrationRoleChoice').classList.toggle('hidden', role !== 'choose');
     document.getElementById('customer-register').classList.toggle('hidden', role !== 'customer');
     document.getElementById('worker-register').classList.toggle('hidden', role !== 'worker');
     screen.scrollIntoView({behavior:'smooth', block:'start'});
