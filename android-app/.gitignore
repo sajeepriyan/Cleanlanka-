@@ -1,0 +1,10 @@
+# Generated Android outputs are not source or backups.
+.gradle/
+**/build/
+local.properties
+*.jks
+*.keystore
+*.apk
+*.aab
+.idea/
+*.iml
