@@ -1611,6 +1611,39 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
   #services-section.cl-cartoon-services .cl-cartoon-name {font-size:clamp(9px,2.25vw,12px)!important;line-height:1.12!important;overflow-wrap:anywhere!important;}
 }
 </style>
+
+<style id="cl-service-detail-page-20261109-style">
+/* Isolated service detail view: reuses approved public worker cards and public jobs. */
+#clServiceDetailPage{display:none}
+body.cl-service-page-mode #top > :not(#clServiceDetailPage):not(#homeWorkerProfileModal){display:none!important}
+body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
+#clServiceDetailPage{min-height:72vh;background:linear-gradient(180deg,#edf9f1 0%,#f8fafc 205px);padding:24px 16px 60px;color:#12243b}
+#clServiceDetailPage .clsd-wrap{max-width:1310px;margin:0 auto}
+#clServiceDetailPage .clsd-back{display:inline-flex;align-items:center;gap:9px;border:1px solid #b6d6c4;background:#fff;color:#086c40;border-radius:999px;font-size:15px;font-weight:800;padding:11px 18px;min-height:44px}
+#clServiceDetailPage .clsd-title{color:#122b22;font-size:clamp(26px,4vw,42px);font-weight:900;line-height:1.18;margin:19px 0 9px}
+#clServiceDetailPage .clsd-description{color:#476155;font-size:16px;font-weight:500;margin:0 0 20px}
+#clServiceDetailPage .clsd-districtline{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0 24px}
+#clServiceDetailPage label{color:#173f2d;font-weight:800;font-size:15px}
+#clServiceDetailPage select{width:min(100%,320px);min-height:47px;border:1px solid #a9cbb8;border-radius:13px;background:#fff;color:#172d28;font-size:15px;font-weight:600;padding:8px 13px}
+#clServiceDetailPage .clsd-card{background:#fff;border:1px solid #dfebe5;border-radius:21px;padding:clamp(15px,2.5vw,25px);box-shadow:0 10px 30px #123e2810;margin-bottom:20px}
+#clServiceDetailPage .clsd-heading{font-size:clamp(23px,2.6vw,29px);font-weight:900;color:#112a25;margin:0 0 9px}
+#clServiceDetailPage .clsd-caption{font-size:13px;color:#587068;line-height:1.5;margin-bottom:15px}
+#clServiceDetailPage #clServiceWorkers{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,245px),1fr));gap:14px}
+#clServiceDetailPage #clServiceJobs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:15px}
+#clServiceDetailPage .clsd-empty{grid-column:1/-1;background:#f6f9f7;border:1px dashed #ccdfd5;border-radius:14px;padding:20px;font-size:15px;color:#506259}
+#clServiceDetailPage [data-home-worker-profile],#clServiceDetailPage [data-home-job-apply]{min-height:42px}
+@media(max-width:600px){
+ #clServiceDetailPage{padding:15px 11px 36px}
+ #clServiceDetailPage .clsd-back{font-size:14px;padding:10px 14px}
+ #clServiceDetailPage .clsd-districtline{align-items:stretch;flex-direction:column}
+ #clServiceDetailPage select{width:100%}
+ #clServiceDetailPage #clServiceWorkers{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #clServiceDetailPage .clsd-card{padding:13px;border-radius:16px}
+ #clServiceDetailPage .clsd-card .cl-worker-card{min-width:0}
+ #clServiceDetailPage .clsd-card .cl-worker-card h4{overflow-wrap:anywhere}
+ #clServiceDetailPage #clServiceJobs{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -2116,6 +2149,25 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
  <div class="max-w-xl mx-auto my-8 bg-white rounded-3xl shadow-2xl overflow-hidden"><div class="bg-gradient-to-r from-emerald-800 to-blue-800 p-6 text-white"><div class="flex items-start justify-between gap-3"><div><p class="text-xs uppercase tracking-widest font-black text-emerald-100">Clean Lanka Approved Professional</p><h3 id="homeWorkerModalTitle" class="text-2xl font-black mt-2">Worker Profile</h3></div><button type="button" id="closeHomeWorkerModal" class="rounded-full bg-white/15 px-3 py-2 font-bold" aria-label="Close profile">✕</button></div></div><div id="homeWorkerModalBody" class="p-6"></div></div>
 </div>
 
+
+<section id="clServiceDetailPage" aria-labelledby="clServiceTitle" aria-hidden="true">
+ <div class="clsd-wrap">
+  <button id="clServiceBack" type="button" class="clsd-back" aria-label="Back to Clean Lanka homepage">← Back to Home</button>
+  <h1 id="clServiceTitle" class="clsd-title">Service Professionals</h1>
+  <p id="clServiceIntro" class="clsd-description">Find verified service professionals and relevant job opportunities across Sri Lanka.</p>
+  <div class="clsd-districtline"><label for="clServiceDistrict">Select district</label><select id="clServiceDistrict" aria-label="Filter workers and jobs by Sri Lankan district"><option value="">All Sri Lanka</option></select></div>
+  <section class="clsd-card" aria-labelledby="clServiceWorkersTitle">
+   <h2 id="clServiceWorkersTitle" class="clsd-heading">Available Workers</h2>
+   <p class="clsd-caption">Admin-approved profiles only. Select a worker to view more details and contact options.</p>
+   <div id="clServiceWorkers" aria-live="polite"><p class="clsd-empty">Loading approved workers…</p></div>
+  </section>
+  <section class="clsd-card" aria-labelledby="clServiceJobsTitle">
+   <h2 id="clServiceJobsTitle" class="clsd-heading">Job Opportunities</h2>
+   <p class="clsd-caption">Available customer and Clean Lanka jobs. Worker login is needed to apply.</p>
+   <div id="clServiceJobs" aria-live="polite"><p class="clsd-empty">Loading jobs…</p></div>
+  </section>
+ </div>
+</section>
 </main>
 <!-- FLOATING LIVE CHAT / WHATSAPP BUBBLE (FEATURE 7) -->
 <aside class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
@@ -7192,5 +7244,99 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
  const observer=new MutationObserver(()=>{list?.querySelectorAll('article h3').forEach(h=>{if(h.querySelector('button'))return;const card=h.closest('article');const open=card?.querySelector('button');if(!open)return;const name=h.textContent;h.textContent='';const btn=document.createElement('button');btn.type='button';btn.textContent=name;btn.addEventListener('click',()=>open.click());h.appendChild(btn);});});
  if(list)observer.observe(list,{childList:true});
  go('overview');
+})();
+</script>
+
+
+<script id="cl-service-detail-page-20261109">
+(function(){
+  'use strict';
+  const page=document.getElementById('clServiceDetailPage');
+  const workerSource=document.getElementById('homeWorkerResults');
+  const jobSource=document.getElementById('homeJobResults');
+  const workerTarget=document.getElementById('clServiceWorkers');
+  const jobTarget=document.getElementById('clServiceJobs');
+  const district=document.getElementById('clServiceDistrict');
+  const search=document.getElementById('homeWorkerSearchText');
+  const searchButton=document.getElementById('homeWorkerSearchButton');
+  if(!page||!workerSource||!jobSource||!workerTarget||!jobTarget||!district||!search||!searchButton)return;
+  const titles={'Hotel':'Hotel Staff','Security':'Security','AC Repair':'AC Repair','Construction':'Construction','Caregiver':'Caregiver'};
+  const sourceDistricts=document.getElementById('homeWorkerSearchDistrict');
+  const heroDistrict=document.getElementById('hero-district-selector');
+  if(sourceDistricts){
+    district.replaceChildren(...Array.from(sourceDistricts.options).map(option=>option.cloneNode(true)));
+  }else if(heroDistrict){
+    district.replaceChildren(...Array.from(heroDistrict.options).map(option=>option.cloneNode(true)));
+  }
+  let currentService='';
+  let previousScroll=0;
+  function isActive(){return document.body.classList.contains('cl-service-page-mode');}
+  function renderList(source,target,loadingText){
+    if(!isActive())return;
+    target.replaceChildren(...Array.from(source.children).map(child=>child.cloneNode(true)));
+    if(!target.children.length){
+      const empty=document.createElement('p');
+      empty.className='clsd-empty';
+      empty.textContent=loadingText;
+      target.append(empty);
+    }
+  }
+  function sync(){
+    renderList(workerSource,workerTarget,'No approved workers match this service yet.');
+    renderList(jobSource,jobTarget,'No open jobs match this service yet.');
+  }
+  function updateVisibility(){
+    const visible=isActive();
+    page.setAttribute('aria-hidden',visible?'false':'true');
+    if(visible)sync();
+  }
+  function filterService(){
+    const q=currentService||'';
+    search.value=q;
+    const heroSearch=document.getElementById('hero-service-search');
+    if(heroSearch)heroSearch.value=q;
+    if(sourceDistricts)sourceDistricts.value=district.value;
+    if(heroDistrict)heroDistrict.value=district.value;
+    searchButton.click(); // Existing public search filters approved workers + public jobs.
+    sync();
+  }
+  function open(term){
+    if(!term)return;
+    const roleModes=['login-page-mode','registration-mode','admin-login-mode','customer-dashboard-mode','worker-dashboard-mode','admin-dashboard-mode','password-recovery-mode'];
+    if(roleModes.some(mode=>document.body.classList.contains(mode)))return;
+    if(!isActive())previousScroll=window.scrollY||0;
+    currentService=String(term).trim();
+    document.getElementById('clServiceTitle').textContent=(titles[currentService]||currentService)+' Services';
+    document.getElementById('clServiceIntro').textContent='Explore approved '+(titles[currentService]||currentService).toLowerCase()+' workers and matching job opportunities in Sri Lanka.';
+    district.value=heroDistrict?.value||sourceDistricts?.value||'';
+    document.body.classList.add('cl-service-page-mode');
+    filterService();
+    updateVisibility();
+    window.scrollTo({top:0,left:0,behavior:'instant'});
+  }
+  function close(){
+    if(!isActive())return;
+    document.body.classList.remove('cl-service-page-mode');
+    updateVisibility();
+    window.scrollTo({top:previousScroll,left:0,behavior:'auto'});
+  }
+  // Each existing cartoon button uses setHomeSearch(term). Keep the markup and search backend unchanged.
+  window.setHomeSearch=function(term){open(term);};
+  document.getElementById('clServiceBack').addEventListener('click',close);
+  district.addEventListener('change',filterService);
+  document.addEventListener('click',function(event){
+    const anchor=event.target.closest('.cl-home-nav a[href^="#"]');
+    if(isActive()&&anchor)close();
+  });
+  new MutationObserver(sync).observe(workerSource,{childList:true});
+  new MutationObserver(sync).observe(jobSource,{childList:true});
+  new MutationObserver(function(){
+    if(isActive()&&['login-page-mode','registration-mode','admin-login-mode','customer-dashboard-mode','worker-dashboard-mode','admin-dashboard-mode','password-recovery-mode'].some(mode=>document.body.classList.contains(mode))){
+      document.body.classList.remove('cl-service-page-mode');
+    }
+    updateVisibility();
+  }).observe(document.body,{attributes:true,attributeFilter:['class']});
+  // The existing site-wide history handler snapshots body classes, including this service view.
+  window.addEventListener('popstate',function(){setTimeout(updateVisibility,0)});
 })();
 </script>
