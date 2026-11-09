@@ -1556,6 +1556,36 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
  }
 }
 #homeMarketplace #homeWorkerResults .cl-worker-card-illustrated .cl-action{margin-top:auto!important}
+</style><style id="cl-marketplace-grid-visibility-fix">
+/* Keep full profile/apply controls visible; scroll only after visible rows fill. */
+#homeMarketplace #homeWorkerResults,#homeMarketplace #homeJobResults{
+ grid-auto-rows:minmax(290px,auto)!important;
+ max-height:calc(290px * 4 + 10px * 3 + 8px)!important;
+}
+#homeMarketplace #homeWorkerResults>article,#homeMarketplace #homeJobResults>article{
+ overflow:visible!important;height:auto!important;min-height:290px!important;
+}
+#homeMarketplace #homeWorkerResults .cl-worker-card-illustrated .cl-action{
+ margin-top:auto!important;flex-shrink:0!important;display:block!important;
+}
+#homeMarketplace #homeWorkerResults>div:not(article),#homeMarketplace #homeJobResults>div:not(article){
+ grid-column:1/-1!important;min-height:0!important;height:auto!important;
+ padding:16px!important;
+}
+#homeMarketplace #homeWorkerResults:has(>div:not(article)),#homeMarketplace #homeJobResults:has(>div:not(article)){
+ grid-auto-rows:auto!important;max-height:none!important;overflow:visible!important;
+}
+@media(min-width:768px){
+ #homeMarketplace #homeWorkerResults,#homeMarketplace #homeJobResults{
+ grid-auto-rows:minmax(290px,auto)!important;max-height:calc(290px * 2 + 10px + 8px)!important;
+ }
+}
+@media(max-width:600px){
+ #homeMarketplace #homeWorkerResults,#homeMarketplace #homeJobResults{
+ grid-auto-rows:minmax(310px,auto)!important;max-height:calc(310px * 4 + 10px * 3 + 8px)!important;
+ }
+ #homeMarketplace #homeWorkerResults>article,#homeMarketplace #homeJobResults>article{min-height:310px!important}
+}
 </style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
