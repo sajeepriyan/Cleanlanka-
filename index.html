@@ -1845,7 +1845,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4"><div class="rounded-xl bg-slate-50 p-3"><p class="text-xs font-bold text-slate-500">Total Requests</p><p id="adminBookingTotal" class="text-2xl font-black text-slate-900">—</p></div><div class="rounded-xl bg-blue-50 p-3"><p class="text-xs font-bold text-blue-700">Open</p><p id="adminBookingOpen" class="text-2xl font-black text-blue-900">—</p></div><div class="rounded-xl bg-emerald-50 p-3"><p class="text-xs font-bold text-emerald-700">Assigned</p><p id="adminBookingAssigned" class="text-2xl font-black text-emerald-900">—</p></div><div class="rounded-xl bg-violet-50 p-3"><p class="text-xs font-bold text-violet-700">Completed</p><p id="adminBookingCompleted" class="text-2xl font-black text-violet-900">—</p></div><div class="rounded-xl bg-rose-50 p-3"><p class="text-xs font-bold text-rose-700">Cancelled</p><p id="adminBookingCancelled" class="text-2xl font-black text-rose-900">—</p></div></div>
    <p id="adminBookingListMessage" class="text-sm text-slate-600 mb-3" role="status" aria-live="polite">Booking records have not been loaded.</p><div id="adminBookingList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
   </section>
-  <section id="adminChatsSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminChatsHeading"><div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminChatsHeading" class="text-xl font-black text-slate-900">Customer–Worker Chat History</h2><p class="text-sm text-slate-600">Main Admin only. Read-only access is logged. Inform users of administrative chat access in your privacy notice.</p></div><button id="adminChatsRefresh" type="button" class="rounded-xl bg-blue-700 text-white px-5 py-3 font-bold">Refresh Chats</button></div><input id="adminChatsSearch" type="search" placeholder="Search customer, worker or messages" class="w-full border border-slate-300 rounded-xl px-4 py-3 mb-3"><p id="adminChatsStatus" role="status" class="text-sm text-slate-600 mb-3">Select Refresh Chats to load conversations.</p><div id="adminChatsList" class="space-y-4"></div></section>
+  <section id="adminChatsSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminChatsHeading"><div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminChatsHeading" class="text-xl font-black text-slate-900">Customer–Worker Chat History</h2><p class="text-sm text-slate-600">Main Admin only. Read-only access is logged. Inform users of administrative chat access in your privacy notice.</p></div><button id="adminChatsRefresh" type="button" class="rounded-xl bg-blue-700 text-white px-5 py-3 font-bold">Refresh Chats</button></div><input id="adminChatsSearch" type="search" placeholder="Search by customer/worker name, email or user ID" class="w-full border border-slate-300 rounded-xl px-4 py-3 mb-3"><p id="adminChatsStatus" role="status" class="text-sm text-slate-600 mb-3">Select Refresh Chats to load conversations.</p><div id="adminChatsList" class="space-y-4"></div></section>
   <section id="adminNotificationsSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminNotificationsHeading">
    <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminNotificationsHeading" class="text-xl font-black text-slate-900">Notifications Centre</h2><p class="text-sm text-slate-500 mt-1">Send a one-off account notification using the recipient's Supabase Auth User ID and review recent notifications. Automatic event alerts require database triggers.</p></div><button id="adminRefreshNotifications" type="button" class="rounded-xl border border-slate-300 px-4 py-3 font-bold">Refresh Notifications</button></div>
    <form id="adminNotificationForm" class="grid sm:grid-cols-2 gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 mb-5">
@@ -6320,14 +6320,81 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
 <style>#adminDashboard .admin-topbar{position:relative;padding-top:32px!important}#adminDashboard #clGrantedPermissionsList p{font-size:14px;line-height:1.5}#adminDashboard #clAdminDashboardEmailName:empty{display:none}</style>
 <script id="cl-admin-chat-monitor">
 (function(){
- const root=document.getElementById('adminDashboard'),list=document.getElementById('adminChatsList'),status=document.getElementById('adminChatsStatus'),search=document.getElementById('adminChatsSearch'),refresh=document.getElementById('adminChatsRefresh');
- if(!root||!list||!refresh)return;
- let rows=[];
- function el(tag,txt,cls){const x=document.createElement(tag);x.textContent=txt;if(cls)x.className=cls;return x;}
- function render(){list.replaceChildren();const q=search.value.trim().toLowerCase();const groups=new Map();for(const r of rows){const id=r.conversation_id;if(!groups.has(id))groups.set(id,[]);groups.get(id).push(r);}
- let shown=0;for(const messages of groups.values()){const first=messages[0],filtered=messages.filter(m=>[m.customer_name,m.worker_name,m.message_text].some(v=>String(v||'').toLowerCase().includes(q)));if(q&&!filtered.length)continue;shown++;const card=el('article','','rounded-xl border border-slate-200 bg-slate-50 p-4');card.append(el('h3',String(first.customer_name||'Customer')+' ↔ '+String(first.worker_name||'Worker'),'font-bold text-lg text-blue-900 mb-2'));for(const m of messages){if(!m.message_id)continue;const who=m.sender_id===null?'Unknown':String(m.sender_id);const when=m.sent_at?new Date(m.sent_at).toLocaleString():'';const item=el('div','','border-t border-slate-200 py-2');item.append(el('p',when+' · Sender ID: '+who,'text-xs text-slate-500'));item.append(el('p',String(m.message_text||''),'text-base text-slate-900 whitespace-pre-wrap break-words'));card.append(item);}list.append(card);}status.textContent=shown+' conversation(s) shown. Read-only.';}
- refresh.addEventListener('click',async()=>{if(root.dataset.adminRole!=='main_admin'){status.textContent='Main Admin access required.';return;}refresh.disabled=true;status.textContent='Loading chat history…';try{const client=window.supabaseClient||window.cleanLankaSupabase||null;if(!client){status.textContent='Chat client not available. Please refresh the page.';return;}const {data,error}=await client.rpc('admin_read_all_chats');if(error)throw error;rows=data||[];render();}catch(e){status.textContent='Unable to load chats: '+(e.message||e);}finally{refresh.disabled=false;}});
- search.addEventListener('input',render);
+ const root=document.getElementById('adminDashboard');
+ const list=document.getElementById('adminChatsList'),status=document.getElementById('adminChatsStatus');
+ const search=document.getElementById('adminChatsSearch'),refresh=document.getElementById('adminChatsRefresh');
+ if(!root||!list||!status||!search||!refresh)return;
+ let directory=[],messages=[],selected=null;
+ const el=(tag,text,cls)=>{const node=document.createElement(tag);if(text!==null)node.textContent=text;if(cls)node.className=cls;return node;};
+ const fmt=v=>v?new Date(v).toLocaleString():'';
+ function render(){
+  list.replaceChildren();
+  const q=search.value.trim().toLocaleLowerCase();
+  const matches=directory.filter(d=>[d.customer_name,d.customer_email,d.customer_user_id,d.worker_name,d.worker_email,d.worker_user_id].some(v=>String(v||'').toLocaleLowerCase().includes(q)));
+  status.textContent=matches.length+' matching conversation(s). Select a person to open their chat history.';
+  if(!selected){
+   const people=new Map();
+   for(const d of matches){
+    for(const type of ['customer','worker']){
+     const uid=d[type+'_user_id'];if(!uid)continue;
+     const key=type+':'+uid;
+     if(!people.has(key))people.set(key,{type,uid,name:d[type+'_name'],email:d[type+'_email'],chats:[]});
+     people.get(key).chats.push(d);
+    }
+   }
+   for(const person of people.values()){
+    const card=el('button',null,'block w-full text-left rounded-xl border border-slate-200 bg-white p-4 mb-3 hover:bg-blue-50');
+    card.type='button';card.append(el('p',(person.type==='customer'?'Customer: ':'Worker: ')+(person.name||'Unknown'),'text-lg font-bold text-blue-900'));
+    card.append(el('p',person.email||'No email available','text-sm text-slate-700 break-all'));
+    card.append(el('p','ID: '+person.uid,'text-xs text-slate-500 break-all'));
+    card.append(el('p',person.chats.length+' conversation(s) · Tap to view contacts','text-sm font-semibold text-emerald-700 mt-2'));
+    card.addEventListener('click',()=>{selected={type:'person',person};render();});list.append(card);
+   }
+   if(!people.size)list.append(el('p','No matching people found.','text-slate-600'));
+  }else if(selected.type==='person'){
+   const back=el('button','← Back to People','rounded-lg bg-blue-700 text-white px-4 py-2 font-semibold mb-4');back.type='button';back.addEventListener('click',()=>{selected=null;render();});list.append(back);
+   list.append(el('h3',selected.person.name||'Person','text-xl font-black text-slate-900 mb-1'));
+   list.append(el('p',(selected.person.email||'')+' · '+selected.person.uid,'text-sm text-slate-600 break-all mb-4'));
+   for(const d of selected.person.chats){
+    const other=selected.person.type==='customer'?'worker':'customer';
+    const btn=el('button',null,'block w-full text-left rounded-xl border border-slate-200 p-4 mb-3 bg-slate-50 hover:bg-blue-50');btn.type='button';
+    btn.append(el('p',(d[other+'_name']||'Unknown')+' · '+(other==='worker'?'Worker':'Customer'),'text-lg font-bold text-blue-900'));
+    btn.append(el('p',d[other+'_email']||'No email available','text-sm text-slate-700 break-all'));
+    btn.append(el('p','ID: '+(d[other+'_user_id']||'Not available'),'text-xs text-slate-500 break-all'));
+    btn.append(el('p',d.message_count+' messages · Last: '+fmt(d.last_message_at),'text-sm text-slate-500 mt-1'));
+    btn.addEventListener('click',()=>{selected={type:'chat',person:selected.person,conversation:d};render();});list.append(btn);
+   }
+  }else{
+   const d=selected.conversation;
+   const back=el('button','← Back to Contacts','rounded-lg bg-blue-700 text-white px-4 py-2 font-semibold mb-4');back.type='button';back.addEventListener('click',()=>{selected={type:'person',person:selected.person};render();});list.append(back);
+   list.append(el('h3',(d.customer_name||'Customer')+' ↔ '+(d.worker_name||'Worker'),'text-xl font-black text-slate-900 mb-1'));
+   list.append(el('p',(d.customer_email||'')+' · '+(d.worker_email||''),'text-sm text-slate-600 break-all mb-3'));
+   const panel=el('div',null,'rounded-2xl bg-[#e9f2eb] border border-slate-200 p-3 sm:p-5 space-y-3');
+   const chat=messages.filter(m=>m.conversation_id===d.conversation_id&&m.message_id).sort((a,b)=>new Date(a.sent_at)-new Date(b.sent_at));
+   for(const m of chat){
+    const fromCustomer=m.sender_id===d.customer_user_id;
+    const fromWorker=m.sender_id===d.worker_user_id;
+    const bubble=el('div',null,'rounded-2xl p-3 max-w-[85%] sm:max-w-[75%] shadow-sm '+(fromWorker?'ml-auto bg-[#d9fdd3]':'mr-auto bg-white'));
+    bubble.append(el('p',fromCustomer?(d.customer_name||'Customer'):fromWorker?(d.worker_name||'Worker'):'Unknown sender','text-xs font-bold text-blue-900 mb-1'));
+    bubble.append(el('p',m.message_text||'','text-base text-slate-900 whitespace-pre-wrap break-words'));
+    bubble.append(el('p',fmt(m.sent_at),'text-xs text-slate-500 text-right mt-1'));panel.append(bubble);
+   }
+   if(!chat.length)panel.append(el('p','No messages in this conversation.','text-slate-600'));
+   list.append(panel);
+  }
+ }
+ refresh.addEventListener('click',async()=>{
+  if(root.dataset.adminRole!=='main_admin'){status.textContent='Main Admin access required.';return;}
+  refresh.disabled=true;status.textContent='Loading chat directory…';
+  try{
+   const client=window.supabaseClient;if(!client)throw Error('Supabase client unavailable');
+   const [people,history]=await Promise.all([client.rpc('admin_chat_directory'),client.rpc('admin_read_all_chats')]);
+   if(people.error)throw people.error;if(history.error)throw history.error;
+   directory=people.data||[];messages=history.data||[];selected=null;render();
+  }catch(e){status.textContent='Unable to load chats: '+(e.message||e);}
+  finally{refresh.disabled=false;}
+ });
+ search.addEventListener('input',()=>{selected=null;render();});
 })();
 </script>
 <script id="cl-admin-pages-v2">
