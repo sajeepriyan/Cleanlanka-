@@ -2001,7 +2001,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
   <div class="cl-accountbar">
    <div><div class="cl-accountbrand">CLEAN <span>LANKA</span></div><p class="cl-accountbar-sub text-xs text-slate-500 font-semibold">Customer Dashboard · Your home services hub</p></div>
    <div class="cl-account-actions"><div class="cl-customer-identity"><img id="customerHeaderAvatar" class="cl-customer-avatar cl-customer-avatar-small" alt="Customer profile photo" hidden><span id="customerHeaderInitial" class="cl-customer-initial">C</span><span class="cl-customer-identity-label">My Account</span></div><button type="button" class="rounded-xl bg-rose-50 text-rose-700 border border-rose-100 px-3 py-2 text-sm font-bold" id="customerDashboardLogoutButton">Sign Out</button>
-    <div class="cl-account-menu-wrap"><button type="button" class="cl-avatar-button" aria-label="Open customer account menu" aria-expanded="false" data-cl-menu-toggle="customerAccountMenu">C</button>
+    <div class="cl-account-menu-wrap"><button type="button" class="cl-avatar-button" aria-label="Open customer account menu" aria-expanded="false" data-cl-menu-toggle="customerAccountMenu" style="display:none!important">C</button>
      <div class="cl-account-dropdown" id="customerAccountMenu"><div class="cl-menu-caption">Customer account</div>
       <button class="cl-menu-item" data-cl-go="customerProfileForm"><span class="material-symbols-outlined">person</span>My Profile</button>
       <button class="cl-menu-item" data-cl-go="customerMarketplace"><span class="material-symbols-outlined">search</span>Find Professionals</button>
@@ -2037,7 +2037,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 <h2 class="text-xl font-extrabold text-emerald-900 mb-4">Your Account Details</h2>
     <p class="text-xs uppercase font-bold text-slate-500">Full Name</p><p id="customerDashName" class="text-lg font-bold text-slate-900 mb-4">—</p>
     <p class="text-xs uppercase font-bold text-slate-500">Email Address</p><p id="customerDashEmail" class="text-lg font-bold text-slate-900 mb-4 break-all">—</p>
-    <div class="cl-customer-contact-grid" aria-label="Customer contact details"><div><span>Phone Number</span><strong id="customerDashPhone">—</strong></div><div><span>Gender / பாலினம்</span><strong id="customerDashGender">Not provided</strong></div><div><span>District</span><strong id="customerDashDistrict">—</strong></div><div class="cl-customer-address"><span>Address</span><strong id="customerDashAddress">—</strong></div></div>
+    <div class="cl-customer-contact-grid" aria-label="Customer contact details"><div><span>Phone Number</span><strong id="customerDashPhone">—</strong></div><div><span>Gender</span><strong id="customerDashGender">Not provided</strong></div><div><span>District</span><strong id="customerDashDistrict">—</strong></div><div class="cl-customer-address"><span>Address</span><strong id="customerDashAddress">—</strong></div></div>
     <p class="text-xs uppercase font-bold text-slate-500">Account Type</p><p class="text-lg font-bold text-emerald-700">Registered Customer</p>
     <div class="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-xs font-black uppercase tracking-widest text-emerald-800">Your Customer ID</p><p id="customerDashPublicId" class="mt-1 text-2xl sm:text-3xl font-black tracking-wider text-emerald-950">CUS-000000</p><p class="mt-1 text-xs text-emerald-800">Your unique Clean Lanka customer reference</p></div>
     <details class="cl-customer-edit" id="clCustomerEditDetails"><summary><span class="material-symbols-outlined">edit</span> Edit My Profile</summary>
@@ -2045,7 +2045,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
      <h3 class="text-lg font-extrabold text-emerald-900">Complete / Update Your Profile</h3>
      <label class="block text-sm font-bold text-slate-700" for="customerProfileFullName">Full Name</label>
      <input id="customerProfileFullName" required maxlength="160" autocomplete="name" class="w-full rounded-xl border border-slate-200 p-3" placeholder="Your full name">
-     <label class="block text-sm font-bold text-slate-700" for="customerProfileGender">Gender / பாலினம்</label><select id="customerProfileGender" class="w-full rounded-xl border border-slate-200 p-3 bg-white" aria-label="Gender"><option value="">Select gender (optional)</option><option value="male">Male / ஆண்</option><option value="female">Female / பெண்</option><option value="prefer_not_to_say">Prefer not to say / குறிப்பிட விரும்பவில்லை</option></select>
+     <label class="block text-sm font-bold text-slate-700" for="customerProfileGender">Gender</label><select id="customerProfileGender" class="w-full rounded-xl border border-slate-200 p-3 bg-white" aria-label="Gender"><option value="">Select gender (optional)</option><option value="male">Male</option><option value="female">Female</option><option value="prefer_not_to_say">Prefer not to say</option></select>
      <label class="block text-sm font-bold text-slate-700" for="customerProfilePhone">Phone Number</label>
      <input id="customerProfilePhone" type="tel" inputmode="numeric" maxlength="10" minlength="10" pattern="[0-9]{10}" title="Enter exactly 10 digits" autocomplete="tel" required class="w-full rounded-xl border border-slate-200 p-3" placeholder="Your contact number">
      <label class="block text-sm font-bold text-slate-700" for="customerProfileDistrict">District</label>
@@ -2255,7 +2255,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
           </div>
           <form id="workerProfileEditForm" class="hidden grid sm:grid-cols-2 gap-3">
             <label class="text-sm font-bold text-slate-700">Full name<input id="editWorkerFullName" required maxlength="120" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
-            <label class="text-sm font-bold text-slate-700">Gender<select id="editWorkerGender" class="mt-1 w-full rounded-xl border p-3 font-normal bg-white"><option value="">Not specified</option><option value="male">Male / ஆண்</option><option value="female">Female / பெண்</option><option value="prefer_not_to_say">Prefer not to say</option></select></label>
+            <label class="text-sm font-bold text-slate-700">Gender<select id="editWorkerGender" class="mt-1 w-full rounded-xl border p-3 font-normal bg-white"><option value="">Not specified</option><option value="male">Male</option><option value="female">Female</option><option value="prefer_not_to_say">Prefer not to say</option></select></label>
             <label class="text-sm font-bold text-slate-700">Phone number<input id="editWorkerPhone" type="tel" maxlength="30" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
             <label class="text-sm font-bold text-slate-700">District<select id="editWorkerDistrict" required class="mt-1 w-full rounded-xl border p-3 font-normal bg-white"><option value="">Select Sri Lanka District</option><option value="Ampara">Ampara</option><option value="Anuradhapura">Anuradhapura</option><option value="Badulla">Badulla</option><option value="Batticaloa">Batticaloa</option><option value="Colombo">Colombo</option><option value="Galle">Galle</option><option value="Gampaha">Gampaha</option><option value="Hambantota">Hambantota</option><option value="Jaffna">Jaffna</option><option value="Kalutara">Kalutara</option><option value="Kandy">Kandy</option><option value="Kegalle">Kegalle</option><option value="Kilinochchi">Kilinochchi</option><option value="Kurunegala">Kurunegala</option><option value="Mannar">Mannar</option><option value="Matale">Matale</option><option value="Matara">Matara</option><option value="Monaragala">Monaragala</option><option value="Mullaitivu">Mullaitivu</option><option value="Nuwara Eliya">Nuwara Eliya</option><option value="Polonnaruwa">Polonnaruwa</option><option value="Puttalam">Puttalam</option><option value="Ratnapura">Ratnapura</option><option value="Trincomalee">Trincomalee</option><option value="Vavuniya">Vavuniya</option></select></label>
             <label class="text-sm font-bold text-slate-700">Town / Area<input id="editWorkerAddress" required maxlength="180" class="mt-1 w-full rounded-xl border p-3 font-normal"></label>
@@ -2587,7 +2587,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
   function clUpdateCustomerContactDetails(){
     const fields=[['customerDashPhone','customerProfilePhone'],['customerDashDistrict','customerProfileDistrict'],['customerDashAddress','customerProfileAddress']];
     for(const [output,input] of fields){const display=document.getElementById(output),source=document.getElementById(input);if(display&&source)display.textContent=(source.value||'').trim()||'Not provided';}
-    const gender=document.getElementById('customerProfileGender')?.value||'';const genderDisplay=document.getElementById('customerDashGender');if(genderDisplay)genderDisplay.textContent=({male:'Male / ஆண்',female:'Female / பெண்',prefer_not_to_say:'Prefer not to say'})[gender]||'Not provided';
+    const gender=document.getElementById('customerProfileGender')?.value||'';const genderDisplay=document.getElementById('customerDashGender');if(genderDisplay)genderDisplay.textContent=({male:'Male',female:'Female',prefer_not_to_say:'Prefer not to say'})[gender]||'Not provided';
   }
   async function loadCustomerProfile(user) {
     const metadata = user.user_metadata || {};
@@ -3494,7 +3494,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const grid = document.createElement('div');
     grid.className = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-3';
     [
-      ['Worker ID',w.worker_public_id ? 'WRK-' + w.worker_public_id : 'Pending ID'],['Full Name',w.full_name],['Gender',w.gender === 'male' ? 'Male / ஆண்' : w.gender === 'female' ? 'Female / பெண்' : w.gender === 'prefer_not_to_say' ? 'Prefer not to say' : 'Not specified'],['Email',w.email],['Phone',w.Phone],['District',w.district],['Address',w.address],
+      ['Worker ID',w.worker_public_id ? 'WRK-' + w.worker_public_id : 'Pending ID'],['Full Name',w.full_name],['Gender',w.gender === 'male' ? 'Male' : w.gender === 'female' ? 'Female' : w.gender === 'prefer_not_to_say' ? 'Prefer not to say' : 'Not specified'],['Email',w.email],['Phone',w.Phone],['District',w.district],['Address',w.address],
       ['Skills / Trade',w.skills],['Experience (years)',w.experience_years],['Service Price (LKR)',w.service_price_lkr],
       ['Availability',w.availability],['Available for work',w.is_available ? 'Yes' : 'No'],
       ['Verification Status',w.verification_status],['Police Clearance Status',w.police_clearance_status],
