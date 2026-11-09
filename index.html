@@ -3682,7 +3682,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     if(!list||!msg||currentAdminRole!=='main_admin') return;
     msg.textContent='Loading Sub Admins...'; list.replaceChildren();
     try {
-      const {data,error}=await supabaseClient.rpc('get_sub_admin_list'); if(error) throw error;
+      const {data,error}=await supabaseClient.rpc('get_sub_admin_directory'); if(error) throw error;
       const rows=Array.isArray(data)?data:[];
       if(!rows.length){msg.textContent='No Sub Admin accounts found.';return;}
       msg.textContent=`${rows.length} Sub Admin account(s).`;
@@ -3690,8 +3690,13 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
         const userId=row.user_id||row.sub_admin_id||row.id||'';
         const card=document.createElement('article'); card.className='rounded-xl border border-slate-200 p-4';
         const top=document.createElement('div'); top.className='flex flex-wrap items-center justify-between gap-2';
-        const title=document.createElement('p'); title.className='font-extrabold text-slate-900 break-all'; title.textContent=`Sub Admin: ${userId||'User ID unavailable'}`;
+        const title=document.createElement('p'); title.className='font-extrabold text-slate-900 break-all'; title.textContent=row.full_name||row.email||'Sub Admin';
+        title.className='text-lg font-black text-slate-900 break-words';
         const status=document.createElement('span'); status.className='text-xs font-bold rounded-full px-3 py-1 '+(row.is_active?'bg-emerald-100 text-emerald-800':'bg-rose-100 text-rose-800'); status.textContent=row.is_active?'Active':'Inactive'; top.append(title,status); card.append(top);
+        const identity=document.createElement('div');identity.className='mt-2 rounded-lg bg-blue-50 border border-blue-100 p-3 space-y-1';
+        const emailLine=document.createElement('p');emailLine.className='text-sm font-bold text-blue-900 break-all';emailLine.textContent='Email: '+(row.email||'Not available');
+        const idLine=document.createElement('p');idLine.className='text-xs text-slate-600 break-all';idLine.textContent='User ID: '+(userId||'Not available');
+        identity.append(emailLine,idLine);card.append(identity);
         const perms=document.createElement('p'); perms.className='text-xs text-slate-600 mt-2'; const p=row.permissions||{}; perms.textContent='Permissions: '+Object.keys(ADMIN_PERMISSION_LABELS).filter(k=>p[k]===true).map(k=>ADMIN_PERMISSION_LABELS[k]).join(', '); card.append(perms);
         const controls=document.createElement('div'); controls.className='mt-3 flex flex-wrap gap-2';
         const edit=document.createElement('button'); edit.type='button'; edit.className='rounded-lg bg-blue-700 text-white px-3 py-2 text-sm font-bold'; edit.textContent='Edit Permissions';
