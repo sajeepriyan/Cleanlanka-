@@ -1410,7 +1410,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 #customerDashboard .customer-card:has(#customerProfileForm) #customerProfileForm{max-width:760px}
 @media(max-width:700px){#customerDashboard .grid.md\\:grid-cols-2:has(> .customer-card > #customerProfileForm){padding:0!important}#customerDashboard .customer-card:has(#customerProfileForm){padding:18px!important}}
 </style>
-</head>
+<style id="cl-customer-account-stack-direct">#customerDashboard #clCustomerAccountAndBookings{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;max-width:920px!important;gap:20px!important;margin:0 auto!important}#customerDashboard #clCustomerAccountAndBookings>.customer-card{width:100%!important;max-width:100%!important;min-width:0!important}#customerDashboard #clCustomerAccountAndBookings>.customer-card:nth-child(2){grid-column:1!important}</style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
 <div class="bg-primary text-white py-2.5 px-4 sm:px-8 text-[15px] border-b border-primary-dark/30">
@@ -1951,7 +1951,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
    <div class="flex items-center justify-between gap-3 flex-wrap"><div><h2 id="customerNotificationsHeading" class="text-xl font-extrabold text-emerald-900">My Notifications</h2><p class="text-sm text-slate-500">Private updates for your account.</p></div><button id="customerRefreshNotifications" type="button" class="rounded-xl border border-slate-300 px-4 py-2 font-bold">Refresh</button></div>
    <p id="customerNotificationsMessage" class="text-sm text-slate-600 mt-3" role="status" aria-live="polite"></p><div id="customerNotificationsList" class="grid md:grid-cols-2 gap-3 mt-3"></div>
   </section>
-  <div class="grid md:grid-cols-2 gap-5">
+  <div id="clCustomerAccountAndBookings" class="grid gap-5" style="display:grid!important;grid-template-columns:minmax(0,1fr)!important;max-width:920px;width:100%;margin:0 auto;">
    <div class="customer-card"><h2 class="text-xl font-extrabold text-emerald-900 mb-4">Your Account Details</h2>
     <p class="text-xs uppercase font-bold text-slate-500">Full Name</p><p id="customerDashName" class="text-lg font-bold text-slate-900 mb-4">—</p>
     <p class="text-xs uppercase font-bold text-slate-500">Email Address</p><p id="customerDashEmail" class="text-lg font-bold text-slate-900 mb-4 break-all">—</p>
