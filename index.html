@@ -3256,6 +3256,25 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     link.style.display = 'none'; document.body.append(link); link.click(); link.remove();
   }
 
+    function adminProfileEditPanel(table,record,fields,permission,refresh){
+    if(!adminHasPermission(permission))return null;
+    const wrap=document.createElement('section');wrap.className='mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4';
+    const title=document.createElement('h4');title.className='font-black text-blue-900 mb-3';title.textContent='Edit profile details';wrap.append(title);
+    const form=document.createElement('form');form.className='grid gap-3';
+    const inputs={};
+    fields.forEach(([key,label])=>{const box=document.createElement('label');box.className='grid gap-1 text-sm font-bold text-slate-800';box.textContent=label;const input=document.createElement('input');input.className='w-full rounded-lg border border-slate-300 p-3';input.maxLength=180;input.required=true;input.value=String(record[key]||'');box.append(input);form.append(box);inputs[key]=input;});
+    const save=document.createElement('button');save.type='submit';save.className='rounded-xl bg-blue-800 text-white px-4 py-3 font-bold';save.textContent='Save profile changes';form.append(save);
+    const msg=document.createElement('p');msg.setAttribute('role','status');form.append(msg);
+    form.addEventListener('submit',async e=>{e.preventDefault();if(!adminHasPermission(permission))return;
+      const changes={};for(const [key,input] of Object.entries(inputs)){const value=input.value.trim();if(!value){msg.textContent='Complete every field.';return;}if(value!==String(record[key]||''))changes[key]=value;}
+      if(!Object.keys(changes).length){msg.textContent='No changes to save.';return;}
+      if(!confirm('Save these profile changes? This action will be audited.'))return;
+      save.disabled=true;msg.textContent='Saving...';
+      try{const {data,error}=await supabaseClient.from(table).update(changes).eq('id',record.id).select('id').maybeSingle();if(error)throw error;if(!data)throw Error('No record was updated. Check permissions.');Object.assign(record,changes);msg.textContent='Changes saved successfully.';if(refresh)refresh();}
+      catch(err){msg.textContent='Update failed: '+(err.message||'Unknown error');}finally{save.disabled=false;}
+    });wrap.append(form);return wrap;
+  }
+
   function showAdminWorkerDetail(w) {
     if (!adminWorkerDetail) return;
     adminWorkerDetail.replaceChildren();
@@ -3466,6 +3485,8 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const close = document.createElement('button'); close.type = 'button'; close.className = 'mt-5 rounded-xl border border-slate-300 px-5 py-3 font-bold text-slate-700'; close.textContent = 'Close Profile';
     close.addEventListener('click', () => adminWorkerDetail.classList.add('hidden'));
     adminWorkerDetail.append(close);
+    const workerEditor=adminProfileEditPanel('worker_profiles',w,[['full_name','Full name'],['district','District'],['address','Address']],'workers_edit',renderAdminWorkerList);
+    if(workerEditor)adminWorkerDetail.insertBefore(workerEditor,close);
     adminWorkerDetail.scrollIntoView({behavior:'smooth',block:'start'});
   }
 
@@ -3496,7 +3517,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
       return (filter==='all'||filter===bucket)&&(!query||hay.includes(query));
     });
     if(!filtered.length){host.innerHTML='<p class="text-sm text-slate-500">No booking requests match this filter.</p>';return;}
-    const canManage=currentAdminRole!=='sub_admin' && (currentAdminRole==='main_admin'||currentAdminRole==='admin');
+    const canManage=adminHasPermission('bookings_manage');
     host.innerHTML=filtered.map(row=>{
       const apps=(row.applications||[]).map(a=>`<div class="border-t border-slate-200 mt-3 pt-3"><p class="text-sm font-bold">${esc(a.worker_name||'Worker')} · ${esc(a.status||'pending')}</p><p class="text-sm font-bold text-blue-900">Worker Phone: ${esc(a.worker_phone||'Not available')}</p><p class="text-sm break-all">Worker Email: ${esc(a.worker_email||'Not available')}</p><p class="text-sm">Worker ID: ${esc(a.worker_public_id||'Pending ID')} · ${esc(a.worker_district||'District unavailable')}</p><p class="text-xs text-slate-600 mt-1">${esc(a.message||'No application message')}</p><p class="text-xs text-slate-500 break-all">Application ID: ${esc(a.id)}</p><p class="text-xs text-slate-500 break-all">Worker Auth User ID: ${esc(a.worker_user_id||'Unavailable')}</p></div>`).join('')||'<p class="text-sm text-slate-500 mt-3">No worker applications yet.</p>';
       const status=String(row.status||'open').toLowerCase();
@@ -3539,7 +3560,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     } catch(error) {message.textContent=`Could not load booking records: ${error.message||'Check Admin read permissions for job_posts and job_applications.'}`;}
   }
   async function updateAdminBooking(jobId) {
-    if(!['main_admin','admin'].includes(currentAdminRole)){alert('Only an authorised Admin can update booking status.');return;}
+    if(!adminHasPermission('bookings_manage')){alert('Booking management permission required.');return;}
     const select=[...document.querySelectorAll('[data-admin-booking-status]')].find(el=>el.dataset.adminBookingStatus===jobId);
     const nextStatus=select?.value;
     if(!['open','assigned','completed','cancelled'].includes(nextStatus)){alert('Invalid booking status.');return;}
@@ -3607,6 +3628,8 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const grid=document.createElement('div'); grid.className='grid sm:grid-cols-2 lg:grid-cols-3 gap-3';
     [['Customer ID',c.customer_public_id ? 'CUS-'+c.customer_public_id : 'Pending ID'],['Full Name',c.full_name],['Email',c.email],['Phone',c.phone],['District',c.district],['Address',c.address],['Registered',c.created_at?new Date(c.created_at).toLocaleString():'Not available']].forEach(([label,value])=>grid.append(adminField(label,value)));
     panel.append(grid);
+    const customerEditor=adminProfileEditPanel('customer_profiles',c,[['full_name','Full name'],['district','District'],['address','Address']],'customers_edit',null);
+    if(customerEditor)panel.append(customerEditor);
     const close=document.createElement('button'); close.type='button'; close.className='mt-5 rounded-xl border border-emerald-300 bg-white px-5 py-3 font-bold text-emerald-900'; close.textContent='Close Customer Profile'; close.addEventListener('click',()=>panel.classList.add('hidden')); panel.append(close);
     panel.scrollIntoView({behavior:'smooth',block:'start'});
   }
