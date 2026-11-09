@@ -1527,7 +1527,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 #homeMarketplace #homeJobResults:has(>div:not(article)){max-height:none!important;overflow:visible!important;display:block!important}
 @media(min-width:768px){#homeMarketplace #homeWorkerResults,#homeMarketplace #homeJobResults{grid-template-columns:repeat(3,minmax(0,1fr))!important}#homeMarketplace #homeWorkerResults{max-height:calc(205px * 2 + 10px)!important}#homeMarketplace #homeJobResults{max-height:calc(270px * 2 + 10px)!important}}
 @media(min-width:1200px){#homeMarketplace #homeWorkerResults,#homeMarketplace #homeJobResults{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
-</style></head>
+</style><style id="cl-customer-terms-no-blue-outline">#customerTermsAccepted,#customerTermsAccepted:focus,#customerTermsAccepted:focus-visible{outline:none!important;box-shadow:none!important;--tw-ring-shadow:0 0 #0000!important;--tw-ring-offset-shadow:0 0 #0000!important;border-color:#047857!important}</style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
 <div class="bg-primary text-white py-2.5 px-4 sm:px-8 text-[15px] border-b border-primary-dark/30">
@@ -2406,7 +2406,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     <input id="customerPassword" type="password" placeholder="Password (minimum 8 characters)" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
     <input id="customerConfirmPassword" type="password" placeholder="Confirm Password" minlength="8" autocomplete="new-password" required class="w-full p-3 border rounded-lg">
     <details class="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-slate-700"><summary class="cursor-pointer font-bold text-emerald-900">Read Customer Terms &amp; Conditions</summary><p class="mt-2">Use accurate account details. Keep your password private. Treat service providers respectfully. Confirm service details and prices before work begins. Do not misuse the platform. Clean Lanka may review reports and suspend accounts that breach these terms. Read the Privacy Policy before sharing personal information.</p></details>
-    <label class="flex items-start gap-3 text-sm text-slate-700"><input id="customerTermsAccepted" name="customerTermsAccepted" type="checkbox" required aria-label="Agree to Customer Terms and Privacy Policy" style="appearance:auto;-webkit-appearance:checkbox;accent-color:#047857;width:22px;height:22px;min-width:22px;min-height:22px;flex-shrink:0;cursor:pointer;margin-top:2px;"><span>I have read and agree to the Customer Terms &amp; Conditions and Privacy Policy.</span></label>
+    <label class="flex items-start gap-3 text-sm text-slate-700"><input id="customerTermsAccepted" name="customerTermsAccepted" type="checkbox" required aria-label="Agree to Customer Terms and Privacy Policy" style="appearance:auto;-webkit-appearance:checkbox;accent-color:#047857;width:22px;height:22px;min-width:22px;min-height:22px;flex-shrink:0;cursor:pointer;margin-top:2px;outline:none;box-shadow:none;"><span>I have read and agree to the Customer Terms &amp; Conditions and Privacy Policy.</span></label>
     <button id="customerSubmit" type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white p-3 rounded-lg font-bold">Create Customer Account</button>
     <p id="customerRegisterMessage" class="text-center text-sm" aria-live="polite"></p>
   </form>
