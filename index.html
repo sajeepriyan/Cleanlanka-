@@ -1527,6 +1527,35 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
 #homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated strong{font-size:12px!important}
 #homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated .cl-action{font-size:12px!important;padding:9px 5px!important;margin-top:auto!important;border-radius:9px!important}
 @media(max-width:600px){#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated{padding:9px!important}#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated h4{font-size:13px!important}#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-card-illustrated .flex.items-start.justify-between{flex-wrap:wrap!important}#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-cartoon{width:52px!important;height:52px!important}#homeMarketplace .cl-market-workers #homeWorkerResults .cl-worker-cartoon span{font-size:30px!important}}
+</style><style id="cl-scrollable-marketplace-grids">
+/* Public marketplace only: 8 visible cards, independently scrollable worker and job directories. */
+#homeMarketplace #homeWorkerResults,#homeMarketplace #homeJobResults{
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ grid-auto-rows:220px;gap:10px!important;max-height:calc(220px * 4 + 10px * 3);
+ overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;
+ scrollbar-gutter:stable;align-content:start;padding:2px 4px 4px 2px;
+ -webkit-overflow-scrolling:touch;
+}
+#homeMarketplace #homeWorkerResults>article,#homeMarketplace #homeJobResults>article{
+ height:100%!important;min-width:0;min-height:0;overflow:hidden;
+}
+#homeMarketplace #homeJobResults>article{padding:12px!important;display:flex;flex-direction:column;gap:4px}
+#homeMarketplace #homeJobResults>article h4{font-size:14px!important;line-height:1.3!important;margin-top:4px!important;overflow-wrap:anywhere}
+#homeMarketplace #homeJobResults>article p{font-size:12px!important;line-height:1.35!important;margin-top:3px!important;overflow-wrap:anywhere}
+#homeMarketplace #homeJobResults>article .cl-action{margin-top:auto!important;font-size:12px!important;padding:9px!important}
+#homeMarketplace #homeJobResults>article .text-sm{font-size:12px!important}
+@media(min-width:768px){
+ #homeMarketplace #homeWorkerResults,#homeMarketplace #homeJobResults{
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-rows:230px;
+ max-height:calc(230px * 2 + 10px);
+ }
+}
+@media(min-width:1200px){
+ #homeMarketplace #homeWorkerResults,#homeMarketplace #homeJobResults{
+ grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ }
+}
+#homeMarketplace #homeWorkerResults .cl-worker-card-illustrated .cl-action{margin-top:auto!important}
 </style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
