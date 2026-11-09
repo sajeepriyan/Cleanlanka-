@@ -1586,6 +1586,33 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
  }
  #homeMarketplace #homeWorkerResults>article,#homeMarketplace #homeJobResults>article{min-height:310px!important}
 }
+</style><style id="cl-marketplace-final-height-fix">
+/* Let the contents determine each card's natural height; clip only at the list viewport. */
+#homeMarketplace #homeWorkerResults,#homeMarketplace #homeJobResults{
+ grid-auto-rows:max-content!important;
+ align-items:stretch!important;
+ max-height:1420px!important;
+ overflow-y:auto!important;
+ overflow-x:hidden!important;
+}
+#homeMarketplace #homeWorkerResults>article,#homeMarketplace #homeJobResults>article{
+ height:auto!important;min-height:0!important;max-height:none!important;
+ overflow:visible!important;align-self:stretch!important;
+}
+#homeMarketplace #homeWorkerResults .cl-worker-card-illustrated .cl-action{
+ display:block!important;position:static!important;min-height:36px!important;
+ flex-shrink:0!important;margin-top:12px!important;visibility:visible!important;
+}
+#homeMarketplace #homeWorkerResults.cl-list-empty,#homeMarketplace #homeJobResults.cl-list-empty{
+ display:block!important;max-height:none!important;overflow:visible!important;
+}
+#homeMarketplace #homeWorkerResults.cl-list-empty>div,#homeMarketplace #homeJobResults.cl-list-empty>div{
+ height:auto!important;min-height:0!important;max-height:none!important;
+ display:block!important;padding:12px!important;margin:0!important;
+}
+@media(min-width:768px){
+ #homeMarketplace #homeWorkerResults,#homeMarketplace #homeJobResults{max-height:730px!important}
+}
 </style></head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -4707,6 +4734,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const d=$('homeWorkerSearchDistrict')?.value||'';
     const rows=homeWorkerCache.filter(w=>(!d||String(w.district||'').toLowerCase()===d.toLowerCase())&&(!q||clMatchesMultilingual([w.full_name,w.skills,w.district],q)));
     const host=$('homeWorkerResults');if(!host)return;
+    host.classList.toggle('cl-list-empty',!rows.length);
     if(!rows.length){host.innerHTML='<div class="sm:col-span-2 lg:col-span-3 rounded-xl bg-slate-50 p-5 text-slate-600">No approved workers match this search yet.</div>';return;}
     host.innerHTML=rows.map(w=>`<article class="cl-worker-card cl-worker-card-illustrated flex flex-col"><div class="cl-worker-cartoon" aria-hidden="true"><span>👷</span></div><div class="flex items-start justify-between gap-2"><div><p class="text-xs font-black uppercase tracking-wider text-emerald-700">Verified Clean Lanka Worker</p><h4 class="font-black text-emerald-950 text-xl mt-1">${esc(w.full_name||'Service Professional')}</h4></div><span class="text-xs rounded-full bg-emerald-100 text-emerald-800 px-2 py-1 font-bold">Approved</span></div><p data-home-worker-online="${esc(w.worker_id)}" class="text-xs font-bold mt-1 ${onlineWorkerIds.has(String(w.worker_id))?'text-emerald-700':'text-slate-500'}">${onlineWorkerIds.has(String(w.worker_id))?'● Online':'● Offline'}</p><p class="text-sm text-slate-600 mt-2">${esc(w.district||'Sri Lanka')}</p><p class="text-sm font-semibold text-slate-800 mt-2">${esc(Array.isArray(w.skills)?w.skills.join(', '):(w.skills||'Home Services'))}</p><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div class="rounded-lg bg-emerald-50 p-2"><span class="block text-xs text-slate-500">Experience</span><strong>${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'}</strong></div><div class="rounded-lg bg-blue-50 p-2"><span class="block text-xs text-slate-500">Service Price</span><strong>${esc(money(w.service_price_lkr))}</strong></div></div><button type="button" class="cl-action mt-4 w-full" data-home-worker-profile="${esc(w.worker_id)}">View Full Profile</button></article>`).join('');
   }
@@ -4728,6 +4756,7 @@ body:not(.admin-dashboard-mode):not(.admin-login-mode):not(.worker-dashboard-mod
     const q=(homeMarketplaceQuery||'').trim();
     const d=$('homeWorkerSearchDistrict')?.value||'';
     const rows=homeJobCache.filter(j=>(homeJobFilter==='all'||(homeJobFilter==='official'?j.post_source==='clean_lanka':j.post_source!=='clean_lanka'))&&(!d||String(j.district||'').toLowerCase()===d.toLowerCase())&&(!q||clMatchesMultilingual([j.service_title,j.description,j.district,...(j.multilingual_titles||[]).flatMap(t=>[t.translated_title,t.search_terms||[]])],q)));
+    host.classList.toggle('cl-list-empty',!rows.length);
     if(!rows.length){host.innerHTML='<div class="md:col-span-2 rounded-xl bg-slate-50 p-5 text-slate-600">No open job opportunities are available right now.</div>';return;}
     host.innerHTML=rows.map(j=>`<article class="rounded-2xl border border-slate-200 p-5 bg-white shadow-sm"><div class="flex flex-wrap justify-between gap-2"><span class="rounded-full px-3 py-1 text-xs font-black ${j.post_source==='clean_lanka'?'bg-amber-100 text-amber-800':'bg-blue-100 text-blue-800'}">${j.post_source==='clean_lanka'?'Official Clean Lanka Job':'Customer Job'}</span><span class="text-xs text-slate-500">${j.created_at?new Date(j.created_at).toLocaleDateString():''}</span></div><h4 class="text-lg font-black text-slate-900 mt-3">${esc(j.service_title)}</h4>${(j.multilingual_titles||[]).length?`<p class="text-xs text-emerald-800 mt-1">Also listed as: ${esc(j.multilingual_titles.map(t=>t.translated_title).filter(Boolean).join(' · '))}</p>`:''}<p class="text-sm text-slate-600 mt-1">${esc(j.district||'Sri Lanka')} · Exact location shared with eligible signed-in workers</p><p class="text-sm text-slate-700 mt-3">${esc(j.description||'')}</p><div class="flex flex-wrap justify-between gap-2 mt-4 text-sm"><strong>${esc(money(j.budget_lkr))}</strong><span class="text-slate-500">Preferred date: ${esc(j.preferred_date||'Flexible')}</span></div><button type="button" class="cl-action mt-4" data-home-job-apply="${esc(j.id)}">Apply / Worker Login</button></article>`).join('');
   }
