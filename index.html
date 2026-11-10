@@ -8316,3 +8316,240 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   }
 }
 </style>
+
+
+
+<!-- Clean Lanka mobile compact header, readable consent and document upload controls.
+     Scope: responsive layout and UI only. Authentication and upload handlers stay intact. -->
+<style id="cl-mobile-forms-header-polish-20261110">
+@media (max-width: 767px) {
+  body:not(.worker-dashboard-mode):not(.customer-dashboard-mode):not(.admin-dashboard-mode) .cl-home-nav {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 50 !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  .cl-home-nav .cl-home-nav-inner {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) auto !important;
+    grid-template-areas: "brand actions" "links links" !important;
+    grid-auto-rows: auto !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: stretch !important;
+    column-gap: 8px !important;
+    row-gap: 5px !important;
+    padding: 8px 12px 6px !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .cl-home-nav .cl-home-brand {
+    grid-area: brand !important;
+    order: 0 !important;
+    margin: 0 !important;
+    flex: initial !important;
+    display: flex !important;
+    gap: 7px !important;
+    min-width: 0 !important;
+    width: auto !important;
+  }
+  .cl-home-nav .cl-home-brand img {
+    width: 45px !important;
+    min-width: 45px !important;
+    height: 45px !important;
+    object-fit: contain !important;
+  }
+  .cl-home-nav .cl-home-brand-name {
+    font-size: clamp(23px, 5.6vw, 28px) !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.8px !important;
+  }
+  .cl-home-nav .cl-home-brand-sub {
+    font-size: 9px !important;
+    white-space: nowrap !important;
+  }
+  .cl-home-nav .cl-home-nav-actions {
+    grid-area: actions !important;
+    order: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    flex: none !important;
+    margin: 0 !important;
+    justify-self: end !important;
+    justify-content: flex-end !important;
+    flex-wrap: nowrap !important;
+  }
+  .cl-home-nav .cl-home-nav-actions .cl-home-login,
+  .cl-home-nav #clHomeLogoutButton {
+    min-height: 40px !important;
+    padding: 8px 11px !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+  }
+  .cl-home-nav .cl-home-navlinks {
+    grid-area: links !important;
+    order: 0 !important;
+    display: flex !important;
+    flex-flow: row nowrap !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    gap: 17px !important;
+    margin: 0 !important;
+    padding: 5px 0 7px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    overscroll-behavior-x: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+  .cl-home-nav .cl-home-navlinks::-webkit-scrollbar { display: none !important; }
+  .cl-home-nav .cl-home-navlinks > a,
+  .cl-home-nav .cl-home-navlinks > button {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    padding: 5px 0 !important;
+    margin: 0 !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    line-height: 1.25 !important;
+  }
+  .cl-home-nav .cl079-language { display: none !important; }
+  body.cl-auth-home .cl-home-nav-inner {
+    grid-template-columns: minmax(0,1fr) auto auto !important;
+    grid-template-areas: "brand profile actions" "links links links" !important;
+  }
+  body.cl-auth-home .cl-home-nav-inner > #clHomeAccountName {
+    grid-area: profile !important;
+    order: 0 !important;
+    max-width: 43px !important;
+    width: 43px !important;
+    min-width: 43px !important;
+    height: 43px !important;
+    padding: 3px !important;
+    margin: 0 !important;
+    justify-content: center !important;
+  }
+  body.cl-auth-home #clHomeAccountNameText { display: none !important; }
+  body.cl-auth-home .cl-home-nav-actions { grid-area: actions !important; }
+  .cl-hero h1 {
+    font-size: clamp(30px, 8.2vw, 39px) !important;
+    line-height: 1.14 !important;
+    letter-spacing: -0.5px !important;
+  }
+  .cl-hero .cl-hero-sub { font-size: 15px !important; }
+  .cl-hero .cl-hero-tag { font-size: 13px !important; }
+}
+#worker-register #workerTermsAccepted {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  display: inline-grid !important;
+  place-content: center !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  margin-top: 2px !important;
+  padding: 0 !important;
+  border: 2px solid #047857 !important;
+  border-radius: 5px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+}
+#worker-register #workerTermsAccepted:checked { background: #047857 !important; }
+#worker-register #workerTermsAccepted:checked::after {
+  content: "✓";
+  color: white;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1;
+}
+#worker-register #workerTermsAccepted:focus-visible {
+  outline: 2px solid #075985 !important;
+  outline-offset: 3px !important;
+}
+#workerDashboard .cv-doc input[type="file"].cl-pdf-native-input {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  min-width: 1px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+}
+#workerDashboard .cv-doc .cl-pdf-picker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 9px 12px;
+  border: 1px solid #0b8650;
+  border-radius: 9px;
+  background: #fff;
+  color: #086441;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.3;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+#workerDashboard .cv-doc .cl-pdf-picker[data-uploading="true"] {
+  opacity: 0.6;
+  pointer-events: none;
+}
+#workerDashboard .cv-doc input[type="file"].cl-pdf-native-input:focus-visible + .cl-pdf-picker {
+  outline: 2px solid #075985;
+  outline-offset: 3px;
+}
+</style>
+<script id="cl-pdf-picker-ui-20261110">
+(function () {
+  const docs = [
+    ["workerNicFrontInput", "workerNicFrontStatus"],
+    ["workerNicBackInput", "workerNicBackStatus"],
+    ["workerPoliceInput", "workerPoliceStatus"],
+    ["workerGnInput", "workerGnStatus"]
+  ];
+  function init() {
+    docs.forEach(([inputId, statusId]) => {
+      const input = document.getElementById(inputId);
+      const status = document.getElementById(statusId);
+      if (!input || !status || input.dataset.clPdfPickerReady) return;
+      input.dataset.clPdfPickerReady = "1";
+      input.classList.add("cl-pdf-native-input");
+      input.setAttribute("aria-describedby", statusId);
+      const picker = document.createElement("label");
+      picker.className = "cl-pdf-picker";
+      picker.setAttribute("for", inputId);
+      input.insertAdjacentElement("afterend", picker);
+      const sync = () => {
+        const state = status.dataset.uploadState || "";
+        const text = (status.textContent || "").toLowerCase();
+        const uploading = state === "uploading" || text.includes("uploading");
+        const success = !uploading && (state === "success" || (text.includes("uploaded") && !text.includes("not uploaded")));
+        picker.textContent = uploading ? "Uploading PDF…" : success ? "Replace PDF" : "Upload PDF";
+        picker.dataset.uploading = uploading ? "true" : "false";
+        picker.setAttribute("aria-label", picker.textContent + " for " + (input.closest(".cv-doc")?.querySelector("strong")?.textContent || "verification document"));
+      };
+      new MutationObserver(sync).observe(status, { attributes: true, attributeFilter: ["data-upload-state"], childList: true, characterData: true, subtree: true });
+      sync();
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+</script>
