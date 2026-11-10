@@ -7103,11 +7103,28 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     // Remember whether the reader was already near the bottom. Refreshing messages
     // must never scroll the document/page; only this fixed chat viewport may move.
     const wasNearBottom=(host.scrollHeight-host.scrollTop-host.clientHeight)<90;
-    const {data,error}=await supabaseClient.from('messages').select('id,sender_id,message,created_at').eq('conversation_id',conversationId).order('created_at',{ascending:true}).limit(100);
+    const readThrough=new Date().toISOString();
+    const {data,error}=await supabaseClient.from('messages').select('id,sender_id,message,created_at').eq('conversation_id',conversationId).order('created_at',{ascending:false}).limit(100);
     if(error){host.textContent='Could not load messages: '+error.message;return;}
+    if((hostId==='workerChatMessages'?clWorkerChatId:clCustomerChatId)!==conversationId)return;
+    data?.reverse();
     host.innerHTML=(data||[]).map(m=>{const mine=m.sender_id===window.clCurrentUser?.id;const worker=hostId==='workerChatMessages';const who=mine?'You · '+(worker?'Worker':'Customer'):(worker?(clWorkerJobContext?.name||$('workerChatTitle')?.textContent||'Job poster'):'Worker');return `<article class="cl-chat-bubble ${mine?'mine':'theirs'}"><strong class="cl-chat-sender">${mine?'↗':'↙'} ${who}</strong><p class="cl-chat-body">${esc(m.message)}</p><time class="cl-chat-time">${new Date(m.created_at).toLocaleString()}</time></article>`;}).join('')||'<p class="text-sm text-slate-500">No messages yet. Start the conversation.</p>';
     if(wasNearBottom){host.scrollTop=host.scrollHeight;}
+    // A background/hidden thread is not read. Only acknowledge messages after rendering.
+    const role=hostId==='workerChatMessages'?'worker':'customer';
+    if(wasNearBottom&&!document.hidden&&host.getClientRects().length&&
+       (role==='worker'?clWorkerChatId:clCustomerChatId)===conversationId){
+      await window.clMarkChatRead?.(conversationId,readThrough);
+    }
   }
+  // Refresh the existing thread and inbox without resetting navigation or the input.
+  window.clRefreshAccountMessages=async function(role){
+    const id=role==='worker'?clWorkerChatId:clCustomerChatId;
+    const host=$(role+'ChatMessages');
+    if(id&&!document.hidden&&host?.getClientRects().length)await loadChatMessages(id,role+'ChatMessages');
+    const list=$(role+'ConversationList');
+    if(list?.getClientRects().length&&!list.contains(document.activeElement))await loadConversations(role);
+  };
 
   // Job applications use the same account chat window and message sender as the inbox.
   window.cleanLankaOpenAccountJobChat=async function(jobId,user){
@@ -8314,7 +8331,9 @@ function ready(){show(root.dataset.activeTab||'profile');}
 'use strict';
 let activeUser='',activeRole='',channel=null,busy=false,refreshPending=false;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const active=()=>document.body.classList.contains('worker-dashboard-mode')?'worker':document.body.classList.contains('customer-dashboard-mode')?'customer':'';
+const active=()=>document.body.classList.contains('worker-dashboard-mode')?'worker':document.body.classList.contains('customer-dashboard-mode')?'customer':activeRole;
+let refreshTimer=null;
+const schedule=()=>{clearTimeout(refreshTimer);refreshTimer=setTimeout(refresh,100);};
 function badge(button,n){
  if(!button)return;
  let el=button.querySelector('.cl071-unread');
@@ -8322,64 +8341,74 @@ function badge(button,n){
  else el?.remove();
 }
 function clear(){document.querySelectorAll('.cl071-unread,.cl071-message-alerts').forEach(el=>el.remove())}
-async function markRead(conversationId){
+window.clMarkChatRead=async function(conversationId,readThrough){
  if(!conversationId||!activeUser)return;
- const {error}=await supabaseClient.from('notifications').update({is_read:true})
- .eq('user_id',activeUser).eq('notification_type','message')
- .eq('related_conversation_id',conversationId).eq('is_read',false);
+ const userId=activeUser;
+ const {data,error}=await supabaseClient.from('notifications').update({is_read:true})
+ .eq('user_id',userId).eq('notification_type','message')
+ .eq('related_conversation_id',conversationId).eq('is_read',false)
+ .lte('created_at',readThrough).select('id');
  if(error){console.warn('Could not mark chat notification read',error);return}
- await refresh();
-}
-document.addEventListener('click',e=>{
- const button=e.target.closest('[data-open-customer-chat],[data-open-worker-chat]');
- if(button){const id=button.dataset.openCustomerChat||button.dataset.openWorkerChat;setTimeout(()=>markRead(id),350)}
-},false);
+ if(data?.length)schedule();
+};
 async function refresh(){
  const selected=active();
- if(!selected){if(activeRole){activeRole='';activeUser='';if(channel){supabaseClient.removeChannel(channel);channel=null}clear()}return}
  if(busy){refreshPending=true;return}
  busy=true;
  try{
-  const {data:{user},error:authError}=await supabaseClient.auth.getUser();
-  if(authError||!user)return;
-  if(activeUser!==user.id||activeRole!==selected){
-   activeUser=user.id;activeRole=selected;clear();
+  const {data:{session},error:authError}=await supabaseClient.auth.getSession();
+  const user=session?.user;
+  if(authError)throw authError;
+  if(!user){activeUser='';activeRole='';if(channel){supabaseClient.removeChannel(channel);channel=null}clear();return;}
+  const role=selected||String(user.user_metadata?.account_type||'').toLowerCase();
+  if(!['customer','worker'].includes(role))return;
+  if(activeUser!==user.id||activeRole!==role){
+   activeUser=user.id;activeRole=role;clear();
    if(channel){supabaseClient.removeChannel(channel);channel=null}
    channel=supabaseClient.channel('cl072-alert-'+user.id)
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:'user_id=eq.'+user.id},()=>setTimeout(refresh,250))
-    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'notifications',filter:'user_id=eq.'+user.id},()=>setTimeout(refresh,250)).subscribe();
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:'user_id=eq.'+user.id},schedule)
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'notifications',filter:'user_id=eq.'+user.id},schedule)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},schedule)
+    .subscribe(status=>{if(status==='SUBSCRIBED')schedule();});
   }
+  await window.clRefreshAccountMessages?.(role);
   const {data,error}=await supabaseClient.from('notifications')
    .select('id,related_conversation_id,created_at')
    .eq('user_id',user.id).eq('notification_type','message').eq('is_read',false)
    .not('related_conversation_id','is',null).order('created_at',{ascending:false}).limit(500);
   if(error)throw error;
-  if(user.id!==activeUser||selected!==activeRole)return;
+  if(user.id!==activeUser||role!==activeRole)return;
   const unread=new Map();
   for(const n of data||[])unread.set(n.related_conversation_id,(unread.get(n.related_conversation_id)||0)+1);
   const count=[...unread.values()].reduce((a,b)=>a+b,0);
-  const root=document.getElementById(selected==='worker'?'workerDashboard':'customerDashboard');
+  badge(document.getElementById('clHomeAccountName'),count);
+  const root=document.getElementById(role==='worker'?'workerDashboard':'customerDashboard');
   root?.querySelectorAll('[data-cl-go]').forEach(b=>{
    if(['customerChatPanel','customerNotificationsPanel','workerChatPanel','workerNotificationsPanel'].includes(b.dataset.clGo))badge(b,count);
   });
-  const panel=document.getElementById(selected==='worker'?'workerNotificationsPanel':'customerNotificationsPanel');
+  const panel=document.getElementById(role==='worker'?'workerNotificationsPanel':'customerNotificationsPanel');
   if(panel){
    let host=panel.querySelector('.cl071-message-alerts');
    if(!host){host=document.createElement('div');host.className='cl071-message-alerts';panel.prepend(host)}
    host.replaceChildren();
    for(const [cid,n] of unread){
     const b=document.createElement('button');b.type='button';b.className='cl071-alert';
-    b.dataset[selected==='worker'?'openWorkerChat':'openCustomerChat']=cid;
+    b.dataset[role==='worker'?'openWorkerChat':'openCustomerChat']=cid;
     b.innerHTML='<strong>💬 '+n+' unread message'+(n===1?'':'s')+'</strong><small>Tap to open and mark as read</small>';
     host.append(b);
    }
    if(!unread.size)host.remove();
   }
-  const list=document.getElementById(selected==='worker'?'workerConversationList':'customerConversationList');
+  const list=document.getElementById(role==='worker'?'workerConversationList':'customerConversationList');
   list?.querySelectorAll('[data-open-worker-chat],[data-open-customer-chat]').forEach(b=>badge(b,unread.get(b.dataset.openWorkerChat||b.dataset.openCustomerChat)||0));
  }catch(e){console.warn('Clean Lanka unread notifications:',e)}
  finally{busy=false;if(refreshPending){refreshPending=false;setTimeout(refresh,100)}}
 }
+supabaseClient.auth.onAuthStateChange((event)=>{
+ if(event==='SIGNED_OUT'){activeUser='';activeRole='';if(channel){supabaseClient.removeChannel(channel);channel=null}clear();}
+ schedule();
+});
+new MutationObserver(schedule).observe(document.body,{attributes:true,attributeFilter:['class']});
 setInterval(refresh,6000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh()});
 window.addEventListener('focus',refresh);
