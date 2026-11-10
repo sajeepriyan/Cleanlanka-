@@ -8553,3 +8553,29 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   else init();
 })();
 </script>
+
+
+<!-- Mobile result lists: scroll WITHIN Find Workers and Job Opportunities cards, without Load More.
+     Leave the search/header outside these scrollboxes and retain natural page scrolling at the edges. -->
+<style id="cl-mobile-directory-inner-scroll-20261110">
+@media (max-width: 767px) {
+  #homeMarketplace #homeWorkerResults,
+  #homeMarketplace #homeJobResults {
+    height: auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y pinch-zoom !important;
+    scroll-behavior: auto !important;
+    scrollbar-width: thin !important;
+    scrollbar-gutter: auto !important;
+  }
+  #homeMarketplace #homeWorkerResults {
+    max-height: min(58dvh, 480px) !important;
+  }
+  #homeMarketplace #homeJobResults {
+    max-height: min(62dvh, 520px) !important;
+  }
+}
+</style>
