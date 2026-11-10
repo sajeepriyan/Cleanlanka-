@@ -7064,6 +7064,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     if(contactResult.error)console.warn('Chat contact names unavailable:',contactResult.error);
     const counts=new Map();for(const n of unreadResult.data||[])counts.set(n.related_conversation_id,(counts.get(n.related_conversation_id)||0)+1);
     const names=new Map((contactResult.data||[]).map(p=>[String(p.conversation_id),p.contact_name]));
+    for(const [id,name] of names)if(name)chatContactNames.set(id,String(name).trim());
     const rows=await Promise.all(data.map(async c=>{
       const {data:latest}=await supabaseClient.from('messages').select('message,created_at,sender_id').eq('conversation_id',c.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
       return {c,latest,unread:counts.get(c.id)||0,name:names.get(String(c.id))|| (role==='worker'?'Customer':'Worker')};
@@ -7098,6 +7099,22 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     },7000);
   }
 
+  const chatContactNames=new Map();
+  async function getChatContactName(conversationId){
+    if(chatContactNames.has(conversationId))return chatContactNames.get(conversationId);
+    const {data,error}=await supabaseClient.rpc('clean_lanka_chat_contact_names',{p_conversation_ids:[conversationId]});
+    const name=String(data?.find(row=>row.conversation_id===conversationId)?.contact_name||'').trim();
+    if(!error&&name)chatContactNames.set(conversationId,name);
+    return name;
+  }
+  function chatSenderLabel(mine,role,contactName){
+    const ownName=String($(role+'DashName')?.textContent||window.clCurrentUser?.user_metadata?.full_name||'').trim();
+    const ownRole=role==='worker'?'Worker':'Customer';
+    const otherRole=role==='worker'?'Customer':'Worker';
+    return mine?(ownName?ownName+' · '+ownRole+' (You)':'You · '+ownRole)
+      :(contactName?contactName+' · '+otherRole:otherRole);
+  }
+
   async function loadChatMessages(conversationId,hostId){
     const host=$(hostId);if(!host)return;
     // Remember whether the reader was already near the bottom. Refreshing messages
@@ -7108,7 +7125,11 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     if(error){host.textContent='Could not load messages: '+error.message;return;}
     if((hostId==='workerChatMessages'?clWorkerChatId:clCustomerChatId)!==conversationId)return;
     data?.reverse();
-    host.innerHTML=(data||[]).map(m=>{const mine=m.sender_id===window.clCurrentUser?.id;const worker=hostId==='workerChatMessages';const who=mine?'You · '+(worker?'Worker':'Customer'):(worker?(clWorkerJobContext?.name||$('workerChatTitle')?.textContent||'Job poster'):'Worker');return `<article class="cl-chat-bubble ${mine?'mine':'theirs'}"><strong class="cl-chat-sender">${mine?'↗':'↙'} ${who}</strong><p class="cl-chat-body">${esc(m.message)}</p><time class="cl-chat-time">${new Date(m.created_at).toLocaleString()}</time></article>`;}).join('')||'<p class="text-sm text-slate-500">No messages yet. Start the conversation.</p>';
+    const chatRole=hostId==='workerChatMessages'?'worker':'customer';
+    const contactName=await getChatContactName(conversationId);
+    if((chatRole==='worker'?clWorkerChatId:clCustomerChatId)!==conversationId)return;
+    if(contactName&&$(chatRole+'ChatTitle'))$(chatRole+'ChatTitle').textContent=contactName;
+    host.innerHTML=(data||[]).map(m=>{const mine=m.sender_id===window.clCurrentUser?.id;const who=chatSenderLabel(mine,chatRole,contactName);return `<article class="cl-chat-bubble ${mine?'mine':'theirs'}"><strong class="cl-chat-sender">${mine?'↗':'↙'} ${esc(who)}</strong><p class="cl-chat-body">${esc(m.message)}</p><time class="cl-chat-time">${new Date(m.created_at).toLocaleString()}</time></article>`;}).join('')||'<p class="text-sm text-slate-500">No messages yet. Start the conversation.</p>';
     if(wasNearBottom){host.scrollTop=host.scrollHeight;}
     // A background/hidden thread is not read. Only acknowledge messages after rendering.
     const role=hostId==='workerChatMessages'?'worker':'customer';
