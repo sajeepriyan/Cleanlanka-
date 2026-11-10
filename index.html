@@ -41,6 +41,46 @@
   };
 })();
 </script>
+<style>
+.cl-job-contact-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.cl-job-contact-actions a,.cl-job-contact-actions button{display:inline-flex;align-items:center;justify-content:center;border:1px solid #b7dbc6;border-radius:9px;padding:8px 12px;min-height:40px;font-size:13px;font-weight:700;background:#edf8f1;color:#115c37;text-decoration:none}.cl-job-contact-actions button{background:#0b7943;color:white}.cl-job-contact-note{font-size:12px;color:#51675d;margin-top:6px}.cl-job-ad-fields{border:1px solid #cfe5d7;border-radius:12px;padding:14px;margin:12px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.cl-job-ad-fields legend{font-weight:800;color:#183e2b;padding:0 6px}.cl-job-ad-fields label{display:flex;flex-direction:column;gap:5px;font-size:14px;color:#253c30}.cl-job-ad-fields input:not([type=checkbox]),.cl-job-ad-fields select,.cl-job-ad-fields textarea{width:100%;border:1px solid #bfd4c7;border-radius:9px;padding:10px;font-size:15px;background:white;color:#183c2b}.cl-job-ad-fields .cl-ad-check{flex-direction:row;align-items:flex-start;grid-column:1/-1}.cl-ad-check input{width:20px;height:20px;flex-shrink:0;accent-color:#087c43;margin-top:2px}.cl-job-ad-fields small{grid-column:1/-1;color:#51675d}.cl-official-chat-messages{height:min(55dvh,500px);overflow:auto;overscroll-behavior:contain;background:#eff7f1;border-radius:12px;padding:14px;margin:12px 0}.cl-official-chat-message{background:white;border-radius:12px;padding:12px;margin-bottom:10px;max-width:90%;overflow-wrap:anywhere;white-space:pre-wrap}.cl-official-chat-message.official{margin-left:auto;background:#d7f3e1}@media(max-width:480px){.cl-job-ad-fields{grid-template-columns:1fr}}
+</style>
+<script id="cl-job-ad-contact-helpers-20261110">
+(function(){
+ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const periods={hour:'per hour',day:'per day',month:'per month',job:'per job',not_specified:''};
+ window.clJobSalaryPeriod=j=>periods[j.salary_period]||'';
+ window.clJobContactHTML=function(j){
+  const phone=j.show_contact_phone===true&&/^[0-9]{10}$/.test(j.contact_phone||'')?j.contact_phone:null;
+  const international=phone?'94'+phone.slice(1):'';
+  return '<div class="cl-job-contact-actions">'+(phone?'<a href="tel:'+phone+'" aria-label="Call job advertiser '+phone+'">☎ Call '+phone+'</a>':'')+(phone&&j.allow_whatsapp===true?'<a target="_blank" rel="noopener noreferrer" href="https://wa.me/'+international+'">WhatsApp</a>':'')+'<button type="button" data-home-job-apply="'+esc(j.id)+'" aria-label="Live Chat about '+esc(j.service_title||'this job')+'">Live Chat</button></div><p class="cl-job-contact-note">'+(phone?'Call directly without an account, or sign in for Live Chat.':'Phone number is private. Create a Worker account or sign in to use Live Chat.')+'</p>';
+ };
+ window.clJobAdDetailsHTML=function(j){
+  return [['Contact',j.contact_name],['Salary period',periods[j.salary_period]],['Working hours',j.working_hours],['Experience required',j.experience_required],['Food / accommodation / benefits',j.benefits]].filter(x=>x[1]).map(([label,value])=>'<p><strong>'+label+':</strong> '+esc(value)+'</p>').join('');
+ };
+ window.clBuildJobAdFields=function(prefix,row={}){
+  const box=document.createElement('fieldset');box.className='cl-job-ad-fields sm:col-span-2';
+  box.innerHTML='<legend>Job details & contact options</legend>'+[
+   ['ContactName','Contact name (optional)','text',120],['WorkingHours','Working hours (optional)','text',200],['Experience','Experience required (optional)','text',300],['Benefits','Food, accommodation / benefits (optional)','text',1000]
+  ].map(([suffix,label,type,max])=>'<label>'+label+'<input id="'+prefix+suffix+'" type="'+type+'" maxlength="'+max+'"></label>').join('')+
+  '<label>Salary period<select id="'+prefix+'SalaryPeriod"><option value="not_specified">Not specified</option><option value="hour">Per hour</option><option value="day">Per day</option><option value="month">Per month</option><option value="job">Per job</option></select></label><label class="cl-ad-check"><input id="'+prefix+'ShowPhone" type="checkbox">Show this advert’s contact number publicly (optional)</label><label>Public contact number — 10 digits<input id="'+prefix+'Phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="0771234567"></label><label class="cl-ad-check"><input id="'+prefix+'WhatsApp" type="checkbox">Allow contact through WhatsApp on this public number</label><small>Leave the number private to receive enquiries through your account’s Live Chat. Your profile phone number is never added automatically.</small>';
+  const get=suffix=>box.querySelector('#'+prefix+suffix);
+  const values={ContactName:row.contact_name,WorkingHours:row.working_hours,Experience:row.experience_required,Benefits:row.benefits,Phone:row.contact_phone,SalaryPeriod:row.salary_period||'not_specified'};
+  for(const [suffix,value] of Object.entries(values))get(suffix).value=value||'';
+  get('ShowPhone').checked=row.show_contact_phone===true;get('WhatsApp').checked=row.allow_whatsapp===true;
+  function sync(){const visible=get('ShowPhone').checked;get('Phone').disabled=!visible;get('Phone').required=visible;get('WhatsApp').disabled=!visible;if(!visible)get('WhatsApp').checked=false;}
+  get('ShowPhone').addEventListener('change',sync);sync();
+  box.clSyncContact=sync;return box;
+ };
+ window.clReadJobAdFields=function(prefix){
+  const get=suffix=>document.getElementById(prefix+suffix);
+  const show=get('ShowPhone')?.checked===true,phone=(get('Phone')?.value||'').trim();
+  if(show&&!/^[0-9]{10}$/.test(phone))throw new Error('Enter exactly 10 digits for the public job contact number.');
+  return {contact_name:get('ContactName')?.value.trim()||null,contact_phone:show?phone:null,show_contact_phone:show,allow_whatsapp:show&&get('WhatsApp')?.checked===true,salary_period:get('SalaryPeriod')?.value||'not_specified',working_hours:get('WorkingHours')?.value.trim()||null,experience_required:get('Experience')?.value.trim()||null,benefits:get('Benefits')?.value.trim()||null};
+ };
+ function mount(){for(const [id,prefix] of [['customerJobForm','jobAd'],['adminOfficialJobForm','officialAd']]){const form=document.getElementById(id);if(!form)continue;form.insertBefore(window.clBuildJobAdFields(prefix),form.querySelector('button[type=submit],button'));form.addEventListener('reset',()=>setTimeout(()=>form.querySelector('.cl-job-ad-fields')?.clSyncContact(),0));}}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
+})();
+</script>
 <meta name="google" content="notranslate">
 <!-- Clean Lanka Index 006: customer registration metadata + Contact navigation correction; prior features preserved. -->
 <meta charset="utf-8"/>
@@ -72,7 +112,7 @@
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
     try {
-      const response = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_public_job_posts', {
+      const response = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_public_job_ads', {
         method: 'POST',
         headers: { apikey: SUPABASE_PUBLISHABLE_KEY, 'Content-Type': 'application/json' },
         body: '{}',
@@ -3941,8 +3981,8 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
  <div class="cl-market-wrap">
   <div class="cl-market-grid">
    <section class="cl-market-jobs" aria-labelledby="homeJobsHeading">
-    <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><h2 id="homeJobsHeading" class="cl-market-heading"><span class="material-symbols-outlined align-middle text-emerald-700" aria-hidden="true">work_outline</span> Latest Job Opportunities</h2><a href="#homeJobResults" class="cl-jobs-login" onclick="openLoginPage();return false;">Worker Login to Apply <span aria-hidden="true">→</span></a></div>
-    <p class="cl-jobs-intro">Customer-posted opportunities and official Clean Lanka jobs. Private customer details stay protected.</p>
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><h2 id="homeJobsHeading" class="cl-market-heading"><span class="material-symbols-outlined align-middle text-emerald-700" aria-hidden="true">work_outline</span> Latest Job Opportunities</h2><a href="#homeJobResults" class="cl-jobs-login" onclick="openLoginPage();return false;">Worker Login / Live Chat <span aria-hidden="true">→</span></a></div>
+    <p class="cl-jobs-intro">Browse job adverts freely. Call public contact numbers directly, or use your account for private Live Chat.</p>
     <div class="cl-job-tabs flex flex-wrap gap-2 mb-4" role="group" aria-label="Filter public job opportunities"><button type="button" class="home-job-filter rounded-full bg-blue-700 text-white px-4 py-2 text-sm font-bold" data-job-filter="all">All Jobs</button><button type="button" class="home-job-filter rounded-full bg-slate-100 text-slate-700 px-4 py-2 text-sm font-bold" data-job-filter="customer">Customer Jobs</button><button type="button" class="home-job-filter rounded-full bg-slate-100 text-slate-700 px-4 py-2 text-sm font-bold" data-job-filter="official">Official Jobs</button></div>
     <p id="homeJobMessage" class="text-sm text-slate-500 mb-3" role="status" aria-live="polite">Loading job opportunities...</p>
     <div id="homeJobResults" class="cl-compact-jobs" aria-label="Public job opportunity listings" aria-busy="true"><article class="cl-job-placeholder" aria-hidden="true"><span></span><span></span><span></span><span></span></article><article class="cl-job-placeholder" aria-hidden="true"><span></span><span></span><span></span><span></span></article><article class="cl-job-placeholder" aria-hidden="true"><span></span><span></span><span></span><span></span></article><article class="cl-job-placeholder" aria-hidden="true"><span></span><span></span><span></span><span></span></article></div>
@@ -3972,7 +4012,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     if(!rows.length){host.innerHTML='<p class="cl-directory-empty">No open job opportunities match the selected filters.</p>';return;}
     host.innerHTML=rows.map(j=>{
       const title=esc(j.service_title||'Service Job');
-      const summary=esc(j.description||'Details available after worker login.');
+      const summary=esc(j.description||'View the full job details.');
       const district=esc(j.district||'Sri Lanka');
       const budget=esc(money(j.budget_lkr));
       const date=esc(j.preferred_date||'Flexible');
@@ -3991,9 +4031,9 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
         '<p class="cl-job-summary" title="'+summary+'">'+summary+'</p>'+
         '<p class="cl-job-posted" title="Published '+esc(posted.absolute)+'"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>'+esc(posted.label)+' · '+esc(posted.absolute)+'</p>'+
         '<button type="button" class="cl-job-details-toggle" data-cl-job-details aria-expanded="false" aria-controls="cl-job-more-'+id+'">View details</button>'+
-        '<div class="cl-job-details" id="cl-job-more-'+id+'" hidden><p>'+summary+'</p><p><strong>Published:</strong> '+esc(posted.absolute)+'</p><p><strong>District:</strong> '+district+'</p><p><strong>Budget:</strong> '+budget+'</p><p><strong>Preferred:</strong> '+date+'</p></div></div>'+
-        '<div class="cl-job-side"><strong>'+budget+'</strong><span class="cl-job-date">Preferred: '+date+'</span>'+
-        '<button type="button" class="cl-action cl-job-view" data-home-job-apply="'+id+'" aria-label="Apply for '+title+' or sign in as worker">Apply / Login</button></div>'+
+        '<div class="cl-job-details" id="cl-job-more-'+id+'" hidden><p>'+summary+'</p><p><strong>Published:</strong> '+esc(posted.absolute)+'</p><p><strong>District:</strong> '+district+'</p><p><strong>Salary / budget:</strong> '+budget+' '+esc(window.clJobSalaryPeriod(j))+'</p><p><strong>Preferred:</strong> '+date+'</p>'+window.clJobAdDetailsHTML(j)+window.clJobContactHTML(j)+'</div></div>'+
+        '<div class="cl-job-side"><strong>'+budget+' '+esc(window.clJobSalaryPeriod(j))+'</strong><span class="cl-job-date">Preferred: '+date+'</span>'+
+        window.clJobContactHTML(j)+'</div>'+
       '</article>';
     }).join('');
   };
@@ -4397,7 +4437,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
  <div class="max-w-7xl mx-auto">
   <div class="admin-topbar"><div class="admin-brand"><div class="admin-brand-mark" aria-hidden="true">🏡</div><div><p class="text-xs font-black tracking-widest">CLEAN LANKA • CONTROL CENTRE</p><h1 id="clAdminDashboardTitle">Admin Dashboard</h1><p id="clAdminDashboardEmailName" class="text-sm font-bold mt-1"></p><p id="adminDashboardEmail" class="text-sm mt-1"></p></div></div><button id="adminDashboardLogoutButton" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold" type="button">Sign Out</button></div>
   <section id="clGrantedPermissions" class="hidden rounded-2xl bg-white border border-blue-200 p-4 my-4" aria-label="Granted permissions"><h2 class="font-black text-blue-900 text-lg">My Granted Permissions</h2><p class="text-sm text-slate-600">Only the Main Admin can change these permissions.</p><div id="clGrantedPermissionsList" class="grid sm:grid-cols-2 gap-2 mt-3"></div></section><div class="cl-admin-welcome-strip"><div><span class="cl-admin-eyebrow">YOUR COMMAND CENTRE</span><h2>Manage Clean Lanka in one place</h2><p>Customers, workers, jobs, bookings, verification and public website preview.</p></div><a href="#clAdminPublicPreview" class="cl-admin-preview-link">🌐 View Homepage Preview</a></div>
-  <div class="cl-admin-workspace"><nav class="admin-nav" aria-label="Admin dashboard navigation"><div class="cl-admin-side-heading"><span class="cl-admin-side-icon">✦</span><span>CLEAN LANKA<br><small>ADMIN WORKSPACE</small></span></div><a href="#adminOverview">▦ Overview</a><a href="#adminWorkersHeading">♙ Workers</a><a href="#adminCustomersHeading">♧ Customers</a><a href="#adminBookingsHeading">▤ Bookings</a><a href="#adminChatsHeading" id="clAdminChatsNav" style="display:none">💬 All Chats</a><a href="#adminNotificationsHeading">♢ Notifications</a><a href="#adminSubAdminsHeading">⚙ Sub Admins</a><a href="#clAdminPublicPreview">🌐 Website Preview</a></nav><main class="cl-admin-main">
+  <div class="cl-admin-workspace"><nav class="admin-nav" aria-label="Admin dashboard navigation"><div class="cl-admin-side-heading"><span class="cl-admin-side-icon">✦</span><span>CLEAN LANKA<br><small>ADMIN WORKSPACE</small></span></div><a href="#adminOverview">▦ Overview</a><a href="#adminWorkersHeading">♙ Workers</a><a href="#adminCustomersHeading">♧ Customers</a><a href="#adminBookingsHeading">▤ Bookings</a><a href="#adminChatsHeading" id="clAdminChatsNav" style="display:none">💬 All Chats</a><a href="#clOfficialJobChats" id="clOfficialJobChatsNav" style="display:none">💬 Official Job Messages</a><a href="#adminNotificationsHeading">♢ Notifications</a><a href="#adminSubAdminsHeading">⚙ Sub Admins</a><a href="#clAdminPublicPreview">🌐 Website Preview</a></nav><main class="cl-admin-main">
   <section id="clAdminPublicPreview" class="cl-admin-preview-section" aria-labelledby="clAdminPreviewHeading">
 <div class="cl-admin-preview-heading"><div><span class="cl-admin-eyebrow">LIVE PUBLIC VIEW</span><h2 id="clAdminPreviewHeading">🌐 Clean Lanka Homepage Preview</h2><p>See the same public website visitors see, including job opportunities, service categories and approved worker listings. Admin tools remain above.</p></div><div class="cl-admin-preview-actions"><a href="/" target="_blank" rel="noopener">Open Homepage ↗</a><button type="button" id="clAdminPreviewRefresh">↻ Refresh Preview</button></div></div>
 <iframe id="clAdminHomepageFrame" title="Clean Lanka public homepage preview" loading="lazy" src="/" referrerpolicy="same-origin"></iframe>
@@ -4411,7 +4451,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
    <div class="admin-stat"><p class="stat-label">Admin Access</p><p id="adminAccessLabel" class="stat-value">Verified</p></div>
   </div>
   <div class="admin-welcome"><h2>Welcome to your Clean Lanka Control Centre</h2><p class="mt-1">Manage workers, customers and administrator access from one secure workspace.</p><p id="adminDashboardMessage" class="text-sm mt-3" role="status"></p></div>
-  <div id="adminOfficialJobsMount"></div>
+  <div id="adminOfficialJobsMount"></div><section id="clOfficialJobChats" class="hidden rounded-2xl bg-white border border-emerald-200 p-4"><h2 class="text-2xl font-black text-emerald-900">Official Job Messages</h2><p class="text-sm text-slate-600 mb-3">Reply to Workers contacting Clean Lanka about official job adverts.</p><button type="button" class="cl-action" id="clOfficialChatRefresh">Refresh messages</button><p id="clOfficialChatStatus" role="status"></p><div id="clOfficialChatList"></div><div id="clOfficialChatThread" hidden><button type="button" class="cl-action light" id="clOfficialChatBack">← Back to messages</button><h3 id="clOfficialChatTitle" class="text-xl font-bold mt-3"></h3><p id="clOfficialChatJobs"></p><div id="clOfficialChatMessages" class="cl-official-chat-messages" aria-live="polite"></div><form id="clOfficialChatForm" class="flex gap-2"><input id="clOfficialChatInput" class="min-w-0 flex-1 rounded-xl border p-3" maxlength="4000" required placeholder="Reply as Clean Lanka" aria-label="Reply to Worker"><button class="cl-action" type="submit">Send</button></form></div></section>
   <div class="hidden" aria-hidden="true"></div>
   <section id="adminCustomersSection" class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 mb-6 hidden" aria-labelledby="adminCustomersHeading">
    <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 id="adminCustomersHeading" class="text-xl font-black text-slate-900">Customer Management</h2><p class="text-sm text-slate-500 mt-1">Customer ID, name, district and registration date.</p></div><button id="adminRefreshCustomers" type="button" class="rounded-xl bg-emerald-800 text-white px-5 py-3 font-bold">Refresh Customers</button></div>
@@ -4577,7 +4617,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
 <div class="grid md:grid-cols-2 gap-4 mt-3" id="publicWorkerResults"></div>
 </section></section><section class="cl-final-panel" data-cl-final="jobs" hidden=""><section class="customer-card mt-6" id="customerJobBoard">
 <h2 class="text-2xl font-black text-blue-900 mb-2">Post a Job</h2>
-<p class="text-sm text-slate-600 mb-4">Describe the work you need. Approved and eligible workers can apply.</p>
+<p class="text-sm text-slate-600 mb-4">Publish a job advert. Visitors can call your chosen public number, or registered Workers can contact you through Live Chat.</p>
 <form class="grid sm:grid-cols-2 gap-3" id="customerJobForm">
 <input class="rounded-xl border border-slate-200 p-3" id="jobTitle" maxlength="120" placeholder="Job title (e.g. Home Cleaning)" required=""/>
 <input class="rounded-xl border border-slate-200 p-3" id="jobTitleEnglish" maxlength="120" placeholder="English job name (optional)"/>
@@ -6502,6 +6542,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
       document.getElementById('adminOfficialJobForm')?.classList.toggle('hidden',!officialJobCanCreate);
       document.getElementById('clOfficialScheduleManager')?.classList.toggle('hidden',!officialJobCanCreate&&!officialJobCanEdit);
       if(officialJobCanCreate||officialJobCanEdit)window.clRefreshOfficialSchedules?.();
+      document.getElementById('clOfficialJobChatsNav').style.display=currentAdminRole==='main_admin'||officialJobCanCreate?'':'none';
       document.getElementById('adminAccessLabel').textContent=currentAdminRole==='main_admin'?'Main Admin':currentAdminRole==='sub_admin'?'Sub Admin':'Admin';
       document.getElementById('adminSubAdminsSection').classList.toggle('hidden',currentAdminRole!=='main_admin');
       document.getElementById('adminWorkersHeading').closest('section').classList.toggle('hidden',!adminHasPermission('workers_view'));
@@ -6970,6 +7011,14 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
           section.appendChild(form);
         }
       }
+      if(j.status==='open'){
+        const edit=document.createElement('details'),summary=document.createElement('summary');
+        summary.textContent='Edit advert details / contact options';summary.className='font-bold cursor-pointer mt-3';edit.append(summary);
+        const prefix='editAd-'+j.id;edit.append(window.clBuildJobAdFields(prefix,j));
+        const save=document.createElement('button'),note=document.createElement('p');save.type='button';save.className='cl-action';save.textContent='Save advert contact options';note.setAttribute('role','status');
+        save.addEventListener('click',async()=>{save.disabled=true;try{const values=window.clReadJobAdFields(prefix);const {data,error}=await supabaseClient.from('job_posts').update(values).eq('id',j.id).eq('customer_id',user.id).eq('status','open').select('id').single();if(error)throw error;if(!data?.id)throw Error('Advert could not be updated.');note.textContent='Advert updated.';await loadHomeJobs();}catch(error){note.textContent=error.message;}finally{save.disabled=false;}});
+        edit.append(save,note);card.append(edit);
+      }
       host.appendChild(card);
     }
   }
@@ -6977,7 +7026,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   async function loadWorkerJobs(focusJobId=null){
     const host=$('workerOpenJobs');if(!host||!activeWorkerProfileId)return;
     say('workerJobsMessage','Loading open jobs...');
-    const {data:publicJobs,error}=await supabaseClient.rpc('get_public_job_posts');
+    const {data:publicJobs,error}=await supabaseClient.rpc('get_public_job_ads');
     const jobs=Array.isArray(publicJobs)?publicJobs.slice():[];
     focusJobId=focusJobId||window.clSelectedWorkerJob(window.clCurrentUser)?.id||null;
     if(error){say('workerJobsMessage','Could not load jobs: '+error.message,true);return;}
@@ -6986,9 +7035,9 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     const {data:mine,error:mineError}=await supabaseClient.from('job_applications').select('job_id,status').eq('worker_id',activeWorkerProfileId);
     if(mineError){say('workerJobsMessage','Could not check your previous applications: '+mineError.message,true);return;}
     const applied=new Map((mine||[]).map(a=>[a.job_id,a.status]));
-    host.innerHTML=jobs.map(j=>`<article data-worker-job-card="${esc(j.id)}" class="border rounded-xl p-4 bg-slate-50 ${j.id===focusJobId?'ring-2 ring-emerald-500 bg-emerald-50':''}">${j.id===focusJobId?'<p class="text-sm font-bold text-emerald-800 mb-2">The job you viewed — continue here</p>':''}<h3 class="font-black text-slate-900">${esc(j.service_title)}</h3><p class="text-sm text-slate-600 mt-1">${esc(j.district)} · ${esc(money(j.budget_lkr))}</p><p class="text-sm mt-2">${esc(String(j.description||'').slice(0,160))}${String(j.description||'').length>160?'…':''}</p><div class="cl-job-details" hidden><p>${esc(j.description)}</p><p>District: ${esc(j.district)}</p><p>Budget: ${esc(money(j.budget_lkr))}</p><p>Preferred date: ${esc(j.preferred_date||'Flexible')}</p></div>${applied.has(j.id)?`<p class="text-sm font-bold text-emerald-700 mt-3">Application: ${esc(applied.get(j.id))}</p>`:''}<div class="flex flex-wrap gap-2 mt-3"><button type="button" class="cl-action light" data-cl-job-details>View details</button><button type="button" class="cl-action" data-home-job-apply="${esc(j.id)}">${applied.has(j.id)?'Open Job Chat':'Apply / Chat'}</button></div></article>`).join('');
+    host.innerHTML=jobs.map(j=>`<article data-worker-job-card="${esc(j.id)}" class="border rounded-xl p-4 bg-slate-50 ${j.id===focusJobId?'ring-2 ring-emerald-500 bg-emerald-50':''}">${j.id===focusJobId?'<p class="text-sm font-bold text-emerald-800 mb-2">The job you viewed — continue here</p>':''}<h3 class="font-black text-slate-900">${esc(j.service_title)}</h3><p class="text-sm text-slate-600 mt-1">${esc(j.district)} · ${esc(money(j.budget_lkr))}</p><p class="text-sm mt-2">${esc(String(j.description||'').slice(0,160))}${String(j.description||'').length>160?'…':''}</p><div class="cl-job-details" hidden><p>${esc(j.description)}</p><p>District: ${esc(j.district)}</p><p>Budget: ${esc(money(j.budget_lkr))}</p><p>Preferred date: ${esc(j.preferred_date||'Flexible')}</p>${window.clJobAdDetailsHTML(j)}${window.clJobContactHTML(j)}</div>${applied.has(j.id)?`<p class="text-sm font-bold text-emerald-700 mt-3">Application: ${esc(applied.get(j.id))}</p>`:''}<div class="flex flex-wrap gap-2 mt-3"><button type="button" class="cl-action light" data-cl-job-details>View details</button>${window.clJobContactHTML(j)}</div></article>`).join('');
     const selectedAvailable=focusJobId&&jobs.some(j=>j.id===focusJobId);
-    say('workerJobsMessage',selectedAvailable?'The job you viewed is shown first. Read its details, then choose Apply / Chat.':focusJobId?'The job you viewed is no longer open. You can browse the other available jobs.':jobs.length+' open job(s) available.');
+    say('workerJobsMessage',selectedAvailable?'The job you viewed is shown first. Read its details, then call the advertiser or choose Live Chat.':focusJobId?'The job you viewed is no longer open. You can browse the other available jobs.':jobs.length+' open job(s) available.');
   }
 
   async function loadConversations(role){
@@ -7056,7 +7105,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     const wasNearBottom=(host.scrollHeight-host.scrollTop-host.clientHeight)<90;
     const {data,error}=await supabaseClient.from('messages').select('id,sender_id,message,created_at').eq('conversation_id',conversationId).order('created_at',{ascending:true}).limit(100);
     if(error){host.textContent='Could not load messages: '+error.message;return;}
-    host.innerHTML=(data||[]).map(m=>{const mine=m.sender_id===window.clCurrentUser?.id;const worker=hostId==='workerChatMessages';const who=mine?'You · '+(worker?'Worker':'Customer'):(worker?'Customer':'Worker');return `<article class="cl-chat-bubble ${mine?'mine':'theirs'}"><strong class="cl-chat-sender">${mine?'↗':'↙'} ${who}</strong><p class="cl-chat-body">${esc(m.message)}</p><time class="cl-chat-time">${new Date(m.created_at).toLocaleString()}</time></article>`;}).join('')||'<p class="text-sm text-slate-500">No messages yet. Start the conversation.</p>';
+    host.innerHTML=(data||[]).map(m=>{const mine=m.sender_id===window.clCurrentUser?.id;const worker=hostId==='workerChatMessages';const who=mine?'You · '+(worker?'Worker':'Customer'):(worker?(clWorkerJobContext?.name||$('workerChatTitle')?.textContent||'Job poster'):'Worker');return `<article class="cl-chat-bubble ${mine?'mine':'theirs'}"><strong class="cl-chat-sender">${mine?'↗':'↙'} ${who}</strong><p class="cl-chat-body">${esc(m.message)}</p><time class="cl-chat-time">${new Date(m.created_at).toLocaleString()}</time></article>`;}).join('')||'<p class="text-sm text-slate-500">No messages yet. Start the conversation.</p>';
     if(wasNearBottom){host.scrollTop=host.scrollHeight;}
   }
 
@@ -7067,6 +7116,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     const sendButton=$('workerChatForm').querySelector('button');
     sendButton.disabled=true;
     $('workerJobChatContext')?.setAttribute('hidden','');
+    $('workerJobApplyButton')?.setAttribute('hidden','');$('workerJobApplyNote')?.setAttribute('hidden','');
     clWorkerChatId=null;clWorkerJobContext=null;stopChatRealtime();
     input.value='';input.maxLength=3500;
     const loading=window.loadWorkerDashboard(user);
@@ -7090,10 +7140,19 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
       if(clWorkerChatId){await loadChatMessages(clWorkerChatId,'workerChatMessages');await subscribeChatRealtime(clWorkerChatId,'workerChatMessages');}
       else $('workerChatMessages').textContent='No messages yet. Send a message to '+clWorkerJobContext.name+' about this job.';
       const eligibility=workerAvailabilityEligibility(currentWorkerProfile);
-      const canSend=eligibility.allowed&&Boolean(currentWorkerProfile?.is_available);
-      say('workerChatMessage',canSend?'Your first message records your application.':!eligibility.approved?'Your Worker account is pending approval. You can read this job; sending an application becomes available after approval and clearance eligibility.':!eligibility.clearanceVerified?'Clearance eligibility is required before you can send an application.':'Turn on Availability in My Profile to send an application.',!canSend);
+      const canApply=eligibility.allowed&&Boolean(currentWorkerProfile?.is_available);
+      say('workerChatMessage','Send an enquiry to the advertiser. Sending a chat message does not submit a job application.');
       input.placeholder='Message '+clWorkerJobContext.name+' about this job';
-      sendButton.disabled=!canSend;
+      sendButton.disabled=false;
+      let applyButton=$('workerJobApplyButton'),applyNote=$('workerJobApplyNote');
+      if(!applyButton){
+        applyButton=document.createElement('button');applyButton.id='workerJobApplyButton';applyButton.type='button';applyButton.className='cl-action mt-3';applyButton.textContent='Apply for this Job';
+        applyNote=document.createElement('p');applyNote.id='workerJobApplyNote';applyNote.className='text-sm text-slate-600 mt-2';applyNote.setAttribute('role','status');
+        $('workerChatForm').after(applyButton,applyNote);
+        applyButton.addEventListener('click',submitWorkerJobApplication);
+      }
+      applyButton.hidden=false;applyNote.hidden=false;applyButton.disabled=!canApply;
+      applyNote.textContent=canApply?'To apply formally, write your application in the message box and choose Apply for this Job.':!eligibility.approved?'Your account is pending approval. Live Chat is available; applying requires approval.':!eligibility.clearanceVerified?'Live Chat is available. Clearance eligibility is required to apply.':'Live Chat is available. Turn on Availability in My Profile to apply.';
     }catch(error){
       $('workerChatTitle').textContent='Job conversation unavailable';
       $('workerChatMessages').textContent='';
@@ -7101,6 +7160,19 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     }
     window.dispatchEvent(new CustomEvent('cl-open-account-thread',{detail:{role:'worker'}}));
   };
+
+  async function submitWorkerJobApplication(){
+    const context=clWorkerJobContext,button=$('workerJobApplyButton'),input=$('workerChatInput');
+    if(!context||button.disabled)return;
+    const message=input.value.trim();if(!message){say('workerJobApplyNote','Write your application in the message box first.',true);return;}
+    button.disabled=true;
+    try{
+      const {data,error}=await supabaseClient.rpc('worker_apply_to_job',{p_job_id:context.id,p_message:message});if(error)throw error;
+      if(clWorkerJobContext!==context)return;
+      clWorkerChatId=data.conversation_id;input.value='';say('workerJobApplyNote','Your application has been submitted.');
+      await loadChatMessages(clWorkerChatId,'workerChatMessages');await subscribeChatRealtime(clWorkerChatId,'workerChatMessages');await loadConversations('worker');await loadWorkerJobs();
+    }catch(error){if(clWorkerJobContext===context){say('workerJobApplyNote',error.message||'Application could not be sent.',true);button.disabled=false;}}
+  }
 
   async function sendChatMessage(role){
     const id=role==='customer'?clCustomerChatId:clWorkerChatId;
@@ -7110,14 +7182,17 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     const form=$(role==='customer'?'customerChatForm':'workerChatForm');
     const sendButton=form?.querySelector('button[type=submit],button:not([type])');
     if(sendButton?.disabled)return;
+    const job=role==='worker'?clWorkerJobContext:null;
+    const message=input?.value.trim()||'';
     if(sendButton)sendButton.disabled=true;
     try{
       const user=await getUser();
       if(!user){say(statusId,'Your login session is not available. Please sign in again.',true);return;}
-      const job=role==='worker'?clWorkerJobContext:null;
+      if(role==='worker'&&(job!==clWorkerJobContext||id!==clWorkerChatId))return;
+      if(role==='customer'&&id!==clCustomerChatId)return;
       if(!id&&!job){say(statusId,'Open a conversation first, then send your reply.',true);return;}
       if(!input){say(statusId,'Message box is unavailable. Close and reopen this conversation.',true);return;}
-      const message=input.value.trim();if(!message){say(statusId,'Please type a message first.',true);return;}
+      if(!message){say(statusId,'Please type a message first.',true);return;}
       if(sendButton)sendButton.disabled=true;
       say(statusId,'Sending message...');
       let sentConversationId=id;
@@ -7125,6 +7200,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
         const {data,error}=await supabaseClient.rpc('worker_job_chat',{p_job_id:job.id,p_message:message});
         if(error)throw error;
         if(!data?.conversation_id)throw new Error('The conversation was not confirmed by the server.');
+        if(clWorkerJobContext!==job)return;
         sentConversationId=data.conversation_id;clWorkerChatId=sentConversationId;
         await subscribeChatRealtime(sentConversationId,hostId);
       }else{
@@ -7132,8 +7208,10 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
         if(error)throw error;
         if(!inserted?.id)throw new Error('The message was not confirmed by the server.');
       }
+      if(role==='worker'&&(clWorkerJobContext!==job||clWorkerChatId!==sentConversationId))return;
+      if(role==='customer'&&clCustomerChatId!==sentConversationId)return;
       input.value='';
-      say(statusId,job?'Message sent. Your application is recorded.':'Message sent successfully.');
+      say(statusId,job?'Enquiry sent to the advertiser.':'Message sent successfully.');
       await loadChatMessages(sentConversationId,hostId);
       await loadConversations(role);
     }catch(error){
@@ -7147,7 +7225,8 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   $('workerSearchText')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();loadPublicWorkers();}});
   $('customerJobForm')?.addEventListener('submit',async e=>{
     e.preventDefault();const user=window.clCurrentUser||await getUser();if(!user)return;
-    const payload={customer_id:user.id,service_title:$('jobTitle').value.trim(),description:$('jobDescription').value.trim(),district:$('jobDistrict').value,address:$('jobArea').value.trim(),budget_lkr:$('jobBudget').value?Number($('jobBudget').value):null,preferred_date:$('jobDate').value||null,status:'open'};
+    let advert;try{advert=window.clReadJobAdFields('jobAd');}catch(error){say('customerJobMessage',error.message,true);return;}
+    const payload={...advert,customer_id:user.id,service_title:$('jobTitle').value.trim(),description:$('jobDescription').value.trim(),district:$('jobDistrict').value,address:$('jobArea').value.trim(),budget_lkr:$('jobBudget').value?Number($('jobBudget').value):null,preferred_date:$('jobDate').value||null,status:'open'};
     const {data:createdJob,error}=await supabaseClient.from('job_posts').insert(payload).select('id').single();
     if(error){say('customerJobMessage',error.message,true);return;}
     const translations=[
@@ -7182,7 +7261,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     if(t.dataset.startChat){await startCustomerChat(t.dataset.startChat);}
     if(t.dataset.chatWorker){t.disabled=true;try{await startCustomerChat(t.dataset.chatWorker);}finally{t.disabled=false;}return;}
     if(t.dataset.openCustomerChat){clCustomerChatId=t.dataset.openCustomerChat;$('customerChatWindow').classList.remove('hidden');$('customerChatTitle').textContent='Private worker conversation';await loadChatMessages(clCustomerChatId,'customerChatMessages');await subscribeChatRealtime(clCustomerChatId,'customerChatMessages');}
-    if(t.dataset.openWorkerChat){document.getElementById('workerDashboard')?._clShowTab?.('messages');clWorkerJobContext=null;clWorkerChatId=t.dataset.openWorkerChat;$('workerChatForm').querySelector('button').disabled=false;$('workerJobChatContext')?.setAttribute('hidden','');$('workerChatInput').placeholder='Write a message';$('workerChatInput').maxLength=4000;$('workerChatWindow').classList.remove('hidden');$('workerChatTitle').textContent=t.querySelector('.cl073-chat-info strong')?.textContent||'Customer conversation';say('workerChatMessage','');await loadChatMessages(clWorkerChatId,'workerChatMessages');await subscribeChatRealtime(clWorkerChatId,'workerChatMessages');}
+    if(t.dataset.openWorkerChat){document.getElementById('workerDashboard')?._clShowTab?.('messages');clWorkerJobContext=null;$('workerJobApplyButton')?.setAttribute('hidden','');$('workerJobApplyNote')?.setAttribute('hidden','');clWorkerChatId=t.dataset.openWorkerChat;$('workerChatForm').querySelector('button').disabled=false;$('workerJobChatContext')?.setAttribute('hidden','');$('workerChatInput').placeholder='Write a message';$('workerChatInput').maxLength=4000;$('workerChatWindow').classList.remove('hidden');$('workerChatTitle').textContent=t.querySelector('.cl073-chat-info strong')?.textContent||'Customer conversation';say('workerChatMessage','');await loadChatMessages(clWorkerChatId,'workerChatMessages');await subscribeChatRealtime(clWorkerChatId,'workerChatMessages');}
     if(t.dataset.acceptApp){if(!confirm('Accept this worker for the job? Other pending applications will be rejected.'))return;t.disabled=true;const {data,error}=await supabaseClient.rpc('accept_job_application',{p_application_id:t.dataset.acceptApp});if(error){alert('Could not accept: '+error.message);t.disabled=false;}else{alert(data||'Worker accepted.');await loadCustomerJobs();}}
     if(t.dataset.rejectApp){if(!confirm('Reject this application?'))return;t.disabled=true;const {data,error}=await supabaseClient.rpc('reject_job_application',{p_application_id:t.dataset.rejectApp});if(error){alert('Could not reject: '+error.message);t.disabled=false;}else{alert(data||'Application rejected.');await loadCustomerJobs();}}
   });
@@ -7328,7 +7407,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
       const initialRequest=window.clInitialPublicJobs;
       window.clInitialPublicJobs=null;
       let result=initialRequest ? await initialRequest : null;
-      if(!result || result.error) result=await supabaseClient.rpc('get_public_job_posts');
+      if(!result || result.error) result=await supabaseClient.rpc('get_public_job_ads');
       const {data,error}=result;
       if(request!==homeJobsRequest)return;
       if(error)throw error;
@@ -7409,7 +7488,8 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
       say('adminOfficialJobMessage','Choose a valid publication start date (today or later) and an expiry date on or after it.',true);
       return;
     }
-    const payload={customer_id:user.id,service_title:$('officialJobTitle').value.trim(),description:$('officialJobDescription').value.trim(),district:$('officialJobDistrict').value,address:$('officialJobArea').value.trim(),budget_lkr:$('officialJobBudget').value?Number($('officialJobBudget').value):null,preferred_date:$('officialJobDate').value||null,publish_on:publishOn,expires_on:expiresOn,status:'open',post_source:'clean_lanka'};
+    let advert;try{advert=window.clReadJobAdFields('officialAd');}catch(error){say('adminOfficialJobMessage',error.message,true);return;}
+    const payload={...advert,customer_id:user.id,service_title:$('officialJobTitle').value.trim(),description:$('officialJobDescription').value.trim(),district:$('officialJobDistrict').value,address:$('officialJobArea').value.trim(),budget_lkr:$('officialJobBudget').value?Number($('officialJobBudget').value):null,preferred_date:$('officialJobDate').value||null,publish_on:publishOn,expires_on:expiresOn,status:'open',post_source:'clean_lanka'};
     const {error}=await supabaseClient.from('job_posts').insert(payload);if(error){say('adminOfficialJobMessage','Could not publish official job: '+error.message,true);return;}
     $('adminOfficialJobForm').reset();
     window.clOfficialScheduleSetDefaults?.();
@@ -8836,8 +8916,8 @@ document.addEventListener('DOMContentLoaded',function(){
 (function(){
  const root=document.getElementById('adminDashboard');if(!root)return;
  const nav=root.querySelector('.admin-nav');if(!nav)return;
- const pages={chats:document.getElementById('adminChatsSection'),overview:document.getElementById('adminOverview'),workers:document.getElementById('adminWorkersHeading')?.closest('section'),customers:document.getElementById('adminCustomersSection'),bookings:document.getElementById('adminBookingsSection'),notifications:document.getElementById('adminNotificationsSection'),subadmins:document.getElementById('adminSubAdminsSection'),website:document.getElementById('clAdminPublicPreview')};
- const labels={chats:'All Customer–Worker Chats',overview:'Overview',workers:'Worker Management',customers:'Customer Management',bookings:'Booking Management',notifications:'Notifications',subadmins:'Sub Admin Permissions',website:'Website Preview',customerprofile:'Customer Profile'};
+ const pages={officialchats:document.getElementById('clOfficialJobChats'),chats:document.getElementById('adminChatsSection'),overview:document.getElementById('adminOverview'),workers:document.getElementById('adminWorkersHeading')?.closest('section'),customers:document.getElementById('adminCustomersSection'),bookings:document.getElementById('adminBookingsSection'),notifications:document.getElementById('adminNotificationsSection'),subadmins:document.getElementById('adminSubAdminsSection'),website:document.getElementById('clAdminPublicPreview')};
+ const labels={officialchats:'Official Job Messages',chats:'All Customer–Worker Chats',overview:'Overview',workers:'Worker Management',customers:'Customer Management',bookings:'Booking Management',notifications:'Notifications',subadmins:'Sub Admin Permissions',website:'Website Preview',customerprofile:'Customer Profile'};
  const sections=Object.values(pages).filter(Boolean);sections.forEach(el=>el.dataset.clAdminPage='true');
  const title=document.createElement('h2');title.id='clAdminPageTitle';
  const back=document.createElement('button');back.type='button';back.id='clAdminPageBack';nav.after(back,title);
@@ -8847,6 +8927,7 @@ document.addEventListener('DOMContentLoaded',function(){
  function allowed(page){
   const isMain=root.dataset.adminRole==='main_admin';
   if(page==='subadmins'||page==='chats')return isMain;
+  if(page==='officialchats')return document.getElementById('clOfficialJobChatsNav')?.style.display!=='none';
   const link=nav.querySelector('[data-cl-admin-target="'+page+'"]');
   if(link&&link.style.display==='none')return false;
   return true;
@@ -8858,6 +8939,7 @@ document.addEventListener('DOMContentLoaded',function(){
   [...sections,customerPage].forEach(el=>el.classList.toggle('cl-admin-page-current',el===(page==='customerprofile'?customerPage:pages[page])));
   if(pages[page]&&allowed(page))pages[page].classList.remove('hidden');
   if(root.dataset.adminRole==='sub_admin')pages.subadmins?.classList.add('hidden');
+  if(page==='officialchats')window.clRefreshOfficialJobChats?.();
   title.textContent=labels[page];back.style.display=page==='overview'?'none':'inline-flex';
   back.textContent=page==='customerprofile'?'← Back to Customers':'← Back to Admin Dashboard';
   if(page==='customerprofile'&&detail){customerPage.appendChild(detail);detail.classList.remove('hidden');}
@@ -8865,7 +8947,7 @@ document.addEventListener('DOMContentLoaded',function(){
   root.scrollTop=0;
  }
  root._clGoAdminPage=go;
- const targets=['overview','workers','customers','bookings','chats','notifications','subadmins','website'];
+ const targets=['overview','workers','customers','bookings','chats','officialchats','notifications','subadmins','website'];
  nav.querySelectorAll('a').forEach((a,i)=>{a.dataset.clAdminTarget=targets[i]||'overview';a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.clAdminTarget);});});
  back.addEventListener('click',()=>go(current==='customerprofile'?'customers':'overview'));
  const list=document.getElementById('adminCustomerList');
@@ -9182,7 +9264,7 @@ document.addEventListener('DOMContentLoaded',function(){
         budgetField.value=job.budget_lkr==null?'':String(job.budget_lkr);
         const preferredField=field('Preferred Job Date',make('input'));
         preferredField.type='date';preferredField.value=job.preferred_date||'';
-        detailsEditor.append(controls);card.append(detailsEditor);
+        detailsEditor.append(controls);const advertPrefix='officialEdit-'+job.id;detailsEditor.append(window.clBuildJobAdFields(advertPrefix,job));card.append(detailsEditor);
         const save=make('button','cl-official-save','Save Dates / Job Details');
         save.type='button';
         const hint=make('p','text-sm text-slate-600 mt-2');
@@ -9210,7 +9292,7 @@ document.addEventListener('DOMContentLoaded',function(){
             if(!client)throw Error('Connection unavailable');
             const changes={publish_on:start.value,expires_on:end.value};
             if(detailsEditor.open){
-              Object.assign(changes,{
+              Object.assign(changes,window.clReadJobAdFields(advertPrefix),{
                 service_title:titleField.value.trim(),
                 description:descField.value.trim(),
                 district:districtField.value,
@@ -9247,7 +9329,7 @@ document.addEventListener('DOMContentLoaded',function(){
     message.textContent='Loading official job schedule…';
     try{
       const {data,error}=await client.from('job_posts')
-        .select('id,service_title,description,district,address,budget_lkr,preferred_date,status,created_at,post_source,publish_on,expires_on')
+        .select('id,service_title,description,district,address,budget_lkr,preferred_date,status,created_at,post_source,publish_on,expires_on,contact_name,contact_phone,show_contact_phone,allow_whatsapp,salary_period,working_hours,experience_required,benefits')
         .eq('post_source','clean_lanka')
         .order('created_at',{ascending:false})
         .limit(250);
@@ -9378,7 +9460,7 @@ document.addEventListener('DOMContentLoaded',function(){
     if(!source||!jobId)return;
     button.setAttribute('aria-expanded','true');
     button.setAttribute('aria-haspopup','dialog');
-    frame(card.querySelector('h3')?.textContent||'Job details',source.innerHTML+'<footer><button type="button" data-job-popup-close>Close</button><button type="button" data-job-popup-apply>I’m interested / Apply →</button></footer>','details');
+    frame(card.querySelector('h3')?.textContent||'Job details',source.innerHTML+'<footer><button type="button" data-job-popup-close>Close</button></footer>','details');
   }
   async function apply(id,button){
     if(busy)return;busy=true;
@@ -9391,7 +9473,7 @@ document.addEventListener('DOMContentLoaded',function(){
       window.clCurrentUser=user;
       window.clRememberWorkerJob(id,user);
       if(!user){
-        frame('Apply for this job','<p>Create a Worker account to express your interest. We’ll keep this job ready in your Dashboard after email confirmation.</p><div class="cl-job-account-options"><button type="button" data-job-account="register">Create Worker Account</button><button type="button" data-job-account="login">Already registered? Login</button></div>','account');
+        frame('Apply for this job','<p>Create a Worker account or sign in to chat with the advertiser. This job will be waiting in your Dashboard after email confirmation.</p><div class="cl-job-account-options"><button type="button" data-job-account="register">Create Worker Account</button><button type="button" data-job-account="login">Already registered? Login</button></div>','account');
         return;
       }
       if(user.user_metadata?.account_type!=='worker')throw new Error('Please use a registered Worker account to apply for this job.');
@@ -9559,5 +9641,56 @@ document.addEventListener('DOMContentLoaded',function(){
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore,{once:true});
   else restore();
+})();
+</script>
+<script id="cl-official-job-reply-inbox-20261110">
+(function(){
+ const $=id=>document.getElementById(id),root=$('clOfficialJobChats');if(!root)return;
+ const sb=window.supabaseClient,list=$('clOfficialChatList'),thread=$('clOfficialChatThread'),status=$('clOfficialChatStatus');
+ let selected=null,rows=[],request=0,refreshing=false;
+ const el=(tag,text,cls='')=>{const node=document.createElement(tag);node.textContent=text||'';node.className=cls;return node;};
+ const visible=()=>document.body.classList.contains('admin-dashboard-mode')&&document.getElementById('adminDashboard')?.dataset.clAdminPage==='officialchats';
+ async function loadThread(){
+  if(!selected)return;
+  const current=selected,token=++request;
+  const {data,error}=await sb.rpc('read_official_job_chat',{p_conversation_id:current.conversation_id});
+  if(token!==request||selected!==current)return;
+  if(error)throw error;
+  const host=$('clOfficialChatMessages'),near=host.scrollHeight-host.scrollTop-host.clientHeight<90;
+  host.replaceChildren();
+  for(const m of data||[]){const worker=m.sender_id===current.worker_user_id;
+   const bubble=el('article','','cl-official-chat-message '+(worker?'':'official'));
+   bubble.append(el('strong',worker?current.worker_name||'Worker':'Clean Lanka'),el('p',m.message),el('small',new Date(m.created_at).toLocaleString()));host.append(bubble);
+  }
+  if(!data?.length)host.append(el('p','No messages yet.'));
+  if(near)host.scrollTop=host.scrollHeight;
+ }
+ async function open(row){
+  selected=row;request++;list.hidden=true;thread.hidden=false;
+  $('clOfficialChatTitle').textContent=row.worker_name||'Worker';$('clOfficialChatJobs').textContent=row.job_titles||'Official job';
+  $('clOfficialChatInput').value='';$('clOfficialChatMessages').textContent='Loading messages…';status.textContent='';
+  try{await loadThread();const {data:{user}}=await sb.auth.getUser();if(user)await sb.from('notifications').update({is_read:true}).eq('user_id',user.id).eq('related_conversation_id',row.conversation_id).eq('notification_type','message').eq('is_read',false);}catch(error){status.textContent=error.message;}
+ }
+ async function refresh(){
+  if(refreshing||!visible())return;refreshing=true;
+  try{
+   if(selected){await loadThread();return;}
+   const {data,error}=await sb.rpc('get_official_job_chats');if(error)throw error;rows=data||[];list.replaceChildren();
+   status.textContent=rows.length+' official job conversation(s).';
+   for(const row of rows){const button=el('button','','block w-full text-left rounded-xl border p-4 my-3 bg-emerald-50');button.type='button';
+    button.append(el('strong',row.worker_name||'Worker','text-lg'),el('p',[row.worker_public_id?'Worker '+row.worker_public_id:'',row.district].filter(Boolean).join(' · ')),el('p',row.job_titles),el('p',row.last_message||'Start a conversation','text-sm text-slate-600'));button.addEventListener('click',()=>open(row));list.append(button);
+   }
+  }catch(error){status.textContent=error.message||'Messages could not be loaded.';}finally{refreshing=false;}
+ }
+ $('clOfficialChatBack').addEventListener('click',()=>{request++;selected=null;thread.hidden=true;list.hidden=false;refresh();});
+ $('clOfficialChatRefresh').addEventListener('click',refresh);
+ $('clOfficialChatForm').addEventListener('submit',async event=>{
+  event.preventDefault();const current=selected,input=$('clOfficialChatInput'),button=event.target.querySelector('button');
+  const message=input.value.trim();if(!current||!message||button.disabled)return;button.disabled=true;status.textContent='Sending…';
+  try{const {data,error}=await sb.rpc('send_official_job_message',{p_conversation_id:current.conversation_id,p_message:message});if(error)throw error;if(!data)throw Error('Message was not confirmed.');if(selected===current){input.value='';status.textContent='Reply sent.';await loadThread();}}
+  catch(error){status.textContent=error.message||'Reply could not be sent.';}finally{button.disabled=false;}
+ });
+ window.clRefreshOfficialJobChats=refresh;
+ setInterval(()=>{if(visible())refresh();},6000);
 })();
 </script>

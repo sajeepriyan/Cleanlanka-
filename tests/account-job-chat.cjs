@@ -8,7 +8,7 @@ function harness(existing=null){
  const elements=new Map(),calls=[],events=[];
  const el=id=>{if(!elements.has(id))elements.set(id,{id,value:'',textContent:'',hidden:false,disabled:false,classList:{remove(){}},querySelector(){return el(id+'Button')},after(node){elements.set(node.id,node)},setAttribute(name,value){this[name]=value}});return elements.get(id)};
  el('workerDashboard')._clShowTab=tab=>calls.push(['tab',tab]);
- const ctx={console,currentWorkerProfile:{is_available:true},workerAvailabilityEligibility:()=>({allowed:true,approved:true,clearanceVerified:true}),CustomEvent:class{constructor(type,init){this.type=type;this.detail=init.detail}},clWorkerChatId:null,clCustomerChatId:null,clWorkerJobContext:null,$:el,document:{createElement:()=>({})},say:(id,msg)=>{el(id).textContent=msg},stopChatRealtime:()=>calls.push(['stop']),subscribeChatRealtime:async id=>calls.push(['subscribe',id]),loadChatMessages:async id=>calls.push(['messages',id]),loadConversations:async role=>calls.push(['inbox',role]),getUser:async()=>({id:'worker-user'}),supabaseClient:{rpc:async(name,args)=>{calls.push(['rpc',name,args]);if(ctx.failSend&&args.p_message)return {error:{message:'Approval required'}};return {data:{conversation_id:args.p_message?'new-conversation':existing,job_title:'Cleaning',contact_name:'Customer Name',contact_district:'Jaffna',contact_public_id:'123456'}}},from:()=>({insert:payload=>{calls.push(['insert',payload]);return {select:()=>({single:async()=>({data:{id:'sent'}})})}}})}};
+ const ctx={console,currentWorkerProfile:{is_available:true},workerAvailabilityEligibility:()=>({allowed:true,approved:true,clearanceVerified:true}),CustomEvent:class{constructor(type,init){this.type=type;this.detail=init.detail}},clWorkerChatId:null,clCustomerChatId:null,clWorkerJobContext:null,$:el,document:{createElement:()=>({})},say:(id,msg)=>{el(id).textContent=msg},stopChatRealtime:()=>calls.push(['stop']),subscribeChatRealtime:async id=>calls.push(['subscribe',id]),loadChatMessages:async id=>calls.push(['messages',id]),loadConversations:async role=>calls.push(['inbox',role]),loadWorkerJobs:async()=>calls.push(['jobs']),getUser:async()=>({id:'worker-user'}),supabaseClient:{rpc:async(name,args)=>{calls.push(['rpc',name,args]);if(ctx.failSend&&args.p_message)return {error:{message:'Approval required'}};return {data:{conversation_id:args.p_message?'new-conversation':existing,job_title:'Cleaning',contact_name:'Customer Name',contact_district:'Jaffna',contact_public_id:'123456'}}},from:()=>({insert:payload=>{calls.push(['insert',payload]);return {select:()=>({single:async()=>({data:{id:'sent'}})})}}})}};
  ctx.window={loadWorkerDashboard:async()=>calls.push(['dashboard']),dispatchEvent:e=>events.push(e)};
  vm.createContext(ctx);vm.runInContext(open+send,ctx);
  return {ctx,el,calls,events};
@@ -27,10 +27,17 @@ function harness(existing=null){
  assert.equal(h.el('workerChatInput').value,'');
  assert.deepEqual(JSON.parse(JSON.stringify(h.calls.find(c=>c[0]==='rpc'&&c[2].p_message)[2])),{p_job_id:'job-one',p_message:'Interested'});
  assert.ok(h.calls.some(c=>c[0]==='subscribe'&&c[1]==='new-conversation'));
+ assert.equal(h.calls.filter(c=>c[0]==='rpc'&&c[1]==='worker_apply_to_job').length,0);
+ h.el('workerChatInput').value='Formal application';
+ await h.ctx.submitWorkerJobApplication();
+ assert.equal(h.calls.filter(c=>c[0]==='rpc'&&c[1]==='worker_apply_to_job').length,1);
+ assert.match(h.el('workerJobApplyNote').textContent,/application has been submitted/);
+
  h=harness();h.ctx.workerAvailabilityEligibility=()=>({allowed:false,approved:false,clearanceVerified:false});
  await h.ctx.window.cleanLankaOpenAccountJobChat('pending-worker-job',{id:'worker-user'});
- assert.equal(h.el('workerChatFormButton').disabled,true);
- assert.match(h.el('workerChatMessage').textContent,/pending approval/);
+ assert.equal(h.el('workerChatFormButton').disabled,false);
+ assert.equal(h.el('workerJobApplyButton').disabled,true);
+ assert.match(h.el('workerJobApplyNote').textContent,/pending approval/);
  h=harness('existing-conversation');
  await h.ctx.window.cleanLankaOpenAccountJobChat('job-two',{id:'worker-user'});
  assert.ok(h.calls.some(c=>c[0]==='messages'&&c[1]==='existing-conversation'));
@@ -44,7 +51,7 @@ function harness(existing=null){
  assert.equal(h.calls.filter(c=>c[0]==='insert').length,1);
  assert.equal(h.calls.find(c=>c[0]==='insert')[1].conversation_id,'existing-conversation');
  assert.ok(!html.includes('id="clJobChatForm"'));
- console.log('PASS: account routing, recipient and job identity, new/existing chats, application RPC, send failure draft, normal inbox replies, removed popup composer');
+ console.log('PASS: account routing, recipient and job identity, new/existing chats, enquiry RPC, send failure draft, normal inbox replies, removed popup composer');
 })().catch(e=>{console.error(e);process.exitCode=1});
 // A direct Home → Apply thread must leave an inbox checkpoint for Android Back.
 {

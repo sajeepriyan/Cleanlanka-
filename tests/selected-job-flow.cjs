@@ -28,11 +28,11 @@ function page(storage=new Map()){
  const start=html.indexOf('  async function loadWorkerJobs('),end=html.indexOf('  async function loadConversations(',start);
  const elements=new Map(),get=id=>{if(!elements.has(id))elements.set(id,{});return elements.get(id)};
  const jobs=Array.from({length:70},(_,i)=>({id:'job-'+i,service_title:'Job '+i,description:'Details',district:'Jaffna'}));jobs[69].id=id;
- const dashboard={window:{clCurrentUser:user,clSelectedWorkerJob:()=>({id})},activeWorkerProfileId:'profile',supabaseClient:{rpc:async()=>({data:jobs}),from:()=>({select:()=>({eq:async()=>({data:[]})})})},$:get,say:()=>{},esc:x=>String(x??''),money:x=>'LKR '+(x||0)};
+ const dashboard={window:{clCurrentUser:user,clSelectedWorkerJob:()=>({id}),clJobAdDetailsHTML:()=>'',clJobContactHTML:()=>'<button>Live Chat</button>'},activeWorkerProfileId:'profile',supabaseClient:{rpc:async()=>({data:jobs}),from:()=>({select:()=>({eq:async()=>({data:[]})})})},$:get,say:()=>{},esc:x=>String(x??''),money:x=>'LKR '+(x||0)};
  vm.createContext(dashboard);vm.runInContext(html.slice(start,end),dashboard);
  await dashboard.loadWorkerJobs();
  assert.match(get('workerOpenJobs').innerHTML,new RegExp('^<article data-worker-job-card="'+id+'"'));
- assert.match(get('workerOpenJobs').innerHTML,/View details/);assert.match(get('workerOpenJobs').innerHTML,/Apply \/ Chat/);
+ assert.match(get('workerOpenJobs').innerHTML,/View details/);assert.match(get('workerOpenJobs').innerHTML,/Live Chat/);
  assert.ok(!get('workerOpenJobs').innerHTML.includes('workerApplyForm'));
  // Resuming a confirmed account opens the job list; it never invokes the chat/application RPC.
  const resumeStart=html.indexOf('  window.cleanLankaFocusWorkerJob=');
@@ -42,5 +42,5 @@ function page(storage=new Map()){
  vm.createContext(resume);vm.runInContext(html.slice(resumeStart,resumeEnd),resume);
  await resume.window.cleanLankaResumeWorkerJob(user);
  assert.deepEqual(calls,['jobs',id,'shown']);
- console.log('PASS: selection persists through refresh and email confirmation, account isolation, expiry, dashboard job priority, explicit Apply / Chat, resume creates no application');
+ console.log('PASS: selection persists through refresh and email confirmation, account isolation, expiry, dashboard job priority, explicit Live Chat, resume creates no application');
 })().catch(e=>{console.error(e);process.exitCode=1});
