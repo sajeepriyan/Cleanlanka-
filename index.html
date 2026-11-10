@@ -7,74 +7,17 @@
 
 <html lang="en"><head>
 
-<!-- Single-entry dashboard transition: keep the legacy layout invisible while the final dashboard view settles. -->
-<style id="cl-single-dashboard-open-20261110">
-body[data-cl-dashboard-transition="customer"] #customerDashboard,
-body[data-cl-dashboard-transition="worker"] #workerDashboard {
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-body[data-cl-dashboard-transition="customer"]::after,
-body[data-cl-dashboard-transition="worker"]::after {
-  content: "Opening your Clean Lanka dashboard…";
-  position: fixed; inset: 0; z-index: 2147483601;
-  display: grid; place-items: center; padding: 24px; box-sizing: border-box;
-  background: #f2faf5; color: #0f5132; text-align: center;
-  font: 800 18px/1.5 system-ui,sans-serif;
-}
-</style>
-<script id="cl-single-dashboard-open-script-20261110">
-(function(){
-  let requestId=0, timeoutId=null;
-  const panels={customer:"customerDashboard",worker:"workerDashboard"};
-  function clearTransition(role,token){
-    if(token!==requestId || document.body?.dataset.clDashboardTransition!==role)return;
-    delete document.body.dataset.clDashboardTransition;
-    if(timeoutId){clearTimeout(timeoutId);timeoutId=null;}
-  }
-  window.clDashboardTransitionStart=function(role){
-    if(!panels[role]||!document.body)return;
-    const root=document.getElementById(panels[role]);
-    if(!root)return;
-    // Avoid a loading overlay during edits/reloads within an already visible dashboard.
-    if(document.body.classList.contains(role+"-dashboard-mode") &&
-       !root.classList.contains("hidden"))return;
-    const token=++requestId;
-    document.body.dataset.clDashboardTransition=role;
-    if(timeoutId)clearTimeout(timeoutId);
-    timeoutId=setTimeout(function(){
-      // Never strand users behind a permanent loader if a later script fails.
-      clearTransition(role,token);
-      console.warn("Clean Lanka: dashboard transition timed out; showing available dashboard.");
-    },7000);
-  };
-  window.clDashboardTransitionFinish=async function(role){
-    if(!panels[role]||document.body?.dataset.clDashboardTransition!==role)return;
-    const token=requestId, root=document.getElementById(panels[role]);
-    const marker=role==="customer"?"clFinalReady":"cl065Ready";
-    for(let i=0;i<100;i++){
-      if(token!==requestId || document.body.dataset.clDashboardTransition!==role)return;
-      if(root?.dataset[marker]==="1" && typeof root._clShowTab==="function")break;
-      await new Promise(resolve=>requestAnimationFrame(resolve));
-    }
-    if(token!==requestId || document.body.dataset.clDashboardTransition!==role)return;
-    try{root?._clShowTab?.("profile");}catch(e){console.warn("Dashboard tab could not be restored:",e);}
-    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
-    clearTransition(role,token);
-  };
-})();
-</script>
 
 
 <!-- Prevent the original dashboard DOM showing briefly before its newer layout has been assembled. -->
 <style id="cl-dashboard-no-legacy-flash-20261110">
-body.customer-dashboard-mode #customerDashboard:not([data-cl-final-ready="1"]):not([data-cl-layout-fallback="1"]),
-body.worker-dashboard-mode #workerDashboard:not([data-cl065-ready="1"]):not([data-cl-layout-fallback="1"]) {
+#customerDashboard:not([data-cl-final-ready="1"]),
+#workerDashboard:not([data-cl065-ready="1"]) {
   visibility: hidden !important;
   pointer-events: none !important;
 }
-body.customer-dashboard-mode:has(#customerDashboard:not([data-cl-final-ready="1"]):not([data-cl-layout-fallback="1"]))::after,
-body.worker-dashboard-mode:has(#workerDashboard:not([data-cl065-ready="1"]):not([data-cl-layout-fallback="1"]))::after {
+body.customer-dashboard-mode:has(#customerDashboard:not([data-cl-final-ready="1"]))::after,
+body.worker-dashboard-mode:has(#workerDashboard:not([data-cl065-ready="1"]))::after {
   content: "Preparing your dashboard…";
   position: fixed;
   inset: 0;
@@ -3300,7 +3243,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
   });
 
   function loadCustomerDashboard(user) {
-    window.clDashboardTransitionStart?.('customer');
+    window.clPrepareAccountDashboard?.('customer');
     const metadata = user.user_metadata || {};
     document.body.classList.remove('login-page-mode','registration-mode','worker-dashboard-mode');
     document.getElementById('account-login').classList.add('hidden');
@@ -3315,7 +3258,6 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
     window.scrollTo(0,0);
     loadCustomerProfile(user);
     if (window.cleanLankaLoadCustomerFeatures) window.cleanLankaLoadCustomerFeatures(user);
-    void window.clDashboardTransitionFinish?.('customer');
   }
 
   function openRegistration(role) {
@@ -3798,7 +3740,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
   });
 
   async function loadWorkerDashboard(user) {
-    window.clDashboardTransitionStart?.('worker');
+    window.clPrepareAccountDashboard?.('worker');
     const dashboard = document.getElementById('workerDashboard');
     const dashboardMessage = document.getElementById('workerDashboardMessage');
     const metadata = user.user_metadata || {};
@@ -3889,7 +3831,6 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
     } else {
       dashboardMessage.textContent = 'Showing the details saved during registration. Your application remains pending review.';
     }
-    void window.clDashboardTransitionFinish?.('worker');
     if (window.cleanLankaLoadWorkerFeatures) await window.cleanLankaLoadWorkerFeatures(user);
     if(profile?.id){
       const reviewHost=document.getElementById('clWorkerDashboardReviews');
@@ -5965,8 +5906,8 @@ body.worker-dashboard-mode #clHomeProfileButton,body.customer-dashboard-mode #cl
   const workerLeft=worker?.querySelector('.cv-grid .cv-left');
   if(workerChat&&workerLeft&&!workerLeft.contains(workerChat))workerLeft.appendChild(workerChat);
  }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',arrangeDashboardPanels,{once:true});else arrangeDashboardPanels();
- window.addEventListener('load',arrangeDashboardPanels,{once:true});
+ // Assemble on hidden DOM once; not after the dashboard appears.
+ arrangeDashboardPanels();
 })();
 </script>
 
@@ -6004,8 +5945,8 @@ document.documentElement.classList.add('notranslate');
   const mobile=main.querySelector('.cl-mobile-nav');if(mobile)mobile.remove();
  }
  function run(){buildOne(document.getElementById('customerDashboard'),'customer');buildOne(document.getElementById('workerDashboard'),'worker')}
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
- window.addEventListener('load',run,{once:true});
+ window.clBuildReferenceDashboards=run;
+ run();
 })();
 </script>
 
@@ -6209,10 +6150,9 @@ body.customer-dashboard-mode #customerDashboard,body.worker-dashboard-mode #work
   show('profile');
  }
  function go(name){initialize();root._clShowTab?.(name)}
- // Run after older dashboard layout scripts have finished.
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>queueMicrotask(initialize));
- else queueMicrotask(initialize);
- window.addEventListener('load',()=>queueMicrotask(initialize));
+ // The reference wrapper exists. Build the customer final view now.
+ window.clInitializeCustomerDashboard=initialize;
+ initialize();
  // Capture before the legacy document-level tab handler, without navigating to another page.
  window.addEventListener('click',function(event){
   const button=event.target.closest?.('#customerDashboard .cl-final-tabs [data-cl-go]');
@@ -6631,12 +6571,29 @@ window.addEventListener('click',function(e){
  show(names[btn.dataset.clGo]);
 },true);
 function ready(){show(root.dataset.activeTab||'profile');}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready);
-else ready();
-window.addEventListener('load',ready);
+ window.clInitializeWorkerDashboard=ready;
+ ready();
 })();
 </script>
 
+<script id="cl-dashboards-before-display-20261110">
+(function(){
+  window.clPrepareAccountDashboard=function(role){
+    if(role!=='customer'&&role!=='worker')return false;
+    try{
+      window.clBuildReferenceDashboards?.();
+      if(role==='customer')window.clInitializeCustomerDashboard?.();
+      else window.clInitializeWorkerDashboard?.();
+      const root=document.getElementById(role==='customer'?'customerDashboard':'workerDashboard');
+      const ready=role==='customer'
+       ?root?.dataset.clFinalReady==='1' && !!root.querySelector('.cl-final-tabs') && !!root.querySelector('.cl-final-panel[data-cl-final="profile"]')
+       :root?.dataset.cl065Ready==='1' && !!root.querySelector('.cl-dash-nav') && !!root.querySelector('.cl-tab-page[data-cl-page="profile"]');
+      if(!ready)console.error('Dashboard layout not prepared:',role);
+      return Boolean(ready);
+    }catch(e){console.error('Dashboard layout preparation error:',e);return false;}
+  };
+})();
+</script>
 <style id="cl066-worker-layout">
 /* The previous empty region came from legacy blocks and spacing outside the active tab. */
 #workerDashboard .cv-shell{display:flex!important;flex-direction:column!important;gap:10px!important;min-height:0!important;padding-bottom:28px!important}
@@ -6688,9 +6645,8 @@ window.addEventListener('load',ready);
   else right.appendChild(settings);
   root.querySelectorAll('.cl-056-settings').forEach(el=>{if(el!==settings&&el.children.length<=1)el.remove();});
  }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(arrange,60));
- else setTimeout(arrange,60);
- window.addEventListener('load',arrange);
+ // Move forms now rather than after a visible 60ms delay.
+ arrange();
 })();
 </script>
 
@@ -9313,31 +9269,3 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
 }
 </style>
 
-<!-- If an older browser or a future layout change prevents readiness, do not leave the dashboard inaccessible. -->
-<script id="cl-dashboard-no-legacy-flash-fallback-20261110">
-(function(){
-  const checks=[
-    {role:"customer",id:"customerDashboard",ready:"clFinalReady"},
-    {role:"worker",id:"workerDashboard",ready:"cl065Ready"}
-  ];
-  const timers={};
-  function check(){
-    for(const item of checks){
-      const panel=document.getElementById(item.id);
-      if(!panel || !document.body.classList.contains(item.role+"-dashboard-mode") ||
-         panel.dataset[item.ready]==="1" || panel.dataset.clLayoutFallback==="1") continue;
-      if(timers[item.role]) continue;
-      timers[item.role]=setTimeout(function(){
-        timers[item.role]=null;
-        if(panel.dataset[item.ready]!=="1" && document.body.classList.contains(item.role+"-dashboard-mode")){
-          panel.dataset.clLayoutFallback="1";
-          console.warn("Clean Lanka: dashboard layout was not ready; displaying original layout as fallback.");
-        }
-      },4000);
-    }
-  }
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",check,{once:true});
-  else check();
-  new MutationObserver(check).observe(document.body,{attributes:true,attributeFilter:["class"]});
-})();
-</script>
