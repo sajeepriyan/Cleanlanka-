@@ -8834,3 +8834,121 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
  nav?.querySelector('a[href="#clAdminWorkerReviewsSection"]')?.addEventListener('click',refresh);
 })();
 </script>
+
+<!-- cl-desktop-marketplace-stacked-20261110: Desktop-only readable, full-width jobs → workers → trust. -->
+<style id="cl-desktop-marketplace-stacked-20261110">
+@media (min-width: 881px) {
+  #homeMarketplace .cl-market-wrap {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto auto auto !important;
+    align-items: start !important;
+    gap: 17px !important;
+    max-width: 1536px !important;
+    margin: 0 auto !important;
+  }
+  #homeMarketplace .cl-market-grid { display: contents !important; }
+  #homeMarketplace .cl-market-jobs {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-self: start !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 20px 22px !important;
+  }
+  #homeMarketplace .cl-market-workers {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    align-self: start !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  #homeMarketplace .cl-market-trust.cl080-trust {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+    align-self: start !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  #homeMarketplace .cl-market-proof {
+    grid-column: 1 !important;
+    grid-row: 4 !important;
+    align-self: start !important;
+    width: 100% !important;
+  }
+  /* Make job filters the first visible row; retain the heading for accessibility. */
+  #homeMarketplace .cl-market-jobs .cl-job-tabs {
+    order: 0 !important;
+    margin: 0 0 6px !important;
+  }
+  #homeMarketplace .cl-market-jobs > div:first-child {
+    order: 1 !important;
+    justify-content: flex-end !important;
+    border: 0 !important;
+    margin: 0 0 7px !important;
+    padding: 0 !important;
+  }
+  #homeMarketplace #homeJobsHeading {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    clip-path: inset(50%) !important;
+    border: 0 !important;
+  }
+  #homeMarketplace .cl-market-jobs .cl-jobs-intro { display: none !important; }
+  #homeMarketplace .cl-market-jobs #homeJobMessage { order: 2 !important; }
+  #homeMarketplace .cl-market-jobs #homeJobResults { order: 3 !important; }
+  #homeMarketplace #homeJobResults {
+    max-height: 620px !important;
+    min-height: 0 !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+  #homeMarketplace #homeWorkerResults {
+    max-height: 535px !important;
+    min-height: 0 !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+  #homeMarketplace .cl-find-worker-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    min-height: 0 !important;
+  }
+  #homeMarketplace .cl-find-worker-join {
+    position: static !important;
+    order: 10 !important;
+    align-self: stretch !important;
+    width: 100% !important;
+    flex: none !important;
+    margin: 15px 0 0 !important;
+  }
+  #homeMarketplace #homeWorkerResults { order: 5 !important; }
+  #homeMarketplace .cl-job-main h3 { font-size: 17px !important; }
+  #homeMarketplace .cl-job-summary {
+    font-size: 13px !important;
+    -webkit-line-clamp: 3 !important;
+  }
+  #homeMarketplace .cl-worker-compact .cl-worker-name { font-size: 16px !important; }
+  #homeMarketplace .cl-worker-compact .cl-worker-skill { font-size: 13px !important; }
+}
+@media (min-width: 1100px) {
+  #homeMarketplace #homeJobResults { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  #homeMarketplace #homeWorkerResults { grid-template-columns: repeat(3,minmax(0,1fr)) !important; }
+}
+@media (min-width: 1500px) {
+  #homeMarketplace #homeWorkerResults { grid-template-columns: repeat(4,minmax(0,1fr)) !important; }
+}
+</style>
