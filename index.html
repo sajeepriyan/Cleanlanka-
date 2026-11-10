@@ -9047,3 +9047,180 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   }
 }
 </style>
+
+
+<!-- cl-worker-directory-dashboard-headings-20261110: Compact 4×3 worker directory, tidy worker dashboard job cards and clear section headings.
+     CSS-only: no login, chat, job application, verification, review or database logic changed. -->
+<style id="cl-worker-directory-dashboard-headings-20261110">
+/* Public Jobs heading was previously visually hidden by a desktop-only override.
+   Restore it in a highlighted bar, without moving existing job filters or buttons. */
+#homeMarketplace #homeJobsHeading {
+  position: static !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 9px 14px !important;
+  clip-path: none !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  background: #e9f8ee !important;
+  border-left: 5px solid #07934f !important;
+  border-radius: 9px !important;
+  color: #172b25 !important;
+  font-size: clamp(18px,1.65vw,24px) !important;
+  font-weight: 900 !important;
+  line-height: 1.25 !important;
+  letter-spacing: 0 !important;
+}
+#homeMarketplace #homeJobsHeading .material-symbols-outlined {color:#07794b !important}
+#homeMarketplace .cl-market-jobs > div:first-child {
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+/* Keep the worker heading clearly readable on the existing deep-green header. */
+#homeMarketplace .cl-market-workers #homeWorkersHeading {
+  color: #fff !important;
+  font-weight: 900 !important;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
+}
+#homeMarketplace .cl-find-worker-banner {border-bottom: 3px solid #18bd6a !important}
+/* Compact approved worker listings, 4 across × roughly 3 visible rows.
+   Additional workers scroll inside the same listing area, not Load More. */
+@media (min-width: 881px) {
+  #homeMarketplace #homeWorkerResults {
+    display: grid !important;
+    grid-template-columns: repeat(4,minmax(0,1fr)) !important;
+    align-content: start !important;
+    gap: 10px !important;
+    max-height: 570px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior-y: auto !important;
+    scrollbar-gutter: stable !important;
+  }
+  #homeMarketplace #homeWorkerResults > article.cl-worker-compact {
+    box-sizing: border-box !important;
+    display: grid !important;
+    grid-template-columns: 34px minmax(0,1fr) !important;
+    grid-template-areas: "avatar details" "action action" !important;
+    gap: 8px !important;
+    align-content: start !important;
+    min-width: 0 !important;
+    min-height: 170px !important;
+    height: auto !important;
+    padding: 11px !important;
+    border-radius: 13px !important;
+  }
+  #homeMarketplace .cl-worker-card-avatar {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 20px !important;
+  }
+  #homeMarketplace .cl-worker-compact .cl-worker-name {
+    font-size: 13px !important;
+    line-height: 1.28 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+  #homeMarketplace .cl-worker-compact .cl-worker-skill,
+  #homeMarketplace .cl-worker-compact .cl-worker-facts,
+  #homeMarketplace .cl-worker-compact .cl-worker-meta {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+    overflow-wrap: anywhere !important;
+  }
+  #homeMarketplace .cl-worker-profile-button {
+    justify-self: stretch !important;
+    width: 100% !important;
+    min-height: 36px !important;
+    font-size: 11px !important;
+  }
+}
+/* Worker dashboard: consistent compact cards for its own job list. Keep the
+   profile CV, availability, chat and document controls in their current places. */
+#workerDashboard #workerOpenJobs {
+  display: grid !important;
+  grid-template-columns: minmax(0,1fr) !important;
+  gap: 10px !important;
+  align-content: start !important;
+  max-height: 590px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-y: auto !important;
+  padding: 3px 3px 9px !important;
+}
+#workerDashboard #workerOpenJobs > article {
+  min-width: 0 !important;
+  height: auto !important;
+  padding: 13px !important;
+  border-radius: 13px !important;
+  background: #f9fdfa !important;
+  border: 1px solid #d6eadb !important;
+  align-self: start !important;
+  overflow-wrap: anywhere !important;
+}
+#workerDashboard #workerOpenJobs > article > div:first-child {
+  color: #172b25 !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+}
+#workerDashboard #workerOpenJobs > article textarea {min-height: 72px !important}
+#workerDashboard #workerOpenJobs > article .cl-action {
+  min-height: 40px !important;
+  padding: 9px 12px !important;
+}
+@media (min-width: 1000px) {
+  #workerDashboard #workerOpenJobs {grid-template-columns: repeat(2,minmax(0,1fr)) !important}
+}
+@media (min-width: 1500px) {
+  #workerDashboard #workerOpenJobs {grid-template-columns: repeat(3,minmax(0,1fr)) !important}
+}
+@media (min-width: 1900px) {
+  #workerDashboard #workerOpenJobs {grid-template-columns: repeat(4,minmax(0,1fr)) !important}
+}
+/* Uniform highlighted section headings throughout the account dashboards.
+   Labels remain bold dark, descriptions remain regular and easy to read. */
+#workerDashboard .cv-section-title,
+#customerDashboard .customer-card > h2,
+#customerDashboard .customer-card > h3,
+#adminDashboard .cl-admin-main h2:not(.cl-admin-eyebrow) {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 9px !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  color: #172b25 !important;
+  background: #eaf8ef !important;
+  border-left: 4px solid #07934f !important;
+  border-radius: 7px !important;
+  padding: 9px 12px !important;
+  font-weight: 900 !important;
+  line-height: 1.3 !important;
+  font-size: clamp(16px,1.4vw,20px) !important;
+  box-sizing: border-box !important;
+  overflow-wrap: anywhere !important;
+  text-shadow: none !important;
+}
+#workerDashboard .cv-section-title .cv-dot {flex:none !important}
+#workerDashboard #workerDashName {
+  color: #172b25 !important;
+  font-weight: 900 !important;
+}
+#workerDashboard .cv-label,
+#customerDashboard .cl-accountbar-sub {
+  color: #334155 !important;
+}
+@media (max-width: 767px) {
+  #workerDashboard .cv-section-title,
+  #customerDashboard .customer-card > h2,
+  #customerDashboard .customer-card > h3 {
+    font-size: 16px !important;
+    padding: 8px 10px !important;
+  }
+}
+</style>
