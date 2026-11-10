@@ -14,6 +14,33 @@
 
 
 <script>if(/^\/admin\/?$/.test(location.pathname))document.documentElement.classList.add('cl-admin-restoring');</script>
+<script id="cl-selected-job-flow-20261110">
+(function(){
+  'use strict';
+  const key='clSelectedWorkerJob',ttl=14*24*60*60*1000;
+  const valid=id=>typeof id==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+  let memory=null;
+  function read(){try{return JSON.parse(localStorage.getItem(key))||memory;}catch{return memory;}}
+  function save(value){memory=value;try{localStorage.setItem(key,JSON.stringify(value));}catch{}}
+  window.clRememberWorkerJob=function(id,user=null){
+    if(!valid(id))return;
+    save({id,selectedAt:Date.now(),userId:user?.id||null,resumeAfterAuth:!user});
+    window.clPendingHomeJobId=id;
+  };
+  window.clSelectedWorkerJob=function(user=null){
+    const record=read(),meta=user?.user_metadata||{};
+    const current=value=>value&&valid(value.id)&&Number.isFinite(value.selectedAt)&&Date.now()-value.selectedAt>=0&&Date.now()-value.selectedAt<ttl;
+    if(current(record)&&(!record.userId||record.userId===user?.id))return record;
+    const registered={id:meta.selected_job_id,selectedAt:Number(meta.selected_job_at),userId:user?.id,resumeAfterAuth:true};
+    return user&&current(registered)?registered:null;
+  };
+  window.clMarkWorkerJobShown=function(user){
+    const job=window.clSelectedWorkerJob(user);
+    if(job)save({...job,userId:user.id,resumeAfterAuth:false});
+    window.clPendingHomeJobId=null;
+  };
+})();
+</script>
 <meta name="google" content="notranslate">
 <!-- Clean Lanka Index 006: customer registration metadata + Contact navigation correction; prior features preserved. -->
 <meta charset="utf-8"/>
@@ -5317,6 +5344,8 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
           data: {
             full_name: name,
             account_type: 'worker',
+            selected_job_id: window.clSelectedWorkerJob()?.id || null,
+            selected_job_at: window.clSelectedWorkerJob()?.selectedAt || null,
             Phone: val('workerPhone'),
             gender: val('workerGender') || null,
             district: val('workerDistrict'),
@@ -5338,7 +5367,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
         showMessage(message, 'This email may already be registered. Please sign in or use Forgot password.', true);
         return;
       }
-      showMessage(message, 'Worker registration submitted. Confirm your email, then sign in from the Login section. Your application will remain pending review.');
+      showMessage(message, 'Worker registration submitted. Confirm your email, then sign in from the Login section. Your account will remain pending review.' + (window.clSelectedWorkerJob() ? ' The job you selected will be waiting in Dashboard → Find Jobs.' : ''));
       workerFormClean.reset();
     } catch (error) {
       showMessage(message, error.message || 'Registration failed. Please try again.', true);
@@ -5854,9 +5883,8 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
         }
         showMessage(message, 'Worker sign-in successful.' + syncWarning, Boolean(syncWarning));
         await loadWorkerDashboard(data.user);
-        if (window.clPendingHomeJobId) {
-          await window.cleanLankaOpenJobChat(window.clPendingHomeJobId);
-          window.clPendingHomeJobId = null;
+        if (window.clSelectedWorkerJob(data.user)) {
+          await window.cleanLankaResumeWorkerJob(data.user);
         }
       } else {
         showMessage(message, 'Customer sign-in successful. Opening your customer profile...');
@@ -6950,17 +6978,17 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     const host=$('workerOpenJobs');if(!host||!activeWorkerProfileId)return;
     say('workerJobsMessage','Loading open jobs...');
     const {data:publicJobs,error}=await supabaseClient.rpc('get_public_job_posts');
-    const jobs=Array.isArray(publicJobs)?publicJobs.slice(0,50):[];
+    const jobs=Array.isArray(publicJobs)?publicJobs.slice():[];
+    focusJobId=focusJobId||window.clSelectedWorkerJob(window.clCurrentUser)?.id||null;
     if(error){say('workerJobsMessage','Could not load jobs: '+error.message,true);return;}
     if(focusJobId) jobs.sort((a,b)=>String(a.id)===String(focusJobId)?-1:String(b.id)===String(focusJobId)?1:0);
     if(!jobs?.length){host.innerHTML='<p class="text-sm text-slate-500">No open jobs right now.</p>';say('workerJobsMessage','');return;}
     const {data:mine,error:mineError}=await supabaseClient.from('job_applications').select('job_id,status').eq('worker_id',activeWorkerProfileId);
     if(mineError){say('workerJobsMessage','Could not check your previous applications: '+mineError.message,true);return;}
     const applied=new Map((mine||[]).map(a=>[a.job_id,a.status]));
-    const canApply = Boolean(currentWorkerProfile?.is_available) && workerAvailabilityEligibility(currentWorkerProfile).allowed;
-    host.innerHTML=jobs.map(j=>`<article data-worker-job-card="${esc(j.id)}" class="border rounded-xl p-4 bg-slate-50"><div class="font-black text-slate-900">${esc(j.service_title)}</div><p class="text-sm text-slate-600 mt-1">${esc(j.district)} · ${esc(money(j.budget_lkr))}</p><p class="text-sm mt-2">${esc(j.description)}</p><p class="cl-muted mt-2">Preferred date: ${esc(j.preferred_date||'Flexible')}</p>${applied.has(j.id)?`<p class="text-sm font-bold text-emerald-700 mt-3">Application: ${esc(applied.get(j.id))}</p>`:canApply?`<form class="workerApplyForm mt-3" data-job-id="${esc(j.id)}"><textarea name="message" required maxlength="1200" class="w-full border rounded-xl p-3" placeholder="Short message to the customer"></textarea><button class="cl-action mt-2" type="submit">Apply for this Job</button></form>`:`<p class="mt-3 rounded-lg bg-amber-50 p-3 text-sm font-semibold text-amber-800">Turn on Job Application Availability in your dashboard to apply.</p>`}</article>`).join('');
-    say('workerJobsMessage',focusJobId ? 'Selected job is shown first. ' + jobs.length + ' open job(s) available.' : jobs.length+' open job(s) available.');
-    if(focusJobId) document.querySelector(`[data-worker-job-card="${CSS.escape(String(focusJobId))}"]`)?.classList.add('ring-2','ring-emerald-500','bg-emerald-50');
+    host.innerHTML=jobs.map(j=>`<article data-worker-job-card="${esc(j.id)}" class="border rounded-xl p-4 bg-slate-50 ${j.id===focusJobId?'ring-2 ring-emerald-500 bg-emerald-50':''}">${j.id===focusJobId?'<p class="text-sm font-bold text-emerald-800 mb-2">The job you viewed — continue here</p>':''}<h3 class="font-black text-slate-900">${esc(j.service_title)}</h3><p class="text-sm text-slate-600 mt-1">${esc(j.district)} · ${esc(money(j.budget_lkr))}</p><p class="text-sm mt-2">${esc(String(j.description||'').slice(0,160))}${String(j.description||'').length>160?'…':''}</p><div class="cl-job-details" hidden><p>${esc(j.description)}</p><p>District: ${esc(j.district)}</p><p>Budget: ${esc(money(j.budget_lkr))}</p><p>Preferred date: ${esc(j.preferred_date||'Flexible')}</p></div>${applied.has(j.id)?`<p class="text-sm font-bold text-emerald-700 mt-3">Application: ${esc(applied.get(j.id))}</p>`:''}<div class="flex flex-wrap gap-2 mt-3"><button type="button" class="cl-action light" data-cl-job-details>View details</button><button type="button" class="cl-action" data-home-job-apply="${esc(j.id)}">${applied.has(j.id)?'Open Job Chat':'Apply / Chat'}</button></div></article>`).join('');
+    const selectedAvailable=focusJobId&&jobs.some(j=>j.id===focusJobId);
+    say('workerJobsMessage',selectedAvailable?'The job you viewed is shown first. Read its details, then choose Apply / Chat.':focusJobId?'The job you viewed is no longer open. You can browse the other available jobs.':jobs.length+' open job(s) available.');
   }
 
   async function loadConversations(role){
@@ -7061,9 +7089,11 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
       context.hidden=false;
       if(clWorkerChatId){await loadChatMessages(clWorkerChatId,'workerChatMessages');await subscribeChatRealtime(clWorkerChatId,'workerChatMessages');}
       else $('workerChatMessages').textContent='No messages yet. Send a message to '+clWorkerJobContext.name+' about this job.';
-      say('workerChatMessage','Your first message records your application. Approval, availability and clearance rules apply.');
+      const eligibility=workerAvailabilityEligibility(currentWorkerProfile);
+      const canSend=eligibility.allowed&&Boolean(currentWorkerProfile?.is_available);
+      say('workerChatMessage',canSend?'Your first message records your application.':!eligibility.approved?'Your Worker account is pending approval. You can read this job; sending an application becomes available after approval and clearance eligibility.':!eligibility.clearanceVerified?'Clearance eligibility is required before you can send an application.':'Turn on Availability in My Profile to send an application.',!canSend);
       input.placeholder='Message '+clWorkerJobContext.name+' about this job';
-      sendButton.disabled=false;
+      sendButton.disabled=!canSend;
     }catch(error){
       $('workerChatTitle').textContent='Job conversation unavailable';
       $('workerChatMessages').textContent='';
@@ -7407,8 +7437,14 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   setInterval(()=>{if(!document.hidden)loadHomeWorkers();},60000);
 
   window.cleanLankaFocusWorkerJob=async function(jobId){
-    if(jobId) await loadWorkerJobs(jobId);
-    document.getElementById('workerJobBoard')?.scrollIntoView({behavior:'smooth',block:'start'});
+    document.getElementById('workerDashboard')?._clShowTab?.('jobs');
+    await loadWorkerJobs(jobId);
+  };
+  window.cleanLankaResumeWorkerJob=async function(user){
+    const selected=window.clSelectedWorkerJob(user);
+    if(!selected)return;
+    await window.cleanLankaFocusWorkerJob(selected.id);
+    window.clMarkWorkerJobShown(user);
   };
   window.cleanLankaLoadCustomerFeatures=async function(user){window.clCurrentUser=user||await getUser();await Promise.all([loadPublicWorkers(),loadCustomerJobs(),loadConversations('customer'),loadUserNotifications(window.clCurrentUser?.id,'customerNotificationsList','customerNotificationsMessage')]);startConversationListRefresh('customer');};
   window.cleanLankaLoadWorkerFeatures=async function(user){window.clCurrentUser=user||await getUser();await Promise.all([loadWorkerJobs(),loadConversations('worker'),loadUserNotifications(window.clCurrentUser?.id,'workerNotificationsList','workerNotificationsMessage')]);startConversationListRefresh('worker');await trackCurrentWorkerPresence();};
@@ -9336,13 +9372,13 @@ document.addEventListener('DOMContentLoaded',function(){
   }
   function details(button){
     opener=button;
-    const card=button.closest('.cl-job-compact');
+    const card=button.closest('.cl-job-compact,[data-worker-job-card]');
     const source=card?.querySelector('.cl-job-details');
     jobId=card?.querySelector('[data-home-job-apply]')?.dataset.homeJobApply;
     if(!source||!jobId)return;
     button.setAttribute('aria-expanded','true');
     button.setAttribute('aria-haspopup','dialog');
-    frame(card.querySelector('h3')?.textContent||'Job details',source.innerHTML+'<footer><button type="button" data-job-popup-close>Close</button><button type="button" data-job-popup-apply>Apply / Login →</button></footer>','details');
+    frame(card.querySelector('h3')?.textContent||'Job details',source.innerHTML+'<footer><button type="button" data-job-popup-close>Close</button><button type="button" data-job-popup-apply>I’m interested / Apply →</button></footer>','details');
   }
   async function apply(id,button){
     if(busy)return;busy=true;
@@ -9353,9 +9389,9 @@ document.addEventListener('DOMContentLoaded',function(){
       if(authError && authError.name!=='AuthSessionMissingError' && !/auth session missing/i.test(authError.message||''))throw authError;
       if(token!==generation)return;
       window.clCurrentUser=user;
+      window.clRememberWorkerJob(id,user);
       if(!user){
-        window.clPendingHomeJobId=id;
-        frame('Apply for this job','<p>Sign in to apply and chat with the job poster.</p><div class="cl-job-account-options"><button type="button" data-job-account="login">Login to my account</button><button type="button" data-job-account="register">Create Worker Account</button></div>','account');
+        frame('Apply for this job','<p>Create a Worker account to express your interest. We’ll keep this job ready in your Dashboard after email confirmation.</p><div class="cl-job-account-options"><button type="button" data-job-account="register">Create Worker Account</button><button type="button" data-job-account="login">Already registered? Login</button></div>','account');
         return;
       }
       if(user.user_metadata?.account_type!=='worker')throw new Error('Please use a registered Worker account to apply for this job.');
@@ -9505,3 +9541,23 @@ document.addEventListener('DOMContentLoaded',function(){
 
 
 
+
+<script id="cl-selected-job-confirmation-resume-20261110">
+(function(){
+  async function restore(){
+    if(/^\/admin\/?$/.test(location.pathname)||/[?#&](?:cl_recovery=1|type=recovery|cl_subadmin_invite)/.test(location.href))return;
+    try{
+      const {data,error}=await window.supabaseClient.auth.getUser();
+      const user=data?.user;
+      if(error||!user||user.user_metadata?.account_type!=='worker'||!(user.email_confirmed_at||user.confirmed_at))return;
+      const job=window.clSelectedWorkerJob(user);
+      if(!job?.resumeAfterAuth)return;
+      await saveWorkerProfileAfterLogin(user);
+      await window.loadWorkerDashboard(user);
+      await window.cleanLankaResumeWorkerJob(user);
+    }catch(error){console.warn('Selected job can be resumed after sign-in:',error);}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore,{once:true});
+  else restore();
+})();
+</script>
