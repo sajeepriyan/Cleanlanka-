@@ -2812,7 +2812,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
           <p class="text-sm text-slate-600 mb-3">Approved work photos and genuine customer reviews can appear on your public worker profile after permission and moderation.</p>
           <div class="grid sm:grid-cols-2 gap-3">
             <div class="rounded-xl border border-dashed border-blue-300 bg-blue-50 p-4"><strong class="text-blue-900">📸 Previous Work Photos</strong><p class="text-xs text-slate-600 mt-1">No portfolio photos added yet.</p></div>
-            <div class="rounded-xl border border-dashed border-amber-300 bg-amber-50 p-4"><strong class="text-amber-900">⭐ Customer Reviews</strong><p class="text-xs text-slate-600 mt-1">Reviews appear after completed bookings and moderation.</p></div>
+            <div class="rounded-xl border border-dashed border-amber-300 bg-amber-50 p-4"><strong class="text-amber-900">⭐ Customer Reviews</strong><div id="clWorkerDashboardReviews" class="text-xs text-slate-700 mt-2">Approved reviews will appear here after completed jobs.</div></div>
           </div>
         </section>
         <div class="cv-note mt-6">🛡️ <strong>Profile approval:</strong> Your profile will be reviewed by the Clean Lanka admin team. Only approved worker profiles can be shown publicly and receive bookings.</div>
@@ -3801,6 +3801,10 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
       dashboardMessage.textContent = 'Showing the details saved during registration. Your application remains pending review.';
     }
     if (window.cleanLankaLoadWorkerFeatures) await window.cleanLankaLoadWorkerFeatures(user);
+    if(profile?.id){
+      const reviewHost=document.getElementById('clWorkerDashboardReviews');
+      if(reviewHost) window.clLoadPublicWorkerReviews?.(profile.id,reviewHost);
+    }
   }
 
   document.getElementById('workerAvailabilityOnButton')?.addEventListener('click', () => {
@@ -4943,6 +4947,62 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
           appHost.appendChild(row);
         }
       }
+      // A customer may complete only their own assigned job with an accepted worker.
+      const accepted=Array.isArray(apps)?apps.find(a=>a.status==='accepted'):null;
+      if(j.status==='assigned' && accepted){
+        const complete=document.createElement('button');
+        complete.type='button';
+        complete.className='cl-action mt-3';
+        complete.textContent='Mark Job Completed';
+        complete.addEventListener('click',async()=>{
+          if(!confirm('Confirm that the worker has completed this job? This will allow you to write a review.'))return;
+          complete.disabled=true;
+          try{
+            const {error}=await supabaseClient.rpc('complete_customer_job',{p_job_id:j.id});
+            if(error)throw error;
+            await loadCustomerJobs();
+            say('customerJobMessage','Job marked completed. You can now rate the accepted worker.');
+          }catch(err){
+            say('customerJobMessage','Could not complete this job: '+(err.message||'Unknown error'),true);
+            complete.disabled=false;
+          }
+        });
+        card.appendChild(complete);
+      }
+      if(j.status==='completed' && accepted){
+        const section=document.createElement('section');
+        section.className='cl-customer-review-box';
+        section.innerHTML='<h5>⭐ Rate your worker</h5><p class="text-sm text-slate-600">Only completed jobs can be reviewed. Reviews are checked by an Admin before appearing publicly.</p>';
+        card.appendChild(section);
+        const {data:existing,error:checkError}=await supabaseClient.from('worker_reviews')
+          .select('id,rating,moderation_status').eq('job_id',j.id).maybeSingle();
+        if(checkError){
+          const note=document.createElement('p');note.textContent='Cannot check review status: '+checkError.message;section.appendChild(note);
+        }else if(existing){
+          const note=document.createElement('p');note.className='text-sm font-bold text-emerald-800 mt-2';
+          note.textContent='Your '+existing.rating+'★ review status: '+existing.moderation_status.replace(/_/g,' ')+'.';
+          section.appendChild(note);
+        }else{
+          const form=document.createElement('form');
+          form.className='cl-review-form';
+          form.innerHTML='<label>Rating (1–5 stars)<select name="rating" required><option value="">Choose a rating</option><option value="5">★★★★★ 5</option><option value="4">★★★★☆ 4</option><option value="3">★★★☆☆ 3</option><option value="2">★★☆☆☆ 2</option><option value="1">★☆☆☆☆ 1</option></select></label><label>Your experience<textarea name="review_text" minlength="10" maxlength="1000" required rows="3" placeholder="Describe the completed service (10–1000 characters)"></textarea></label><button type="submit" class="cl-action">Submit Review</button><p class="cl-review-form-message" role="status" aria-live="polite"></p>';
+          form.addEventListener('submit',async e=>{
+            e.preventDefault();
+            const rating=Number(form.elements.rating.value),reviewText=form.elements.review_text.value.trim();
+            const result=form.querySelector('.cl-review-form-message'),submit=form.querySelector('button');
+            if(!Number.isInteger(rating)||rating<1||rating>5||reviewText.length<10||reviewText.length>1000){result.textContent='Choose 1–5 stars and write 10–1000 characters.';return;}
+            submit.disabled=true;
+            result.textContent='Submitting your review...';
+            try{
+              const {error}=await supabaseClient.from('worker_reviews').insert({job_id:j.id,worker_id:accepted.worker_id,customer_id:user.id,rating,review_text:reviewText});
+              if(error)throw error;
+              await loadCustomerJobs();
+              say('customerJobMessage','Thank you. Your review is pending Admin approval.');
+            }catch(err){result.textContent='Review not submitted: '+(err.message||'Unknown error');submit.disabled=false;}
+          });
+          section.appendChild(form);
+        }
+      }
       host.appendChild(card);
     }
   }
@@ -5214,6 +5274,11 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
     const body=$('homeWorkerModalBody');
     const phone=w.phone?`<div class="rounded-xl bg-emerald-50 p-3"><span class="block text-xs text-slate-500">Phone Number</span><a class="font-black text-emerald-800 underline" href="tel:${esc(w.phone)}">${esc(w.phone)}</a><p class="text-xs text-emerald-800 mt-1">This worker chose to show their number publicly.</p></div>`:'<div class="rounded-xl bg-slate-100 p-3 text-sm text-slate-700">🔒 Phone number is private. Contact this worker through Clean Lanka Live Chat.</div>';
     body.innerHTML=`<div class="space-y-4"><div><p class="text-xs uppercase font-bold tracking-wider text-slate-500">District</p><p class="font-bold text-slate-900">${esc(w.district||'Not listed')}</p></div><div><p class="text-xs uppercase font-bold tracking-wider text-slate-500">Skills & Services</p><p class="font-semibold text-slate-900">${esc(Array.isArray(w.skills)?w.skills.join(', '):(w.skills||'Not listed'))}</p></div><div class="grid grid-cols-2 gap-3"><div class="rounded-xl bg-blue-50 p-3"><p class="text-xs text-slate-500">Experience</p><p class="font-black">${w.experience_years==null?'Not listed':esc(w.experience_years)+' years'}</p></div><div class="rounded-xl bg-emerald-50 p-3"><p class="text-xs text-slate-500">Service Price</p><p class="font-black">${esc(money(w.service_price_lkr))}</p></div></div>${phone}<div class="flex flex-wrap gap-2"><button type="button" class="cl-action flex-1" data-home-worker-chat="${esc(w.worker_id)}">Message via Clean Lanka</button>${w.phone?`<a class="cl-action blue flex-1 text-center" href="tel:${esc(w.phone)}">Call Worker</a>`:''}</div><p class="text-xs text-slate-500">Only approved profile information is displayed. Private contact details are not shown.</p></div>`;
+    const reviewHost=document.createElement('section');
+    reviewHost.className='cl-public-reviews';
+    reviewHost.setAttribute('aria-label','Verified customer reviews');
+    body.appendChild(reviewHost);
+    window.clLoadPublicWorkerReviews?.(w.worker_id,reviewHost);
     $('homeWorkerProfileModal').classList.remove('hidden');
   }
   async function loadHomeWorkers(){
@@ -8666,5 +8731,104 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     button.setAttribute('aria-expanded',String(expanding));
     button.textContent=expanding?'Hide details':'View details';
   });
+})();
+</script>
+
+<!-- cl-worker-review-frontend-20261110: real job-linked reviews (moderated), no fake ratings -->
+<style id="cl-worker-review-frontend-20261110">
+.cl-customer-review-box,.cl-public-reviews{background:#f6fcf8;border:1px solid #c9e7d3;border-radius:16px;padding:16px;margin-top:14px;}
+.cl-customer-review-box h5,.cl-public-reviews h4{font-weight:900;font-size:17px;color:#0f5132;margin:0 0 8px;}
+.cl-review-form{display:grid;gap:12px;margin-top:14px;}
+.cl-review-form label{display:grid;gap:6px;font-size:13px;font-weight:800;color:#334155;}
+.cl-review-form select,.cl-review-form textarea{display:block;width:100%;max-width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:10px;background:white;font-size:15px;color:#1f2937;}
+.cl-review-form button{justify-self:start;min-height:42px;padding:10px 20px;}
+.cl-review-form-message{font-size:13px;overflow-wrap:anywhere;}
+.cl-public-review-item{padding:11px 0;border-top:1px solid #dbe7de;}
+.cl-public-review-item .cl-stars{color:#b7791f;font-weight:900;font-size:16px;letter-spacing:1px;}
+.cl-public-review-item p{color:#334155;font-size:13px;line-height:1.55;margin-top:5px;white-space:pre-wrap;overflow-wrap:anywhere;}
+.cl-public-review-item time{font-size:11px;color:#64748b;}
+#clAdminWorkerReviewsSection{background:white;border:1px solid #dbe7e1;border-radius:18px;padding:20px;margin:16px 0;}
+#clAdminWorkerReviewsSection h2{font-size:21px;font-weight:900;color:#0f5132;}
+.cl-admin-review-row{padding:15px;border:1px solid #e2e8f0;border-radius:13px;margin-top:12px;background:#fafdfb;}
+.cl-admin-review-row p{overflow-wrap:anywhere;white-space:pre-wrap;}
+.cl-admin-review-row .cl-review-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.cl-admin-review-row button,.cl-admin-reviews-refresh{background:#0f5132;color:white;border:0;border-radius:10px;padding:10px 15px;font-weight:800;cursor:pointer;}
+.cl-admin-review-row button[data-cl-review-reject]{background:#9f1239;}
+</style>
+
+<script id="cl-worker-reviews-script-20261110">
+(function(){
+ const sb=window.supabaseClient;
+ if(!sb)return;
+ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const fmtDate=v=>{if(!v)return '';const d=new Date(v);return Number.isNaN(d.getTime())?'':d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});};
+ window.clLoadPublicWorkerReviews=async function(workerId,host){
+   if(!host)return;
+   host.innerHTML='<h4>⭐ Customer Reviews</h4><p>Loading approved reviews…</p>';
+   host.dataset.clReviewWorkerId=String(workerId);
+   const {data,error}=await sb.rpc('get_public_worker_reviews',{p_worker_id:workerId});
+   if(host.dataset.clReviewWorkerId!==String(workerId))return;
+   if(error){host.innerHTML='<h4>⭐ Customer Reviews</h4><p>Reviews could not be loaded.</p>';return;}
+   const rows=Array.isArray(data)?data:[];
+   if(!rows.length){host.innerHTML='<h4>⭐ Customer Reviews</h4><p class="text-sm text-slate-600">No approved customer reviews yet.</p>';return;}
+   const avg=rows.reduce((sum,r)=>sum+Number(r.rating||0),0)/rows.length;
+   host.innerHTML='<h4>⭐ Customer Reviews</h4><p class="font-bold text-emerald-900">'+avg.toFixed(1)+' / 5 · '+rows.length+' approved review(s) shown</p>'+
+   rows.map(r=>'<article class="cl-public-review-item"><span class="cl-stars" aria-label="'+Number(r.rating)+' out of 5 stars">'+('★'.repeat(Math.max(0,Math.min(5,Number(r.rating)||0))))+'</span><time class="ml-2">'+esc(fmtDate(r.created_at))+'</time><p>'+esc(r.review_text)+'</p></article>').join('');
+ };
+ const admin=document.querySelector('#adminDashboard .cl-admin-main');
+ if(!admin)return;
+ const sec=document.createElement('section');
+ sec.id='clAdminWorkerReviewsSection';
+ sec.setAttribute('aria-labelledby','clAdminWorkerReviewsHeading');
+ sec.innerHTML='<div class="flex items-center justify-between gap-2 flex-wrap"><div><h2 id="clAdminWorkerReviewsHeading">⭐ Worker Reviews Moderation</h2><p class="text-sm text-slate-600 mt-1">Approve only genuine, appropriate reviews of completed jobs. Main Admin and Admin only.</p></div><button type="button" class="cl-admin-reviews-refresh" id="clAdminWorkerReviewsRefresh">Refresh Reviews</button></div><p id="clAdminWorkerReviewsStatus" class="text-sm text-slate-600 mt-3" role="status"></p><div id="clAdminWorkerReviewsList"></div>';
+ admin.appendChild(sec);
+ const nav=document.querySelector('#adminDashboard .admin-nav');
+ if(nav){const a=document.createElement('a');a.href='#clAdminWorkerReviewsSection';a.textContent='⭐ Worker Reviews';nav.appendChild(a);}
+ const status=sec.querySelector('#clAdminWorkerReviewsStatus');
+ const list=sec.querySelector('#clAdminWorkerReviewsList');
+ async function refresh(){
+   status.textContent='Loading worker reviews…';list.replaceChildren();
+   const {data,error}=await sb.from('worker_reviews').select('id,job_id,worker_id,rating,review_text,moderation_status,created_at').order('created_at',{ascending:false}).limit(100);
+   if(error){status.textContent='Unable to load reviews: '+error.message;return;}
+   const rows=Array.isArray(data)?data:[];
+   if(!rows.length){status.textContent='No reviews available. Only Admin users can moderate them.';return;}
+   const workerIds=[...new Set(rows.map(r=>r.worker_id).filter(Boolean))];
+   let names=new Map();
+   if(workerIds.length){
+     const {data:workers}=await sb.from('worker_profiles').select('id,full_name').in('id',workerIds);
+     names=new Map((workers||[]).map(w=>[String(w.id),w.full_name]));
+   }
+   const pending=rows.filter(r=>r.moderation_status==='pending').length;
+   status.textContent=rows.length+' review(s) · '+pending+' awaiting moderation';
+   for(const r of rows){
+     const card=document.createElement('article');card.className='cl-admin-review-row';
+     const name=names.get(String(r.worker_id))||'Worker';
+     card.innerHTML='<p class="font-black text-slate-900">'+esc(name)+' · '+Number(r.rating)+' / 5 ★</p><p class="text-xs text-slate-500">'+esc(fmtDate(r.created_at))+' · '+esc(r.moderation_status)+'</p><p class="text-sm text-slate-700 mt-2">'+esc(r.review_text)+'</p>';
+     if(r.moderation_status==='pending'){
+       const actions=document.createElement('div');actions.className='cl-review-actions';
+       for(const [moderation,label] of [['approved','Approve Review'],['rejected','Reject Review']]){
+         const btn=document.createElement('button');btn.type='button';
+         if(moderation==='rejected')btn.dataset.clReviewReject='1';
+         btn.textContent=label;
+         btn.addEventListener('click',async()=>{
+           if(!confirm(label+'?'))return;
+           btn.disabled=true;
+           const {data:authData,error:authError}=await sb.auth.getUser();
+           if(authError||!authData?.user){status.textContent='Please sign in again.';btn.disabled=false;return;}
+           const {data:updated,error:saveError}=await sb.from('worker_reviews')
+             .update({moderation_status:moderation,reviewed_by:authData.user.id,reviewed_at:new Date().toISOString()})
+             .eq('id',r.id).eq('moderation_status','pending').select('id');
+           if(saveError||!updated?.length){status.textContent='Moderation failed: '+(saveError?.message||'Permission denied or already moderated');btn.disabled=false;return;}
+           await refresh();
+         });
+         actions.appendChild(btn);
+       }
+       card.appendChild(actions);
+     }
+     list.appendChild(card);
+   }
+ }
+ sec.querySelector('#clAdminWorkerReviewsRefresh').addEventListener('click',refresh);
+ nav?.querySelector('a[href="#clAdminWorkerReviewsSection"]')?.addEventListener('click',refresh);
 })();
 </script>
