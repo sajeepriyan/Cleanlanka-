@@ -5,6 +5,10 @@
   if (!services) return;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let visible = false;
+  // Download once; a failed or missing image keeps the original pictures.
+  const poses = new Image();
+  poses.onload = () => { services.dataset.workPoses = 'ready'; update(); };
+  poses.src = '/assets/service-work-actions-v2.webp';
   const update = () => {
     services.dataset.characterMotion = visible && !document.hidden && !reduced.matches && hero?.dataset.motionPaused !== 'true' ? 'active' : 'paused';
   };
