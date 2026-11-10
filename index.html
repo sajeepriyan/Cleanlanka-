@@ -49,10 +49,10 @@
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const periods={hour:'per hour',day:'per day',month:'per month',job:'per job',not_specified:''};
  window.clJobSalaryPeriod=j=>periods[j.salary_period]||'';
- window.clJobContactHTML=function(j){
+ window.clJobContactHTML=function(j,compact=false){
   const phone=j.show_contact_phone===true&&/^[0-9]{10}$/.test(j.contact_phone||'')?j.contact_phone:null;
   const international=phone?'94'+phone.slice(1):'';
-  return '<div class="cl-job-contact-actions">'+(phone?'<a href="tel:'+phone+'" aria-label="Call job advertiser '+phone+'">☎ Call '+phone+'</a>':'')+(phone&&j.allow_whatsapp===true?'<a target="_blank" rel="noopener noreferrer" href="https://wa.me/'+international+'">WhatsApp</a>':'')+'<button type="button" data-home-job-apply="'+esc(j.id)+'" aria-label="Live Chat about '+esc(j.service_title||'this job')+'">Live Chat</button></div><p class="cl-job-contact-note">'+(phone?'Call directly without an account, or sign in for Live Chat.':'Phone number is private. Create a Worker account or sign in to use Live Chat.')+'</p>';
+  return '<div class="cl-job-contact-actions">'+(phone?'<a href="tel:'+phone+'" aria-label="Call job advertiser '+phone+'">☎ Call '+phone+'</a>':'')+(phone&&j.allow_whatsapp===true?'<a target="_blank" rel="noopener noreferrer" href="https://wa.me/'+international+'">WhatsApp</a>':'')+'<button type="button" data-home-job-apply="'+esc(j.id)+'" aria-label="Live Chat about '+esc(j.service_title||'this job')+'">Live Chat</button></div>'+(compact?'':'<p class="cl-job-contact-note">'+(phone?'Call directly without an account, or sign in for Live Chat.':'Phone number is private. Create a Worker account or sign in to use Live Chat.')+'</p>');
  };
  window.clJobAdDetailsHTML=function(j){
   return [['Contact',j.contact_name],['Salary period',periods[j.salary_period]],['Working hours',j.working_hours],['Experience required',j.experience_required],['Food / accommodation / benefits',j.benefits]].filter(x=>x[1]).map(([label,value])=>'<p><strong>'+label+':</strong> '+esc(value)+'</p>').join('');
@@ -4033,7 +4033,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
         '<button type="button" class="cl-job-details-toggle" data-cl-job-details aria-expanded="false" aria-controls="cl-job-more-'+id+'">View details</button>'+
         '<div class="cl-job-details" id="cl-job-more-'+id+'" hidden><p>'+summary+'</p><p><strong>Published:</strong> '+esc(posted.absolute)+'</p><p><strong>District:</strong> '+district+'</p><p><strong>Salary / budget:</strong> '+budget+' '+esc(window.clJobSalaryPeriod(j))+'</p><p><strong>Preferred:</strong> '+date+'</p>'+window.clJobAdDetailsHTML(j)+window.clJobContactHTML(j)+'</div></div>'+
         '<div class="cl-job-side"><strong>'+budget+' '+esc(window.clJobSalaryPeriod(j))+'</strong><span class="cl-job-date">Preferred: '+date+'</span>'+
-        window.clJobContactHTML(j)+'</div>'+
+        window.clJobContactHTML(j,true)+'</div>'+
       '</article>';
     }).join('');
   };
@@ -7035,7 +7035,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     const {data:mine,error:mineError}=await supabaseClient.from('job_applications').select('job_id,status').eq('worker_id',activeWorkerProfileId);
     if(mineError){say('workerJobsMessage','Could not check your previous applications: '+mineError.message,true);return;}
     const applied=new Map((mine||[]).map(a=>[a.job_id,a.status]));
-    host.innerHTML=jobs.map(j=>`<article data-worker-job-card="${esc(j.id)}" class="border rounded-xl p-4 bg-slate-50 ${j.id===focusJobId?'ring-2 ring-emerald-500 bg-emerald-50':''}">${j.id===focusJobId?'<p class="text-sm font-bold text-emerald-800 mb-2">The job you viewed — continue here</p>':''}<h3 class="font-black text-slate-900">${esc(j.service_title)}</h3><p class="text-sm text-slate-600 mt-1">${esc(j.district)} · ${esc(money(j.budget_lkr))}</p><p class="text-sm mt-2">${esc(String(j.description||'').slice(0,160))}${String(j.description||'').length>160?'…':''}</p><div class="cl-job-details" hidden><p>${esc(j.description)}</p><p>District: ${esc(j.district)}</p><p>Budget: ${esc(money(j.budget_lkr))}</p><p>Preferred date: ${esc(j.preferred_date||'Flexible')}</p>${window.clJobAdDetailsHTML(j)}${window.clJobContactHTML(j)}</div>${applied.has(j.id)?`<p class="text-sm font-bold text-emerald-700 mt-3">Application: ${esc(applied.get(j.id))}</p>`:''}<div class="flex flex-wrap gap-2 mt-3"><button type="button" class="cl-action light" data-cl-job-details>View details</button>${window.clJobContactHTML(j)}</div></article>`).join('');
+    host.innerHTML=jobs.map(j=>`<article data-worker-job-card="${esc(j.id)}" class="border rounded-xl p-4 bg-slate-50 ${j.id===focusJobId?'ring-2 ring-emerald-500 bg-emerald-50':''}">${j.id===focusJobId?'<p class="text-sm font-bold text-emerald-800 mb-2">The job you viewed — continue here</p>':''}<h3 class="font-black text-slate-900">${esc(j.service_title)}</h3><p class="text-sm text-slate-600 mt-1">${esc(j.district)} · ${esc(money(j.budget_lkr))}</p><p class="text-sm mt-2">${esc(String(j.description||'').slice(0,160))}${String(j.description||'').length>160?'…':''}</p><div class="cl-job-details" hidden><p>${esc(j.description)}</p><p>District: ${esc(j.district)}</p><p>Budget: ${esc(money(j.budget_lkr))}</p><p>Preferred date: ${esc(j.preferred_date||'Flexible')}</p>${window.clJobAdDetailsHTML(j)}${window.clJobContactHTML(j)}</div>${applied.has(j.id)?`<p class="text-sm font-bold text-emerald-700 mt-3">Application: ${esc(applied.get(j.id))}</p>`:''}<div class="flex flex-wrap gap-2 mt-3"><button type="button" class="cl-action light" data-cl-job-details>View details</button>${window.clJobContactHTML(j,true)}</div></article>`).join('');
     const selectedAvailable=focusJobId&&jobs.some(j=>j.id===focusJobId);
     say('workerJobsMessage',selectedAvailable?'The job you viewed is shown first. Read its details, then call the advertiser or choose Live Chat.':focusJobId?'The job you viewed is no longer open. You can browse the other available jobs.':jobs.length+' open job(s) available.');
   }
@@ -9473,14 +9473,14 @@ document.addEventListener('DOMContentLoaded',function(){
       window.clCurrentUser=user;
       window.clRememberWorkerJob(id,user);
       if(!user){
-        frame('Apply for this job','<p>Create a Worker account or sign in to chat with the advertiser. This job will be waiting in your Dashboard after email confirmation.</p><div class="cl-job-account-options"><button type="button" data-job-account="register">Create Worker Account</button><button type="button" data-job-account="login">Already registered? Login</button></div>','account');
+        frame('Live Chat about this job','<p>Create a Worker account or sign in to chat with the advertiser. This job will be waiting in your Dashboard after email confirmation.</p><div class="cl-job-account-options"><button type="button" data-job-account="register">Create Worker Account</button><button type="button" data-job-account="login">Already registered? Login</button></div>','account');
         return;
       }
       if(user.user_metadata?.account_type!=='worker')throw new Error('Please use a registered Worker account to apply for this job.');
       const open=()=>window.cleanLankaOpenAccountJobChat(id,user);
       if(dialog.open){afterClose=open;close();}
       else await open();
-    }catch(error){if(token===generation)frame('Job application','<p role="alert">'+esc(error.message||'Unable to open chat. Please try again.')+'</p>','error');}
+    }catch(error){if(token===generation)frame('Job enquiry','<p role="alert">'+esc(error.message||'Unable to open chat. Please try again.')+'</p>','error');}
     finally{busy=false;}
   }
   dialog.addEventListener('click',event=>{
