@@ -7453,7 +7453,37 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   $('homeWorkerProfileModal')?.addEventListener('click',e=>{if(e.target.id==='homeWorkerProfileModal')e.currentTarget.classList.add('hidden');});
   document.addEventListener('click',async e=>{
     const profile=e.target.closest('[data-home-worker-profile]');if(profile){openHomeWorkerProfile(profile.dataset.homeWorkerProfile);return;}
-    const chat=e.target.closest('[data-home-worker-chat]');if(chat){const user=await getUser();if(!user){alert('Please sign in as a Customer to use Clean Lanka Live Chat.');openLoginPage();return;}const {data:customerProfile}=await supabaseClient.from('customer_profiles').select('id').eq('id',user.id).maybeSingle();if(!customerProfile){alert('Live Chat is available to registered Customer accounts only.');return;}if(document.getElementById('customerDashboard')?.classList.contains('hidden')){alert('Please open your Customer Dashboard, then select the worker from Find Workers to start the chat.');return;}await startCustomerChat(chat.dataset.homeWorkerChat);return;}
+    const chat=e.target.closest('[data-home-worker-chat]');
+    if(chat){
+      e.preventDefault();
+      if(chat.disabled)return;
+      chat.disabled=true;
+      try{
+        const user=await getUser();
+        if(!user){
+          alert('Please sign in as a Customer to use Clean Lanka Live Chat.');
+          $('homeWorkerProfileModal')?.classList.add('hidden');
+          openLoginPage();
+          return;
+        }
+        const {data:customerProfile,error:profileError}=await supabaseClient.from('customer_profiles').select('id').eq('id',user.id).maybeSingle();
+        if(profileError)throw profileError;
+        if(!customerProfile){alert('Live Chat is available to registered Customer accounts only.');return;}
+        window.clCurrentUser=user;
+        $('homeWorkerProfileModal')?.classList.add('hidden');
+        // Home profile enquiries open the selected worker directly in the account inbox.
+        await window.loadCustomerDashboard(user);
+        const dashboard=$('customerDashboard');
+        dashboard?._clShowTab?.('messages');
+        window.dispatchEvent(new CustomEvent('cl-open-account-thread',{detail:{role:'customer'}}));
+        await startCustomerChat(chat.dataset.homeWorkerChat);
+      }catch(error){
+        alert('Could not open worker chat: '+(error?.message||'Please try again.'));
+      }finally{
+        chat.disabled=false;
+      }
+      return;
+    }
     const apply=e.target.closest('[data-home-job-apply]');if(apply){
       window.clPendingHomeJobId=apply.dataset.homeJobApply;
       const user=await getUser();
