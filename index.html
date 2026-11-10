@@ -35,6 +35,36 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Clean Lanka","url":"https://cleanlanka.lk/","description":"Sri Lankan home services marketplace connecting customers with skilled workers.","inLanguage":["en","si","ta"]}
 </script>
+<!-- Start the public board before blocking UI libraries and account restoration. -->
+<link rel="preconnect" href="https://eudzypjjnoiboqzqrlin.supabase.co" crossorigin>
+<script id="cl-public-jobs-early-request-20261110">
+  // Public browser configuration; this read uses the existing anonymous public RPC.
+  const SUPABASE_URL = "https://eudzypjjnoiboqzqrlin.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2Yh_kmsE9Kj5rtcdDmh0Kg_ctV6Aesv";
+  window.clInitialPublicJobs = (async function () {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    try {
+      const response = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_public_job_posts', {
+        method: 'POST',
+        headers: { apikey: SUPABASE_PUBLISHABLE_KEY, 'Content-Type': 'application/json' },
+        body: '{}',
+        credentials: 'omit',
+        cache: 'no-store',
+        signal: controller.signal
+      });
+      if (!response.ok) throw new Error('Public jobs request failed (' + response.status + ')');
+      const data = await response.json();
+      if (!Array.isArray(data)) throw new Error('Invalid public jobs response');
+      return { data, error: null };
+    } catch (error) {
+      // Resolve rather than reject while the rest of the document is still parsing.
+      return { data: null, error };
+    } finally {
+      clearTimeout(timeout);
+    }
+  })();
+</script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -4187,8 +4217,6 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // Supabase browser configuration. Publishable keys are intended for frontend use.
-  const SUPABASE_URL = "https://eudzypjjnoiboqzqrlin.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2Yh_kmsE9Kj5rtcdDmh0Kg_ctV6Aesv";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
   // Expose the single shared client for the homepage account/profile controls and dashboard helpers.
   window.supabaseClient = supabaseClient;
@@ -7181,7 +7209,12 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     const msg=$('homeJobMessage');
     if(msg&&!homeJobCache.length)msg.textContent='Loading public job opportunities...';
     try{
-      const {data,error}=await supabaseClient.rpc('get_public_job_posts');
+      // Consume the already-running request once; explicit refreshes still fetch fresh data.
+      const initialRequest=window.clInitialPublicJobs;
+      window.clInitialPublicJobs=null;
+      let result=initialRequest ? await initialRequest : null;
+      if(!result || result.error) result=await supabaseClient.rpc('get_public_job_posts');
+      const {data,error}=result;
       if(request!==homeJobsRequest)return;
       if(error)throw error;
       homeJobCache=data||[];
@@ -9284,4 +9317,5 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 })();
 </script>
+
 
