@@ -5855,7 +5855,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
         showMessage(message, 'Worker sign-in successful.' + syncWarning, Boolean(syncWarning));
         await loadWorkerDashboard(data.user);
         if (window.clPendingHomeJobId) {
-          await window.cleanLankaFocusWorkerJob(window.clPendingHomeJobId);
+          await window.cleanLankaOpenJobChat(window.clPendingHomeJobId);
           window.clPendingHomeJobId = null;
         }
       } else {
@@ -7306,7 +7306,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
         return;
       }
       await loadWorkerDashboard(user);
-      await window.cleanLankaFocusWorkerJob(window.clPendingHomeJobId);
+      await window.cleanLankaOpenJobChat(window.clPendingHomeJobId);
       window.clPendingHomeJobId=null;
       return;
     }
@@ -7544,7 +7544,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   let checkpointTimer=null;
   function commitView(){
     checkpointTimer=null;
-    if(restoreInProgress)return;
+    if(restoreInProgress||window.history.state?.clJobPopup)return;
     const view=cleanLankaCaptureView(),key=viewKey(view);
     if(key===lastViewKey)return;
     const previous=JSON.parse(lastViewKey);
@@ -7558,7 +7558,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     catch(error){console.warn('Clean Lanka history checkpoint unavailable:',error);}
   }
   function scheduleViewCheckpoint(ms){
-    if(restoreInProgress)return;
+    if(restoreInProgress||window.history.state?.clJobPopup)return;
     if(checkpointTimer!==null)clearTimeout(checkpointTimer);
     checkpointTimer=setTimeout(commitView,ms);
   }
@@ -9230,19 +9230,149 @@ document.addEventListener('DOMContentLoaded',function(){
 
 <!-- cl-job-posted-info-and-desktop-scroll-20261110: mobile & desktop job date/details, desktop scrolling, original worker/job forms preserved -->
 
-<script id="cl-job-details-toggle-20261110">
+<style>
+#clJobPopup{box-sizing:border-box;width:min(440px,calc(100vw - 28px));max-width:440px;max-height:82vh;max-height:82dvh;margin:auto;padding:0;border:1px solid #cce7d9;border-radius:18px;background:#fff;color:#183c2d;box-shadow:0 20px 70px #073c3440;font:400 15px/1.55 'Inter',sans-serif;overflow:auto;overscroll-behavior:contain}
+#clJobPopup::backdrop{background:#092e2855}
+#clJobPopup header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:16px 18px;border-bottom:1px solid #e1eee6;background:#f0faf5;position:sticky;top:0;z-index:1}
+#clJobPopup h2{margin:0;color:#153c2b;font-size:19px;font-weight:800;overflow-wrap:anywhere}
+#clJobPopup button{border-radius:9px;border:1px solid #cae1d4;padding:10px 14px;font-size:14px;font-weight:700;cursor:pointer;background:#f0f8f3;color:#145338;min-height:42px}
+#clJobPopup header button{white-space:nowrap;padding:6px 10px;font-size:13px}
+#clJobPopup .cl-job-popup-body{padding:18px;overflow-wrap:anywhere}
+#clJobPopup p{margin:0 0 12px;white-space:pre-wrap}
+#clJobPopup footer{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #e1eee6;padding-top:14px;margin-top:18px}
+#clJobPopup [data-job-popup-apply],#clJobPopup [type=submit],#clJobPopup [data-job-account=login]{background:#078342;color:white;border-color:#078342}
+#clJobPopup .cl-job-account-options{display:grid;gap:12px;margin-top:20px}
+#clJobPopup textarea{display:block;box-sizing:border-box;width:100%;margin:6px 0 10px;border:1px solid #b8d6c7;border-radius:10px;padding:10px;font:inherit;resize:vertical;max-height:150px;background:white;color:#183c2d}
+#clJobPopup label{font-weight:700}
+#clJobPopup [role=status]{font-size:13px;margin-top:12px;color:#496657}
+#clJobPopup #clJobChatMessages{height:220px;max-height:30dvh;overflow:auto;overscroll-behavior:contain;background:#f1f7f3;border-radius:10px;padding:12px;margin-bottom:14px}
+#clJobPopup .cl-job-chat-bubble{max-width:92%;width:fit-content;margin:0 0 10px;padding:9px 12px;border:1px solid #deebe3;border-radius:12px;background:white}
+#clJobPopup .cl-job-chat-bubble.mine{margin-left:auto;background:#d8f3e1}
+#clJobPopup .cl-job-chat-bubble p{margin:3px 0;white-space:pre-wrap}
+#clJobPopup .cl-job-chat-bubble small{font-size:10px;color:#4d685a}
+#clJobPopup button:disabled{opacity:.6;cursor:wait}
+#clJobPopup button:focus-visible,#clJobPopup textarea:focus-visible{outline:3px solid #8acfa8;outline-offset:2px}
+
+</style>
+<script id="cl-job-popup-20261110">
 (function(){
-  document.addEventListener('click',function(event){
-    const button=event.target.closest('button[data-cl-job-details]');
-    if(!button || !button.closest('#homeJobResults'))return;
-    const details=document.getElementById(button.getAttribute('aria-controls'));
-    if(!details)return;
-    const expanding=details.hidden;
-    details.hidden=!expanding;
-    button.setAttribute('aria-expanded',String(expanding));
-    button.textContent=expanding?'Hide details':'View details';
+  'use strict';
+  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const dialog=document.createElement('dialog');
+  dialog.id='clJobPopup';
+  dialog.setAttribute('aria-labelledby','clJobPopupTitle');
+  document.body.append(dialog);
+  let opener=null,jobId=null,conversationId=null,channel=null,timer=null,generation=0;
+  let popupMode='',busy=false,returnState=null,afterClose=null;
+  function stop(){if(channel){supabaseClient.removeChannel(channel);channel=null;}clearInterval(timer);timer=null;}
+  function dismiss(){generation++;stop();if(dialog.open)dialog.close();opener?.setAttribute('aria-expanded','false');opener?.focus({preventScroll:true});popupMode='';const next=afterClose;afterClose=null;if(next)setTimeout(next,180);}
+  function close(){if(history.state?.clJobPopup){history.back();}else dismiss();}
+  function frame(title,content,mode){
+    const entering=!dialog.open;
+    popupMode=mode;
+    dialog.innerHTML='<header><h2 id="clJobPopupTitle">'+esc(title)+'</h2><button type="button" data-job-popup-close aria-label="Close job window">✕ Close</button></header><div class="cl-job-popup-body">'+content+'</div>';
+    if(entering){
+      returnState=window.cleanLankaCaptureView?.()||history.state||{};
+      history.pushState({...returnState,clJobPopup:true},'',location.href);
+      dialog.showModal();
+    }
+    dialog.querySelector('button')?.focus({preventScroll:true});
+  }
+  function details(button){
+    opener=button;
+    const card=button.closest('.cl-job-compact');
+    const source=card?.querySelector('.cl-job-details');
+    jobId=card?.querySelector('[data-home-job-apply]')?.dataset.homeJobApply;
+    if(!source||!jobId)return;
+    button.setAttribute('aria-expanded','true');
+    button.setAttribute('aria-haspopup','dialog');
+    frame(card.querySelector('h3')?.textContent||'Job details',source.innerHTML+'<footer><button type="button" data-job-popup-close>Close</button><button type="button" data-job-popup-apply>Apply / Login →</button></footer>','details');
+  }
+  async function refresh(token){
+    if(!conversationId||token!==generation||!dialog.open)return;
+    const id=conversationId;
+    const {data,error}=await supabaseClient.from('messages').select('id,sender_id,message,created_at').eq('conversation_id',id).order('created_at',{ascending:false}).limit(100);
+    if(token!==generation||!dialog.open||id!==conversationId)return;
+    const host=dialog.querySelector('#clJobChatMessages');if(!host)return;
+    const near=host.scrollHeight-host.scrollTop-host.clientHeight<90;
+    if(error){dialog.querySelector('[role=status]').textContent='Messages could not load: '+error.message;return;}
+    host.innerHTML=(data||[]).slice().reverse().map(m=>'<article class="cl-job-chat-bubble '+(m.sender_id===window.clCurrentUser?.id?'mine':'')+'"><strong>'+(m.sender_id===window.clCurrentUser?.id?'You':'Job poster')+'</strong><p>'+esc(m.message)+'</p><small>'+esc(new Date(m.created_at).toLocaleString())+'</small></article>').join('')||'<p>No messages yet. Send a message about this job.</p>';
+    if(near)host.scrollTop=host.scrollHeight;
+  }
+  function watch(token){
+    stop();if(!conversationId)return;
+    channel=supabaseClient.channel('job-popup-'+conversationId).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'conversation_id=eq.'+conversationId},()=>refresh(token)).subscribe();
+    timer=setInterval(()=>refresh(token),6000);
+  }
+  async function apply(id,button){
+    if(busy)return;busy=true;
+    if(button)opener=button;
+    jobId=id;conversationId=null;stop();const token=++generation;
+    try{
+      const {data:{user},error:authError}=await supabaseClient.auth.getUser();
+      if(authError && authError.name!=='AuthSessionMissingError' && !/auth session missing/i.test(authError.message||''))throw authError;
+      if(token!==generation)return;
+      window.clCurrentUser=user;
+      if(!user){
+        window.clPendingHomeJobId=id;
+        frame('Apply for this job','<p>Sign in to apply and chat with the job poster.</p><div class="cl-job-account-options"><button type="button" data-job-account="login">Login to my account</button><button type="button" data-job-account="register">Create Worker Account</button></div>','account');
+        return;
+      }
+      frame('Live Chat — Job Application','<p role="status">Opening this job’s conversation…</p>','loading');
+      const {data,error}=await supabaseClient.rpc('worker_job_chat',{p_job_id:id,p_message:null});
+      if(token!==generation)return;
+      if(error)throw error;
+      conversationId=data.conversation_id;
+      frame(data.job_title+' — Live Chat','<div id="clJobChatMessages" aria-live="polite"><p>No messages yet. Start the conversation.</p></div><form id="clJobChatForm"><label for="clJobChatInput">Message about this job</label><textarea id="clJobChatInput" required maxlength="3500" rows="3" placeholder="Hello, I’m interested in this job…"></textarea><button type="submit">Send / Apply</button></form><p role="status">Your first message submits your application and starts the chat.</p>','chat');
+      await refresh(token);watch(token);dialog.querySelector('textarea')?.focus({preventScroll:true});
+    }catch(error){if(token===generation)frame('Job application','<p role="alert">'+esc(error.message||'Unable to open chat. Please try again.')+'</p>','error');}
+    finally{busy=false;}
+  }
+  dialog.addEventListener('click',event=>{
+    if(event.target===dialog||event.target.closest('[data-job-popup-close]')){close();return;}
+    if(event.target.closest('[data-job-popup-apply]')){apply(jobId);return;}
+    const account=event.target.closest('[data-job-account]');
+    if(account){
+      const action=account.dataset.jobAccount;
+      // Consume the popup checkpoint before the existing screen router runs.
+      afterClose=()=>{
+          if(action==='register')openRegistration('worker');
+          else{openLoginPage();const role=document.getElementById('loginRole');if(role)role.value='worker';}
+      };
+      close();
+    }
   });
+  dialog.addEventListener('cancel',event=>{event.preventDefault();close();});
+  dialog.addEventListener('submit',async event=>{
+    if(event.target.id!=='clJobChatForm')return;event.preventDefault();
+    const input=dialog.querySelector('textarea'),button=event.target.querySelector('button'),status=dialog.querySelector('[role=status]');
+    const message=input.value.trim();if(!message||button.disabled)return;
+    const token=generation,id=jobId;button.disabled=true;status.textContent='Sending…';
+    try{
+      const {data,error}=await supabaseClient.rpc('worker_job_chat',{p_job_id:id,p_message:message});
+      if(error)throw error;
+      if(token!==generation)return;
+      conversationId=data.conversation_id;input.value='';status.textContent='Message sent. Your application is recorded.';
+      await refresh(token);watch(token);
+    }catch(error){if(token===generation)status.textContent=error.message||'Message could not be sent. Please retry.';}
+    finally{if(token===generation)button.disabled=false;}
+  });
+  // Capture before the legacy dashboard Apply handler to keep this action in a popup.
+  document.addEventListener('click',event=>{
+    const button=event.target.closest('[data-cl-job-details],[data-home-job-apply]');
+    if(!button)return;
+    event.preventDefault();event.stopImmediatePropagation();
+    if(button.hasAttribute('data-cl-job-details'))details(button);
+    else apply(button.dataset.homeJobApply,button);
+  },true);
+  // Modal Back must not reach the legacy page router or close another screen.
+  window.addEventListener('popstate',event=>{
+    if(!dialog.open)return;
+    event.stopImmediatePropagation();dismiss();
+  },true);
+  window.cleanLankaOpenJobChat=id=>apply(id);
 })();
+
 </script>
 
 <!-- cl-worker-review-frontend-20261110: real job-linked reviews (moderated), no fake ratings -->
@@ -9349,5 +9479,6 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 })();
 </script>
+
 
 
