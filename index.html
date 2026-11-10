@@ -167,6 +167,14 @@
 
 
 
+<style id="cl-public-jobs-placeholder-20261110">
+/* Reserve the first row from initial HTML so incoming jobs do not open a blank board. */
+#homeMarketplace #homeJobResults > .cl-job-placeholder{box-sizing:border-box;min-height:224px!important;border:1px solid #dbe9e1;border-radius:16px;padding:16px!important;background:#fff;display:flex;flex-direction:column;gap:15px}
+.cl-job-placeholder span{display:block;height:12px;border-radius:6px;background:#e8f0eb;width:90%}
+.cl-job-placeholder span:first-child{width:36%;height:10px}
+.cl-job-placeholder span:nth-child(2){width:72%;height:20px}
+.cl-job-placeholder span:last-child{width:52%;margin-top:auto;height:28px}
+</style>
 <style id="cl-dashboard-no-legacy-flash-20261110">
 /* Hide the whole composited dashboard until layout and styles are ready.
    visibility alone is insufficient: child chat/tab rules explicitly set
@@ -3910,7 +3918,69 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     <p class="cl-jobs-intro">Customer-posted opportunities and official Clean Lanka jobs. Private customer details stay protected.</p>
     <div class="cl-job-tabs flex flex-wrap gap-2 mb-4" role="group" aria-label="Filter public job opportunities"><button type="button" class="home-job-filter rounded-full bg-blue-700 text-white px-4 py-2 text-sm font-bold" data-job-filter="all">All Jobs</button><button type="button" class="home-job-filter rounded-full bg-slate-100 text-slate-700 px-4 py-2 text-sm font-bold" data-job-filter="customer">Customer Jobs</button><button type="button" class="home-job-filter rounded-full bg-slate-100 text-slate-700 px-4 py-2 text-sm font-bold" data-job-filter="official">Official Jobs</button></div>
     <p id="homeJobMessage" class="text-sm text-slate-500 mb-3" role="status" aria-live="polite">Loading job opportunities...</p>
-    <div id="homeJobResults" class="cl-compact-jobs" aria-label="Public job opportunity listings"></div>
+    <div id="homeJobResults" class="cl-compact-jobs" aria-label="Public job opportunity listings" aria-busy="true"><article class="cl-job-placeholder" aria-hidden="true"><span></span><span></span><span></span><span></span></article><article class="cl-job-placeholder" aria-hidden="true"><span></span><span></span><span></span><span></span></article><article class="cl-job-placeholder" aria-hidden="true"><span></span><span></span><span></span><span></span></article><article class="cl-job-placeholder" aria-hidden="true"><span></span><span></span><span></span><span></span></article></div>
+<script id="cl-public-jobs-first-paint-20261110">
+(function(){
+  'use strict';
+  const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const money = v => (v == null || v === '' || !Number.isFinite(Number(v))) ? 'Price not listed' : 'LKR ' + Number(v).toFixed(2);
+  // Show publication age using Sri Lanka calendar days, regardless of visitor timezone.
+  const clJobCalendarFormat = new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Colombo',year:'numeric',month:'2-digit',day:'2-digit'});
+  const clJobDateFormat = new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Colombo',day:'2-digit',month:'short',year:'numeric'});
+  function clJobDayNumber(date){
+    const values=Object.fromEntries(clJobCalendarFormat.formatToParts(date).map(item=>[item.type,item.value]));
+    return Date.UTC(Number(values.year),Number(values.month)-1,Number(values.day));
+  }
+  function clJobPosted(createdAt){
+    const date=createdAt?new Date(createdAt):null;
+    if(!date||Number.isNaN(date.getTime()))return {label:'Date unavailable',absolute:'Not listed'};
+    const days=Math.max(0,Math.floor((clJobDayNumber(new Date())-clJobDayNumber(date))/86400000));
+    const label=days===0?'Posted today':days===1?'Posted yesterday':'Posted '+days+' days ago';
+    return {label,absolute:clJobDateFormat.format(date)};
+  }
+
+  window.clRenderPublicJobCards=function(host,rows){
+    host.classList.toggle('cl-list-empty',!rows.length);
+    host.setAttribute('aria-busy','false');
+    if(!rows.length){host.innerHTML='<p class="cl-directory-empty">No open job opportunities match the selected filters.</p>';return;}
+    host.innerHTML=rows.map(j=>{
+      const title=esc(j.service_title||'Service Job');
+      const summary=esc(j.description||'Details available after worker login.');
+      const district=esc(j.district||'Sri Lanka');
+      const budget=esc(money(j.budget_lkr));
+      const date=esc(j.preferred_date||'Flexible');
+      const posted=clJobPosted(j.created_at);
+      const id=esc(j.id);
+      const official=j.post_source==='clean_lanka';
+      const label=official?'Official Job':'Customer Job';
+      const value=String(j.service_title||'').toLowerCase();
+      const icon=/clean|wash|maid/i.test(value)?'cleaning_services':/cook|cat(er|ering)|chef|food/i.test(value)?'restaurant':/plumb|water/i.test(value)?'plumbing':/electric|wiring/i.test(value)?'electrical_services':/car|driver|van/i.test(value)?'directions_car':/garden/i.test(value)?'yard':'handyman';
+      const translated=(j.multilingual_titles||[]).map(t=>t.translated_title).filter(Boolean).join(' · ');
+      return '<article class="cl-job-compact">'+
+        '<span class="cl-job-icon material-symbols-outlined" aria-hidden="true">'+icon+'</span>'+
+        '<div class="cl-job-main"><span class="cl-job-type">'+label+'</span><h3 title="'+title+'">'+title+'</h3>'+
+        '<p class="cl-job-location"><span class="material-symbols-outlined" aria-hidden="true">location_on</span>'+district+'</p>'+
+        (translated?'<p class="cl-job-translation">'+esc(translated)+'</p>':'')+
+        '<p class="cl-job-summary" title="'+summary+'">'+summary+'</p>'+
+        '<p class="cl-job-posted" title="Published '+esc(posted.absolute)+'"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>'+esc(posted.label)+' · '+esc(posted.absolute)+'</p>'+
+        '<button type="button" class="cl-job-details-toggle" data-cl-job-details aria-expanded="false" aria-controls="cl-job-more-'+id+'">View details</button>'+
+        '<div class="cl-job-details" id="cl-job-more-'+id+'" hidden><p>'+summary+'</p><p><strong>Published:</strong> '+esc(posted.absolute)+'</p><p><strong>District:</strong> '+district+'</p><p><strong>Budget:</strong> '+budget+'</p><p><strong>Preferred:</strong> '+date+'</p></div></div>'+
+        '<div class="cl-job-side"><strong>'+budget+'</strong><span class="cl-job-date">Preferred: '+date+'</span>'+
+        '<button type="button" class="cl-action cl-job-view" data-home-job-apply="'+id+'" aria-label="Apply for '+title+' or sign in as worker">Apply / Login</button></div>'+
+      '</article>';
+    }).join('');
+  };
+  // Render while the parser is below the board, before the Supabase SDK
+  // and dashboard scripts. The main controller takes over filters later.
+  window.clInitialPublicJobs?.then(result=>{
+    if(window.clPublicJobsControllerReady||result.error)return;
+    const host=document.getElementById('homeJobResults');
+    const rows=result.data.slice().sort((a,b)=>(Date.parse(b.created_at)||0)-(Date.parse(a.created_at)||0));
+    window.clRenderPublicJobCards(host,rows);
+    document.getElementById('homeJobMessage').textContent=rows.length+' open job(s) published.';
+  });
+})();
+</script>
    </section>
    <aside class="cl-market-trust cl080-trust" aria-labelledby="cl080TrustTitle">
     <div class="cl080-trust-decor" aria-hidden="true"><span class="material-symbols-outlined">eco</span><span class="material-symbols-outlined">home</span></div>
@@ -7155,20 +7225,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     if(error){if(msg)msg.textContent='Could not load worker profiles: '+error.message;return;}
     homeWorkerCache=data||[];renderHomeWorkers();
   }
-  // Show publication age using Sri Lanka calendar days, regardless of visitor timezone.
-  const clJobCalendarFormat = new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Colombo',year:'numeric',month:'2-digit',day:'2-digit'});
-  const clJobDateFormat = new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Colombo',day:'2-digit',month:'short',year:'numeric'});
-  function clJobDayNumber(date){
-    const values=Object.fromEntries(clJobCalendarFormat.formatToParts(date).map(item=>[item.type,item.value]));
-    return Date.UTC(Number(values.year),Number(values.month)-1,Number(values.day));
-  }
-  function clJobPosted(createdAt){
-    const date=createdAt?new Date(createdAt):null;
-    if(!date||Number.isNaN(date.getTime()))return {label:'Date unavailable',absolute:'Not listed'};
-    const days=Math.max(0,Math.floor((clJobDayNumber(new Date())-clJobDayNumber(date))/86400000));
-    const label=days===0?'Posted today':days===1?'Posted yesterday':'Posted '+days+' days ago';
-    return {label,absolute:clJobDateFormat.format(date)};
-  }
+  window.clPublicJobsControllerReady=true;
   function renderHomeJobs(){
     const host=$('homeJobResults');if(!host)return;
     const q=(homeMarketplaceQuery||'').trim();
@@ -7176,32 +7233,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     const rows=homeJobCache.filter(j=>(homeJobFilter==='all'||(homeJobFilter==='official'?j.post_source==='clean_lanka':j.post_source!=='clean_lanka'))&&(!d||String(j.district||'').toLowerCase()===d.toLowerCase())&&(!q||clMatchesMultilingual([j.service_title,j.description,j.district,...(j.multilingual_titles||[]).flatMap(t=>[t.translated_title,t.search_terms||[]])],q))).sort((a,b)=>(Date.parse(b.created_at)||0)-(Date.parse(a.created_at)||0));
     host.classList.toggle('cl-list-empty',!rows.length);
     if(!rows.length){host.innerHTML='<p class="cl-directory-empty">No open job opportunities match the selected filters.</p>';return;}
-    host.innerHTML=rows.map(j=>{
-      const title=esc(j.service_title||'Service Job');
-      const summary=esc(j.description||'Details available after worker login.');
-      const district=esc(j.district||'Sri Lanka');
-      const budget=esc(money(j.budget_lkr));
-      const date=esc(j.preferred_date||'Flexible');
-      const posted=clJobPosted(j.created_at);
-      const id=esc(j.id);
-      const official=j.post_source==='clean_lanka';
-      const label=official?'Official Job':'Customer Job';
-      const value=String(j.service_title||'').toLowerCase();
-      const icon=/clean|wash|maid/i.test(value)?'cleaning_services':/cook|cat(er|ering)|chef|food/i.test(value)?'restaurant':/plumb|water/i.test(value)?'plumbing':/electric|wiring/i.test(value)?'electrical_services':/car|driver|van/i.test(value)?'directions_car':/garden/i.test(value)?'yard':'handyman';
-      const translated=(j.multilingual_titles||[]).map(t=>t.translated_title).filter(Boolean).join(' · ');
-      return '<article class="cl-job-compact">'+
-        '<span class="cl-job-icon material-symbols-outlined" aria-hidden="true">'+icon+'</span>'+
-        '<div class="cl-job-main"><span class="cl-job-type">'+label+'</span><h3 title="'+title+'">'+title+'</h3>'+
-        '<p class="cl-job-location"><span class="material-symbols-outlined" aria-hidden="true">location_on</span>'+district+'</p>'+
-        (translated?'<p class="cl-job-translation">'+esc(translated)+'</p>':'')+
-        '<p class="cl-job-summary" title="'+summary+'">'+summary+'</p>'+
-        '<p class="cl-job-posted" title="Published '+esc(posted.absolute)+'"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>'+esc(posted.label)+' · '+esc(posted.absolute)+'</p>'+
-        '<button type="button" class="cl-job-details-toggle" data-cl-job-details aria-expanded="false" aria-controls="cl-job-more-'+id+'">View details</button>'+
-        '<div class="cl-job-details" id="cl-job-more-'+id+'" hidden><p>'+summary+'</p><p><strong>Published:</strong> '+esc(posted.absolute)+'</p><p><strong>District:</strong> '+district+'</p><p><strong>Budget:</strong> '+budget+'</p><p><strong>Preferred:</strong> '+date+'</p></div></div>'+
-        '<div class="cl-job-side"><strong>'+budget+'</strong><span class="cl-job-date">Preferred: '+date+'</span>'+
-        '<button type="button" class="cl-action cl-job-view" data-home-job-apply="'+id+'" aria-label="Apply for '+title+' or sign in as worker">Apply / Login</button></div>'+
-      '</article>';
-    }).join('');
+    window.clRenderPublicJobCards(host,rows);
   }
   let homeJobsRequest=0;
   async function loadHomeJobs(){
