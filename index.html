@@ -7,6 +7,65 @@
 
 <html lang="en"><head>
 
+<!-- Single-entry dashboard transition: keep the legacy layout invisible while the final dashboard view settles. -->
+<style id="cl-single-dashboard-open-20261110">
+body[data-cl-dashboard-transition="customer"] #customerDashboard,
+body[data-cl-dashboard-transition="worker"] #workerDashboard {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+body[data-cl-dashboard-transition="customer"]::after,
+body[data-cl-dashboard-transition="worker"]::after {
+  content: "Opening your Clean Lanka dashboard…";
+  position: fixed; inset: 0; z-index: 2147483601;
+  display: grid; place-items: center; padding: 24px; box-sizing: border-box;
+  background: #f2faf5; color: #0f5132; text-align: center;
+  font: 800 18px/1.5 system-ui,sans-serif;
+}
+</style>
+<script id="cl-single-dashboard-open-script-20261110">
+(function(){
+  let requestId=0, timeoutId=null;
+  const panels={customer:"customerDashboard",worker:"workerDashboard"};
+  function clearTransition(role,token){
+    if(token!==requestId || document.body?.dataset.clDashboardTransition!==role)return;
+    delete document.body.dataset.clDashboardTransition;
+    if(timeoutId){clearTimeout(timeoutId);timeoutId=null;}
+  }
+  window.clDashboardTransitionStart=function(role){
+    if(!panels[role]||!document.body)return;
+    const root=document.getElementById(panels[role]);
+    if(!root)return;
+    // Avoid a loading overlay during edits/reloads within an already visible dashboard.
+    if(document.body.classList.contains(role+"-dashboard-mode") &&
+       !root.classList.contains("hidden"))return;
+    const token=++requestId;
+    document.body.dataset.clDashboardTransition=role;
+    if(timeoutId)clearTimeout(timeoutId);
+    timeoutId=setTimeout(function(){
+      // Never strand users behind a permanent loader if a later script fails.
+      clearTransition(role,token);
+      console.warn("Clean Lanka: dashboard transition timed out; showing available dashboard.");
+    },7000);
+  };
+  window.clDashboardTransitionFinish=async function(role){
+    if(!panels[role]||document.body?.dataset.clDashboardTransition!==role)return;
+    const token=requestId, root=document.getElementById(panels[role]);
+    const marker=role==="customer"?"clFinalReady":"cl065Ready";
+    for(let i=0;i<100;i++){
+      if(token!==requestId || document.body.dataset.clDashboardTransition!==role)return;
+      if(root?.dataset[marker]==="1" && typeof root._clShowTab==="function")break;
+      await new Promise(resolve=>requestAnimationFrame(resolve));
+    }
+    if(token!==requestId || document.body.dataset.clDashboardTransition!==role)return;
+    try{root?._clShowTab?.("profile");}catch(e){console.warn("Dashboard tab could not be restored:",e);}
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    clearTransition(role,token);
+  };
+})();
+</script>
+
+
 <!-- Prevent the original dashboard DOM showing briefly before its newer layout has been assembled. -->
 <style id="cl-dashboard-no-legacy-flash-20261110">
 body.customer-dashboard-mode #customerDashboard:not([data-cl-final-ready="1"]):not([data-cl-layout-fallback="1"]),
@@ -3241,6 +3300,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
   });
 
   function loadCustomerDashboard(user) {
+    window.clDashboardTransitionStart?.('customer');
     const metadata = user.user_metadata || {};
     document.body.classList.remove('login-page-mode','registration-mode','worker-dashboard-mode');
     document.getElementById('account-login').classList.add('hidden');
@@ -3255,6 +3315,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
     window.scrollTo(0,0);
     loadCustomerProfile(user);
     if (window.cleanLankaLoadCustomerFeatures) window.cleanLankaLoadCustomerFeatures(user);
+    void window.clDashboardTransitionFinish?.('customer');
   }
 
   function openRegistration(role) {
@@ -3737,6 +3798,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
   });
 
   async function loadWorkerDashboard(user) {
+    window.clDashboardTransitionStart?.('worker');
     const dashboard = document.getElementById('workerDashboard');
     const dashboardMessage = document.getElementById('workerDashboardMessage');
     const metadata = user.user_metadata || {};
@@ -3827,6 +3889,7 @@ body.cl-service-page-mode #top > #clServiceDetailPage{display:block!important}
     } else {
       dashboardMessage.textContent = 'Showing the details saved during registration. Your application remains pending review.';
     }
+    void window.clDashboardTransitionFinish?.('worker');
     if (window.cleanLankaLoadWorkerFeatures) await window.cleanLankaLoadWorkerFeatures(user);
     if(profile?.id){
       const reviewHost=document.getElementById('clWorkerDashboardReviews');
@@ -7103,7 +7166,7 @@ document.addEventListener('DOMContentLoaded',function(){
  }catch(e){console.warn('Homepage profile photo could not be loaded:',e);profilePhotoUrl=user.user_metadata?.avatar_url||user.user_metadata?.picture||user.user_metadata?.profile_photo_url||'';}
  if(token===refreshToken)render();}
  async function openOwnDashboard(){let u=current;try{if(!u){const r=await window.supabaseClient.auth.getUser();u=r.data?.user||null;}}catch(e){}if(!u)return;current=u;const role=roleOf(u);if(role==='customer'&&typeof window.loadCustomerDashboard==='function')await window.loadCustomerDashboard(u);else if(role==='worker'&&typeof window.loadWorkerDashboard==='function')await window.loadWorkerDashboard(u);render();}
- nameBtn.addEventListener('click',openOwnDashboard);
+ // Index 050 already binds the signed-in account button. Do not trigger a second dashboard load.
  logout.addEventListener('click',async()=>{logout.disabled=true;logout.textContent='Signing out...';try{const {error}=await window.supabaseClient.auth.signOut();if(error)throw error;current=null;profilePhotoUrl='';document.body.classList.remove('login-page-mode','registration-mode','admin-login-mode','worker-dashboard-mode','customer-dashboard-mode','admin-dashboard-mode','password-recovery-mode');['account-login','registration-screen','admin-login','workerDashboard','customerDashboard','adminDashboard'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));render();window.scrollTo({top:0,left:0,behavior:'auto'});}catch(e){alert('Logout failed: '+(e.message||'Please try again.'));}finally{logout.disabled=false;logout.textContent='Logout';}});
  async function sync(){try{const {data,error}=await window.supabaseClient.auth.getUser();if(error)throw error;current=data?.user||null;render();if(current)await loadAccountPhoto(current);}catch(e){console.warn('Homepage account sync failed:',e);}}
  window.supabaseClient.auth.onAuthStateChange((event,session)=>{current=session?.user||null;profilePhotoUrl='';Promise.resolve().then(()=>{render();if(current)loadAccountPhoto(current);});});
