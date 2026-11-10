@@ -7175,19 +7175,37 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
       '</article>';
     }).join('');
   }
+  let homeJobsRequest=0;
   async function loadHomeJobs(){
-    const msg=$('homeJobMessage');if(msg)msg.textContent='Loading public job opportunities...';
-    const {data,error}=await supabaseClient.rpc('get_public_job_posts');
-    if(error){if(msg)msg.textContent='Job board setup is pending: '+error.message;return;}
-    homeJobCache=data||[];
-    const jobIds=homeJobCache.map(j=>j.id).filter(Boolean);
-    if(jobIds.length){
-      const {data:translations}=await supabaseClient.rpc('get_public_job_post_translations',{p_job_ids:jobIds});
-      const byJob=new Map();
-      (translations||[]).forEach(t=>{const a=byJob.get(String(t.job_id))||[];a.push(t);byJob.set(String(t.job_id),a);});
-      homeJobCache=homeJobCache.map(j=>({...j,multilingual_titles:byJob.get(String(j.id))||[]}));
+    const request=++homeJobsRequest;
+    const msg=$('homeJobMessage');
+    if(msg&&!homeJobCache.length)msg.textContent='Loading public job opportunities...';
+    try{
+      const {data,error}=await supabaseClient.rpc('get_public_job_posts');
+      if(request!==homeJobsRequest)return;
+      if(error)throw error;
+      homeJobCache=data||[];
+      // Publish the jobs as soon as they arrive. Optional translations must
+      // never hold the entire job board on its initial Loading message.
+      renderHomeJobs();
+      if(msg)msg.textContent=homeJobCache.length+' open job(s) published.';
+      const jobIds=homeJobCache.map(j=>j.id).filter(Boolean);
+      if(!jobIds.length)return;
+      try{
+        const {data:translations,error:translationError}=await supabaseClient.rpc('get_public_job_post_translations',{p_job_ids:jobIds});
+        if(request!==homeJobsRequest||translationError)return;
+        const byJob=new Map();
+        (translations||[]).forEach(t=>{const a=byJob.get(String(t.job_id))||[];a.push(t);byJob.set(String(t.job_id),a);});
+        homeJobCache=homeJobCache.map(j=>({...j,multilingual_titles:byJob.get(String(j.id))||[]}));
+        renderHomeJobs();
+      }catch(error){console.warn('Job translations could not load:',error);}
+    }catch(error){
+      if(request!==homeJobsRequest)return;
+      if(msg)msg.textContent=homeJobCache.length
+        ?'Showing previously loaded jobs. Could not refresh; please try again.'
+        :'Could not load job opportunities. Please refresh to try again.';
+      console.warn('Public jobs could not load:',error);
     }
-    renderHomeJobs();if(msg)msg.textContent=homeJobCache.length+' open job(s) published.';
   }
   window.runHomeMarketplaceSearch=function(){
     homeMarketplaceQuery=($('hero-service-search')?.value||$('homeWorkerSearchText')?.value||'').trim();
