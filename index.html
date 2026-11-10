@@ -6,6 +6,31 @@
 <!DOCTYPE html>
 
 <html lang="en"><head>
+
+<!-- Prevent the original dashboard DOM showing briefly before its newer layout has been assembled. -->
+<style id="cl-dashboard-no-legacy-flash-20261110">
+body.customer-dashboard-mode #customerDashboard:not([data-cl-final-ready="1"]):not([data-cl-layout-fallback="1"]),
+body.worker-dashboard-mode #workerDashboard:not([data-cl065-ready="1"]):not([data-cl-layout-fallback="1"]) {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+body.customer-dashboard-mode:has(#customerDashboard:not([data-cl-final-ready="1"]):not([data-cl-layout-fallback="1"]))::after,
+body.worker-dashboard-mode:has(#workerDashboard:not([data-cl065-ready="1"]):not([data-cl-layout-fallback="1"]))::after {
+  content: "Preparing your dashboard…";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483600;
+  display: grid;
+  place-items: center;
+  background: #f2faf5;
+  color: #0f5132;
+  font: 800 18px/1.5 system-ui, sans-serif;
+  text-align: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+</style>
+
 <style id="cl-admin-refresh-guard">html.cl-admin-restoring body{visibility:hidden!important}html.cl-admin-restoring{background:#f3f7f5!important}html.cl-admin-restoring:after{content:"Verifying your secure Admin session…";position:fixed;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:#12458c;font:700 18px Arial,sans-serif;background:#f3f7f5;z-index:2147483647}</style>
 <script>if(/^\/admin\/?$/.test(location.pathname))document.documentElement.classList.add('cl-admin-restoring');</script>
 <meta name="google" content="notranslate">
@@ -9224,3 +9249,32 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   }
 }
 </style>
+
+<!-- If an older browser or a future layout change prevents readiness, do not leave the dashboard inaccessible. -->
+<script id="cl-dashboard-no-legacy-flash-fallback-20261110">
+(function(){
+  const checks=[
+    {role:"customer",id:"customerDashboard",ready:"clFinalReady"},
+    {role:"worker",id:"workerDashboard",ready:"cl065Ready"}
+  ];
+  const timers={};
+  function check(){
+    for(const item of checks){
+      const panel=document.getElementById(item.id);
+      if(!panel || !document.body.classList.contains(item.role+"-dashboard-mode") ||
+         panel.dataset[item.ready]==="1" || panel.dataset.clLayoutFallback==="1") continue;
+      if(timers[item.role]) continue;
+      timers[item.role]=setTimeout(function(){
+        timers[item.role]=null;
+        if(panel.dataset[item.ready]!=="1" && document.body.classList.contains(item.role+"-dashboard-mode")){
+          panel.dataset.clLayoutFallback="1";
+          console.warn("Clean Lanka: dashboard layout was not ready; displaying original layout as fallback.");
+        }
+      },4000);
+    }
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",check,{once:true});
+  else check();
+  new MutationObserver(check).observe(document.body,{attributes:true,attributeFilter:["class"]});
+})();
+</script>
