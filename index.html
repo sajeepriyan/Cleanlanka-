@@ -11,13 +11,16 @@
 
 <!-- Prevent the original dashboard DOM showing briefly before its newer layout has been assembled. -->
 <style id="cl-dashboard-no-legacy-flash-20261110">
-/* Keep both dashboards masked until all late inline CSS has been parsed,
-   not only until the layout builder sets its earlier readiness flag. */
+/* Hide the whole composited dashboard until layout and styles are ready.
+   visibility alone is insufficient: child chat/tab rules explicitly set
+   visibility:visible and can paint through a hidden parent. */
 #customerDashboard:not([data-cl-final-ready="1"]),
 #workerDashboard:not([data-cl065-ready="1"]),
 html:not(.cl-dashboard-styles-ready) body.customer-dashboard-mode #customerDashboard,
 html:not(.cl-dashboard-styles-ready) body.worker-dashboard-mode #workerDashboard {
   visibility: hidden !important;
+  opacity: 0 !important;
+  contain: paint !important;
   pointer-events: none !important;
 }
 html:not(.cl-dashboard-styles-ready) body.customer-dashboard-mode::after,
