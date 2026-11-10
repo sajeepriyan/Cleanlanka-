@@ -1,34 +1,22 @@
-/* Keep the existing artwork visible until the working-pose sheet loads. */
+/* Animate the existing character artwork inside its stationary service tile. */
 #services-section .cl-cartoon-frame { position:relative; background-image:none!important; }
 #services-section .cl-cartoon-frame::before {
   content:""; position:absolute; inset:0; pointer-events:none;
   background-image:var(--cl-character-sheet);
-  background-size:600% 200%; background-repeat:no-repeat; background-position:inherit;
+  background-size:600% 200%; background-repeat:no-repeat;
+  background-position:inherit; transform-origin:50% 88%;
+  animation:clCharacterHello 4.8s ease-in-out infinite;
+  animation-play-state:paused;
 }
-#services-section[data-work-poses="ready"] .cl-cartoon-frame::before {
-  background-image:url('/assets/service-work-actions-v2.webp');
-  background-size:400% 1200%; background-position:0 var(--cl-work-row);
-  animation:clServiceWork 1.4s steps(1,end) infinite paused;
-}
-#services-section[data-work-poses="ready"][data-character-motion="active"] .cl-cartoon-frame::before { animation-play-state:running; }
-#services-section .cl-home-cat:nth-child(1) { --cl-work-row:0%; }
-#services-section .cl-home-cat:nth-child(2) { --cl-work-row:9.090909%; }
-#services-section .cl-home-cat:nth-child(3) { --cl-work-row:18.181818%; }
-#services-section .cl-home-cat:nth-child(4) { --cl-work-row:27.272727%; }
-#services-section .cl-home-cat:nth-child(5) { --cl-work-row:36.363636%; }
-#services-section .cl-home-cat:nth-child(6) { --cl-work-row:45.454545%; }
-#services-section .cl-home-cat:nth-child(7) { --cl-work-row:54.545455%; }
-#services-section .cl-home-cat:nth-child(8) { --cl-work-row:63.636364%; }
-#services-section .cl-home-cat:nth-child(9) { --cl-work-row:72.727273%; }
-#services-section .cl-home-cat:nth-child(10) { --cl-work-row:81.818182%; }
-#services-section .cl-home-cat:nth-child(11) { --cl-work-row:90.909091%; }
-#services-section .cl-home-cat:nth-child(12) { --cl-work-row:100%; }
-@keyframes clServiceWork {
-  0%,100% { background-position-x:0%; }
-  25% { background-position-x:33.333333%; }
-  50% { background-position-x:66.666667%; }
-  75% { background-position-x:100%; }
+#services-section[data-character-motion="active"] .cl-cartoon-frame::before { animation-play-state:running; }
+#services-section .cl-home-cat:nth-child(3n+2) .cl-cartoon-frame::before { animation-delay:-1.6s; }
+#services-section .cl-home-cat:nth-child(3n) .cl-cartoon-frame::before { animation-delay:-3.2s; animation-direction:reverse; }
+@keyframes clCharacterHello {
+  0%,100% { transform:translateY(0) rotate(0) scale(.96); }
+  25% { transform:translateY(-3px) rotate(-2deg) scale(.975); }
+  50% { transform:translateY(0) rotate(0) scale(.96); }
+  75% { transform:translateY(-3px) rotate(2deg) scale(.975); }
 }
 @media (prefers-reduced-motion:reduce) {
-  #services-section[data-work-poses="ready"] .cl-cartoon-frame::before { animation:none!important; }
+  #services-section .cl-cartoon-frame::before { animation:none!important; transform:none; }
 }
