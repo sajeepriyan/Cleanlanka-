@@ -11,11 +11,17 @@
 
 <!-- Prevent the original dashboard DOM showing briefly before its newer layout has been assembled. -->
 <style id="cl-dashboard-no-legacy-flash-20261110">
+/* Keep both dashboards masked until all late inline CSS has been parsed,
+   not only until the layout builder sets its earlier readiness flag. */
 #customerDashboard:not([data-cl-final-ready="1"]),
-#workerDashboard:not([data-cl065-ready="1"]) {
+#workerDashboard:not([data-cl065-ready="1"]),
+html:not(.cl-dashboard-styles-ready) body.customer-dashboard-mode #customerDashboard,
+html:not(.cl-dashboard-styles-ready) body.worker-dashboard-mode #workerDashboard {
   visibility: hidden !important;
   pointer-events: none !important;
 }
+html:not(.cl-dashboard-styles-ready) body.customer-dashboard-mode::after,
+html:not(.cl-dashboard-styles-ready) body.worker-dashboard-mode::after,
 body.customer-dashboard-mode:has(#customerDashboard:not([data-cl-final-ready="1"]))::after,
 body.worker-dashboard-mode:has(#workerDashboard:not([data-cl065-ready="1"]))::after {
   content: "Preparing your dashboard…";
@@ -9269,3 +9275,15 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
 }
 </style>
 
+<!-- Final dashboard first-paint release: must remain AFTER every inline CSS patch. -->
+<script id="cl-dashboard-all-styles-ready-20261110">
+(function () {
+  const release = () => document.documentElement.classList.add('cl-dashboard-styles-ready');
+  const schedule = () => requestAnimationFrame(() => requestAnimationFrame(release));
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', schedule, { once: true });
+  } else {
+    schedule();
+  }
+})();
+</script>
