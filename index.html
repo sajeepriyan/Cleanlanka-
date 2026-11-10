@@ -8299,3 +8299,20 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   if(canManage())refresh();
 })();
 </script>
+
+<!-- Mobile-only scroll fix: results use the ordinary page scroll, not a nested scroll trap. -->
+<style id="cl-mobile-marketplace-scroll-fix-20261110">
+@media (max-width: 767px) {
+  #homeMarketplace #homeWorkerResults,
+  #homeMarketplace #homeJobResults {
+    height: auto !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+    overscroll-behavior: auto !important;
+    scrollbar-gutter: auto !important;
+    scroll-behavior: auto !important;
+    touch-action: pan-y pinch-zoom !important;
+  }
+}
+</style>
