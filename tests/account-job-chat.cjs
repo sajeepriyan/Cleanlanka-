@@ -42,3 +42,19 @@ function harness(existing=null){
  assert.ok(!html.includes('id="clJobChatForm"'));
  console.log('PASS: account routing, recipient and job identity, new/existing chats, application RPC, send failure draft, normal inbox replies, removed popup composer');
 })().catch(e=>{console.error(e);process.exitCode=1});
+// A direct Home → Apply thread must leave an inbox checkpoint for Android Back.
+{
+ const listeners={},nodes=new Map(),states=[];
+ const el=id=>{if(!nodes.has(id)){const classes=new Set();nodes.set(id,{classList:{add:c=>classes.add(c),remove:c=>classes.delete(c),contains:c=>classes.has(c)},querySelector:()=>({}),scrollIntoView(){}})}return nodes.get(id)};
+ const history={state:{cleanLankaDashboardEntry:true},replaceState(s){this.state=s;states.push(s)},pushState(s){this.state=s;states.push(s)}};
+ const ctx={document:{getElementById:el,addEventListener(){}},window:{addEventListener:(name,fn)=>listeners[name]=fn,cleanLankaCaptureView:()=>({cleanLankaView:true,activeTabs:{worker:'messages'},visible:{workerChatWindow:true}})},history,location:{href:'https://example.test/'}};
+ const script=html.match(/<script id="cl074-chat-navigation-script">([\s\S]*?)<\/script>/)[1];
+ vm.createContext(ctx);vm.runInContext(script,ctx);
+ listeners['cl-open-account-thread']({detail:{role:'worker'}});
+ assert.equal(states[0].activeTabs.worker,'messages');
+ assert.equal(states[0].visible.workerChatWindow,false);
+ assert.equal(states[1].cl074Chat,true);
+ listeners.popstate();
+ assert.equal(el('workerChatPanel').classList.contains('cl074-thread-open'),false);
+ console.log('PASS: direct job chat Back returns to account inbox');
+}

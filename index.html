@@ -8267,6 +8267,9 @@ setTimeout(refresh,1000);
   if(!history.state?.cl074Chat){
     const view=typeof window.cleanLankaCaptureView==='function'
       ? window.cleanLankaCaptureView() : (history.state||{});
+    // Back from a job thread returns to the account inbox, including direct Home → Apply entries.
+    const listView={...history.state,...view,visible:{...view.visible,[role+'ChatWindow']:false},cl074Chat:false};
+    history.replaceState(listView,'',location.href);
     history.pushState({...view,cl074Chat:true,cl074Role:role},'','#'+role+'-conversation');
   }
  }
