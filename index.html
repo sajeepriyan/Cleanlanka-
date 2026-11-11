@@ -4405,8 +4405,14 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
       <div class="login-card">
         <div class="login-card-heading"><span class="material-symbols-outlined">account_circle</span><div><h3>Sign in to continue</h3><p>Use the email and password from registration.</p></div></div>
         <form id="loginForm" class="mt-6 space-y-4">
-          <label class="login-label" for="loginRole">I am signing in as</label>
-          <select id="loginRole" required class="login-field"><option value="">Select Account Type</option><option value="customer">Customer</option><option value="worker">Service Worker</option></select>
+          <fieldset id="cl-login-role-choice">
+            <legend class="login-label">I am signing in as</legend>
+            <div class="cl-login-role-grid">
+              <label class="cl-login-role-option"><input type="radio" name="loginAccountType" value="customer" checked required><span class="cl-login-role-card"><span class="cl-login-role-tick" aria-hidden="true">✓</span><span>Customer</span></span></label>
+              <label class="cl-login-role-option"><input type="radio" name="loginAccountType" value="worker" required><span class="cl-login-role-card"><span class="cl-login-role-tick" aria-hidden="true">✓</span><span>Worker</span></span></label>
+            </div>
+          </fieldset>
+          <input id="loginRole" type="hidden" value="customer">
           <label class="login-label" for="loginEmail">Email address</label>
           <input id="loginEmail" type="email" placeholder="Registered email address" autocomplete="username" required class="login-field">
           <label class="login-label" for="loginPassword">Password</label>
@@ -7334,7 +7340,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   document.addEventListener('submit',async e=>{
     const form=e.target.closest('.workerApplyForm');if(!form)return;e.preventDefault();
     const user=window.clCurrentUser||await getUser();
-    if(!user){document.getElementById('loginRole').value='worker';openLoginPage();const loginMessage=document.getElementById('loginMessage');if(loginMessage)loginMessage.textContent='Sign in with your existing Worker account to apply.';return;}
+    if(!user){window.clSetLoginRole('worker');openLoginPage();const loginMessage=document.getElementById('loginMessage');if(loginMessage)loginMessage.textContent='Sign in with your existing Worker account to apply.';return;}
     if(String(user.user_metadata?.account_type||'').toLowerCase()!=='worker'||!activeWorkerProfileId){say('workerJobsMessage','Please sign in with your Worker account to apply.',true);return;}
     if(!currentWorkerProfile?.is_available||!workerAvailabilityEligibility(currentWorkerProfile).allowed){say('workerJobsMessage','Turn on Job Application Availability after approval and verification before applying.',true);return;}
     const btn=form.querySelector('button');btn.disabled=true;
@@ -7553,7 +7559,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
       window.clPendingHomeJobId=apply.dataset.homeJobApply;
       const user=await getUser();
       if(!user){
-        const roleSelect=document.getElementById('loginRole');if(roleSelect)roleSelect.value='worker';
+        window.clSetLoginRole('worker');
         openLoginPage();
         say('loginMessage','Sign in with your existing Worker account to apply. New workers can create an account from the registration page.');
         return;
@@ -8733,6 +8739,35 @@ document.addEventListener('DOMContentLoaded',function(){
 })();
 </script>
 
+<style id="cl-login-role-choice-style">
+#cl-login-role-choice{border:0;padding:0;margin:0;min-width:0}
+#cl-login-role-choice legend{margin-bottom:10px}
+#cl-login-role-choice .cl-login-role-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#cl-login-role-choice .cl-login-role-option{position:relative;display:block;cursor:pointer;margin:0;min-width:0}
+#cl-login-role-choice input{position:absolute;opacity:0;width:1px;height:1px}
+#cl-login-role-choice .cl-login-role-card{display:flex;align-items:center;justify-content:center;gap:9px;min-height:58px;padding:12px 8px;border:2px solid #cbd5e1;border-radius:12px;background:#fff;color:#334155;font-size:16px;font-weight:700;line-height:1.25}
+#cl-login-role-choice .cl-login-role-tick{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:24px;height:24px;border:2px solid #94a3b8;border-radius:5px;background:#fff;color:transparent;font-size:20px;font-weight:800}
+#cl-login-role-choice input:checked + .cl-login-role-card{border-color:#16a34a;background:#ecfdf5;color:#065f46}
+#cl-login-role-choice input:checked + .cl-login-role-card .cl-login-role-tick{border-color:#16a34a;background:#16a34a;color:#fff}
+#cl-login-role-choice input:focus-visible + .cl-login-role-card{outline:3px solid #2563eb;outline-offset:3px}
+</style>
+<script id="cl-login-role-choice-script">
+(function(){
+  const role = document.getElementById('loginRole');
+  const choice = document.getElementById('cl-login-role-choice');
+  window.clSetLoginRole = function(value){
+    role.value = value;
+    choice.querySelectorAll('input[name="loginAccountType"]').forEach(function(input){input.checked = input.value === value;});
+  };
+  choice.addEventListener('change',function(event){
+    if(event.target.name === 'loginAccountType') window.clSetLoginRole(event.target.value);
+  });
+  document.getElementById('loginForm').addEventListener('reset',function(){
+    queueMicrotask(function(){window.clSetLoginRole('customer');});
+  });
+  window.clSetLoginRole(role.value);
+})();
+</script>
 </body>
 
 
@@ -9635,7 +9670,7 @@ document.addEventListener('DOMContentLoaded',function(){
       // Consume the popup checkpoint before the existing screen router runs.
       afterClose=()=>{
           if(action==='register')openRegistration('worker');
-          else{openLoginPage();const role=document.getElementById('loginRole');if(role)role.value='worker';}
+          else{openLoginPage();window.clSetLoginRole('worker');}
       };
       close();
     }
