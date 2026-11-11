@@ -8697,6 +8697,42 @@ document.addEventListener('DOMContentLoaded',function(){
 })();
 </script>
 
+<!-- Password visibility controls: UI only; preserves existing inputs and form handlers. -->
+<style id="cl-password-visibility-style">
+.cl-password-control{position:relative;display:block;width:100%}
+.cl-password-control>input{padding-right:3.25rem!important;width:100%;box-sizing:border-box}
+.cl-password-eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:0;border-radius:8px;background:transparent;color:#0f5132;cursor:pointer;z-index:1}
+.cl-password-eye:hover{background:#ecfdf5}
+.cl-password-eye:focus-visible{outline:2px solid #0f5132;outline-offset:-3px}
+.cl-password-eye svg{width:22px;height:22px;pointer-events:none}
+</style>
+<script id="cl-password-visibility">
+(function(){
+  'use strict';
+  const eye='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const hiddenEye='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 3 18 18M10.6 5.1 12 5c6.5 0 10 7 10 7a19 19 0 0 1-3 3.9M6.3 6.3A21 21 0 0 0 2 12s3.5 7 10 7a12 12 0 0 0 5.7-1.5M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+  function enhance(root){
+    const fields=[];
+    if(root.matches&&root.matches('input[type="password"]'))fields.push(root);
+    if(root.querySelectorAll)fields.push(...root.querySelectorAll('input[type="password"]'));
+    fields.forEach(input=>{
+      if(input.parentElement.classList.contains('cl-password-control'))return;
+      const wrapper=document.createElement('span'),button=document.createElement('button');
+      wrapper.className='cl-password-control';
+      input.before(wrapper);wrapper.append(input);
+      button.type='button';button.className='cl-password-eye';
+      if(input.id)button.setAttribute('aria-controls',input.id);
+      function sync(){const shown=input.type==='text';button.innerHTML=shown?hiddenEye:eye;button.setAttribute('aria-label',shown?'Hide password':'Show password');button.title=shown?'Hide password':'Show password';button.setAttribute('aria-pressed',String(shown));}
+      button.addEventListener('click',()=>{const start=input.selectionStart,end=input.selectionEnd;input.type=input.type==='password'?'text':'password';sync();input.focus({preventScroll:true});if(start!==null)input.setSelectionRange(start,end);});
+      wrapper.append(button);sync();
+      if(input.form)input.form.addEventListener('reset',()=>{input.type='password';sync();});
+    });
+  }
+  function start(){enhance(document);new MutationObserver(records=>{records.forEach(record=>record.addedNodes.forEach(node=>{if(node.nodeType===1)enhance(node);}));}).observe(document.body,{childList:true,subtree:true});}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+</script>
+
 </body>
 
 
