@@ -44,6 +44,22 @@
 <style>
 .cl-job-contact-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.cl-job-contact-actions a,.cl-job-contact-actions button{display:inline-flex;align-items:center;justify-content:center;border:1px solid #b7dbc6;border-radius:9px;padding:8px 12px;min-height:40px;font-size:13px;font-weight:700;background:#edf8f1;color:#115c37;text-decoration:none}.cl-job-contact-actions button{background:#0b7943;color:white}.cl-job-contact-note{font-size:12px;color:#51675d;margin-top:6px}.cl-job-ad-fields{border:1px solid #cfe5d7;border-radius:12px;padding:14px;margin:12px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.cl-job-ad-fields legend{font-weight:800;color:#183e2b;padding:0 6px}.cl-job-ad-fields label{display:flex;flex-direction:column;gap:5px;font-size:14px;color:#253c30}.cl-job-ad-fields input:not([type=checkbox]),.cl-job-ad-fields select,.cl-job-ad-fields textarea{width:100%;border:1px solid #bfd4c7;border-radius:9px;padding:10px;font-size:15px;background:white;color:#183c2b}.cl-job-ad-fields .cl-ad-check{flex-direction:row;align-items:flex-start;grid-column:1/-1}.cl-ad-check input{width:20px;height:20px;flex-shrink:0;accent-color:#087c43;margin-top:2px}.cl-job-ad-fields small{grid-column:1/-1;color:#51675d}.cl-official-chat-messages{height:min(55dvh,500px);overflow:auto;overscroll-behavior:contain;background:#eff7f1;border-radius:12px;padding:14px;margin:12px 0}.cl-official-chat-message{background:white;border-radius:12px;padding:12px;margin-bottom:10px;max-width:90%;overflow-wrap:anywhere;white-space:pre-wrap}.cl-official-chat-message.official{margin-left:auto;background:#d7f3e1}@media(max-width:480px){.cl-job-ad-fields{grid-template-columns:1fr}}
 </style>
+<style id="cl-job-ad-checkbox-fix-20261111">
+/* Keep contact checkboxes square despite dashboard text-input styles. */
+.cl-job-ad-fields .cl-ad-check {align-items:center;min-height:44px;cursor:pointer;}
+.cl-job-ad-fields .cl-ad-check input[type="checkbox"],
+#adminDashboard .cl-job-ad-fields .cl-ad-check input[type="checkbox"] {
+  -webkit-appearance:checkbox!important;appearance:auto!important;
+  display:inline-block!important;flex:0 0 22px!important;
+  width:22px!important;min-width:22px!important;max-width:22px!important;
+  height:22px!important;min-height:22px!important;max-height:22px!important;
+  padding:0!important;margin:0!important;border-radius:4px!important;
+  accent-color:#047857!important;cursor:pointer;
+}
+.cl-job-ad-fields .cl-ad-check input[type="checkbox"]:focus-visible {
+  outline:2px solid #047857;outline-offset:3px;
+}
+</style>
 <script id="cl-job-ad-contact-helpers-20261110">
 (function(){
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
