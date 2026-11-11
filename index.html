@@ -8783,6 +8783,78 @@ document.addEventListener('DOMContentLoaded',function(){
   window.clSetLoginRole(role.value);
 })();
 </script>
+<!-- Clean Lanka interactive login mascot: presentation only; existing authentication owns every result. -->
+<style id="cl-auth-mascot-style">
+.cl-auth-mascot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;margin:0 auto 18px;padding:8px 8px 10px;border-radius:18px;background:radial-gradient(ellipse at 50% 65%,#dcfce7 0,transparent 68%);pointer-events:none;user-select:none}
+.cl-auth-mascot svg{display:block;width:174px;height:112px;max-width:100%;overflow:visible}
+.cl-auth-mascot .cl-snail-caption{font:500 12px/1.5 system-ui,sans-serif;color:#426354;text-align:center;min-height:18px}
+.cl-snail-head{transform-origin:60px 82px;transition:transform .28s ease}
+.cl-snail-eye{transform-box:fill-box;transform-origin:center bottom;transition:transform .26s ease,opacity .22s ease}
+.cl-snail-pupil{transition:transform .2s ease}
+.cl-auth-mascot[data-state="hidden"] .cl-snail-eye,.cl-auth-mascot[data-state="peek"] .cl-snail-eye-back{transform:scaleY(.06);opacity:0}
+.cl-auth-mascot[data-state="hidden"] .cl-snail-head{transform:translateY(4px)}
+.cl-auth-mascot[data-state="peek"] .cl-snail-head{transform:rotate(-5deg)}
+.cl-auth-mascot[data-state="curious"] .cl-snail-pupil{transform:translate(2px,2px)}
+.cl-auth-mascot[data-state="error"] .cl-snail-head{animation:cl-snail-no .55s ease both}
+.cl-auth-mascot[data-state="success"] .cl-snail-head{animation:cl-snail-yes .55s ease both}
+.cl-auth-mascot[data-state="error"] .cl-snail-caption{color:#9f3333}
+@keyframes cl-snail-no{0%,100%{transform:translateX(0)}25%,65%{transform:translateX(-5px) rotate(-4deg)}45%,85%{transform:translateX(5px) rotate(4deg)}}
+@keyframes cl-snail-yes{0%,100%{transform:rotate(0)}35%{transform:rotate(9deg)}70%{transform:rotate(-5deg)}}
+@media(max-width:480px){.cl-auth-mascot{margin-bottom:12px;padding-top:2px}.cl-auth-mascot svg{width:150px;height:98px}}
+@media(prefers-reduced-motion:reduce){.cl-auth-mascot *{animation:none!important;transition:none!important}}
+</style>
+<script id="cl-auth-mascot-script">
+(function(){
+  'use strict';
+  const drawing='<svg viewBox="0 0 190 120" fill="none" aria-hidden="true" focusable="false"><ellipse cx="98" cy="108" rx="70" ry="5" fill="#0f5132" opacity=".09"/><path d="M64 98c-2-11 0-24 11-33 12-11 40-7 54 7 10 11 12 23 29 25 7 1 14 5 13 8H50c-10 0-16-5-16-13V80c0-12 7-21 18-21s18 8 18 20v19" fill="#efc485"/><circle cx="116" cy="68" r="35" fill="#15803d"/><circle cx="116" cy="68" r="29" fill="#22a354"/><path d="M136 74c5-16-4-28-20-27-15 1-22 17-14 28 8 12 27 9 28-4 1-9-10-14-15-8-4 5 0 10 5 8" stroke="#b8ecc5" stroke-width="4" stroke-linecap="round"/><g class="cl-snail-head"><path d="M35 98V79c0-13 7-22 18-22 10 0 18 8 18 22v20" fill="#f5d29a"/><g class="cl-snail-eye cl-snail-eye-back"><path d="m45 65-5-23" stroke="#e5b87c" stroke-width="7" stroke-linecap="round"/><circle cx="39" cy="37" r="9" fill="#fffdf5"/><circle class="cl-snail-pupil" cx="40" cy="38" r="4" fill="#173d2b"/><circle cx="41" cy="36" r="1.3" fill="white"/></g><g class="cl-snail-eye cl-snail-eye-front"><path d="m61 64 4-27" stroke="#efc485" stroke-width="7" stroke-linecap="round"/><circle cx="66" cy="30" r="10" fill="#fffdf5"/><circle class="cl-snail-pupil" cx="67" cy="31" r="4.5" fill="#173d2b"/><circle cx="68" cy="29" r="1.5" fill="white"/></g><ellipse cx="42" cy="79" rx="5" ry="3" fill="#e9a68e" opacity=".7"/><path d="M50 83q5 5 10-1" stroke="#82542e" stroke-width="2.5" stroke-linecap="round"/></g><path d="M81 33q0-13 14-16-1 13-14 16Z" fill="#4caf65"/><path d="m81 33 8-10" stroke="#d4f5dd" stroke-width="1.5" stroke-linecap="round"/></svg>';
+  function mount(hostId,messageId){
+    const host=document.getElementById(hostId);
+    if(!host||host.querySelector('.cl-auth-mascot'))return;
+    const mascot=document.createElement('div');
+    mascot.className='cl-auth-mascot';mascot.dataset.state='idle';mascot.setAttribute('aria-hidden','true');
+    mascot.innerHTML=drawing+'<span class="cl-snail-caption">Ready when you are.</span>';
+    host.prepend(mascot);
+    const caption=mascot.querySelector('.cl-snail-caption');
+    const captions={idle:'Ready when you are.',curious:'Let’s get you started.',hidden:'Password hidden.',peek:'Password is visible.',error:'Please check the message below.',success:'You’re all set.'};
+    let timer=0;
+    const fields=[...host.querySelectorAll('input[autocomplete="current-password"],input[autocomplete="new-password"]')];
+    function paint(state){mascot.dataset.state=state;caption.textContent=captions[state];}
+    function sync(){
+      if(timer)return;
+      const active=document.activeElement;
+      paint(fields.includes(active)?(active.type==='password'?'hidden':'peek'):host.contains(active)&&active?.matches('input,textarea,select')?'curious':'idle');
+    }
+    function react(state){
+      clearTimeout(timer);timer=0;paint('idle');
+      // Restart a short reaction even when two validation errors arrive in succession.
+      requestAnimationFrame(()=>{paint(state);timer=setTimeout(()=>{timer=0;sync();},1300);});
+    }
+    host.addEventListener('focusin',sync);
+    host.addEventListener('focusout',()=>queueMicrotask(sync));
+    host.addEventListener('input',()=>{clearTimeout(timer);timer=0;sync();});
+    host.addEventListener('invalid',()=>react('error'),true);
+    host.addEventListener('reset',()=>{clearTimeout(timer);timer=0;queueMicrotask(sync);});
+    // Observe only visibility, never read, copy, log or retain a password value.
+    for(const field of fields)new MutationObserver(sync).observe(field,{attributes:true,attributeFilter:['type']});
+    const message=document.getElementById(messageId);
+    if(message){
+      let previous='';
+      new MutationObserver(()=>{
+        const text=message.textContent.trim(),signature=text+'|'+message.className;
+        if(!text||signature===previous)return;previous=signature;
+        if(message.classList.contains('text-red-600'))react('error');
+        else if(/successful|password updated|password saved|check your email|confirmation email has been sent/i.test(text))react('success');
+      }).observe(message,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class']});
+    }
+    sync();
+  }
+  function start(){
+    [['loginForm','loginMessage'],['customerRegisterForm','customerRegisterMessage'],['workerRegisterForm','workerRegisterMessage'],['newPasswordPanel','newPasswordMessage']].forEach(args=>mount(...args));
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+</script>
+
 </body>
 
 
