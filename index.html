@@ -9095,7 +9095,7 @@ document.addEventListener('DOMContentLoaded',function(){
  const root=document.getElementById('adminDashboard');if(!root)return;
  const nav=root.querySelector('.admin-nav');if(!nav)return;
  const pages={officialchats:document.getElementById('clOfficialJobChats'),chats:document.getElementById('adminChatsSection'),overview:document.getElementById('adminOverview'),workers:document.getElementById('adminWorkersHeading')?.closest('section'),customers:document.getElementById('adminCustomersSection'),bookings:document.getElementById('adminBookingsSection'),notifications:document.getElementById('adminNotificationsSection'),subadmins:document.getElementById('adminSubAdminsSection'),website:document.getElementById('clAdminPublicPreview')};
- const labels={officialchats:'Official Job Messages',chats:'All Customer–Worker Chats',overview:'Overview',workers:'Worker Management',customers:'Customer Management',bookings:'Booking Management',notifications:'Notifications',subadmins:'Sub Admin Permissions',website:'Website Preview',customerprofile:'Customer Profile'};
+ const labels={members:'All Members',access:'Admin Access',officialchats:'Official Job Messages',chats:'All Customer–Worker Chats',overview:'Overview',workers:'Worker Management',customers:'Customer Management',bookings:'Booking Management',notifications:'Notifications',subadmins:'Sub Admin Permissions',website:'Website Preview',customerprofile:'Customer Profile'};
  const sections=Object.values(pages).filter(Boolean);sections.forEach(el=>el.dataset.clAdminPage='true');
  const title=document.createElement('h2');title.id='clAdminPageTitle';
  const back=document.createElement('button');back.type='button';back.id='clAdminPageBack';nav.after(back,title);
@@ -9103,6 +9103,7 @@ document.addEventListener('DOMContentLoaded',function(){
  const detail=document.getElementById('adminCustomerDetail');const originalParent=detail?.parentElement;
  let current='overview';
  function allowed(page){
+  if(page==='members')return allowed('workers')&&allowed('customers');
   const isMain=root.dataset.adminRole==='main_admin';
   if(page==='subadmins'||page==='chats')return isMain;
   if(page==='officialchats')return document.getElementById('clOfficialJobChatsNav')?.style.display!=='none';
@@ -9114,7 +9115,8 @@ document.addEventListener('DOMContentLoaded',function(){
   if(!labels[page]||!allowed(page))page='overview';
   if(current==='customerprofile'&&page!=='customerprofile'&&detail&&originalParent)originalParent.appendChild(detail);
   current=page;root.dataset.clAdminPage=page;root.classList.add('cl-admin-pages-active');
-  [...sections,customerPage].forEach(el=>el.classList.toggle('cl-admin-page-current',el===(page==='customerprofile'?customerPage:pages[page])));
+  [...sections,customerPage].forEach(el=>el.classList.toggle('cl-admin-page-current',(page==='members'?(el===pages.workers||el===pages.customers):el===(page==='customerprofile'?customerPage:pages[page]))));
+  if(page==='members'){pages.workers?.classList.remove('hidden');pages.customers?.classList.remove('hidden');}
   if(pages[page]&&allowed(page))pages[page].classList.remove('hidden');
   if(root.dataset.adminRole==='sub_admin')pages.subadmins?.classList.add('hidden');
   if(page==='officialchats')window.clRefreshOfficialJobChats?.();
@@ -9132,6 +9134,42 @@ document.addEventListener('DOMContentLoaded',function(){
  list?.addEventListener('click',e=>{if(e.target.closest('button')&&e.target.closest('article'))setTimeout(()=>go('customerprofile'),80);});
  const observer=new MutationObserver(()=>{list?.querySelectorAll('article h3').forEach(h=>{if(h.querySelector('button'))return;const card=h.closest('article');const open=card?.querySelector('button');if(!open)return;const name=h.textContent;h.textContent='';const btn=document.createElement('button');btn.type='button';btn.textContent=name;btn.addEventListener('click',()=>open.click());h.appendChild(btn);});});
  if(list)observer.observe(list,{childList:true});
+
+ // Overview cards use the same permission-aware router as the Admin navigation.
+ const overviewActions=[
+  ['adminTotalMembers','members','all','Open all customer and worker profiles'],
+  ['adminCustomerCount','customers',null,'Open customer profiles'],
+  ['adminWorkerCount','workers','all','Open all worker profiles'],
+  ['adminPendingWorkerCount','workers','pending','Open pending worker profiles'],
+  ['adminApprovedWorkerCount','workers','approved','Open approved worker profiles'],
+  ['adminAccessLabel','subadmins',null,'Open admin access']
+ ];
+ overviewActions.forEach(([id,page,status,label])=>{
+  const card=document.getElementById(id)?.closest('.admin-stat');if(!card)return;
+  card.setAttribute('role','button');card.tabIndex=0;card.setAttribute('aria-label',label);
+  const open=()=>{
+   if(page==='subadmins'&&root.dataset.adminRole!=='main_admin'){
+    document.getElementById('clGrantedPermissions')?.scrollIntoView({behavior:'smooth',block:'start'});
+    return;
+   }
+   if(!allowed(page))return;
+   if(status!==null){
+    const search=document.getElementById('adminWorkerSearch');
+    const filter=document.getElementById('adminWorkerStatusFilter');
+    if(search){search.value='';search.dispatchEvent(new Event('input',{bubbles:true}));}
+    if(filter){filter.value=status;filter.dispatchEvent(new Event('change',{bubbles:true}));}
+    document.getElementById('adminWorkerDetail')?.classList.add('hidden');
+   }
+   document.getElementById('adminCustomerDetail')?.classList.add('hidden');
+   go(page);
+   title.scrollIntoView({behavior:'smooth',block:'start'});
+  };
+  card.addEventListener('click',open);
+  card.addEventListener('keydown',event=>{
+   if(event.key==='Enter'||event.key===' '){event.preventDefault();open();}
+  });
+ });
+
  go('overview');
 })();
 </script>
@@ -9872,3 +9910,5 @@ document.addEventListener('DOMContentLoaded',function(){
  setInterval(()=>{if(visible())refresh();},6000);
 })();
 </script>
+
+<style id="cl-admin-overview-card-links-20261111">#adminOverview .admin-stat[role="button"]{cursor:pointer;touch-action:manipulation}#adminOverview .admin-stat[role="button"]:hover{box-shadow:0 4px 18px #0f513220}#adminOverview .admin-stat[role="button"]:focus-visible{outline:3px solid #087b46;outline-offset:3px}</style>
