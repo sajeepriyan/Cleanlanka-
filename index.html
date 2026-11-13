@@ -10052,3 +10052,31 @@ document.addEventListener('DOMContentLoaded',function(){
  #workerDashboard #workerRefreshNotifications{font-size:13px!important;line-height:1.4!important;min-height:42px!important;padding:9px 12px!important}
 }
 </style>
+
+<style id="cl-dashboard-mobile-tabs-20261113">
+/* Both original and rebuilt dashboard tab bars must fit mobile widths. */
+@media (max-width:760px) {
+ #customerDashboard nav.cl-dash-nav.cl-final-tabs,
+ #workerDashboard nav.cl-dash-nav {
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-items:stretch!important;gap:8px!important;padding:9px!important;
+  width:100%!important;min-width:0!important;max-width:100%!important;
+  box-sizing:border-box!important;overflow:visible!important;
+  position:relative!important;top:auto!important;
+ }
+ #customerDashboard nav.cl-dash-nav.cl-final-tabs>button,
+ #workerDashboard nav.cl-dash-nav>button {
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:100%!important;min-width:0!important;max-width:100%!important;
+  box-sizing:border-box!important;min-height:48px!important;height:auto!important;
+  margin:0!important;padding:10px 8px!important;flex:none!important;
+  font-size:13px!important;line-height:1.4!important;letter-spacing:normal!important;
+  white-space:normal!important;word-break:normal!important;overflow-wrap:anywhere!important;
+  text-align:center!important;gap:5px!important;flex-wrap:wrap!important;
+ }
+ #customerDashboard nav.cl-dash-nav.cl-final-tabs>button:last-child:nth-child(odd),
+ #workerDashboard nav.cl-dash-nav>button:last-child:nth-child(odd) {
+  grid-column:1/-1!important;
+ }
+}
+</style>
