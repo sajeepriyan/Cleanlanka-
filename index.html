@@ -7,6 +7,32 @@
 
 <html lang="en"><head>
 
+<!-- Detect reset links before external libraries can delay the recovery screen. -->
+<script id="cl-recovery-first-paint-20261113">
+(function () {
+  const url = new URL(window.location.href);
+  const hash = new URLSearchParams(url.hash.slice(1));
+  if (url.searchParams.get('cl_recovery') === '1' ||
+      url.searchParams.get('type') === 'recovery' ||
+      hash.get('type') === 'recovery' || url.searchParams.get('code')) {
+    document.documentElement.classList.add('cl-recovery-opening');
+  }
+})();
+</script>
+<style id="cl-recovery-first-paint-style-20261113">
+/* Keep the public homepage from painting while the reset form is loading. */
+html.cl-recovery-opening { background:#f2faf5!important; }
+html.cl-recovery-opening body { visibility:hidden!important; }
+html.cl-recovery-opening body * { visibility:hidden!important; }
+html.cl-recovery-opening::after {
+  content:"Opening password reset…";
+  position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;
+  padding:24px;box-sizing:border-box;text-align:center;background:#f2faf5;
+  color:#0f5132;font:700 18px/1.5 system-ui,sans-serif;
+}
+</style>
+
+
 
 
 <!-- Prevent the original dashboard DOM showing briefly before its newer layout has been assembled. -->
@@ -6714,6 +6740,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
     document.getElementById('account-login').classList.remove('hidden');
     document.getElementById('newPasswordPanel').classList.remove('hidden');
     document.body.classList.add('login-page-mode', 'password-recovery-mode');
+    document.documentElement.classList.remove('cl-recovery-opening');
     if (messageText) showMessage(document.getElementById('newPasswordMessage'), messageText, isError);
   }
   // Register the listener before awaiting any session recovery work.
