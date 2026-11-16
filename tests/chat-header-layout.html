@@ -1,0 +1,24 @@
+<!doctype html>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Clean Lanka chat header layout regression</title>
+<style>body{margin:20px;font:15px/1.5 system-ui;color:#163e29;background:#eef6f0}#frames{display:flex;flex-wrap:wrap;gap:20px}iframe{height:540px;border:1px solid #aecab7;border-radius:16px;background:white}.pass{color:#087b47}.fail{color:#b42332}</style>
+<h1>Chat header layout check</h1>
+<p>Current production styles and audio setup code. Synthetic contacts only. No microphone requests or network calls.</p>
+<ul id="results"></ul><div id="frames"></div>
+<script>
+(async()=>{
+ const html=await (await fetch('../index.html',{cache:'no-store'})).text();
+ const styles=[...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map(m=>m[1]).join('\n');
+ const audio=html.match(/<script id="cl-audio-calls-script">([\s\S]*?)<\/script>/)[1];
+ window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.kind!=='header-layout')return;const li=document.createElement('li');li.className=e.data.pass?'pass':'fail';li.textContent=JSON.stringify(e.data);document.getElementById('results').append(li);});
+ for(const width of [320,390])for(const role of ['customer','worker']){
+  const frame=document.createElement('iframe');frame.style.width=width+'px';frame.title=role+' '+width+'px';document.getElementById('frames').append(frame);
+  const scaffold='<section id="'+role+'Dashboard" data-cl-final-ready="1" data-cl065-ready="1"><section id="'+role+'ChatPanel" class="cl074-thread-open"><div id="'+role+'ChatWindow"><div class="cl-chat-header"><button class="cl074-back" aria-label="Back to messages">‹</button><div id="'+role+'ChatTitle">Niluraj</div><div class="cl-audio-chat-toolbar"><button data-cl-audio-start="'+role+'" aria-label="Start audio call">☎</button></div></div><div id="'+role+'ChatMessages"><p>Sample message</p></div><form id="'+role+'ChatForm"><input id="'+role+'ChatInput" placeholder="Message"><button>Send</button></form></div></section></section>';
+  const stub="window.supabaseClient={auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange:()=>{}}};";
+  const checks=`setTimeout(()=>{const role=document.body.dataset.role,header=document.querySelector('.cl-chat-header'),title=document.getElementById(role+'ChatTitle'),status=document.querySelector('.cl-call-mic-status'),toolbar=document.querySelector('.cl-audio-chat-toolbar');status.textContent='Microphone ready. You can start or answer calls.';document.querySelectorAll('button').forEach(b=>b.disabled=true);requestAnimationFrame(()=>{const a=title.getBoundingClientRect(),h=header.getBoundingClientRect(),s=status.getBoundingClientRect(),t=toolbar.getBoundingClientRect();parent.postMessage({kind:'header-layout',role,width:innerWidth,titleWidth:a.width,titleHeight:a.height,statusBelow:s.top>=h.bottom-1,pass:a.width>=65&&a.height<=44&&s.top>=h.bottom-1&&t.right<=innerWidth+1&&document.body.scrollWidth<=innerWidth},location.origin);});},100);`;
+  const script=x=>'<scr'+'ipt>'+x+'</scr'+'ipt>';
+  frame.srcdoc='<!doctype html><html class="cl-dashboard-styles-ready"><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;font:15px/1.4 system-ui}*{box-sizing:border-box}#'+role+'Dashboard{padding:8px!important;width:100%!important;box-sizing:border-box!important}</style><style>'+styles+'</style></head><body data-role="'+role+'" class="'+role+'-dashboard-mode">'+scaffold+script(stub)+script(audio)+script(checks)+'</body></html>';
+ }
+})().catch(error=>{document.getElementById('results').textContent='FAIL: '+error.message;});
+</script>

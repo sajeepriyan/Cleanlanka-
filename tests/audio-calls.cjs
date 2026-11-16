@@ -42,6 +42,8 @@ function page(sb, options={}){
   removeAttribute(name){delete this[name];}
   appendChild(child){this.children.push(child);return child;}
   append(...children){this.children.push(...children);}
+  closest(){return null;}
+  after(...nodes){this.afterNodes=nodes;}
   replaceChildren(...children){this.children=children;}
   focus(){document.activeElement=this;}
   click(){return this.listeners.click?.({target:this});}
@@ -122,7 +124,8 @@ function page(sb, options={}){
  assert.equal(losingDevice.get('clAudioStatus').textContent,'Answered on another device','A genuinely different accepted answer must still release this device');
  assert.equal(losingDevice.streams[0].track.stopped,true);
  const audioDB=server(),audioCaller=page(audioDB.client('customer')),receiver=page(audioDB.client('worker'),{sound:true,routing:true});await tick();
- assert.equal(receiver.toolbars[0].children.length,3,'Both dashboards need sound and microphone checks, with permission feedback');
+ assert.equal(receiver.toolbars[0].children.length,2,'Only sound and microphone buttons belong in the toolbar');
+ assert.equal(receiver.toolbars[0].afterNodes[0].className,'cl-call-mic-status','Permission feedback must be outside the toolbar');
  await receiver.toolbars[0].children[0].click();await tick();assert.equal(receiver.sound.context.state,'running');assert.equal(receiver.sound.oscillators.length,2,'Test sound must create an audible dual tone');
  await audioCaller.api.start('conversation');await tick();assert.ok(receiver.sound.oscillators.length>=4,'Incoming call must ring after sound is unlocked');assert.equal(receiver.micCount(),0);
  await receiver.api.accept();await tick();assert.ok(receiver.sound.oscillators.every(o=>o.stopped),'Answering must stop every ringtone oscillator');
@@ -134,9 +137,9 @@ function page(sb, options={}){
  const blockedOptions={sound:true,resumeDenied:true},blocked=page(server().client('worker'),blockedOptions);await tick();await blocked.toolbars[0].children[0].click();await tick();assert.match(blocked.toolbars[0].children[0].getAttribute('aria-label'),/Tap again/);assert.equal(blocked.sound.oscillators.length,0,'Blocked autoplay must never be labeled as enabled');
  blockedOptions.resumeDenied=false;await blocked.toolbars[0].children[0].click();await tick();assert.equal(blocked.sound.oscillators.length,2);
  const setup=page(server().client('worker'));await tick();assert.equal(setup.micCount(),0,'No microphone request on page load');
- await setup.toolbars[0].children[1].click();assert.equal(setup.micCount(),1);assert.ok(setup.streams.every(s=>s.track.stopped),'Readiness test must release every microphone track');assert.match(setup.toolbars[0].children[2].textContent,/check passed/);
- setup.deny();await setup.toolbars[0].children[1].click();assert.match(setup.toolbars[0].children[2].textContent,/no Allow popup/);assert.equal(setup.toolbars[0].children[1].disabled,false);
- setup.allow();await setup.toolbars[0].children[1].click();assert.match(setup.toolbars[0].children[2].textContent,/check passed/);assert.ok(setup.streams.every(s=>s.track.stopped));
+ await setup.toolbars[0].children[1].click();assert.equal(setup.micCount(),1);assert.ok(setup.streams.every(s=>s.track.stopped),'Readiness test must release every microphone track');assert.match(setup.toolbars[0].afterNodes[0].textContent,/Microphone ready/);
+ setup.deny();await setup.toolbars[0].children[1].click();assert.match(setup.toolbars[0].afterNodes[0].textContent,/no Allow popup/);assert.equal(setup.toolbars[0].children[1].disabled,false);
+ setup.allow();await setup.toolbars[0].children[1].click();assert.match(setup.toolbars[0].afterNodes[0].textContent,/Microphone ready/);assert.ok(setup.streams.every(s=>s.track.stopped));
  assert.equal((html.match(/data-cl-audio-start="(?:customer|worker)"/g)||[]).length,2);
  const isolation=[...html.matchAll(/body\.(?:worker|customer|admin)-dashboard-mode\s*>\s*\*([^{}]+)\{\s*display\s*:\s*none\s*!important/gi)];
  assert.ok(isolation.length>=4,'Dashboard isolation rules must be covered by the call visibility check');

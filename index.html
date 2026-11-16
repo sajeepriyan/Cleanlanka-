@@ -10231,8 +10231,8 @@ document.addEventListener('DOMContentLoaded',function(){
 /* Call sound and output controls. Device routing is offered only when supported. */
 .cl-audio-chat-toolbar .cl-call-sound-enable{background:#eef6f0;color:#155d36;border-color:#b9d8c3;font-size:12px;padding:8px 12px;min-height:40px}
 .cl-audio-chat-toolbar .cl-call-mic-check{background:#eef6f0;color:#155d36;border-color:#b9d8c3;padding:8px 12px;min-height:40px}
-.cl-audio-chat-toolbar .cl-call-mic-status{flex-basis:100%;margin:0;font-size:13px;line-height:1.5;color:#214a32;overflow-wrap:anywhere}
-.cl-audio-chat-toolbar .cl-call-mic-status:empty{display:none}
+:is(#customerChatWindow,#workerChatWindow) > .cl-call-mic-status{display:block;box-sizing:border-box;width:100%;margin:0;padding:10px 12px;background:#f0f8f3;border-bottom:1px solid #dfebe3;font-size:13px;line-height:1.5;color:#214a32;overflow-wrap:anywhere}
+.cl-call-mic-status:empty{display:none!important}
 #clAudioRingEnable{display:inline-flex;align-items:center;justify-content:center;margin:14px auto 0;min-height:44px;padding:10px 17px;border:1px solid #bfdac9;border-radius:22px;font-size:14px;font-weight:700}
 #clAudioOutputPanel{margin-top:16px;padding:14px;border:1px solid #d7e8dc;border-radius:15px;background:#f5faf7;text-align:left}
 #clAudioOutputPanel label{display:block;font-size:13px;font-weight:750;margin-bottom:8px;color:#214a32}
@@ -10753,11 +10753,13 @@ document.addEventListener('DOMContentLoaded',function(){
    try {
     mediaSupported();
     stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
-    status.textContent='Microphone check passed. The microphone is now off. You can start or answer a call.';
+    status.textContent='Microphone ready. You can start or answer calls.';
    }catch(error){status.textContent=errorText(error);}
    finally{stream?.getTracks().forEach(track=>track.stop());button.disabled=false;microphoneSetupPending=false;}
   });
-  toolbar.append(button,status);
+  toolbar.append(button);
+  const header=toolbar.closest('.cl-chat-header');
+  (header||toolbar).after(status);
  });
  async function loadAudioOutputs(s) {
   if(active!==s)return;
