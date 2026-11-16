@@ -10297,7 +10297,7 @@ document.addEventListener('DOMContentLoaded',function(){
     try {
      await s.pc.setRemoteDescription({type:'answer',sdp:row.answer_sdp});
      if (active !== s) return;
-     s.phase = 'connecting'; render(s); await drainCandidates(s); armConnectionTimeout(s);
+     s.phase = s.connectedAt ? 'connected' : 'connecting'; render(s); await drainCandidates(s); armConnectionTimeout(s);
     } catch (error) { if (active===s) await failCall(s,errorText(error)); }
     finally { s.applying = false; }
    }
@@ -10409,7 +10409,7 @@ document.addEventListener('DOMContentLoaded',function(){
    if(active!==s)return;
    if(!row||row.status!=='accepted'){if(row)await handleRow(row);return;}
    if(row.answer_sdp!==s.pc.localDescription.sdp){finish(s,'Answered on another device');return;}
-   s.call=row;s.answeredHere=true;s.phase='connecting';flushLocalCandidates(s);
+   s.call=row;s.answeredHere=true;s.phase=s.connectedAt?'connected':'connecting';flushLocalCandidates(s);
    await drainCandidates(s);armConnectionTimeout(s);render(s);
   }catch(error){
    if(active!==s)return;
@@ -10458,6 +10458,15 @@ document.addEventListener('DOMContentLoaded',function(){
   if(!account||historyBusy)return;historyBusy=true;const uid=account.id;
   try{
    const {data,error}=await sb.from('cl_audio_calls').select('id,caller_id,callee_id,caller_name,callee_name,status,created_at,answered_at,ended_at,expires_at').order('created_at',{ascending:false}).limit(30);
+   if(account?.id!==uid)return;
+   // Reconcile abandoned calls when an account returns after losing its network.
+   if(!error)for(let i=0;i<(data||[]).length;i++){
+    const row=data[i];
+    if(row.status==='accepted'||(row.status==='ringing'&&Date.parse(row.expires_at)<=Date.now())){
+     const current=await sb.rpc('cl_audio_call_action',{p_call_id:row.id,p_action:'timeout'});
+     if(!current.error&&current.data)data[i]=current.data;
+    }
+   }
    if(account?.id!==uid)return;
    document.querySelectorAll('[data-cl-call-history]').forEach(host=>{
     host.replaceChildren();
