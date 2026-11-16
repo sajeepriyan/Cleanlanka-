@@ -10160,8 +10160,7 @@ document.addEventListener('DOMContentLoaded',function(){
 @media(max-width:380px){#clAudioOverlay{padding:12px}#clAudioDialog{padding:24px 17px;border-radius:24px}#clAudioActions{gap:9px}#clAudioActions button{padding:12px 15px;font-size:14px}#clAudioName{font-size:23px}}
 
 </style>
-<script id="cl-audio-calls-script">
-/* Clean Lanka: participant-only WebRTC audio calling. No recording. */
+<script id="cl-audio-calls-script">/* Clean Lanka: participant-only WebRTC audio calling. No recording. */
 (function () {
  'use strict';
  const sb = window.supabaseClient;
@@ -10412,10 +10411,13 @@ document.addEventListener('DOMContentLoaded',function(){
    if(active!==s)return;
    await s.pc.setLocalDescription(answer);
    if(active!==s)return;
-   const row=await rpcAction(s,'accept',s.pc.localDescription.sdp);
+   // ICE gathering can append candidates to localDescription while this RPC waits.
+   // Compare the server reply against the exact answer submitted by this device.
+   const submittedAnswer=s.pc.localDescription.sdp;
+   const row=await rpcAction(s,'accept',submittedAnswer);
    if(active!==s)return;
    if(!row||row.status!=='accepted'){if(row)await handleRow(row);return;}
-   if(row.answer_sdp!==s.pc.localDescription.sdp){finish(s,'Answered on another device');return;}
+   if(row.answer_sdp!==submittedAnswer){finish(s,'Answered on another device');return;}
    s.call=row;s.answeredHere=true;s.phase=s.connectedAt?'connected':'connecting';flushLocalCandidates(s);
    await drainCandidates(s);armConnectionTimeout(s);render(s);
   }catch(error){
@@ -10559,7 +10561,6 @@ document.addEventListener('DOMContentLoaded',function(){
  void sb.auth.getSession().then(({data})=>configure(data?.session)).catch(()=>{});
  window.clAudioCalls={start:startCall,accept:acceptCall,end:endCall,refresh:syncActive};
 })();
-
 </script>
 
 <style id="cl-call-visibility-mobile-chat-fix">

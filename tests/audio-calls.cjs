@@ -73,7 +73,18 @@ function page(sb){
  assert.equal(worker.get('clAudioName').textContent,'Verified Customer');
  assert.equal(worker.get('clAudioStatus').textContent,'Incoming audio call');
  assert.equal(worker.micCount(),0,'Incoming call must not open microphone before Accept');
+ const workerRpc=worker.sb.rpc;
+ worker.sb.rpc=async(name,args)=>{
+  const response=await workerRpc(name,args);
+  if(name==='cl_audio_call_action'&&args.p_action==='accept'){
+   const pc=worker.peers[0];
+   pc.localDescription={...pc.localDescription,sdp:pc.localDescription.sdp+'\r\na=candidate:late-gathered-route'};
+  }
+  return response;
+ };
  await worker.api.accept();await tick();
+ assert.notEqual(worker.get('clAudioStatus').textContent,'Answered on another device','Late ICE candidates must not make this phone lose its own accepted call');
+ assert.equal(worker.streams[0].track.stopped,false,'Accepting phone must keep its microphone active during ICE gathering');
  assert.equal(worker.micCount(),1);assert.equal(customer.peers[0].remoteDescription.type,'answer');
  assert.ok(worker.peers[0].candidates.length>0,'Buffered network candidates must drain after answer');
  customer.peers[0].connect();worker.peers[0].connect();await tick();
@@ -85,6 +96,13 @@ function page(sb){
  const denied=page(db2.client('worker'));await tick();denied.deny();await denied.api.start('conversation');assert.match(denied.get('clAudioError').textContent,/Allow microphone access/);assert.equal(db2.calls.size,0);
  const insecure=page(db2.client('customer'));await tick();insecure.setInsecure();await insecure.api.start('conversation');assert.match(insecure.get('clAudioError').textContent,/https:\/\/cleanlanka.lk/);assert.equal(insecure.micCount(),0);
  const failureDB=server(),failed=page(failureDB.client('customer'));await tick();await failed.api.start('conversation');failed.peers[0].connectionState='failed';failed.peers[0].onconnectionstatechange();await tick();assert.equal(failed.streams[0].track.stopped,true);assert.equal([...failureDB.calls.values()][0].status,'failed');
+ const multiDB=server(),multiCaller=page(multiDB.client('customer')),losingDevice=page(multiDB.client('worker'));await tick();
+ await multiCaller.api.start('conversation');await tick();
+ const losingRpc=losingDevice.sb.rpc;
+ losingDevice.sb.rpc=(name,args)=>losingRpc(name,name==='cl_audio_call_action'&&args.p_action==='accept'?{...args,p_answer:'v=0\r\nm=audio answered-on-a-different-device'}:args);
+ await losingDevice.api.accept();await tick();
+ assert.equal(losingDevice.get('clAudioStatus').textContent,'Answered on another device','A genuinely different accepted answer must still release this device');
+ assert.equal(losingDevice.streams[0].track.stopped,true);
  assert.equal((html.match(/data-cl-audio-start="(?:customer|worker)"/g)||[]).length,2);
  const isolation=[...html.matchAll(/body\.(?:worker|customer|admin)-dashboard-mode\s*>\s*\*([^{}]+)\{\s*display\s*:\s*none\s*!important/gi)];
  assert.ok(isolation.length>=4,'Dashboard isolation rules must be covered by the call visibility check');
