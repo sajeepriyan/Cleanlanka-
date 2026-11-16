@@ -150,11 +150,12 @@ public class MainActivity extends Activity {
   if(web!=null)web.setKeepScreenOn(false);
   setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
  }
- private void stopWebCall(){if(web!=null)web.evaluateJavascript("window.__clStopNativeCall&&window.__clStopNativeCall()",ignored->endAudio());else endAudio();}
+ private void stopWebCall(){stopWebCall("Call stopped because the app left the foreground.");}
+ private void stopWebCall(String reason){if(web!=null)web.evaluateJavascript("window.__clStopNativeCall&&window.__clStopNativeCall("+JSONObject.quote(reason)+")",ignored->endAudio());else endAudio();}
  private void failClosed(){
   if(!calling)return;
   // Stop all call tracks and remote playback when Android reports loss of the earpiece.
-  stopWebCall();
+  stopWebCall("Earpiece route lost. Call stopped.");
   Toast.makeText(this,"Earpiece route lost. Call stopped.",Toast.LENGTH_LONG).show();
  }
  private String response(String id,boolean ok,String error){
@@ -163,8 +164,10 @@ public class MainActivity extends Activity {
  @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] results){
   super.onRequestPermissionsResult(request,permissions,results);
   if(request==MIC&&microphoneRequest!=null){
-   if(foreground&&results.length>0&&results[0]==PackageManager.PERMISSION_GRANTED)microphoneRequest.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE});else microphoneRequest.deny();
-   microphoneRequest=null;
+   PermissionRequest pending=microphoneRequest;microphoneRequest=null;
+   if(results.length>0&&results[0]==PackageManager.PERMISSION_GRANTED){
+    handler.postDelayed(()->{if(foreground&&!isFinishing())pending.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE});else pending.deny();},150);
+   }else pending.deny();
   }
  }
  @Override protected void onActivityResult(int request,int result,Intent data){

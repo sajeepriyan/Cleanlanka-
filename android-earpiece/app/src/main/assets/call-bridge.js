@@ -64,5 +64,5 @@
   configureCallUI();
  });
  window.addEventListener('pagehide',()=>{for(const track of [...localTracks])track.stop();request('end').catch(()=>{});});
- window.__clStopNativeCall=()=>stopCall('Call stopped because the app left the foreground.');
+ window.__clStopNativeCall=reason=>stopCall(reason||'Call stopped because the app left the foreground.');
 })();
