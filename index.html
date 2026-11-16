@@ -433,7 +433,7 @@ body.worker-dashboard-mode:has(#workerDashboard:not([data-cl065-ready="1"]))::af
 
 </style>
 <style>
-  body.worker-dashboard-mode > *:not(#workerDashboard) {
+  body.worker-dashboard-mode > *:not(#workerDashboard):not(#clAudioCallRoot) {
     display: none !important;
   }
   body.worker-dashboard-mode #workerDashboard {
@@ -543,7 +543,7 @@ body.worker-dashboard-mode:has(#workerDashboard:not([data-cl065-ready="1"]))::af
   body.admin-login-mode > header,body.admin-login-mode > main,body.admin-login-mode > footer,body.admin-login-mode > aside,body.admin-login-mode > #registration-screen,body.admin-login-mode > #account-login,body.admin-login-mode > #customerDashboard,body.admin-login-mode > #workerDashboard {display:none!important;}
   body.admin-login-mode {min-height:100vh;background:radial-gradient(circle at 10% 10%,#d1fae5,transparent 30%),linear-gradient(135deg,#eff6ff,#f8fafc);}
   body.admin-login-mode #admin-login {display:flex!important;min-height:100vh;align-items:center;justify-content:center;padding:24px 16px;}
-  body.admin-dashboard-mode > *:not(#adminDashboard) {display:none!important;}
+  body.admin-dashboard-mode > *:not(#adminDashboard):not(#clAudioCallRoot) {display:none!important;}
   body.admin-dashboard-mode #adminDashboard {display:block!important;position:fixed;inset:0;z-index:100000;overflow:auto;background:#f8fafc;padding:24px;}
   #admin-login .admin-login-card {width:min(100%,460px);background:white;border:1px solid #dbe9e2;border-radius:24px;padding:28px;box-shadow:0 25px 70px #164e3b18;}
   #admin-login .admin-login-field {width:100%;box-sizing:border-box;border:1px solid #d7e3e8;border-radius:12px;padding:13px 14px;background:#f8fbfd;margin-top:6px;}
@@ -800,7 +800,7 @@ body.customer-dashboard-mode{
   overflow:hidden!important;
   background:#eef7fb!important;
 }
-body.customer-dashboard-mode > *:not(#customerDashboard):not(#clDashboardHomeButton):not(script):not(style){
+body.customer-dashboard-mode > *:not(#customerDashboard):not(#clDashboardHomeButton):not(script):not(style):not(#clAudioCallRoot){
   display:none!important;
 }
 body.customer-dashboard-mode > #customerDashboard{
@@ -1976,7 +1976,7 @@ body.admin-dashboard-mode > #clDashboardHomeButton {
   pointer-events:auto !important; position:fixed !important; z-index:2147483647 !important;
   top:14px !important; left:14px !important; align-items:center !important;
 }
-body.worker-dashboard-mode > *:not(#workerDashboard):not(#clDashboardHomeButton) {display:none !important;}
+body.worker-dashboard-mode > *:not(#workerDashboard):not(#clDashboardHomeButton):not(#clAudioCallRoot) {display:none !important;}
 @media(max-width:600px){
  body.worker-dashboard-mode > #clDashboardHomeButton,body.customer-dashboard-mode > #clDashboardHomeButton{top:9px!important;left:9px!important;min-height:42px!important;padding:9px 13px!important}
 }
@@ -2532,8 +2532,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
  padding:12px!important;margin:10px 0!important;
 }
 #workerDashboard #workerChatMessages .cl-chat-bubble p,
-#workerDashboard #workerChatMessages .cl-chat-bubble p.text-sm,
-#workerDashboard #workerChatMessages .cl-chat-bubble *:not(.cl-muted) {
+#workerDashboard #workerChatMessages .cl-chat-bubble p.text-sm {
  font-size:19px!important;font-weight:750!important;line-height:1.65!important;
  color:#000000!important;opacity:1!important;text-shadow:none!important;
 }
@@ -10554,3 +10553,81 @@ document.addEventListener('DOMContentLoaded',function(){
 })();
 
 </script>
+
+<style id="cl-call-visibility-mobile-chat-fix">
+/* A shared call overlay must survive every dashboard's page isolation. */
+body > #clAudioCallRoot{display:block!important;position:relative;z-index:2147483647;}
+
+@media(max-width:767px){
+ body.worker-dashboard-mode #workerDashboard #workerChatPanel #workerChatWindow,
+ body.customer-dashboard-mode #customerDashboard #customerChatPanel #customerChatWindow{
+  box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-width:0!important;
+  min-height:0!important;margin:0!important;padding:10px!important;border:1px solid #dce6df!important;border-radius:14px!important;box-shadow:none!important;
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;
+ }
+ #workerDashboard #workerChatWindow #workerChatTitle,
+ #customerDashboard #customerChatWindow #customerChatTitle{
+  font-size:17px!important;font-weight:700!important;line-height:1.35!important;margin:0 0 10px!important;
+ }
+ #workerDashboard #workerChatWindow #workerChatMessages,
+ #customerDashboard #customerChatWindow #customerChatMessages{
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;
+  height:clamp(180px,42dvh,360px)!important;min-height:180px!important;max-height:46dvh!important;
+  width:100%!important;max-width:100%!important;box-sizing:border-box!important;
+  padding:9px!important;overflow-x:hidden!important;overflow-y:auto!important;
+  background:#f5f8f6!important;border:1px solid #e1e8e3!important;border-radius:12px!important;
+ }
+ #workerDashboard #workerChatWindow #workerChatMessages .cl-chat-bubble,
+ #customerDashboard #customerChatWindow #customerChatMessages .cl-chat-bubble{
+  width:fit-content!important;min-width:0!important;max-width:90%!important;box-sizing:border-box!important;
+  margin:0!important;padding:8px 10px!important;border:1px solid #e0e8e2!important;border-left-width:1px!important;
+  border-radius:12px!important;background:#fff!important;box-shadow:none!important;
+ }
+ #workerDashboard #workerChatWindow #workerChatMessages .cl-chat-bubble,
+ #customerDashboard #customerChatWindow #customerChatMessages .cl-chat-bubble{
+  box-sizing:border-box!important;flex-shrink:0!important;width:fit-content!important;max-width:88%!important;min-height:0!important;
+  padding:8px 10px!important;margin:0!important;border:1px solid #dce5df!important;border-left-width:1px!important;
+  border-radius:12px!important;box-shadow:none!important;background:#fff!important;
+ }
+ #workerDashboard #workerChatWindow #workerChatMessages .cl-chat-bubble.mine,
+ #customerDashboard #customerChatWindow #customerChatMessages .cl-chat-bubble.mine{
+  align-self:flex-end!important;margin-left:auto!important;background:#e6f5ec!important;border-color:#c8e6d4!important;
+ }
+ #workerDashboard #workerChatWindow #workerChatMessages .cl-chat-bubble.theirs,
+ #customerDashboard #customerChatWindow #customerChatMessages .cl-chat-bubble.theirs{
+  align-self:flex-start!important;margin-right:auto!important;
+ }
+ #workerDashboard #workerChatWindow #workerChatMessages .cl-chat-bubble .cl-chat-sender,
+ #customerDashboard #customerChatWindow #customerChatMessages .cl-chat-bubble .cl-chat-sender{
+  display:block!important;font-size:13px!important;line-height:1.35!important;font-weight:650!important;color:#16643c!important;margin:0 0 3px!important;
+ }
+ #workerDashboard #workerChatWindow #workerChatMessages .cl-chat-bubble .cl-chat-body,
+ #customerDashboard #customerChatWindow #customerChatMessages .cl-chat-bubble .cl-chat-body{
+  font-size:15px!important;line-height:1.45!important;font-weight:400!important;color:#152c20!important;
+  margin:0!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;
+ }
+ #workerDashboard #workerChatWindow #workerChatMessages .cl-chat-bubble .cl-chat-time,
+ #customerDashboard #customerChatWindow #customerChatMessages .cl-chat-bubble .cl-chat-time{
+  display:block!important;font-size:10px!important;line-height:1.3!important;font-weight:400!important;color:#68776e!important;margin:4px 0 0!important;
+ }
+ #workerDashboard #workerChatWindow #workerChatForm,
+ #customerDashboard #customerChatWindow #customerChatForm{display:flex!important;gap:7px!important;margin-top:10px!important;}
+ #workerDashboard #workerChatWindow #workerChatInput,
+ #customerDashboard #customerChatWindow #customerChatInput{
+  font-size:16px!important;line-height:1.4!important;font-weight:400!important;min-height:44px!important;height:44px!important;padding:9px 10px!important;min-width:0!important;border:1px solid #a8b9ad!important;
+ }
+ #workerDashboard #workerChatWindow #workerChatForm button,
+ #customerDashboard #customerChatWindow #customerChatForm button,
+ #workerDashboard #workerChatWindow #workerJobApplyButton{
+  font-size:14px!important;line-height:1.3!important;font-weight:700!important;min-height:44px!important;padding:10px 13px!important;
+ }
+ #workerDashboard #workerChatWindow .cl-audio-chat-toolbar,
+ #customerDashboard #customerChatWindow .cl-audio-chat-toolbar{gap:7px!important;margin:0 0 10px!important;}
+ #workerDashboard #workerChatWindow .cl-audio-chat-toolbar button,
+ #customerDashboard #customerChatWindow .cl-audio-chat-toolbar button{font-size:14px!important;min-height:42px!important;padding:9px 14px!important;}
+ #workerDashboard #workerChatWindow .cl-audio-chat-toolbar small,
+ #customerDashboard #customerChatWindow .cl-audio-chat-toolbar small{font-size:11px!important;line-height:1.4!important;}
+ #workerDashboard #workerChatWindow #workerJobChatContext{font-size:12px!important;line-height:1.4!important;margin-bottom:8px!important;}
+}
+
+</style>

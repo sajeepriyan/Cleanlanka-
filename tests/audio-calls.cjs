@@ -86,5 +86,8 @@ function page(sb){
  const insecure=page(db2.client('customer'));await tick();insecure.setInsecure();await insecure.api.start('conversation');assert.match(insecure.get('clAudioError').textContent,/https:\/\/cleanlanka.lk/);assert.equal(insecure.micCount(),0);
  const failureDB=server(),failed=page(failureDB.client('customer'));await tick();await failed.api.start('conversation');failed.peers[0].connectionState='failed';failed.peers[0].onconnectionstatechange();await tick();assert.equal(failed.streams[0].track.stopped,true);assert.equal([...failureDB.calls.values()][0].status,'failed');
  assert.equal((html.match(/data-cl-audio-start="(?:customer|worker)"/g)||[]).length,2);
+ const isolation=[...html.matchAll(/body\.(?:worker|customer|admin)-dashboard-mode\s*>\s*\*([^{}]+)\{\s*display\s*:\s*none\s*!important/gi)];
+ assert.ok(isolation.length>=4,'Dashboard isolation rules must be covered by the call visibility check');
+ assert.ok(isolation.every(match=>match[1].includes(':not(#clAudioCallRoot)')),'Dashboard isolation must preserve the shared incoming call panel');
  console.log('PASS: named incoming calls, consent before microphone, offer/answer and buffered candidates, mute, minimize for messages, end/decline cleanup, cancel during permission prompt, microphone denial, HTTPS requirement, network failure cleanup. WebRTC is mocked; real-device audio still needs testing.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
