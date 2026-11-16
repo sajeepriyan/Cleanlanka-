@@ -10230,6 +10230,9 @@ document.addEventListener('DOMContentLoaded',function(){
 
 /* Call sound and output controls. Device routing is offered only when supported. */
 .cl-audio-chat-toolbar .cl-call-sound-enable{background:#eef6f0;color:#155d36;border-color:#b9d8c3;font-size:12px;padding:8px 12px;min-height:40px}
+.cl-audio-chat-toolbar .cl-call-mic-check{background:#eef6f0;color:#155d36;border-color:#b9d8c3;padding:8px 12px;min-height:40px}
+.cl-audio-chat-toolbar .cl-call-mic-status{flex-basis:100%;margin:0;font-size:13px;line-height:1.5;color:#214a32;overflow-wrap:anywhere}
+.cl-audio-chat-toolbar .cl-call-mic-status:empty{display:none}
 #clAudioRingEnable{display:inline-flex;align-items:center;justify-content:center;margin:14px auto 0;min-height:44px;padding:10px 17px;border:1px solid #bfdac9;border-radius:22px;font-size:14px;font-weight:700}
 #clAudioOutputPanel{margin-top:16px;padding:14px;border:1px solid #d7e8dc;border-radius:15px;background:#f5faf7;text-align:left}
 #clAudioOutputPanel label{display:block;font-size:13px;font-weight:750;margin-bottom:8px;color:#214a32}
@@ -10264,6 +10267,7 @@ document.addEventListener('DOMContentLoaded',function(){
  let account = null, accessToken = '', channel = null, active = null, minimized = false;
  let scanning = false, historyBusy = false, configurationGeneration = 0, previousFocus = null;
  let audioContext = null, ringTimer = null, ringOscillators = [];
+ let microphoneSetupPending = false;
  const dismissedCalls = new Set();
  const phoneIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3l-5-2-2 2a14 14 0 0 1-7-7l2-2-2-5Z"/></svg>';
  const callSvg = paths => '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+paths+'</svg>';
@@ -10384,7 +10388,7 @@ document.addEventListener('DOMContentLoaded',function(){
   if (error?.name === 'NotAllowedError' || error?.name === 'SecurityError') {
    const policy=document.permissionsPolicy || document.featurePolicy;
    if(policy?.allowsFeature && !policy.allowsFeature('microphone')) return 'This page is not allowed to use the microphone. Open Clean Lanka directly in Chrome and try again.';
-   return 'Microphone access is blocked. Chrome: ⋮ → Settings → Site settings → Microphone → allow Clean Lanka. Also check Android Settings → Apps → Chrome → Permissions → Microphone. Return here and tap Answer again, or start a new call.';
+   return 'Microphone access is blocked. If no Allow popup appears, Chrome or Android may already deny access. Chrome: ⋮ → Settings → Site settings → Microphone → allow Clean Lanka. Also check Android Settings → Apps → Chrome → Permissions → Microphone, and the phone’s Microphone access switch. Return here and tap Answer again, or start a new call.';
   }
   if (error?.name === 'NotFoundError') return 'No microphone was found on this device.';
   if (error?.name === 'NotReadableError') return 'Your microphone is busy. Close the other app using it and try again.';
@@ -10548,6 +10552,7 @@ document.addEventListener('DOMContentLoaded',function(){
   s.connectTimer=setTimeout(()=>{if(active===s&&!s.connectedAt)void failCall(s,'Audio could not connect on this network. Try another network or send a message.');},35000);
  }
  async function startCall(conversationId, displayName = '') {
+  if(microphoneSetupPending){alert('Finish the microphone permission check before starting a call.');return;}
   if(active){minimized=false;render(active);return;}
   if(!account){window.openLoginPage?.();return;}
   if(!conversationId){alert('Open a conversation and send your first message before calling.');return;}
@@ -10567,6 +10572,7 @@ document.addEventListener('DOMContentLoaded',function(){
   }catch(error){if(active===s)finish(s,'Could not start call',errorText(error));}
  }
  async function acceptCall() {
+  if(microphoneSetupPending){alert('Finish the microphone permission check, then tap Answer.');return;}
   const s=active;if(!s?.incoming||s.phase!=='incoming'||s.accepting)return;
   s.accepting=true;s.phase='preparing';s.error='';stopRing();render(s);
   try {
@@ -10732,6 +10738,27 @@ document.addEventListener('DOMContentLoaded',function(){
   button.addEventListener('click',()=>void testCallSound(button));toolbar.appendChild(button);
  });
  $('clAudioRingEnable').addEventListener('click',()=>void testCallSound($('clAudioRingEnable')));
+ // Only a deliberate tap checks microphone access; no background capture.
+ document.querySelectorAll('.cl-audio-chat-toolbar').forEach(toolbar=>{
+  const button=document.createElement('button'),status=document.createElement('p');
+  button.type='button';button.className='cl-call-mic-check';button.dataset.clCheckMicrophone='';button.innerHTML=micIcon;
+  button.setAttribute('aria-label','Enable or check microphone');button.title='Enable or check microphone';
+  status.className='cl-call-mic-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
+  button.addEventListener('click',async()=>{
+   if(active){status.textContent='Finish the current call before checking microphone access.';return;}
+   if(microphoneSetupPending)return;
+   button.disabled=true;microphoneSetupPending=true;
+   status.textContent='Checking microphone. If an Allow popup appears, choose Allow while visiting the site. If no popup appears, check Chrome and Android microphone permissions.';
+   let stream;
+   try {
+    mediaSupported();
+    stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
+    status.textContent='Microphone check passed. The microphone is now off. You can start or answer a call.';
+   }catch(error){status.textContent=errorText(error);}
+   finally{stream?.getTracks().forEach(track=>track.stop());button.disabled=false;microphoneSetupPending=false;}
+  });
+  toolbar.append(button,status);
+ });
  async function loadAudioOutputs(s) {
   if(active!==s)return;
   const select=$('clAudioOutputSelect');select.replaceChildren();select.hidden=true;
