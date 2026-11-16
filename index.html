@@ -10312,8 +10312,16 @@ document.addEventListener('DOMContentLoaded',function(){
   s.stream = stream; return true;
  }
  async function createPeer(s) {
-  const {data:iceServers,error} = await sb.rpc('cl_audio_ice_config');
-  if (error) throw error;
+  const {data:{session},error:sessionError} = await sb.auth.getSession();
+  if (sessionError || !session?.access_token) throw new Error('Please sign in again before calling.');
+  const response = await fetch('https://cleanlanka-turn.cleanlanka-audio.workers.dev', {
+   method:'POST',headers:{Authorization:'Bearer '+session.access_token,'Content-Type':'application/json'},
+   body:JSON.stringify({conversation_id:s.conversationId || s.call?.conversation_id}),
+   signal:AbortSignal.timeout(15000),
+  });
+  const relay = await response.json();
+  if (!response.ok) throw new Error(relay.error || 'Audio relay is unavailable. Please try again.');
+  const iceServers = relay.iceServers;
   if (active !== s) return false;
   if (!Array.isArray(iceServers) || !iceServers.length) throw new Error('Audio call network settings are unavailable. Please try again later.');
   const pc = new RTCPeerConnection({iceServers,iceCandidatePoolSize:0}); s.pc = pc;
@@ -10377,7 +10385,7 @@ document.addEventListener('DOMContentLoaded',function(){
   if(active){minimized=false;render(active);return;}
   if(!account){window.openLoginPage?.();return;}
   if(!conversationId){alert('Open a conversation and send your first message before calling.');return;}
-  const s=stateFor(null,false);s.name=displayName||'Contact';active=s;minimized=false;render(s);
+  const s=stateFor(null,false);s.conversationId=conversationId;s.name=displayName||'Contact';active=s;minimized=false;render(s);
   try {
    if(!await getMicrophone(s))return;
    if(!await createPeer(s))return;
