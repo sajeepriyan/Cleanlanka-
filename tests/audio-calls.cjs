@@ -33,7 +33,7 @@ function server(){
 function page(sb, options={}){
  const elements=new Map(),events={},streams=[],peers=[],timers=new Map();let timerId=0,micCalls=0,denyMic=false,pendingMic=null;
  class Element{
-  constructor(id=''){this._id=id;this.hidden=false;this.listeners={};this.dataset={};this.textContent='';this.children=[];this.isConnected=true;this.srcObject=null;if(id)elements.set(id,this);}
+  constructor(id=''){this._id=id;this.hidden=false;this.listeners={};this.dataset={};this.style={};this.textContent='';this.children=[];this.isConnected=true;this.srcObject=null;if(id)elements.set(id,this);}
   set id(id){this._id=id;elements.set(id,this);}get id(){return this._id;}
   set innerHTML(value){for(const match of value.matchAll(/<[^>]+\bid="([^"]+)"([^>]*)>/g)){const e=new Element(match[1]);e.hidden=/\bhidden\b/.test(match[2]);}}
   addEventListener(name,fn){this.listeners[name]=fn;}
@@ -74,7 +74,7 @@ function page(sb, options={}){
  const ctx={window,document,navigator,RTCPeerConnection:Peer,MediaStream:class{},console,Date,Set,Promise,fetch:async(url,options)=>{assert.equal(url,'https://cleanlanka-turn.cleanlanka-audio.workers.dev');assert.equal(options.headers.Authorization,'Bearer test-token');assert.equal(JSON.parse(options.body).conversation_id,'conversation');return {ok:true,json:async()=>({iceServers:[{urls:'turns:turn.cloudflare.com:5349',username:'temporary',credential:'temporary'}]})};},AbortSignal,SUPABASE_URL:'https://test.invalid',SUPABASE_PUBLISHABLE_KEY:'test-public-key',setInterval:fn=>{const id=++timerId;timers.set(id,fn);return id;},clearInterval:id=>timers.delete(id),setTimeout:(fn,ms)=>{if(!ms){queueMicrotask(fn);return 0;}const id=++timerId;timers.set(id,fn);return id;},clearTimeout:id=>timers.delete(id),alert:message=>{get('alert').textContent=message;}};
  vm.createContext(ctx);vm.runInContext(code,ctx);
  if(options.routing){get('clAudioRemote').sinkId='';get('clAudioRemote').setSinkId=async id=>{if(id==='denied')throw new Error('Denied');get('clAudioRemote').sinkId=id;};navigator.mediaDevices.enumerateDevices=async()=>[{kind:'audiooutput',deviceId:'speaker-1',label:'Speakers'},{kind:'audiooutput',deviceId:'headset-1',label:'Headset'}];}
- return {api:window.clAudioCalls,get,streams,peers,events,sb,makeStream,sound,toolbars,micCount:()=>micCalls,deny:()=>{denyMic=true;},delayMic:promise=>{pendingMic=promise;},setInsecure:()=>{window.isSecureContext=false;}};
+ return {api:window.clAudioCalls,get,streams,peers,events,sb,makeStream,sound,toolbars,micCount:()=>micCalls,deny:()=>{denyMic=true;},allow:()=>{denyMic=false;},setViewport:(width,screenWidth,height=800)=>{window.innerWidth=width;window.innerHeight=height;window.screen={width:screenWidth};window.matchMedia=()=>({matches:true});},delayMic:promise=>{pendingMic=promise;},setInsecure:()=>{window.isSecureContext=false;}};
 }
 (async()=>{
  const db=server(),customer=page(db.client('customer')),worker=page(db.client('worker'));await tick();
@@ -104,7 +104,14 @@ function page(sb, options={}){
  await customer.api.end();await tick();assert.equal(worker.get('clAudioStatus').textContent,'Call ended');assert.ok([...customer.streams,...worker.streams].every(s=>s.track.stopped));
  await worker.api.start('conversation');await tick();assert.equal(customer.get('clAudioName').textContent,'Verified Worker');const beforeDecline=customer.micCount();await customer.api.end('decline');await tick();assert.equal(customer.micCount(),beforeDecline);assert.match(worker.get('clAudioStatus').textContent,/declined/);
  const db2=server(),cancel=page(db2.client('customer'));await tick();let resolveMic;cancel.delayMic(new Promise(resolve=>{resolveMic=resolve;}));const starting=cancel.api.start('conversation');await tick();await cancel.api.end();const late=cancel.makeStream();resolveMic(late);await starting;assert.equal(late.track.stopped,true);assert.equal(db2.calls.size,0,'Cancelling while microphone opens must not initiate a remote call');
- const denied=page(db2.client('worker'));await tick();denied.deny();await denied.api.start('conversation');assert.match(denied.get('clAudioError').textContent,/Allow microphone access/);assert.equal(db2.calls.size,0);
+ const denied=page(db2.client('worker'));await tick();denied.deny();await denied.api.start('conversation');assert.match(denied.get('clAudioError').textContent,/Microphone access is blocked/);assert.match(denied.get('clAudioError').textContent,/Android Settings/);assert.equal(db2.calls.size,0);
+ const retryDB=server(),retryCaller=page(retryDB.client('customer')),retryReceiver=page(retryDB.client('worker'));await tick();
+ await retryCaller.api.start('conversation');await tick();retryReceiver.deny();await retryReceiver.api.accept();await tick();
+ assert.equal(retryReceiver.get('clAudioStatus').textContent,'Incoming audio call');assert.equal(retryReceiver.get('clAudioAccept').hidden,false);assert.equal([...retryDB.calls.values()][0].status,'ringing');assert.equal(retryReceiver.streams.length,0);
+ retryReceiver.allow();await retryReceiver.api.accept();await tick();assert.equal([...retryDB.calls.values()][0].status,'accepted');await retryReceiver.api.end();await tick();
+ const scaled=page(server().client('customer'));await tick();scaled.setViewport(980,390,1800);await scaled.api.start('conversation');assert.ok(Number(scaled.get('clAudioDialog').style.zoom)>2.5);assert.ok(parseFloat(scaled.get('clAudioDialog').style.maxHeight)<800);await scaled.api.end();
+ const normal=page(server().client('customer'));await tick();normal.setViewport(390,390);await normal.api.start('conversation');assert.equal(normal.get('clAudioDialog').style.zoom,'1');await normal.api.end();
+ const desktopPhone=page(server().client('customer'));await tick();desktopPhone.setViewport(980,980,1800);await desktopPhone.api.start('conversation');assert.ok(Number(desktopPhone.get('clAudioDialog').style.zoom)>2.5);await desktopPhone.api.end();
  const insecure=page(db2.client('customer'));await tick();insecure.setInsecure();await insecure.api.start('conversation');assert.match(insecure.get('clAudioError').textContent,/https:\/\/cleanlanka.lk/);assert.equal(insecure.micCount(),0);
  const failureDB=server(),failed=page(failureDB.client('customer'));await tick();await failed.api.start('conversation');failed.peers[0].connectionState='failed';failed.peers[0].onconnectionstatechange();await tick();assert.equal(failed.streams[0].track.stopped,true);assert.equal([...failureDB.calls.values()][0].status,'failed');
  const multiDB=server(),multiCaller=page(multiDB.client('customer')),losingDevice=page(multiDB.client('worker'));await tick();
