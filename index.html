@@ -4737,11 +4737,11 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
 <div aria-live="polite" class="space-y-2" id="customerConversationList"></div>
 <details class="cl-audio-history" data-cl-call-history-details><summary>Audio call history</summary><div data-cl-call-history="customer">Your audio calls will appear here.</div></details>
 <div class="hidden mt-4 border rounded-2xl p-3" id="customerChatWindow">
-<div class="font-bold text-emerald-900 mb-2" id="customerChatTitle">Conversation</div>
-<div class="cl-audio-chat-toolbar"><button type="button" data-cl-audio-start="customer" aria-label="Start audio call with this contact"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3l-5-2-2 2a14 14 0 0 1-7-7l2-2-2-5Z"/></svg>Audio Call</button><small>Keep Clean Lanka open to receive calls.</small></div>
+<div class="cl-chat-header"><div class="font-bold text-emerald-900 mb-2" id="customerChatTitle">Conversation</div>
+<div class="cl-audio-chat-toolbar"><button type="button" data-cl-audio-start="customer" aria-label="Start audio call with this contact"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3l-5-2-2 2a14 14 0 0 1-7-7l2-2-2-5Z"/></svg></button><small>Keep Clean Lanka open to receive calls.</small></div></div>
 <div class="max-h-64 overflow-y-auto space-y-2 bg-slate-50 rounded-xl p-3" id="customerChatMessages"></div>
-<form class="flex gap-2 mt-3" id="customerChatForm"><input class="min-w-0 flex-1 rounded-xl border p-3" id="customerChatInput" maxlength="4000" placeholder="Write a message" required=""/><button class="rounded-xl bg-emerald-700 text-white px-4 font-bold">Send</button></form>
-<p aria-live="polite" class="text-xs mt-2 font-semibold" id="customerChatMessage">Select Message Worker to start a private conversation.</p>
+<form class="flex gap-2 mt-3" id="customerChatForm"><input class="min-w-0 flex-1 rounded-xl border p-3" id="customerChatInput" aria-label="Message" maxlength="4000" placeholder="Message…" required=""/><button class="rounded-xl bg-emerald-700 text-white px-4 font-bold" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7ZM22 2 11 13"/></svg></button></form>
+<p aria-live="polite" class="text-xs mt-2 font-semibold" id="customerChatMessage"></p>
 </div>
 </section></section><section class="cl-final-panel" data-cl-final="notifications" hidden=""><section aria-labelledby="customerNotificationsHeading" class="customer-card mb-6" id="customerNotificationsPanel">
 <div class="flex items-center justify-between gap-3 flex-wrap"><div><h2 class="text-xl font-extrabold text-emerald-900" id="customerNotificationsHeading">My Notifications</h2><p class="text-sm text-slate-500">Private updates for your account.</p></div><button class="rounded-xl border border-slate-300 px-4 py-2 font-bold" id="customerRefreshNotifications" type="button">Refresh</button></div>
@@ -4938,10 +4938,10 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
 <div aria-live="polite" class="space-y-2" id="workerConversationList"><p class="text-sm text-slate-500">Loading customer messages...</p></div>
 <details class="cl-audio-history" data-cl-call-history-details><summary>Audio call history</summary><div data-cl-call-history="worker">Your audio calls will appear here.</div></details>
 <div class="hidden mt-4 border rounded-2xl p-3" id="workerChatWindow">
-<div class="font-bold text-emerald-900 mb-2" id="workerChatTitle">Conversation</div>
-<div class="cl-audio-chat-toolbar"><button type="button" data-cl-audio-start="worker" aria-label="Start audio call with this contact"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3l-5-2-2 2a14 14 0 0 1-7-7l2-2-2-5Z"/></svg>Audio Call</button><small>Keep Clean Lanka open to receive calls.</small></div>
+<div class="cl-chat-header"><div class="font-bold text-emerald-900 mb-2" id="workerChatTitle">Conversation</div>
+<div class="cl-audio-chat-toolbar"><button type="button" data-cl-audio-start="worker" aria-label="Start audio call with this contact"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3l-5-2-2 2a14 14 0 0 1-7-7l2-2-2-5Z"/></svg></button><small>Keep Clean Lanka open to receive calls.</small></div></div>
 <div class="max-h-64 overflow-y-auto space-y-2 bg-slate-50 rounded-xl p-3" id="workerChatMessages"></div>
-<form class="flex gap-2 mt-3" id="workerChatForm"><input class="min-w-0 flex-1 rounded-xl border p-3" id="workerChatInput" maxlength="4000" placeholder="Write a message" required=""/><button class="rounded-xl bg-emerald-700 text-white px-4 font-bold">Send</button></form>
+<form class="flex gap-2 mt-3" id="workerChatForm"><input class="min-w-0 flex-1 rounded-xl border p-3" id="workerChatInput" aria-label="Message" maxlength="4000" placeholder="Message…" required=""/><button class="rounded-xl bg-emerald-700 text-white px-4 font-bold" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7ZM22 2 11 13"/></svg></button></form>
 <p aria-live="polite" class="text-xs mt-2" id="workerChatMessage"></p>
 </div>
 </section></section><section class="cl-tab-page" data-cl-page="notifications" hidden=""><section aria-labelledby="workerNotificationsHeading" class="cv-card mb-5" id="workerNotificationsPanel">
@@ -8556,7 +8556,7 @@ setTimeout(refresh,1000);
   panel.classList.add('cl074-thread-open');
   win.classList.remove('hidden');
   let back=win.querySelector('.cl074-back');
-  if(!back){back=document.createElement('button');back.type='button';back.className='cl074-back';back.innerHTML='<span aria-hidden="true">‹</span> Back to messages';win.prepend(back);back.addEventListener('click',()=>showList(role))}
+  if(!back){back=document.createElement('button');back.type='button';back.className='cl074-back';back.setAttribute('aria-label','Back to messages');back.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';(win.querySelector('.cl-chat-header')||win).prepend(back);back.addEventListener('click',()=>showList(role))}
   const name=button?.querySelector('.cl073-chat-info strong')?.textContent;
   if(name){const title=document.getElementById(role+'ChatTitle');if(title)title.textContent=name}
   win.scrollIntoView({behavior:'smooth',block:'start'});
@@ -10569,7 +10569,7 @@ document.addEventListener('DOMContentLoaded',function(){
  function updateRingControls() {
   const ready=audioContext?.state==='running';
   document.querySelectorAll('[data-cl-call-sound]').forEach(button=>{
-   button.textContent=ready?'Test call sound':'Enable & test call sound';
+   button.setAttribute('aria-label',ready?'Test call sound':'Enable call sound');button.title=button.getAttribute('aria-label');
   });
   setVisible('clAudioRingEnable', active?.phase==='incoming' && !ready);
  }
@@ -10606,11 +10606,11 @@ document.addEventListener('DOMContentLoaded',function(){
  async function testCallSound(button) {
   const ready=await unlockAudio();
   if(ready)playRingTone();
-  else if(button)button.textContent='Tap again to enable sound';
+  else if(button){button.setAttribute('aria-label','Tap again to enable sound');button.title='Tap again to enable sound';}
  }
  document.querySelectorAll('.cl-audio-chat-toolbar').forEach(toolbar=>{
   const button=document.createElement('button');button.type='button';button.dataset.clCallSound='';
-  button.className='cl-call-sound-enable';button.textContent='Enable & test call sound';
+  button.className='cl-call-sound-enable';button.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>';button.setAttribute('aria-label','Enable and test call sound');button.title='Enable and test call sound';
   button.addEventListener('click',()=>void testCallSound(button));toolbar.appendChild(button);
  });
  $('clAudioRingEnable').addEventListener('click',()=>void testCallSound($('clAudioRingEnable')));
@@ -10773,4 +10773,33 @@ body > #clAudioCallRoot{display:block!important;position:relative;z-index:214748
  #workerDashboard #workerChatWindow #workerJobChatContext{font-size:12px!important;line-height:1.4!important;margin-bottom:8px!important;}
 }
 
+</style>
+
+
+<style id="cl-chat-polished-layout">
+/* Shared customer and worker conversation layout. */
+:is(#customerChatPanel,#workerChatPanel).cl074-thread-open > .cl-audio-history{display:none!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow){padding:0!important;border:1px solid #dce9e1!important;border-radius:20px!important;overflow:hidden!important;background:#fff!important;box-shadow:0 8px 28px #123c2410!important;min-height:0!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) .cl-chat-header{display:grid!important;grid-template-columns:38px minmax(0,1fr) auto!important;align-items:center!important;gap:8px!important;padding:14px 12px!important;border-bottom:1px solid #e4ece6!important;background:#fff!important;position:relative!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) .cl074-back{width:38px!important;height:42px!important;padding:8px!important;margin:0!important;border:0!important;background:transparent!important;border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;color:#165638!important}
+.cl-chat-header svg{width:22px;height:22px;flex-shrink:0}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) :is(#customerChatTitle,#workerChatTitle){font-size:15px!important;font-weight:750!important;line-height:1.4!important;color:#163e29!important;margin:0!important;overflow-wrap:anywhere!important;min-width:0!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) .cl-audio-chat-toolbar{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:6px!important;margin:0!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) .cl-audio-chat-toolbar small{display:none!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) .cl-audio-chat-toolbar button{display:flex!important;align-items:center!important;justify-content:center!important;width:42px!important;height:42px!important;min-height:42px!important;padding:0!important;border-radius:50%!important;border:0!important;background:#087b47!important;color:#fff!important;flex:0 0 42px!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) .cl-audio-chat-toolbar .cl-call-sound-enable{width:36px!important;height:42px!important;flex-basis:36px!important;background:transparent!important;color:#4b725b!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) :is(#customerChatMessages,#workerChatMessages){display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:12px!important;width:100%!important;height:clamp(240px,52dvh,540px)!important;max-height:none!important;min-height:240px!important;box-sizing:border-box!important;padding:18px 12px!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;background:#f3f7f4!important;border:0!important;border-radius:0!important;scroll-padding-block:16px!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) :is(#customerChatMessages,#workerChatMessages) .cl-chat-bubble{flex-shrink:0!important;width:fit-content!important;min-width:0!important;max-width:85%!important;margin:0!important;padding:10px 12px!important;border:1px solid #e1e9e3!important;border-radius:15px 15px 15px 4px!important;background:#fff!important;box-shadow:0 1px 2px #17472b06!important;overflow-wrap:anywhere!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) :is(#customerChatMessages,#workerChatMessages) .cl-chat-bubble.mine{align-self:flex-end!important;margin-left:auto!important;background:#dff2e5!important;border-color:#cee7d6!important;border-radius:15px 15px 4px 15px!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) :is(#customerChatMessages,#workerChatMessages) .cl-chat-sender{display:none!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) :is(#customerChatMessages,#workerChatMessages) .cl-chat-body{font-size:15px!important;line-height:1.55!important;font-weight:400!important;color:#193327!important;margin:0!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) :is(#customerChatMessages,#workerChatMessages) .cl-chat-time{display:block!important;font-size:10px!important;line-height:1.4!important;font-weight:400!important;color:#728278!important;margin:5px 0 0!important;text-align:right!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) :is(#customerChatForm,#workerChatForm){display:flex!important;align-items:center!important;gap:8px!important;margin:0!important;padding:12px!important;background:#fff!important;border-top:1px solid #e3ece6!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) :is(#customerChatInput,#workerChatInput){flex:1!important;min-width:0!important;width:0!important;height:46px!important;min-height:46px!important;padding:10px 15px!important;font-size:16px!important;line-height:1.5!important;font-weight:400!important;color:#193327!important;border:1px solid #dde7df!important;border-radius:24px!important;background:#f7f9f7!important;box-shadow:none!important}
+:is(#customerDashboard,#workerDashboard) :is(#customerChatWindow,#workerChatWindow) :is(#customerChatForm,#workerChatForm) button{display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 46px!important;width:46px!important;height:46px!important;min-height:46px!important;padding:0!important;border:0!important;border-radius:50%!important;background:#087b47!important;color:#fff!important}
+:is(#customerChatForm,#workerChatForm) button svg{width:21px;height:21px}
+:is(#customerChatMessage,#workerChatMessage):empty{display:none!important}
+:is(#customerChatMessage,#workerChatMessage):not(:empty){padding:0 12px 10px!important;margin:0!important}
+:is(#customerChatWindow,#workerChatWindow) button:focus-visible{outline:3px solid #97c9aa!important;outline-offset:2px!important}
+@media(min-width:768px){:is(#customerChatWindow,#workerChatWindow){max-width:860px;margin-inline:auto!important}}
 </style>
