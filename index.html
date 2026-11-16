@@ -5067,6 +5067,8 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
     <p class="text-sm mt-2"><a href="/terms.html" target="_blank" rel="noopener noreferrer" class="text-emerald-800 underline font-bold">Read Terms of Service</a> · <a href="/privacy.html" target="_blank" rel="noopener noreferrer" class="text-emerald-800 underline font-bold">Read Privacy Policy</a></p>
     <button id="workerSubmit" type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white p-3 rounded-lg font-bold">Create Worker Account</button>
     <p id="workerRegisterMessage" class="text-center text-sm" aria-live="polite"></p>
+    <button id="workerResendConfirmation" type="button" class="w-full rounded-lg border-2 border-emerald-700 bg-white text-emerald-800 p-3 font-bold">Resend Confirmation Email</button>
+    <p class="text-center text-sm text-gray-500">Already registered but no email? Enter the same email address above and tap Resend Confirmation Email. Check Inbox and Spam.</p>
   </form>
   <p class="text-center text-sm text-gray-500 mt-4">After email confirmation, your worker application must be reviewed before you can receive bookings.</p>
 </section>
@@ -5459,6 +5461,39 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
     messageId: 'customerRegisterMessage', role: 'customer'
   });
 
+  // Resending confirmation does not submit the form or create another account.
+  const workerResend = document.getElementById('workerResendConfirmation');
+  let workerResendAfter = 0;
+  workerResend.addEventListener('click', async () => {
+    if (workerResend.disabled || Date.now() < workerResendAfter) return;
+    const input = document.getElementById('workerEmail');
+    const email = input.value.trim();
+    const message = document.getElementById('workerRegisterMessage');
+    if (!email || !input.checkValidity()) {
+      showMessage(message, 'Enter the email address used for your worker registration, then tap Resend Confirmation Email.', true);
+      input.focus();
+      return;
+    }
+    workerResend.disabled = true;
+    showMessage(message, 'Requesting your confirmation email...');
+    try {
+      const { error } = await supabaseClient.auth.resend({
+        type: 'signup', email, options: { emailRedirectTo: 'https://cleanlanka.lk' }
+      });
+      if (error) throw error;
+      workerResendAfter = Date.now() + 60000;
+      showMessage(message, 'Confirmation email requested for ' + email + '. Check Inbox and Spam. Use the newest confirmation link. If no email arrives, contact Clean Lanka support with this email address.');
+      workerResend.textContent = 'Please wait 60 seconds before resending';
+      setTimeout(() => {
+        workerResend.disabled = false;
+        workerResend.textContent = 'Resend Confirmation Email';
+      }, 60000);
+    } catch (error) {
+      showMessage(message, error.message || 'Could not request the confirmation email. Please try again.', true);
+      workerResend.disabled = false;
+    }
+  });
+
   // Worker details are stored in Auth metadata during sign-up.
   // After email confirmation and sign-in, they are copied into worker_profiles.
   const workerFormClean = document.getElementById('workerRegisterForm');
@@ -5526,6 +5561,7 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
       }
       showMessage(message, 'Worker registration submitted. Confirm your email, then sign in from the Login section. Your account will remain pending review.' + (window.clSelectedWorkerJob() ? ' The job you selected will be waiting in Dashboard → Find Jobs.' : ''));
       workerFormClean.reset();
+      document.getElementById('workerEmail').value = email;
     } catch (error) {
       showMessage(message, error.message || 'Registration failed. Please try again.', true);
     } finally {
