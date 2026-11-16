@@ -1,0 +1,32 @@
+name: Build Android earpiece test
+on:
+  push:
+    branches: [android-earpiece-test]
+    paths: ['android-earpiece/**', '.github/workflows/android-earpiece.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Verify microphone and playback guards
+        run: node --test android-earpiece/tests/bridge.test.cjs
+      - name: Build test APK and run lint
+        working-directory: android-earpiece
+        run: gradle --no-daemon :app:assembleDebug :app:lintDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Clean-Lanka-Earpiece-Test-APK
+          path: android-earpiece/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
