@@ -3719,6 +3719,23 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
 <link rel="stylesheet" href="/assets/character-motion.css?v=20261110">
 <script defer src="/assets/character-motion.js?v=20261110"></script>
 <link rel="stylesheet" href="assets/mobile-job-grid.css?v=20261113-2x2">
+
+<style id="cl-job-card-natural-height-20261116">
+/* Cards use their content height even when an adjacent panel is taller. */
+#homeMarketplace #homeJobResults{align-items:start!important;align-content:start!important;grid-auto-rows:max-content!important;height:auto!important;min-height:0!important}
+#homeMarketplace #homeJobResults>article.cl-job-compact{align-self:start!important;height:auto!important;min-height:0!important;grid-template-rows:auto auto!important;align-content:start!important}
+#homeMarketplace #homeJobResults .cl-job-side{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto!important;align-content:start!important;gap:5px!important}
+#homeMarketplace #homeJobResults .cl-job-side>*{grid-column:1!important;grid-row:auto!important;min-width:0!important;overflow-wrap:anywhere}
+#homeMarketplace #homeJobResults .cl-job-contact-actions{margin-top:3px!important}
+#homeMarketplace #homeJobResults .cl-job-contact-actions button{flex:1;min-width:0;white-space:normal}
+@media(max-width:880px){
+ #homeMarketplace #homeJobResults,#homeMarketplace #homeWorkerResults{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ #homeMarketplace #homeJobResults>article.cl-job-compact{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"main" "side"!important;padding:10px!important}
+ #homeMarketplace #homeJobResults .cl-job-icon{display:none!important}
+ #homeMarketplace #homeJobResults .cl-job-main h3{font-size:15px!important}
+ #homeMarketplace #homeJobResults .cl-job-summary,#homeMarketplace #homeJobResults .cl-job-posted{font-size:11px!important}
+}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -4069,7 +4086,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
   }
   function clJobPosted(createdAt){
     const date=createdAt?new Date(createdAt):null;
-    if(!date||Number.isNaN(date.getTime()))return {label:'Date unavailable',absolute:'Not listed'};
+    if(!date||Number.isNaN(date.getTime()))return {label:'Publication date not provided',absolute:''};
     const days=Math.max(0,Math.floor((clJobDayNumber(new Date())-clJobDayNumber(date))/86400000));
     const label=days===0?'Posted today':days===1?'Posted yesterday':'Posted '+days+' days ago';
     return {label,absolute:clJobDateFormat.format(date)};
@@ -4098,7 +4115,7 @@ body.cl-auth-home .cl-home-nav-actions .cl-home-login[onclick*="openLoginPage"]{
         '<p class="cl-job-location"><span class="material-symbols-outlined" aria-hidden="true">location_on</span>'+district+'</p>'+
         (translated?'<p class="cl-job-translation">'+esc(translated)+'</p>':'')+
         '<p class="cl-job-summary" title="'+summary+'">'+summary+'</p>'+
-        '<p class="cl-job-posted" title="Published '+esc(posted.absolute)+'"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>'+esc(posted.label)+' · '+esc(posted.absolute)+'</p>'+
+        '<p class="cl-job-posted" title="'+esc(posted.absolute?'Published '+posted.absolute:'Publication date not provided')+'"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>'+esc(posted.label)+(posted.absolute?' · '+esc(posted.absolute):'')+'</p>'+
         '<button type="button" class="cl-job-details-toggle" data-cl-job-details aria-expanded="false" aria-controls="cl-job-more-'+id+'">View details</button>'+
         '<div class="cl-job-details" id="cl-job-more-'+id+'" hidden><p>'+summary+'</p><p><strong>Published:</strong> '+esc(posted.absolute)+'</p><p><strong>District:</strong> '+district+'</p><p><strong>Salary / budget:</strong> '+budget+' '+esc(window.clJobSalaryPeriod(j))+'</p><p><strong>Preferred:</strong> '+date+'</p>'+window.clJobAdDetailsHTML(j)+window.clJobContactHTML(j)+'</div></div>'+
         '<div class="cl-job-side"><strong>'+budget+' '+esc(window.clJobSalaryPeriod(j))+'</strong><span class="cl-job-date">Preferred: '+date+'</span>'+
