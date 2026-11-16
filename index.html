@@ -10159,6 +10159,15 @@ document.addEventListener('DOMContentLoaded',function(){
 #clAudioCallRoot button:focus-visible,.cl-audio-chat-toolbar button:focus-visible{outline:3px solid #f1ba47;outline-offset:3px}
 @media(max-width:380px){#clAudioOverlay{padding:12px}#clAudioDialog{padding:24px 17px;border-radius:24px}#clAudioActions{gap:9px}#clAudioActions button{padding:12px 15px;font-size:14px}#clAudioName{font-size:23px}}
 
+
+/* Call sound and output controls. Device routing is offered only when supported. */
+.cl-audio-chat-toolbar .cl-call-sound-enable{background:#eef6f0;color:#155d36;border-color:#b9d8c3;font-size:12px;padding:8px 12px;min-height:40px}
+#clAudioRingEnable{display:inline-flex;align-items:center;justify-content:center;margin:14px auto 0;min-height:44px;padding:10px 17px;border:1px solid #bfdac9;border-radius:22px;font-size:14px;font-weight:700}
+#clAudioOutputPanel{margin-top:16px;padding:14px;border:1px solid #d7e8dc;border-radius:15px;background:#f5faf7;text-align:left}
+#clAudioOutputPanel label{display:block;font-size:13px;font-weight:750;margin-bottom:8px;color:#214a32}
+#clAudioOutputSelect{display:block;width:100%;min-height:44px;border:1px solid #b6cdbf;border-radius:9px;padding:8px;background:white;color:#183c28;font:inherit;font-size:14px;box-sizing:border-box}
+#clAudioOutputChoose{min-height:44px;border:1px solid #bfdac9;border-radius:12px;padding:9px 12px;font-size:14px;font-weight:700}
+#clAudioOutputStatus{font-size:12px;line-height:1.6;color:#52675b;margin:10px 0 0}
 </style>
 <script id="cl-audio-calls-script">/* Clean Lanka: participant-only WebRTC audio calling. No recording. */
 (function () {
@@ -10174,7 +10183,7 @@ document.addEventListener('DOMContentLoaded',function(){
  const phoneIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3l-5-2-2 2a14 14 0 0 1-7-7l2-2-2-5Z"/></svg>';
  const root = document.createElement('div');
  root.id = 'clAudioCallRoot';
- root.innerHTML = '<div id="clAudioOverlay" hidden><section id="clAudioDialog" role="dialog" aria-modal="true" aria-labelledby="clAudioName" aria-describedby="clAudioStatus" tabindex="-1"><div class="cl-audio-brand">Clean Lanka <span>Audio Call</span></div><div id="clAudioInitial" aria-hidden="true">C</div><h2 id="clAudioName">Contact</h2><p id="clAudioStatus" role="status" aria-live="polite"></p><p id="clAudioHint">Private audio call · Your phone number stays private.</p><p id="clAudioError" role="alert"></p><div id="clAudioActions"><button id="clAudioDecline" class="cl-audio-danger" type="button">Decline</button><button id="clAudioAccept" class="cl-audio-accept" type="button">'+phoneIcon+'Accept</button><button id="clAudioMute" class="cl-audio-secondary" type="button" aria-pressed="false">Mute mic</button><button id="clAudioEnd" class="cl-audio-danger" type="button">End Call</button><button id="clAudioClose" class="cl-audio-secondary" type="button">Close</button></div><button id="clAudioMinimize" type="button">Keep call open &amp; return to messages</button><button id="clAudioPlay" class="cl-audio-secondary" type="button" hidden>Tap to hear audio</button></section></div><button id="clAudioPill" type="button" hidden>'+phoneIcon+'<span id="clAudioPillText">Return to call</span></button><audio id="clAudioRemote" autoplay playsinline></audio>';
+ root.innerHTML = '<div id="clAudioOverlay" hidden><section id="clAudioDialog" role="dialog" aria-modal="true" aria-labelledby="clAudioName" aria-describedby="clAudioStatus" tabindex="-1"><div class="cl-audio-brand">Clean Lanka <span>Audio Call</span></div><div id="clAudioInitial" aria-hidden="true">C</div><h2 id="clAudioName">Contact</h2><p id="clAudioStatus" role="status" aria-live="polite"></p><p id="clAudioHint">Private audio call · Your phone number stays private.</p><p id="clAudioError" role="alert"></p><div id="clAudioActions"><button id="clAudioDecline" class="cl-audio-danger" type="button">Decline</button><button id="clAudioAccept" class="cl-audio-accept" type="button">'+phoneIcon+'Accept</button><button id="clAudioMute" class="cl-audio-secondary" type="button" aria-pressed="false">Mute mic</button><button id="clAudioOutput" class="cl-audio-secondary" type="button" aria-expanded="false" aria-controls="clAudioOutputPanel">Audio output</button><button id="clAudioEnd" class="cl-audio-danger" type="button">End Call</button><button id="clAudioClose" class="cl-audio-secondary" type="button">Close</button></div><button id="clAudioRingEnable" class="cl-audio-secondary" type="button" hidden>Enable ringtone</button><div id="clAudioOutputPanel" hidden><label for="clAudioOutputSelect">Call audio device</label><select id="clAudioOutputSelect" hidden></select><button id="clAudioOutputChoose" class="cl-audio-secondary" type="button" hidden>Choose speaker or headset</button><p id="clAudioOutputStatus" role="status" aria-live="polite"></p></div><button id="clAudioMinimize" type="button">Keep call open &amp; return to messages</button><button id="clAudioPlay" class="cl-audio-secondary" type="button" hidden>Tap to hear audio</button></section></div><button id="clAudioPill" type="button" hidden>'+phoneIcon+'<span id="clAudioPillText">Return to call</span></button><audio id="clAudioRemote" autoplay playsinline></audio>';
  document.body.appendChild(root);
  const remoteAudio = $('clAudioRemote');
 
@@ -10208,6 +10217,9 @@ document.addEventListener('DOMContentLoaded',function(){
   setVisible('clAudioMute', !!s.stream && !finished);
   $('clAudioMute').textContent = s.muted ? 'Unmute mic' : 'Mute mic';
   $('clAudioMute').setAttribute('aria-pressed', String(!!s.muted));
+  setVisible('clAudioOutput', !!s.stream && !finished);
+  setVisible('clAudioRingEnable', incoming && audioContext?.state!=='running');
+  if(finished){$('clAudioOutputPanel').hidden=true;$('clAudioOutput').setAttribute('aria-expanded','false');}
   setVisible('clAudioClose', finished);
   setVisible('clAudioMinimize', !incoming && !finished && !!s.call);
   setVisible('clAudioPlay', !!s.playBlocked && !finished);
@@ -10516,18 +10528,100 @@ document.addEventListener('DOMContentLoaded',function(){
    .subscribe(status=>{if(status==='SUBSCRIBED'&&generation===configurationGeneration){void scanIncoming();void syncActive();}});
   void scanIncoming();void loadHistory();
  }
- function unlockAudio() {
-  try{const Constructor=window.AudioContext||window.webkitAudioContext;if(!audioContext&&Constructor)audioContext=new Constructor();if(audioContext?.state==='suspended')void audioContext.resume().catch(()=>{});}catch(_){}
+ function updateRingControls() {
+  const ready=audioContext?.state==='running';
+  document.querySelectorAll('[data-cl-call-sound]').forEach(button=>{
+   button.textContent=ready?'Test call sound':'Enable & test call sound';
+  });
+  setVisible('clAudioRingEnable', active?.phase==='incoming' && !ready);
+ }
+ async function unlockAudio() {
+  try {
+   const Constructor=window.AudioContext||window.webkitAudioContext;
+   if(!audioContext&&Constructor){audioContext=new Constructor();audioContext.onstatechange=updateRingControls;}
+   if(audioContext?.state==='suspended'||audioContext?.state==='interrupted')await audioContext.resume();
+   updateRingControls();return audioContext?.state==='running';
+  }catch(_){updateRingControls();return false;}
+ }
+ function playRingTone() {
+  if(audioContext?.state!=='running')return false;
+  try {
+   const gain=audioContext.createGain(),now=audioContext.currentTime;
+   gain.gain.setValueAtTime(0.001,now);gain.gain.exponentialRampToValueAtTime(.13,now+.035);
+   gain.gain.setValueAtTime(.13,now+.65);gain.gain.exponentialRampToValueAtTime(.001,now+.85);
+   gain.connect(audioContext.destination);
+   let remaining=2;
+   for(const frequency of [440,560]){
+    const osc=audioContext.createOscillator();osc.type='sine';osc.frequency.value=frequency;
+    osc.connect(gain);osc.start(now);osc.stop(now+.9);ringOscillators.push(osc);
+    osc.onended=()=>{osc.disconnect();if(!--remaining)gain.disconnect();ringOscillators=ringOscillators.filter(x=>x!==osc);};
+   }
+   return true;
+  }catch(_){return false;}
  }
  function startRing() {
   stopRing();
-  const beep=()=>{
-   if(!active?.incoming||active.phase!=='incoming'||audioContext?.state!=='running')return;
-   try{const osc=audioContext.createOscillator(),gain=audioContext.createGain();osc.type='sine';osc.frequency.value=520;gain.gain.setValueAtTime(.045,audioContext.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+.6);osc.connect(gain);gain.connect(audioContext.destination);osc.start();osc.stop(audioContext.currentTime+.65);ringOscillators.push(osc);osc.onended=()=>{osc.disconnect();gain.disconnect();ringOscillators=ringOscillators.filter(x=>x!==osc);};}catch(_){}
-  };
-  beep();ringTimer=setInterval(beep,2500);
+  const beep=()=>{if(active?.incoming&&active.phase==='incoming'){playRingTone();try{navigator.vibrate?.([200,120,200]);}catch(_){}}};
+  void unlockAudio().then(beep);ringTimer=setInterval(beep,2500);updateRingControls();
  }
- function stopRing() {clearInterval(ringTimer);ringTimer=null;ringOscillators.forEach(osc=>{try{osc.stop();}catch(_){}});ringOscillators=[];}
+ function stopRing() {clearInterval(ringTimer);ringTimer=null;ringOscillators.forEach(osc=>{try{osc.stop();}catch(_){}});ringOscillators=[];try{navigator.vibrate?.(0);}catch(_){}}
+ async function testCallSound(button) {
+  const ready=await unlockAudio();
+  if(ready)playRingTone();
+  else if(button)button.textContent='Tap again to enable sound';
+ }
+ document.querySelectorAll('.cl-audio-chat-toolbar').forEach(toolbar=>{
+  const button=document.createElement('button');button.type='button';button.dataset.clCallSound='';
+  button.className='cl-call-sound-enable';button.textContent='Enable & test call sound';
+  button.addEventListener('click',()=>void testCallSound(button));toolbar.appendChild(button);
+ });
+ $('clAudioRingEnable').addEventListener('click',()=>void testCallSound($('clAudioRingEnable')));
+ async function loadAudioOutputs(s) {
+  if(active!==s)return;
+  const select=$('clAudioOutputSelect');select.replaceChildren();select.hidden=true;
+  const canRoute=typeof remoteAudio.setSinkId==='function';
+  const canChoose=canRoute&&typeof navigator.mediaDevices?.selectAudioOutput==='function';
+  setVisible('clAudioOutputChoose',canChoose);
+  $('clAudioOutputStatus').textContent=canRoute?'Use your phone volume buttons to adjust call volume.':'This browser does not offer speaker/earpiece switching. Use your phone volume buttons, or connect wired/Bluetooth headphones for private listening.';
+  if(!canRoute||!navigator.mediaDevices?.enumerateDevices)return;
+  try {
+   const devices=await navigator.mediaDevices.enumerateDevices();if(active!==s)return;
+   const outputs=devices.filter(device=>device.kind==='audiooutput'&&device.deviceId);
+   const option=document.createElement('option');option.value='';option.textContent='Phone / system default';select.appendChild(option);
+   for(const [index,device] of outputs.entries()){
+    const item=document.createElement('option');item.value=device.deviceId;item.textContent=device.label||'Audio device '+(index+1);select.appendChild(item);
+   }
+   select.value=remoteAudio.sinkId||'';select.hidden=false;
+   if(!outputs.length&&!canChoose)$('clAudioOutputStatus').textContent='Only system default audio is available. Connect headphones or use your phone audio controls.';
+  }catch(_){$('clAudioOutputStatus').textContent='Audio device access is unavailable. Your call continues on the current output.';}
+ }
+ async function useAudioOutput(deviceId,label,s) {
+  try {
+   await remoteAudio.setSinkId(deviceId);
+   if(active!==s)return;
+   $('clAudioOutputStatus').textContent='Call audio: '+label+'. Use your phone volume buttons to adjust volume.';
+   await playRemote(s);
+  }catch(_){if(active===s){$('clAudioOutputSelect').value=remoteAudio.sinkId||'';$('clAudioOutputStatus').textContent='Could not switch audio device. Your call continues on the current output.';}}
+ }
+ $('clAudioOutput').addEventListener('click',()=>{
+  const s=active;if(!s?.stream)return;
+  const panel=$('clAudioOutputPanel');panel.hidden=!panel.hidden;
+  $('clAudioOutput').setAttribute('aria-expanded',String(!panel.hidden));
+  if(!panel.hidden)void loadAudioOutputs(s);
+ });
+ $('clAudioOutputSelect').addEventListener('change',()=>{
+  const s=active,select=$('clAudioOutputSelect');if(!s?.stream)return;
+  const label=select.selectedOptions?.[0]?.textContent||'Selected device';
+  void useAudioOutput(select.value,label,s);
+ });
+ $('clAudioOutputChoose').addEventListener('click',async()=>{
+  const s=active;if(!s?.stream)return;
+  try {
+   const device=await navigator.mediaDevices.selectAudioOutput();if(active!==s)return;
+   await useAudioOutput(device.deviceId,device.label||'Selected device',s);
+  }catch(error){if(active===s&&error?.name!=='NotAllowedError')$('clAudioOutputStatus').textContent='Audio selection is unavailable. Your call continues on the current output.';}
+ });
+ navigator.mediaDevices?.addEventListener?.('devicechange',()=>{if(active&&!$('clAudioOutputPanel').hidden)void loadAudioOutputs(active);});
  $('clAudioAccept').addEventListener('click',()=>{unlockAudio();void acceptCall();});
  $('clAudioDecline').addEventListener('click',()=>void endCall('decline'));
  $('clAudioEnd').addEventListener('click',()=>void endCall());
@@ -10536,7 +10630,9 @@ document.addEventListener('DOMContentLoaded',function(){
  $('clAudioMinimize').addEventListener('click',()=>{if(!active)return;minimized=true;$('clAudioOverlay').hidden=true;render(active,false);if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});});
  $('clAudioPill').addEventListener('click',()=>{if(active){minimized=false;render(active);}});
  $('clAudioPlay').addEventListener('click',()=>{if(active)void playRemote(active);});
- document.addEventListener('pointerdown',unlockAudio,{passive:true});
+ document.addEventListener('pointerdown',()=>void unlockAudio(),{passive:true});
+ document.addEventListener('click',()=>void unlockAudio(),{passive:true});
+ document.addEventListener('keydown',()=>void unlockAudio(),{passive:true});
  document.addEventListener('click',event=>{
   const button=event.target.closest('[data-cl-audio-start]');if(!button)return;
   const role=button.dataset.clAudioStart,host=$(role+'ChatWindow');

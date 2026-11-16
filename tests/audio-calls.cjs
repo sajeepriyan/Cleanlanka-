@@ -30,7 +30,7 @@ function server(){
  }
  return {calls,signals,client};
 }
-function page(sb){
+function page(sb, options={}){
  const elements=new Map(),events={},streams=[],peers=[],timers=new Map();let timerId=0,micCalls=0,denyMic=false,pendingMic=null;
  class Element{
   constructor(id=''){this._id=id;this.hidden=false;this.listeners={};this.dataset={};this.textContent='';this.children=[];this.isConnected=true;this.srcObject=null;if(id)elements.set(id,this);}
@@ -48,7 +48,9 @@ function page(sb){
  }
  const get=id=>elements.get(id)||new Element(id);
  const history=[new Element('history-customer'),new Element('history-worker')];
- const document={body:new Element('body'),activeElement:null,hidden:false,createElement:()=>new Element(),getElementById:get,addEventListener:(name,fn)=>{events[name]=fn;},querySelectorAll:selector=>selector==='[data-cl-call-history]'?history:[]};
+ const toolbars=[new Element('customer-toolbar'),new Element('worker-toolbar')];
+ const sound={oscillators:[],resumes:0};
+ const document={body:new Element('body'),activeElement:null,hidden:false,createElement:()=>new Element(),getElementById:get,addEventListener:(name,fn)=>{events[name]=fn;},querySelectorAll:selector=>selector==='[data-cl-call-history]'?history:selector==='.cl-audio-chat-toolbar'?toolbars:selector==='[data-cl-call-sound]'?toolbars.flatMap(t=>t.children):[]};
  document.activeElement=document.body;
  function makeStream(){const track={enabled:true,stopped:false,stop(){this.stopped=true;}};const stream={track,getTracks:()=>[track],getAudioTracks:()=>[track]};streams.push(stream);return stream;}
  class Peer{
@@ -61,9 +63,16 @@ function page(sb){
  }
  const navigator={mediaDevices:{getUserMedia:async options=>{micCalls++;assert.equal(options.video,false);if(denyMic)throw Object.assign(new Error('Denied'),{name:'NotAllowedError'});if(pendingMic)return pendingMic;return makeStream();}}};
  const window={supabaseClient:sb,isSecureContext:true,RTCPeerConnection:Peer,addEventListener:(name,fn)=>{events['window:'+name]=fn;}};
+ if(options.sound){window.AudioContext=class{
+  constructor(){this.state='suspended';this.currentTime=0;this.destination={};sound.context=this;}
+  async resume(){sound.resumes++;if(options.resumeDenied)throw new Error('gesture required');this.state='running';this.onstatechange?.();}
+  createGain(){return {gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){},disconnect(){}};}
+  createOscillator(){const oscillator={frequency:{value:0},stopped:false,connect(){},disconnect(){},start(){},stop(){this.stopped=true;}};sound.oscillators.push(oscillator);return oscillator;}
+ };}
  const ctx={window,document,navigator,RTCPeerConnection:Peer,MediaStream:class{},console,Date,Set,Promise,fetch:async(url,options)=>{assert.equal(url,'https://cleanlanka-turn.cleanlanka-audio.workers.dev');assert.equal(options.headers.Authorization,'Bearer test-token');assert.equal(JSON.parse(options.body).conversation_id,'conversation');return {ok:true,json:async()=>({iceServers:[{urls:'turns:turn.cloudflare.com:5349',username:'temporary',credential:'temporary'}]})};},AbortSignal,SUPABASE_URL:'https://test.invalid',SUPABASE_PUBLISHABLE_KEY:'test-public-key',setInterval:fn=>{const id=++timerId;timers.set(id,fn);return id;},clearInterval:id=>timers.delete(id),setTimeout:(fn,ms)=>{if(!ms){queueMicrotask(fn);return 0;}const id=++timerId;timers.set(id,fn);return id;},clearTimeout:id=>timers.delete(id),alert:message=>{get('alert').textContent=message;}};
  vm.createContext(ctx);vm.runInContext(code,ctx);
- return {api:window.clAudioCalls,get,streams,peers,events,sb,makeStream,micCount:()=>micCalls,deny:()=>{denyMic=true;},delayMic:promise=>{pendingMic=promise;},setInsecure:()=>{window.isSecureContext=false;}};
+ if(options.routing){get('clAudioRemote').sinkId='';get('clAudioRemote').setSinkId=async id=>{if(id==='denied')throw new Error('Denied');get('clAudioRemote').sinkId=id;};navigator.mediaDevices.enumerateDevices=async()=>[{kind:'audiooutput',deviceId:'speaker-1',label:'Speakers'},{kind:'audiooutput',deviceId:'headset-1',label:'Headset'}];}
+ return {api:window.clAudioCalls,get,streams,peers,events,sb,makeStream,sound,toolbars,micCount:()=>micCalls,deny:()=>{denyMic=true;},delayMic:promise=>{pendingMic=promise;},setInsecure:()=>{window.isSecureContext=false;}};
 }
 (async()=>{
  const db=server(),customer=page(db.client('customer')),worker=page(db.client('worker'));await tick();
@@ -103,9 +112,21 @@ function page(sb){
  await losingDevice.api.accept();await tick();
  assert.equal(losingDevice.get('clAudioStatus').textContent,'Answered on another device','A genuinely different accepted answer must still release this device');
  assert.equal(losingDevice.streams[0].track.stopped,true);
+ const audioDB=server(),audioCaller=page(audioDB.client('customer')),receiver=page(audioDB.client('worker'),{sound:true,routing:true});await tick();
+ assert.equal(receiver.toolbars[0].children.length,1,'Both dashboards need an explicit enable/test sound control');
+ await receiver.toolbars[0].children[0].click();await tick();assert.equal(receiver.sound.context.state,'running');assert.equal(receiver.sound.oscillators.length,2,'Test sound must create an audible dual tone');
+ await audioCaller.api.start('conversation');await tick();assert.ok(receiver.sound.oscillators.length>=4,'Incoming call must ring after sound is unlocked');assert.equal(receiver.micCount(),0);
+ await receiver.api.accept();await tick();assert.ok(receiver.sound.oscillators.every(o=>o.stopped),'Answering must stop every ringtone oscillator');
+ receiver.get('clAudioOutput').click();await tick();assert.equal(receiver.get('clAudioOutputSelect').hidden,false);assert.equal(receiver.get('clAudioOutputSelect').children.length,3);
+ receiver.get('clAudioOutputSelect').value='headset-1';await receiver.get('clAudioOutputSelect').listeners.change();await tick();assert.equal(receiver.get('clAudioRemote').sinkId,'headset-1');
+ receiver.get('clAudioOutputSelect').value='denied';await receiver.get('clAudioOutputSelect').listeners.change();await tick();assert.equal(receiver.get('clAudioRemote').sinkId,'headset-1');assert.match(receiver.get('clAudioOutputStatus').textContent,/Could not switch/);
+ audioCaller.get('clAudioOutput').click();await tick();assert.match(audioCaller.get('clAudioOutputStatus').textContent,/does not offer speaker\/earpiece switching/,'Unsupported phones must get honest guidance instead of a fake speaker toggle');
+ await receiver.api.end();await tick();assert.equal(receiver.get('clAudioOutputPanel').hidden,true);
+ const blockedOptions={sound:true,resumeDenied:true},blocked=page(server().client('worker'),blockedOptions);await tick();await blocked.toolbars[0].children[0].click();await tick();assert.match(blocked.toolbars[0].children[0].textContent,/Tap again/);assert.equal(blocked.sound.oscillators.length,0,'Blocked autoplay must never be labeled as enabled');
+ blockedOptions.resumeDenied=false;await blocked.toolbars[0].children[0].click();await tick();assert.equal(blocked.sound.oscillators.length,2);
  assert.equal((html.match(/data-cl-audio-start="(?:customer|worker)"/g)||[]).length,2);
  const isolation=[...html.matchAll(/body\.(?:worker|customer|admin)-dashboard-mode\s*>\s*\*([^{}]+)\{\s*display\s*:\s*none\s*!important/gi)];
  assert.ok(isolation.length>=4,'Dashboard isolation rules must be covered by the call visibility check');
  assert.ok(isolation.every(match=>match[1].includes(':not(#clAudioCallRoot)')),'Dashboard isolation must preserve the shared incoming call panel');
- console.log('PASS: named incoming calls, consent before microphone, offer/answer and buffered candidates, mute, minimize for messages, end/decline cleanup, cancel during permission prompt, microphone denial, HTTPS requirement, network failure cleanup. WebRTC is mocked; real-device audio still needs testing.');
+ console.log('PASS: ringtone enable/test, incoming tone and cleanup, blocked autoplay recovery, supported output switching, failed routing and unsupported-device guidance; named incoming calls, consent before microphone, offer/answer and buffered candidates, mute, minimize for messages, end/decline cleanup, cancel during permission prompt, microphone denial, HTTPS requirement, network failure cleanup. WebRTC is mocked; real-device audio still needs testing.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
