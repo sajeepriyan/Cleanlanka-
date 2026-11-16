@@ -38,6 +38,8 @@ function page(sb, options={}){
   set innerHTML(value){for(const match of value.matchAll(/<[^>]+\bid="([^"]+)"([^>]*)>/g)){const e=new Element(match[1]);e.hidden=/\bhidden\b/.test(match[2]);}}
   addEventListener(name,fn){this.listeners[name]=fn;}
   setAttribute(name,value){this[name]=value;}
+  getAttribute(name){return this[name]??null;}
+  removeAttribute(name){delete this[name];}
   appendChild(child){this.children.push(child);return child;}
   append(...children){this.children.push(...children);}
   replaceChildren(...children){this.children=children;}
@@ -122,7 +124,7 @@ function page(sb, options={}){
  receiver.get('clAudioOutputSelect').value='denied';await receiver.get('clAudioOutputSelect').listeners.change();await tick();assert.equal(receiver.get('clAudioRemote').sinkId,'headset-1');assert.match(receiver.get('clAudioOutputStatus').textContent,/Could not switch/);
  audioCaller.get('clAudioOutput').click();await tick();assert.match(audioCaller.get('clAudioOutputStatus').textContent,/does not offer speaker\/earpiece switching/,'Unsupported phones must get honest guidance instead of a fake speaker toggle');
  await receiver.api.end();await tick();assert.equal(receiver.get('clAudioOutputPanel').hidden,true);
- const blockedOptions={sound:true,resumeDenied:true},blocked=page(server().client('worker'),blockedOptions);await tick();await blocked.toolbars[0].children[0].click();await tick();assert.match(blocked.toolbars[0].children[0].textContent,/Tap again/);assert.equal(blocked.sound.oscillators.length,0,'Blocked autoplay must never be labeled as enabled');
+ const blockedOptions={sound:true,resumeDenied:true},blocked=page(server().client('worker'),blockedOptions);await tick();await blocked.toolbars[0].children[0].click();await tick();assert.match(blocked.toolbars[0].children[0].getAttribute('aria-label'),/Tap again/);assert.equal(blocked.sound.oscillators.length,0,'Blocked autoplay must never be labeled as enabled');
  blockedOptions.resumeDenied=false;await blocked.toolbars[0].children[0].click();await tick();assert.equal(blocked.sound.oscillators.length,2);
  assert.equal((html.match(/data-cl-audio-start="(?:customer|worker)"/g)||[]).length,2);
  const isolation=[...html.matchAll(/body\.(?:worker|customer|admin)-dashboard-mode\s*>\s*\*([^{}]+)\{\s*display\s*:\s*none\s*!important/gi)];
@@ -130,3 +132,4 @@ function page(sb, options={}){
  assert.ok(isolation.every(match=>match[1].includes(':not(#clAudioCallRoot)')),'Dashboard isolation must preserve the shared incoming call panel');
  console.log('PASS: ringtone enable/test, incoming tone and cleanup, blocked autoplay recovery, supported output switching, failed routing and unsupported-device guidance; named incoming calls, consent before microphone, offer/answer and buffered candidates, mute, minimize for messages, end/decline cleanup, cancel during permission prompt, microphone denial, HTTPS requirement, network failure cleanup. WebRTC is mocked; real-device audio still needs testing.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
+

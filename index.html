@@ -5868,6 +5868,17 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
     finally { btn.disabled = false; }
   });
 
+  function workerProfileStatusMessage(profile) {
+    if (!profile) return 'Your worker profile is not available yet. Refresh the page or contact Clean Lanka support.';
+    const messages = {
+      pending: 'Your worker profile is loaded. Your application is waiting for administrator review.',
+      approved: 'Your worker profile is approved. Manage your availability, jobs and messages from this dashboard.',
+      more_info_required: 'Your worker application needs more information before approval. Review your profile and documents.',
+      rejected: 'Your worker application was rejected. Contact Clean Lanka support if you need help.'
+    };
+    return messages[profile.verification_status] || 'Your worker profile is loaded.';
+  }
+
   async function loadWorkerDashboard(user) {
     window.clPrepareAccountDashboard?.('worker');
     const dashboard = document.getElementById('workerDashboard');
@@ -5953,13 +5964,9 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
       ? 'px-4 py-2 rounded-full bg-green-100 text-green-800 text-sm font-bold'
       : 'px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold';
 
-    if (profile) {
-      dashboardMessage.textContent = error
-        ? 'Showing the registration details saved with your account. The database profile could not be read.'
-        : 'Your worker profile is loaded. Your application is waiting for administrator review.';
-    } else {
-      dashboardMessage.textContent = 'Showing the details saved during registration. Your application remains pending review.';
-    }
+    dashboardMessage.textContent = error
+      ? 'Your worker profile could not be loaded. Refresh the page or contact Clean Lanka support.'
+      : workerProfileStatusMessage(profile);
     if (window.cleanLankaLoadWorkerFeatures) await window.cleanLankaLoadWorkerFeatures(user);
     if(profile?.id){
       const reviewHost=document.getElementById('clWorkerDashboardReviews');
@@ -6418,6 +6425,7 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
       if (error) throw error;
       adminWorkerCache = Array.isArray(data) ? data : [];
       renderAdminWorkerList();
+      await loadAdminDashboardSummary().catch(error => console.warn('Admin counts could not be refreshed:', error));
     } catch (error) {
       adminWorkerListMessage.textContent = `Could not load worker profiles: ${error.message || 'Check worker view permission.'}`;
     }
@@ -8995,8 +9003,8 @@ document.addEventListener('DOMContentLoaded',function(){
      profilePhotoUrl=data?.avatar_url||data?.profile_photo_url||data?.profile_image_url||data?.photo_url||user.user_metadata?.avatar_url||user.user_metadata?.picture||'';
      if(data?.full_name){current={...current,user_metadata:{...(current.user_metadata||{}),full_name:data.full_name}};}
    } else if(role==='customer'){
-     const {data,error}=await window.supabaseClient.from('customer_profiles').select('avatar_url,profile_photo_url').eq('user_id',user.id).maybeSingle();
-     if(error)throw error;profilePhotoUrl=data?.avatar_url||data?.profile_photo_url||user.user_metadata?.avatar_url||user.user_metadata?.picture||'';
+     const {data,error}=await window.supabaseClient.storage.from('customer-profile-photos').createSignedUrl(user.id+'/avatar',3600);
+     profilePhotoUrl=(!error&&data?.signedUrl)||user.user_metadata?.avatar_url||user.user_metadata?.picture||'';
    }
  }catch(e){console.warn('Homepage profile photo could not be loaded:',e);profilePhotoUrl=user.user_metadata?.avatar_url||user.user_metadata?.picture||user.user_metadata?.profile_photo_url||'';}
  if(token===refreshToken)render();}
