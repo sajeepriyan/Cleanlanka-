@@ -10201,9 +10201,34 @@ document.addEventListener('DOMContentLoaded',function(){
  iconButton('clAudioOutput',speakerIcon,'Choose audio output');
  iconButton('clAudioOutputChoose',speakerIcon,'Choose audio device');
  $('clAudioOutputSelect').setAttribute('aria-label','Call audio device');
- const canRouteCallAudio=typeof remoteAudio.setSinkId==='function';
- $('clAudioOutput').disabled=!canRouteCallAudio;
- if(!canRouteCallAudio){$('clAudioOutput').title='Audio output is controlled by your phone';$('clAudioOutput').setAttribute('aria-label',$('clAudioOutput').title);}
+ // Output state describes a confirmed device, never an assumed speaker state.
+ $('clAudioOutput').disabled=false;
+ function updateOutputButton(s) {
+  const label=s?.outputKind==='speaker'?'Speaker on':s?.outputKind==='earpiece'?'Speaker off · Earpiece':'Choose audio output';
+  iconButton('clAudioOutput',speakerIcon,label);
+  if(s?.outputKind==='speaker'||s?.outputKind==='earpiece')$('clAudioOutput').setAttribute('aria-pressed',String(s.outputKind==='speaker'));
+  else $('clAudioOutput').removeAttribute('aria-pressed');
+ }
+ async function preferPrivateAudio(s) {
+  s.outputKind='system';s.earpieceId=null;s.speakerId=null;
+  try { if(navigator.audioSession){s.previousAudioSessionType=navigator.audioSession.type;navigator.audioSession.type='play-and-record';} } catch(_){}
+  // A running ringtone context must not keep call audio in media playback mode.
+  try { if(audioContext?.state==='running')await audioContext.suspend(); } catch(_){}
+  if(active!==s)return;
+  if(typeof remoteAudio.setSinkId==='function'){
+   try {
+    await remoteAudio.setSinkId('');
+    const devices=await navigator.mediaDevices.enumerateDevices();
+    if(active!==s)return;
+    const outputs=devices.filter(d=>d.kind==='audiooutput'&&d.deviceId);
+    const ear=outputs.find(d=>/earpiece|receiver|handset/i.test(d.label));
+    const speaker=outputs.find(d=>/speaker|loudspeaker/i.test(d.label)&&! /head|ear|bluetooth/i.test(d.label));
+    s.earpieceId=ear?.deviceId||null;s.speakerId=speaker?.deviceId||null;
+    if(ear){await remoteAudio.setSinkId(ear.deviceId);if(active===s)s.outputKind='earpiece';}
+   }catch(_){}
+  }
+  if(active===s)updateOutputButton(s);
+ }
 
 
  function setVisible(id, yes) { $(id).hidden = !yes; }
@@ -10237,6 +10262,7 @@ document.addEventListener('DOMContentLoaded',function(){
   iconButton('clAudioMute',s.muted ? mutedIcon : micIcon,s.muted ? 'Unmute microphone' : 'Mute microphone');
   $('clAudioMute').setAttribute('aria-pressed', String(!!s.muted));
   setVisible('clAudioOutput', !!s.stream && !finished);
+  updateOutputButton(s);
   setVisible('clAudioRingEnable', incoming && audioContext?.state!=='running');
   if(finished){$('clAudioOutputPanel').hidden=true;$('clAudioOutput').setAttribute('aria-expanded','false');}
   setVisible('clAudioClose', finished);
@@ -10270,6 +10296,7 @@ document.addEventListener('DOMContentLoaded',function(){
   s.stream?.getTracks().forEach(track => track.stop());
   if (remoteAudio.srcObject) remoteAudio.srcObject.getTracks().forEach(track => track.stop());
   remoteAudio.pause(); remoteAudio.srcObject = null;
+  try {if(navigator.audioSession&&s.previousAudioSessionType!==undefined)navigator.audioSession.type=s.previousAudioSessionType;}catch(_){}
   s.pendingCandidates.length = 0;
  }
  function finish(s, message, error = '') {
@@ -10337,9 +10364,12 @@ document.addEventListener('DOMContentLoaded',function(){
  }
  async function getMicrophone(s) {
   mediaSupported();
+  stopRing();
   const stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
   if (active !== s) { stream.getTracks().forEach(track=>track.stop()); return false; }
-  s.stream = stream; return true;
+  s.stream = stream;
+  await preferPrivateAudio(s);
+  return active===s;
  }
  async function createPeer(s) {
   const {data:{session},error:sessionError} = await sb.auth.getSession();
@@ -10555,6 +10585,7 @@ document.addEventListener('DOMContentLoaded',function(){
   setVisible('clAudioRingEnable', active?.phase==='incoming' && !ready);
  }
  async function unlockAudio() {
+  if(active?.stream)return false;
   try {
    const Constructor=window.AudioContext||window.webkitAudioContext;
    if(!audioContext&&Constructor){audioContext=new Constructor();audioContext.onstatechange=updateRingControls;}
@@ -10606,7 +10637,7 @@ document.addEventListener('DOMContentLoaded',function(){
   try {
    const devices=await navigator.mediaDevices.enumerateDevices();if(active!==s)return;
    const outputs=devices.filter(device=>device.kind==='audiooutput'&&device.deviceId);
-   const option=document.createElement('option');option.value='';option.textContent='Phone / system default';select.appendChild(option);
+   const option=document.createElement('option');option.value='';option.textContent='System default (phone controls output)';select.appendChild(option);
    for(const [index,device] of outputs.entries()){
     const item=document.createElement('option');item.value=device.deviceId;item.textContent=device.label||'Audio device '+(index+1);select.appendChild(item);
    }
@@ -10618,12 +10649,18 @@ document.addEventListener('DOMContentLoaded',function(){
   try {
    await remoteAudio.setSinkId(deviceId);
    if(active!==s)return;
+   s.outputKind=deviceId===s.earpieceId?'earpiece':deviceId===s.speakerId?'speaker':'system';
+   updateOutputButton(s);
    $('clAudioOutputStatus').textContent='Call audio: '+label+'. Use your phone volume buttons to adjust volume.';
    await playRemote(s);
   }catch(_){if(active===s){$('clAudioOutputSelect').value=remoteAudio.sinkId||'';$('clAudioOutputStatus').textContent='Could not switch audio device. Your call continues on the current output.';}}
  }
  $('clAudioOutput').addEventListener('click',()=>{
   const s=active;if(!s?.stream)return;
+  if(s.earpieceId&&s.speakerId){
+   const toSpeaker=s.outputKind!=='speaker';
+   void useAudioOutput(toSpeaker?s.speakerId:s.earpieceId,toSpeaker?'Speaker':'Earpiece',s);return;
+  }
   const panel=$('clAudioOutputPanel');panel.hidden=!panel.hidden;
   $('clAudioOutput').setAttribute('aria-expanded',String(!panel.hidden));
   if(!panel.hidden)void loadAudioOutputs(s);
