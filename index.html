@@ -5074,6 +5074,25 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
 </section>
 </div>
 
+<style id="cl-registration-confirmation-style">
+#customerRegisterForm[hidden],#workerRegisterForm[hidden],.cl-email-confirmation[hidden]{display:none!important}
+.cl-email-confirmation{margin:24px 0 12px;padding:24px;box-sizing:border-box;border:2px solid #9cd5b6;border-radius:22px;background:#f2fbf6;text-align:center;color:#173d2a;scroll-margin-top:24px;outline:none}
+.cl-email-confirmation .cl-confirm-step{font-size:12px;font-weight:850;letter-spacing:1px;color:#086b40}
+.cl-email-confirmation .cl-confirm-icon{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;margin:18px auto;background:#d7f3e3;color:#086b40;font-size:32px}
+.cl-email-confirmation h3{margin:0 0 16px;font-size:clamp(23px,5vw,29px);font-weight:850;line-height:1.3;color:#104c30}
+:is(#customer-register,#worker-register) .cl-email-confirmation .cl-confirm-label{margin:0;font-size:14px!important;color:#4c6758}
+.cl-email-confirmation .cl-confirm-email{display:block;width:100%;box-sizing:border-box;margin:9px 0 15px;padding:14px 12px;border:1px solid #bddfcc;border-radius:12px;background:white;color:#075e37;font-size:20px;font-weight:850;overflow-wrap:anywhere}
+:is(#customer-register,#worker-register) .cl-email-confirmation .cl-confirm-required{margin:0 0 18px;color:#814500;font-size:16px!important;font-weight:800}
+.cl-email-confirmation ol{margin:0 0 18px;padding-left:24px;text-align:left;font-size:16px;line-height:1.65;color:#203e2d}
+.cl-email-confirmation li{padding-left:4px;margin:10px 0}
+:is(#customer-register,#worker-register) .cl-email-confirmation .cl-confirm-translation{margin:8px 0;color:#456452;font-size:13px!important;line-height:1.65!important}
+:is(#customer-register,#worker-register) .cl-email-confirmation .cl-confirm-review{margin:16px 0;font-size:14px!important;font-weight:700;color:#385943}
+.cl-confirm-actions{margin-top:18px}
+.cl-email-confirmation button{width:100%;box-sizing:border-box;margin-top:10px;white-space:normal;line-height:1.4}
+.cl-email-confirmation .cl-confirm-login{padding:13px 16px;border:0;border-radius:12px;background:#087b47;color:white;font-size:16px;font-weight:800;min-height:48px}
+.cl-email-confirmation .cl-confirm-back{padding:10px 12px;border:0;background:transparent;color:#355944;text-decoration:underline;font-size:14px!important;min-height:44px!important}
+@media(max-width:480px){.cl-email-confirmation{padding:20px 14px}.cl-email-confirmation .cl-confirm-email{font-size:18px}.cl-email-confirmation ol{font-size:15px}}
+</style>
 <script>
   let activeWorkerProfileId = null;
   let activeWorkerUserId = null;
@@ -5370,6 +5389,60 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
     window.scrollTo({top:0, behavior:'smooth'});
   }
 
+  function showRegistrationConfirmation(role, email) {
+    const form = document.getElementById(role + 'RegisterForm');
+    const message = document.getElementById(role + 'RegisterMessage');
+    const resend = document.getElementById(role + 'ResendConfirmation');
+    let panel = document.getElementById(role + 'ConfirmationPanel');
+    if (!panel) {
+      panel = document.createElement('aside');
+      panel.id = role + 'ConfirmationPanel';
+      panel.className = 'cl-email-confirmation';
+      panel.tabIndex = -1;
+      panel.setAttribute('aria-labelledby', role + 'ConfirmationHeading');
+      panel.innerHTML = '<div class="cl-confirm-step">STEP 2 OF 3 · CONFIRM YOUR EMAIL</div>' +
+        '<div class="cl-confirm-icon" aria-hidden="true">✉</div>' +
+        '<h3 id="' + role + 'ConfirmationHeading">Check your email to finish registration</h3>' +
+        '<p class="cl-confirm-label">Confirmation email requested for:</p>' +
+        '<strong class="cl-confirm-email"></strong>' +
+        '<p class="cl-confirm-required">You must confirm your email before you can log in.</p>' +
+        '<ol><li>Open your email <strong>Inbox</strong>. Also check <strong>Spam / Junk</strong>.</li>' +
+        '<li>Open the email from <strong>Clean Lanka</strong> and tap <strong>Confirm email address</strong>.</li>' +
+        '<li>Return to Clean Lanka and <strong>log in</strong>.</li></ol>' +
+        '<p class="cl-confirm-translation" lang="ta">உங்கள் மின்னஞ்சலில் வந்த Clean Lanka செய்தியைத் திறந்து, Confirm email address அழுத்திய பிறகு Login செய்யுங்கள்.</p>' +
+        '<p class="cl-confirm-translation" lang="si">Clean Lanka ඊමේල් පණිවිඩය විවෘත කර Confirm email address ඔබා, පසුව Login වන්න.</p>' +
+        (role === 'worker' ? '<p class="cl-confirm-review">After email confirmation, your Worker application still needs Admin approval.</p>' : '') +
+        '<div class="cl-confirm-feedback"></div><div class="cl-confirm-actions"></div>' +
+        '<button type="button" class="cl-confirm-login">I confirmed my email — Go to Login</button>' +
+        '<button type="button" class="cl-confirm-back">Back to registration</button>';
+      form.after(panel);
+      panel.querySelector('.cl-confirm-login').addEventListener('click', () => {
+        document.body.classList.remove('registration-mode');
+        openLoginPage();
+        document.getElementById('loginEmail').value = panel.querySelector('.cl-confirm-email').textContent;
+        document.getElementById('loginRole').value = role;
+      });
+      panel.querySelector('.cl-confirm-back').addEventListener('click', () => {
+        panel.hidden = true;
+        form.hidden = false;
+        form.append(message, resend);
+        resend.dataset.email = '';
+        showMessage(message, 'Check your email address before submitting again. If it is correct, use Resend Confirmation Email.');
+        document.getElementById(role + 'Email').focus();
+      });
+    }
+    panel.querySelector('.cl-confirm-email').textContent = email;
+    panel.querySelector('.cl-confirm-feedback').append(message);
+    panel.querySelector('.cl-confirm-actions').append(resend);
+    resend.classList.remove('hidden');
+    resend.dataset.email = email;
+    document.getElementById(role + 'Email').value = email;
+    form.hidden = true;
+    panel.hidden = false;
+    panel.scrollIntoView({behavior:'smooth', block:'start'});
+    panel.focus({preventScroll:true});
+  }
+
   function showMessage(element, message, isError = false) {
     element.textContent = message;
     element.classList.toggle('text-red-600', isError);
@@ -5429,6 +5502,7 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
         showMessage(message, 'Registration submitted. Please confirm your email, then sign in using the Login section.');
         if (role === 'customer') { const resend = document.getElementById('customerResendConfirmation'); if (resend) { resend.dataset.email = email; resend.classList.remove('hidden'); } }
         form.reset();
+        showRegistrationConfirmation(role, email);
       } catch (error) {
         showMessage(message, error.message || 'Registration failed. Please try again.', true);
       } finally {
@@ -5450,6 +5524,7 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
       });
       if (error) throw error;
       showMessage(message, 'Confirmation email requested again. Check Inbox and Spam. If it does not arrive, email delivery settings must be checked.');
+      showRegistrationConfirmation('customer', email);
     } catch (error) {
       showMessage(message, error.message || 'Could not resend confirmation email.', true);
     } finally { customerResend.disabled = false; }
@@ -5483,6 +5558,7 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
       if (error) throw error;
       workerResendAfter = Date.now() + 60000;
       showMessage(message, 'Confirmation email requested for ' + email + '. Check Inbox and Spam. Use the newest confirmation link. If no email arrives, contact Clean Lanka support with this email address.');
+      showRegistrationConfirmation('worker', email);
       workerResend.textContent = 'Please wait 60 seconds before resending';
       setTimeout(() => {
         workerResend.disabled = false;
@@ -5562,6 +5638,7 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
       showMessage(message, 'Worker registration submitted. Confirm your email, then sign in from the Login section. Your account will remain pending review.' + (window.clSelectedWorkerJob() ? ' The job you selected will be waiting in Dashboard → Find Jobs.' : ''));
       workerFormClean.reset();
       document.getElementById('workerEmail').value = email;
+      showRegistrationConfirmation('worker', email);
     } catch (error) {
       showMessage(message, error.message || 'Registration failed. Please try again.', true);
     } finally {
@@ -11146,3 +11223,4 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
 </script>
+
