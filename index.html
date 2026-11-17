@@ -8,33 +8,115 @@
 <html lang="en"><head>
 <script id="cl-navigation-keyboard-dismiss-20261117">
 (function () {
-  function dismissKeyboard() {
-    const active = document.activeElement;
-    if (!active || !(active.matches('input, textarea') || active.isContentEditable)) return;
-    active.blur();
-    try { navigator.virtualKeyboard?.hide(); } catch (error) {}
+  const viewport = window.visualViewport;
+  const touchDevice = navigator.maxTouchPoints > 0 || /Android/i.test(navigator.userAgent);
+  let baselineHeight = Math.max(window.innerHeight || 0, viewport?.height || 0);
+  let baselineWidth = window.innerWidth;
+  let editing = false;
+  let keyboardSeen = false;
+  let ignoreFocusUntil = 0;
+  let currentEntry = {state: history.state, url: location.href};
+
+  function isEditor(element) {
+    if (!element || element.readOnly || element.disabled) return false;
+    return element.isContentEditable || element.matches('textarea, input:not([type]), input[type="text"], input[type="search"], input[type="email"], input[type="password"], input[type="tel"], input[type="url"], input[type="number"]');
   }
-  // Capture runs before existing route restorers hide or replace the focused field.
-  // Leave history and all route handlers intact; native Back can dismiss the IME first.
-  window.addEventListener('popstate', dismissKeyboard, true);
-  window.addEventListener('hashchange', dismissKeyboard, true);
+  function keyboardVisible() {
+    if (!touchDevice || !editing) return false;
+    if (navigator.virtualKeyboard?.boundingRect?.height > 0) return true;
+    if (viewport && viewport.scale > 1.1) return false;
+    const height = viewport?.height || window.innerHeight;
+    return baselineHeight - height > Math.max(120, baselineHeight * 0.18);
+  }
+  function dismissKeyboard() {
+    editing = false;
+    keyboardSeen = false;
+    ignoreFocusUntil = Date.now() + 250;
+    const active = document.activeElement;
+    if (isEditor(active)) active.blur();
+    try { navigator.virtualKeyboard?.hide(); } catch (error) {}
+    // Explicitly give Chrome a non-editable focus target, including when the
+    // old input was removed before the history event and activeElement is body.
+    if (touchDevice && document.body) {
+      const sink = document.createElement('div');
+      sink.tabIndex = -1;
+      sink.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;';
+      document.body.appendChild(sink);
+      sink.focus({preventScroll: true});
+      sink.blur();
+      sink.remove();
+    }
+  }
+  // Remember the exact current entry, including modal/chat route flags. Do not
+  // add history entries when inputs gain focus or the keyboard opens/closes.
+  for (const method of ['pushState', 'replaceState']) {
+    const original = history[method];
+    history[method] = function () {
+      const result = original.apply(this, arguments);
+      currentEntry = {state: history.state, url: location.href};
+      return result;
+    };
+  }
+  window.addEventListener('popstate', function (event) {
+    const previousEntry = currentEntry;
+    const keyboardOnly = keyboardVisible();
+    currentEntry = {state: history.state, url: location.href};
+    if (keyboardOnly) {
+      // Chrome has already traversed history. Restore the entry we were editing
+      // before letting any legacy router hide panels or change the screen.
+      try {
+        history.pushState(previousEntry.state, '', previousEntry.url);
+        event.stopImmediatePropagation();
+      } catch (error) {
+        // If restoration is unavailable, still release the IME and let Back run.
+      }
+    }
+    dismissKeyboard();
+  }, true);
   window.addEventListener('pagehide', dismissKeyboard, true);
+  document.addEventListener('pointerdown', function () { ignoreFocusUntil = 0; }, true);
+  document.addEventListener('focusin', function (event) {
+    if (!isEditor(event.target)) return;
+    if (Date.now() < ignoreFocusUntil) { event.target.blur(); return; }
+    editing = true;
+    keyboardSeen = keyboardVisible();
+  }, true);
+  document.addEventListener('focusout', function () {
+    queueMicrotask(function () {
+      // Chrome can remove focus before dispatching popstate while the IME is
+      // still visible. Retain that session until its viewport actually expands.
+      if (!isEditor(document.activeElement) && !keyboardSeen) editing = false;
+    });
+  }, true);
+  function updateViewport() {
+    const height = viewport?.height || window.innerHeight;
+    const width = window.innerWidth;
+    if (Math.abs(width - baselineWidth) > 100) {
+      baselineWidth = width;
+      baselineHeight = Math.max(window.innerHeight || 0, height);
+      keyboardSeen = false;
+      return;
+    }
+    if (!editing) baselineHeight = Math.max(baselineHeight, height);
+    const visible = keyboardVisible();
+    if (keyboardSeen && !visible) dismissKeyboard();
+    else keyboardSeen = visible;
+  }
+  viewport?.addEventListener('resize', updateViewport);
+  window.addEventListener('resize', updateViewport);
   document.addEventListener('click', function (event) {
     if (event.target?.closest?.('#clDashboardHomeButton, #clServiceBack, #clOfficialChatBack, .cl074-back, .cl-tab-back, .login-back-home, .cl-confirm-back, [onclick="closeAdminLoginPage()"], [onclick="closeRegistration()"]')) dismissKeyboard();
   }, true);
   function watchHiddenInput() {
-    // Also cover Admin tabs and programmatic navigation without a history event.
     new MutationObserver(function () {
       const active = document.activeElement;
-      if (active && (active.matches('input, textarea') || active.isContentEditable) &&
-          (!active.getClientRects().length || getComputedStyle(active).visibility === 'hidden')) {
-        dismissKeyboard();
-      }
+      if (isEditor(active) && (!active.getClientRects().length || getComputedStyle(active).visibility === 'hidden')) dismissKeyboard();
     }).observe(document.body, {subtree: true, attributes: true, attributeFilter: ['class', 'style', 'hidden']});
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watchHiddenInput, {once: true});
   else watchHiddenInput();
 })();
+
 </script>
 
 <!-- Detect reset links before external libraries can delay the recovery screen. -->
