@@ -3773,7 +3773,7 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
 }
 </style>
 </head>
-<body translate="no" class="notranslate bg-white text-on-surface antialiased font-sans">
+<body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
 <div class="bg-primary text-white py-2.5 px-4 sm:px-8 text-[15px] border-b border-primary-dark/30">
 <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
@@ -3803,7 +3803,7 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
  <div class="cl-home-nav-inner">
   <a class="cl-home-brand" href="#top" aria-label="Clean Lanka Home"><img alt="Clean Lanka Sri Lanka leaf logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSh7GcRie2m5v1OiH4IUu5lxi4Qmpn6h_Pep3G-39-hWm7AbRMjRiSaW8SsexcB7a_7tX9SAvOol6H691xnReL6mdZRfnbYcd-7BNMTw7Gg4htwndima_BEOAvVMt9HiksX1Ri23atqe1GVO1CKI16GOVKspLITaWrltY2U16g_mM9bw1hqxe2nZo7REvfttd1v1-sltMDGf-rk3tCAAVbMLB9FiHnjPpY0SBgHgnSEQYH5v3C8xoNg"><div><div class="cl-home-brand-name">Clean <span>Lanka</span></div><div class="cl-home-brand-sub">Home Services Marketplace</div></div></a>
   <button id="clHomeAccountName" type="button" class="hidden" aria-label="Open my dashboard" style="align-items:center;gap:8px;border:1px solid #cfe7d8;background:#f0fdf4;color:#0f5132;border-radius:999px;padding:10px 15px;font-weight:900;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Open my dashboard"><span aria-hidden="true">👤</span><span id="clHomeAccountNameText">My Dashboard</span></button>
-  <button id="clHomeMenuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="clHomeMainMenu">☰</button><nav id="clHomeMainMenu" class="cl-home-navlinks" aria-label="Main navigation"><a href="#top">⌂ Home</a><a href="#services-section">Services</a><a href="#homeWorkersHeading">Find Workers</a><a href="#homeJobsHeading">Job Opportunities</a><a href="#worker-register" onclick="openRegistration('worker');return false;">For Workers</a><a href="#customer-register" onclick="openRegistration('customer');return false;">For Customers</a><button type="button" data-cl-open-live-chat class="font-extrabold text-blue-800" aria-label="Open Live Chat">Live Chat</button><a href="#contact">Contact Us</a></nav>
+  <nav class="cl-home-navlinks" aria-label="Main navigation"><a href="#top">⌂ Home</a><a href="#services-section">Services</a><a href="#homeWorkersHeading">Find Workers</a><a href="#homeJobsHeading">Job Opportunities</a><a href="#worker-register" onclick="openRegistration('worker');return false;">For Workers</a><a href="#customer-register" onclick="openRegistration('customer');return false;">For Customers</a><button type="button" data-cl-open-live-chat class="font-extrabold text-blue-800" aria-label="Open Live Chat">Live Chat</button><a href="#contact">Contact Us</a></nav>
   <label class="cl079-language" aria-label="Choose language"><span aria-hidden="true">🌐</span><select id="cl079Language" aria-label="Language"><option value="en">English</option><option value="si">සිංහල</option><option value="ta">தமிழ்</option></select></label><div class="cl-home-nav-actions"><button type="button" class="cl-home-login" onclick="openLoginPage()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="8" r="3"/><path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2H4Z"/></svg> Login</button></div>
  </div>
 </header>
@@ -3816,7 +3816,7 @@ body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([
   <p class="cl-hero-sub">Find skilled professionals for your home, family and everyday needs.</p>
   <p class="cl-hero-tag">Find Workers · Explore Jobs · Connect with Confidence</p>
   <form id="heroMarketplaceSearchForm" class="cl-hero-search" onsubmit="event.preventDefault();runHomeMarketplaceSearch();">
-   <input id="hero-service-search" type="search" list="cleanLankaSearchSuggestions" autocomplete="off" placeholder="What service do you need?" aria-label="Search any service or job">
+   <input id="hero-service-search" type="search" list="cleanLankaSearchSuggestions" autocomplete="off" placeholder="Search for services... (e.g. Electrician, Plumber, Cleaner, House Driver)" aria-label="Search any service or job">
    <datalist id="cleanLankaSearchSuggestions"><option value="House driver"><option value="House security guard"><option value="House maid"><option value="Home cleaning"><option value="Electrician"><option value="Plumber"><option value="Van driver"><option value="Car washing"><option value="Pet care"></datalist>
    <select id="hero-district-selector" aria-label="Select district"><option value="">All Sri Lanka</option><option>Ampara</option><option>Anuradhapura</option><option>Badulla</option><option>Batticaloa</option><option>Colombo</option><option>Galle</option><option>Gampaha</option><option>Hambantota</option><option>Jaffna</option><option>Kalutara</option><option>Kandy</option><option>Kegalle</option><option>Kilinochchi</option><option>Kurunegala</option><option>Mannar</option><option>Matale</option><option>Matara</option><option>Monaragala</option><option>Mullaitivu</option><option>Nuwara Eliya</option><option>Polonnaruwa</option><option>Puttalam</option><option>Ratnapura</option><option>Trincomalee</option><option>Vavuniya</option></select>
    <button type="submit"><span class="material-symbols-outlined align-middle">search</span> Search</button>
@@ -11224,91 +11224,3 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 })();
 </script>
 
-
-
-<style id="cl-responsive-home-20261117">
-/* One responsive homepage contract; scoped away from dashboards and dialogs. */
-body header.cl-home-nav{position:relative!important;height:auto!important;min-height:0!important;background:#fff!important;}
-body header.cl-home-nav > .cl-home-nav-inner{max-width:1280px!important;margin:auto!important;padding:14px 24px!important;gap:12px 20px!important;grid-template-columns:minmax(0,1fr) auto auto!important;grid-template-areas:"brand language actions" "links links links"!important;}
-body.cl-auth-home header.cl-home-nav > .cl-home-nav-inner{grid-template-columns:44px minmax(0,1fr) auto auto!important;grid-template-areas:"account brand language actions" "links links links links"!important;}
-body header.cl-home-nav .cl-home-brand{position:static!important;transform:none!important;gap:10px!important;}
-body header.cl-home-nav .cl-home-brand img{width:60px!important;height:60px!important;}
-body header.cl-home-nav .cl-home-brand-name{font-size:32px!important;letter-spacing:-1px!important;}
-body header.cl-home-nav .cl-home-brand-sub{font-size:12px!important;}
-body header.cl-home-nav #clHomeAccountName{position:static!important;transform:none!important;align-self:center!important;justify-self:start!important;margin:0!important;}
-body header.cl-home-nav .cl-home-navlinks{justify-content:center!important;flex-wrap:wrap!important;gap:8px 26px!important;overflow:visible!important;padding:10px 0 0!important;}
-body header.cl-home-nav .cl-home-navlinks > :is(a,button){font-size:14px!important;min-height:36px!important;display:inline-flex!important;align-items:center!important;}
-body header.cl-home-nav #clHomeMenuToggle{display:none!important;}
-body #top .cl-hero{min-height:0!important;overflow:hidden!important;}
-body #top .cl-hero-inner{max-width:1280px!important;padding:48px 24px 32px!important;text-align:left!important;}
-body #top .cl-hero h1{max-width:730px!important;font-size:clamp(38px,4.2vw,60px)!important;line-height:1.12!important;letter-spacing:-1.8px!important;margin:0!important;}
-body #top .cl-hero-sub{max-width:570px!important;font-size:19px!important;line-height:1.5!important;margin:16px 0 0!important;}
-body #top .cl-hero-tag{font-size:15px!important;line-height:1.5!important;margin:14px 0 24px!important;}
-body #top #heroMarketplaceSearchForm{width:100%!important;max-width:none!important;margin:0!important;grid-template-columns:minmax(0,1fr) 220px 170px!important;border:2px solid #9bd79c!important;border-radius:18px!important;padding:8px!important;gap:8px!important;}
-body #top #heroMarketplaceSearchForm :is(input,select,button){height:52px!important;min-height:52px!important;font-size:16px!important;border-radius:11px!important;}
-body #services-section{max-width:1280px!important;margin:auto!important;padding:28px 24px!important;}
-body #services-section .cl-cartoon-heading{font-size:25px!important;line-height:1.3!important;margin:0 0 18px!important;padding:0!important;}
-body #services-section .cl-home-cats{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:14px!important;padding:0!important;width:100%!important;}
-body #services-section .cl-home-cat{width:100%!important;min-width:0!important;height:auto!important;min-height:150px!important;padding:12px 8px!important;border-radius:16px!important;font-size:14px!important;line-height:1.3!important;}
-body #services-section .cl-cartoon-frame{width:100%!important;height:108px!important;max-width:120px!important;display:flex!important;align-items:center!important;justify-content:center!important;}
-body #services-section .cl-cartoon-frame :is(svg,img){width:100%!important;height:100%!important;object-fit:contain!important;}
-body #homeMarketplace .cl-market-wrap{width:100%!important;max-width:1280px!important;margin:auto!important;padding:12px 24px 40px!important;}
-body #homeMarketplace #homeWorkerResults{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important;}
-body #homeMarketplace #homeJobResults{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important;}
-@media(max-width:1000px){
- body #homeMarketplace #homeWorkerResults,body #homeMarketplace #homeJobResults{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
- body header.cl-home-nav .cl-home-navlinks{gap:6px 18px!important;}
- body #top #heroMarketplaceSearchForm{grid-template-columns:minmax(0,1fr) 180px 140px!important;}
-}
-@media(max-width:767px){
- body header.cl-home-nav > .cl-home-nav-inner{padding:10px 12px!important;gap:8px!important;grid-template-columns:minmax(0,1fr) auto 40px!important;grid-template-areas:"brand actions toggle" "language language language" "links links links"!important;}
- body.cl-auth-home header.cl-home-nav > .cl-home-nav-inner{grid-template-columns:36px minmax(0,1fr) auto 40px!important;grid-template-areas:"account brand actions toggle" "language language language language" "links links links links"!important;}
- body header.cl-home-nav .cl-home-brand img{width:40px!important;height:40px!important;}
- body header.cl-home-nav .cl-home-brand{gap:6px!important;}
- body header.cl-home-nav .cl-home-brand-name{font-size:22px!important;letter-spacing:-.7px!important;}
- body header.cl-home-nav .cl-home-brand-sub{font-size:8px!important;margin-top:4px!important;}
- body header.cl-home-nav #clHomeAccountName{width:34px!important;min-width:34px!important;max-width:34px!important;height:34px!important;}
- body header.cl-home-nav #clHomeAccountName :is(.cl-home-user-photo,.cl-home-user-fallback){width:34px!important;min-width:34px!important;height:34px!important;}
- body header.cl-home-nav .cl-home-nav-actions :is(button,a){min-height:40px!important;font-size:12px!important;padding:8px 10px!important;}
- body header.cl-home-nav #clHomeMenuToggle{grid-area:toggle!important;display:flex!important;align-items:center!important;justify-content:center!important;width:40px!important;height:40px!important;border:1px solid #d6e7dd!important;border-radius:10px!important;background:#f2faf5!important;color:#0f5132!important;font-size:22px!important;}
- body header.cl-home-nav .cl079-language{display:none!important;justify-self:start!important;padding:8px 10px!important;}
- body header.cl-home-nav .cl-home-navlinks{display:none!important;}
- body header.cl-home-nav.cl-menu-open .cl079-language{display:flex!important;}
- body header.cl-home-nav.cl-menu-open .cl-home-navlinks{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;padding:10px 0 0!important;}
- body header.cl-home-nav.cl-menu-open .cl-home-navlinks > :is(a,button){white-space:normal!important;border:0!important;border-radius:9px!important;padding:10px!important;min-height:44px!important;background:#f4f9f6!important;font-size:13px!important;line-height:1.4!important;}
- body #top .cl-hero-inner{padding:30px 16px 24px!important;}
- body #top .cl-hero h1{font-size:clamp(30px,8vw,42px)!important;line-height:1.14!important;letter-spacing:-1px!important;max-width:480px!important;}
- body #top .cl-hero-sub{max-width:440px!important;font-size:16px!important;line-height:1.5!important;margin-top:12px!important;}
- body #top .cl-hero-tag{font-size:13px!important;margin:12px 0 20px!important;}
- body #top #heroMarketplaceSearchForm{grid-template-columns:minmax(0,1fr) 115px!important;padding:8px!important;border-radius:16px!important;gap:8px!important;}
- body #top #heroMarketplaceSearchForm input{grid-column:1/-1!important;}
- body #top #heroMarketplaceSearchForm :is(input,select,button){font-size:14px!important;min-height:48px!important;height:48px!important;padding:0 12px!important;}
- body #services-section{padding:24px 16px!important;}
- body #services-section .cl-cartoon-heading{font-size:22px!important;margin-bottom:16px!important;}
- body #services-section .cl-home-cats{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;}
- body #services-section .cl-home-cat{min-height:124px!important;font-size:12px!important;padding:8px 4px!important;border-radius:12px!important;}
- body #services-section .cl-cartoon-frame{height:86px!important;}
- body #homeMarketplace .cl-market-wrap{padding:8px 16px 28px!important;}
- body #homeMarketplace .cl-find-worker-fields{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important;}
- body #homeMarketplace .cl-find-worker-fields :is(input,select,button){min-height:46px!important;font-size:14px!important;}
- body #homeMarketplace .cl-find-worker-banner{padding:18px 16px!important;gap:8px!important;flex-wrap:wrap!important;}
- body #homeMarketplace .cl-find-worker-banner-note{font-size:11px!important;}
- body #homeMarketplace .cl-market-heading{font-size:22px!important;}
-}
-@media(max-width:360px){
- body header.cl-home-nav .cl-home-brand img{display:none!important;}
- body header.cl-home-nav .cl-home-brand-name{font-size:21px!important;}
-}
-</style>
-<script id="cl-responsive-menu-20261117">
-(function(){
- const button=document.getElementById('clHomeMenuToggle');
- const header=button.closest('header');
- const menu=document.getElementById('clHomeMainMenu');
- function close(){header.classList.remove('cl-menu-open');button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','Open menu');button.textContent='☰';}
- button.addEventListener('click',function(){const open=header.classList.toggle('cl-menu-open');button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'Close menu':'Open menu');button.textContent=open?'×':'☰';});
- menu.addEventListener('click',function(e){if(e.target.closest('a,button'))close();});
- header.addEventListener('keydown',function(e){if(e.key==='Escape'){close();button.focus();}});
- window.matchMedia('(min-width:768px)').addEventListener('change',close);
-})();
-</script>
