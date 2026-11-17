@@ -4104,6 +4104,29 @@ body #homeMarketplace #homeWorkerResults .cl-worker-card-info{
 body #homeMarketplace #homeWorkerResults .cl-worker-profile-button{
  align-self:end!important;
 }
+/* Share content tracks within each results row, including wrapped names/skills. */
+@supports(grid-template-rows:subgrid){
+ body #homeMarketplace #homeWorkerResults>article.cl-worker-card.cl-worker-compact{
+  grid-row:span 6!important;grid-template-rows:subgrid!important;
+  grid-template-areas:none!important;row-gap:8px!important;
+  height:auto!important;align-content:stretch!important;
+ }
+ body #homeMarketplace #homeWorkerResults .cl-worker-card-avatar{
+  grid-area:auto!important;grid-row:1!important;
+ }
+ body #homeMarketplace #homeWorkerResults .cl-worker-card-info{
+  grid-area:auto!important;grid-row:2 / span 4!important;
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:subgrid!important;align-self:stretch!important;
+  row-gap:8px!important;
+ }
+ body #homeMarketplace #homeWorkerResults .cl-worker-card-info>:is(.cl-worker-name,.cl-worker-skill,.cl-worker-facts,.cl-worker-meta){
+  margin:0!important;align-self:start!important;
+ }
+ body #homeMarketplace #homeWorkerResults .cl-worker-profile-button{
+  grid-area:auto!important;grid-row:6!important;align-self:stretch!important;
+ }
+}
 </style>
 
 </head>
