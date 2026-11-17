@@ -6553,6 +6553,37 @@ body #homeMarketplace #homeWorkerResults .cl-worker-profile-button{
   function adminHasPermission(permission) {
     return ['main_admin','admin'].includes(currentAdminRole) || (currentAdminRole==='sub_admin' && currentAdminPermissions?.[permission] === true);
   }
+  function adminFullAccountDeletePanel(kind, profile) {
+    if (!['main_admin','admin'].includes(currentAdminRole)) return null;
+    const box=document.createElement('div');
+    box.className='mt-5 rounded-xl border border-red-300 bg-red-50 p-4';
+    const title=document.createElement('h4'); title.className='font-black text-red-900'; title.textContent='Delete Full Account';
+    const note=document.createElement('p'); note.className='mt-2 text-sm text-red-900';
+    note.textContent='Permanently removes this login, all Worker and Customer profiles on the account, uploaded files, and related chats, applications and job posts. Available for every approval status. The same email can register again; a new Worker registration requires fresh approval.';
+    const status=document.createElement('p'); status.className='mt-2 text-sm font-bold'; status.setAttribute('role','status');
+    const button=document.createElement('button'); button.type='button';
+    button.className='mt-3 rounded-xl bg-red-700 text-white px-5 py-3 font-bold';
+    button.textContent='Delete Full Account';
+    button.addEventListener('click',async()=>{
+      const entered=window.prompt('Permanently delete the full account?\n\nName: '+adminSafeText(profile.full_name)+'\nEmail: '+adminSafeText(profile.email)+'\nID: '+(profile.worker_public_id||profile.customer_public_id||profile.id)+'\n\nThis cannot be undone. All profiles on this login and related files, chats and jobs will be removed.\n\nType the account email to confirm:');
+      if(entered===null)return;
+      if(!profile.email||entered.trim().toLowerCase()!==profile.email.trim().toLowerCase()){status.textContent='Email does not match. Account was not deleted.';return;}
+      button.disabled=true; status.textContent='Deleting full account…';
+      try {
+        const {data,error}=await supabaseClient.functions.invoke('admin-remove-account',{body:{kind,profile_id:profile.id,confirm_email:entered.trim()}});
+        if(error){let message=error.message;try{message=(await error.context.json()).error||message;}catch{}throw new Error(message);}
+        if(!data?.success)throw new Error(data?.error||'Deletion was not confirmed. Refresh before retrying.');
+        adminWorkerCache=adminWorkerCache.filter(w=>w.id!==profile.id&&w.user_id!==(profile.user_id||profile.id));
+        document.getElementById('adminWorkerDetail')?.classList.add('hidden');
+        document.getElementById('adminCustomerDetail')?.classList.add('hidden');
+        await loadAdminWorkers(); await loadAdminCustomers(); await loadAdminBookings();
+        alert('Full account deleted. The same email can register again. New Worker registrations require approval.');
+      } catch(error){status.textContent=error.message||'Could not delete account. Refresh and retry.';}
+      finally {button.disabled=false;}
+    });
+    box.append(title,note,button,status); return box;
+  }
+
   function adminSafeText(value, fallback = 'Not provided') {
     if (value === null || value === undefined || value === '') return fallback;
     if (Array.isArray(value)) return value.length ? value.join(', ') : fallback;
@@ -6844,6 +6875,8 @@ body #homeMarketplace #homeWorkerResults .cl-worker-profile-button{
 
     const close = document.createElement('button'); close.type = 'button'; close.className = 'mt-5 rounded-xl border border-slate-300 px-5 py-3 font-bold text-slate-700'; close.textContent = 'Close Profile';
     close.addEventListener('click', () => adminWorkerDetail.classList.add('hidden'));
+    const accountRemoval=adminFullAccountDeletePanel('worker',w);
+    if(accountRemoval)adminWorkerDetail.append(accountRemoval);
     adminWorkerDetail.append(close);
     const workerEditor=adminProfileEditPanel('worker_profiles',w,[['full_name','Full name'],['district','District'],['address','Address']],'workers_edit',renderAdminWorkerList);
     if(workerEditor)adminWorkerDetail.insertBefore(workerEditor,close);
@@ -6991,6 +7024,8 @@ body #homeMarketplace #homeWorkerResults .cl-worker-profile-button{
     panel.append(grid);
     const customerEditor=adminProfileEditPanel('customer_profiles',c,[['full_name','Full name'],['district','District'],['address','Address']],'customers_edit',null);
     if(customerEditor)panel.append(customerEditor);
+    const accountRemoval=adminFullAccountDeletePanel('customer',c);
+    if(accountRemoval)panel.append(accountRemoval);
     const close=document.createElement('button'); close.type='button'; close.className='mt-5 rounded-xl border border-emerald-300 bg-white px-5 py-3 font-bold text-emerald-900'; close.textContent='Close Customer Profile'; close.addEventListener('click',()=>panel.classList.add('hidden')); panel.append(close);
     panel.scrollIntoView({behavior:'smooth',block:'start'});
   }
