@@ -7460,6 +7460,7 @@ body #homeMarketplace #homeWorkerResults .cl-worker-profile-button{
     stopChatRealtime();
     activeChatChannel=supabaseClient.channel('clean-lanka-chat-'+conversationId)
       .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'conversation_id=eq.'+conversationId},()=>loadChatMessages(conversationId,hostId))
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'message_read_receipts'},()=>loadChatMessages(conversationId,hostId))
       .subscribe();
     // Fallback refresh keeps the chat usable if Realtime is not enabled for messages.
     chatRefreshTimer=setInterval(()=>loadChatMessages(conversationId,hostId),8000);
@@ -7713,6 +7714,36 @@ body #homeMarketplace #homeWorkerResults .cl-worker-profile-button{
       :(contactName?contactName+' · '+otherRole:otherRole);
   }
 
+  // Receipts are recorded only for received messages actually visible in the open thread.
+  function watchVisibleChatMessages(host,conversationId,role){
+    host._clSeenObserver?.disconnect();
+    const pending=new Set();
+    const current=()=>!document.hidden&&host.getClientRects().length&&
+      (role==='worker'?clWorkerChatId:clCustomerChatId)===conversationId;
+    const observer=new IntersectionObserver(entries=>{
+      for(const entry of entries){
+        const node=entry.target,id=node.dataset.clReceivedMessage;
+        if(!entry.isIntersecting||pending.has(id)||!current())continue;
+        pending.add(id);
+        setTimeout(async()=>{
+          try{
+            const rect=node.getBoundingClientRect(),root=host.getBoundingClientRect();
+            if(!node.isConnected||!current()||rect.bottom<=Math.max(root.top,0)||rect.top>=Math.min(root.bottom,innerHeight))return;
+            const {error}=await supabaseClient.rpc('clean_lanka_mark_messages_seen',{p_message_ids:[id]});
+            if(error){console.warn('Message seen receipt could not be saved:',error);return;}
+            observer.unobserve(node);
+          }finally{pending.delete(id);}
+        },350);
+      }
+    },{root:host,threshold:0.1});
+    host._clSeenObserver=observer;
+    host.querySelectorAll('[data-cl-received-message]').forEach(node=>observer.observe(node));
+  }
+  function chatReceiptHTML(seenAt){
+    if(!seenAt)return '<span class="cl-message-receipt" style="display:block;color:#64748b;font-size:11px" aria-label="Message sent">✓ Sent</span>';
+    return '<span class="cl-message-receipt" style="display:block;color:#2563eb;font-size:11px;font-weight:700" aria-label="Message seen">✓✓ Seen · '+esc(new Date(seenAt).toLocaleString())+'</span>';
+  }
+
   async function loadChatMessages(conversationId,hostId){
     const host=$(hostId);if(!host)return;
     // The audio-call button uses the same participant-checked conversation.
@@ -7720,18 +7751,23 @@ body #homeMarketplace #homeWorkerResults .cl-worker-profile-button{
     if(audioChatWindow)audioChatWindow.dataset.callConversation=conversationId;
     // Remember whether the reader was already near the bottom. Refreshing messages
     // must never scroll the document/page; only this fixed chat viewport may move.
+    const previousScrollTop=host.scrollTop;
     const wasNearBottom=(host.scrollHeight-host.scrollTop-host.clientHeight)<90;
     const readThrough=new Date().toISOString();
     const {data,error}=await supabaseClient.from('messages').select('id,sender_id,message,created_at').eq('conversation_id',conversationId).order('created_at',{ascending:false}).limit(100);
     if(error){host.textContent='Could not load messages: '+error.message;return;}
     if((hostId==='workerChatMessages'?clWorkerChatId:clCustomerChatId)!==conversationId)return;
+    const receipts=data?.length?await supabaseClient.from('message_read_receipts').select('message_id,reader_id,seen_at').in('message_id',data.map(m=>m.id)):{data:[]};
+    if(receipts.error)console.warn('Could not load message receipts:',receipts.error);
+    const seen=new Map((receipts.data||[]).map(r=>[r.message_id,r.seen_at]));
     data?.reverse();
     const chatRole=hostId==='workerChatMessages'?'worker':'customer';
     const contactName=await getChatContactName(conversationId);
     if((chatRole==='worker'?clWorkerChatId:clCustomerChatId)!==conversationId)return;
     if(contactName&&$(chatRole+'ChatTitle'))$(chatRole+'ChatTitle').textContent=contactName;
-    host.innerHTML=(data||[]).map(m=>{const mine=m.sender_id===window.clCurrentUser?.id;const who=chatSenderLabel(mine,chatRole,contactName);return `<article class="cl-chat-bubble ${mine?'mine':'theirs'}"><strong class="cl-chat-sender">${mine?'↗':'↙'} ${esc(who)}</strong><p class="cl-chat-body">${esc(m.message)}</p><time class="cl-chat-time">${new Date(m.created_at).toLocaleString()}</time></article>`;}).join('')||'<p class="text-sm text-slate-500">No messages yet. Start the conversation.</p>';
-    if(wasNearBottom){host.scrollTop=host.scrollHeight;}
+    host.innerHTML=(data||[]).map(m=>{const mine=m.sender_id===window.clCurrentUser?.id;const who=chatSenderLabel(mine,chatRole,contactName);return `<article ${!mine&&!seen.has(m.id)?`data-cl-received-message="${esc(m.id)}"`:""} class="cl-chat-bubble ${mine?'mine':'theirs'}"><strong class="cl-chat-sender">${mine?'↗':'↙'} ${esc(who)}</strong><p class="cl-chat-body">${esc(m.message)}</p><time class="cl-chat-time">${new Date(m.created_at).toLocaleString()}</time>${mine?chatReceiptHTML(seen.get(m.id)):""}</article>`;}).join('')||'<p class="text-sm text-slate-500">No messages yet. Start the conversation.</p>';
+    if(wasNearBottom){host.scrollTop=host.scrollHeight;}else{host.scrollTop=previousScrollTop;}
+    watchVisibleChatMessages(host,conversationId,chatRole);
     // A background/hidden thread is not read. Only acknowledge messages after rendering.
     const role=hostId==='workerChatMessages'?'worker':'customer';
     if(wasNearBottom&&!document.hidden&&host.getClientRects().length&&
