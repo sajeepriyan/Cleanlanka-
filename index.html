@@ -6,6 +6,36 @@
 <!DOCTYPE html>
 
 <html lang="en"><head>
+<script id="cl-navigation-keyboard-dismiss-20261117">
+(function () {
+  function dismissKeyboard() {
+    const active = document.activeElement;
+    if (!active || !(active.matches('input, textarea') || active.isContentEditable)) return;
+    active.blur();
+    try { navigator.virtualKeyboard?.hide(); } catch (error) {}
+  }
+  // Capture runs before existing route restorers hide or replace the focused field.
+  // Leave history and all route handlers intact; native Back can dismiss the IME first.
+  window.addEventListener('popstate', dismissKeyboard, true);
+  window.addEventListener('hashchange', dismissKeyboard, true);
+  window.addEventListener('pagehide', dismissKeyboard, true);
+  document.addEventListener('click', function (event) {
+    if (event.target?.closest?.('#clDashboardHomeButton, #clServiceBack, #clOfficialChatBack, .cl074-back, .cl-tab-back, .login-back-home, .cl-confirm-back, [onclick="closeAdminLoginPage()"], [onclick="closeRegistration()"]')) dismissKeyboard();
+  }, true);
+  function watchHiddenInput() {
+    // Also cover Admin tabs and programmatic navigation without a history event.
+    new MutationObserver(function () {
+      const active = document.activeElement;
+      if (active && (active.matches('input, textarea') || active.isContentEditable) &&
+          (!active.getClientRects().length || getComputedStyle(active).visibility === 'hidden')) {
+        dismissKeyboard();
+      }
+    }).observe(document.body, {subtree: true, attributes: true, attributeFilter: ['class', 'style', 'hidden']});
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watchHiddenInput, {once: true});
+  else watchHiddenInput();
+})();
+</script>
 
 <!-- Detect reset links before external libraries can delay the recovery screen. -->
 <script id="cl-recovery-first-paint-20261113">
