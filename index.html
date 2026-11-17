@@ -3866,7 +3866,6 @@ body header.cl-home-nav #clHomeAccountName > span[aria-hidden="true"]{display:no
 body header.cl-home-nav #clHomeAccountName :is(.cl-home-user-photo,.cl-home-user-fallback){width:44px!important;height:44px!important;min-width:44px!important;border-radius:50%!important;box-sizing:border-box!important}
 /* When two legacy account renderers run, retain one visible identity. */
 body header.cl-home-nav #clHomeAccountName:has(img.cl-home-user-photo[src]:not([src=""])) .cl-home-user-fallback{display:none!important}
-#clSupportButtons.cl-search-visible{visibility:hidden!important;pointer-events:none!important}
 @media(max-width:900px){
  body header.cl-home-nav .cl-home-navlinks{justify-content:flex-start!important;gap:20px!important}
  body header.cl-home-nav .cl-home-navlinks > :is(a,button){font-size:14px!important}
@@ -4241,6 +4240,21 @@ body #homeMarketplace #homeWorkerResults .cl-worker-profile-button{
 }
 </style>
 
+<style id="cl-mobile-support-icons">
+/* Define support controls before first paint, independently of delayed utilities. */
+#clSupportButtons{position:fixed;right:24px;bottom:calc(24px + env(safe-area-inset-bottom, 0px));z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:12px;}
+#clSupportButtons > button[data-cl-open-live-chat]{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;width:140px!important;height:50px!important;min-height:50px;box-sizing:border-box;margin:0!important;padding:0 16px!important;border:2px solid white;border-radius:999px!important;background:#1d4ed8;color:#fff;font:800 15px/1.2 Arial,sans-serif;white-space:nowrap;box-shadow:0 10px 20px #0002;}
+#clSupportButtons .cl-support-chat-label{display:inline!important;}
+#clSupportButtons > button .material-symbols-outlined{font-size:24px;line-height:1;}
+#clSupportButtons > div{display:flex;align-items:center;gap:12px;}
+#clSupportButtons a[title="Live WhatsApp Support"]{display:flex;align-items:center;justify-content:center;position:relative;width:64px!important;height:64px!important;min-width:64px;min-height:64px;box-sizing:border-box;padding:0!important;margin:0!important;border-radius:50%;background:#16a34a;color:#fff;box-shadow:0 10px 20px #0002;}
+#clSupportButtons a[title="Live WhatsApp Support"] svg{width:35px;height:35px;}
+@media(max-width:767px){
+ #clSupportButtons{right:14px;bottom:calc(24px + env(safe-area-inset-bottom, 0px));}
+ #clSupportButtons a[href^="tel:"]{display:none!important;}
+ footer#contact{padding-bottom:calc(160px + env(safe-area-inset-bottom, 0px))!important;}
+}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -10790,22 +10804,7 @@ document.addEventListener('DOMContentLoaded',function(){
 }
 </style>
 
-<style id="cl-mobile-support-icons">
-@media (max-width:767px){
- #clSupportButtons{right:12px;bottom:calc(12px + env(safe-area-inset-bottom, 0px));gap:10px;}
- #clSupportButtons > button[data-cl-open-live-chat],
- #clSupportButtons a[title="Live WhatsApp Support"]{
-  width:48px!important;height:48px!important;min-width:48px;min-height:48px;
-  padding:0!important;margin:0!important;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;box-sizing:border-box;
- }
- #clSupportButtons .cl-support-chat-label{display:none;}
- #clSupportButtons > button .material-symbols-outlined{font-size:24px;line-height:1;}
- #clSupportButtons a[title="Live WhatsApp Support"] svg{width:28px;height:28px;}
- #clSupportButtons a[title="Live WhatsApp Support"] > span{display:none;}
- footer#contact{padding-bottom:calc(140px + env(safe-area-inset-bottom, 0px))!important;}
-}
-</style>
+
 
 <style id="cl-audio-calls-style">
 /* Calls keep their layout independent of dashboard and Tailwind styles. */
@@ -11744,24 +11743,6 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 </style>
 
 
-<script id="cl-support-search-clearance-20261116">
-(function(){
- function start(){
-  const search=document.getElementById('heroMarketplaceSearchForm'),support=document.getElementById('clSupportButtons');
-  if(!search||!support)return;
-  // Keep search and footer links clear; contact actions remain in the footer.
-  const protectedAreas=[search,document.querySelector('footer#contact')].filter(Boolean);
-  if('IntersectionObserver' in window){
-   const visible=new Set();
-   const observer=new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{if(entry.isIntersecting)visible.add(entry.target);else visible.delete(entry.target);});
-    support.classList.toggle('cl-search-visible',visible.size>0);
-   },{rootMargin:'16px',threshold:0});
-   protectedAreas.forEach(area=>observer.observe(area));
-  }
- }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
-})();
-</script>
+
 
 
