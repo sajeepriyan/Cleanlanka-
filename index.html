@@ -9430,16 +9430,27 @@ document.addEventListener('DOMContentLoaded',function(){
 <script id="cl-live-chat-discovery-20261109">
 (function(){
   'use strict';
+  function needsLogin(error){
+    return error?.name==='AuthSessionMissingError'||
+      ['session_not_found','refresh_token_not_found','refresh_token_already_used'].includes(error?.code)||
+      /auth session missing|session (?:has )?expired|invalid refresh token/i.test(error?.message||'');
+  }
+  function openChatLogin(){
+    if(typeof window.openLoginPage==='function')window.openLoginPage();
+    else alert('Please sign in as a Customer or Worker to access Live Chat.');
+  }
   window.cleanLankaOpenLiveChat=async function(){
     const sb=window.supabaseClient;
     if(!sb){alert('Live Chat is temporarily unavailable. Please try again.');return;}
     try{
+      const {data:sessionData,error:sessionError}=await sb.auth.getSession();
+      if(sessionError){if(needsLogin(sessionError)){openChatLogin();return;}throw sessionError;}
+      if(!sessionData?.session){openChatLogin();return;}
       const {data,error}=await sb.auth.getUser();
-      if(error)throw error;
+      if(error){if(needsLogin(error)){openChatLogin();return;}throw error;}
       const user=data?.user;
       if(!user){
-        if(typeof window.openLoginPage==='function')window.openLoginPage();
-        else alert('Please sign in as a Customer or Worker to access Live Chat.');
+        openChatLogin();
         return;
       }
       const role=String(user.user_metadata?.account_type||'').toLowerCase();
@@ -9456,6 +9467,7 @@ document.addEventListener('DOMContentLoaded',function(){
         else root?.querySelector(isWorker?'[data-cl-go="workerChatPanel"]':'[data-cl-go="customerChatPanel"]')?.click();
       });
     }catch(err){
+      if(needsLogin(err)){openChatLogin();return;}
       alert('Could not open Live Chat: '+(err?.message||'Please try again.'));
     }
   };
