@@ -11,23 +11,10 @@
 </style>
 </head>
 <body>
-<header class="top"><div class="shell"><a class="brand" href="/">CLEAN <span>LANKA</span></a><nav class="topnav" aria-label="Government jobs navigation"><a id="homeLink" href="/">⌂ Home</a><a id="backAdmin" href="/admin" hidden>← Admin Dashboard</a><button type="button" id="manageToggle" hidden>Manage Jobs</button><button type="button" id="adminAccessButton" aria-expanded="false" aria-controls="adminAccessPanel">Admin Sign In</button></nav></div></header>
+<header class="top"><div class="shell"><a class="brand" href="/">CLEAN <span>LANKA</span></a><nav class="topnav" aria-label="Government jobs navigation"><a id="homeLink" href="/">⌂ Home</a><a id="backAdmin" href="/admin" hidden>← Admin Dashboard</a><button type="button" id="manageToggle" hidden>Manage Jobs</button></nav></div></header>
 <section class="hero"><div class="shell"><div class="eyebrow">Sri Lanka • Government Vacancies</div><h1>Government Jobs</h1><p>Browse Sri Lankan public-sector vacancies and find closing dates, official notices, and application forms in one place.</p><div class="sub">அரச வேலைவாய்ப்புகள் &nbsp;•&nbsp; රජයේ රැකියා &nbsp;•&nbsp; All 25 districts</div></div></section>
 <main class="shell content">
 <section id="vacancies" aria-label="Search government vacancies"><form id="filterForm" class="filters"><input id="filterText" type="search" placeholder="Search title, department or skills" aria-label="Search vacancies"><select id="filterDistrict" aria-label="District filter"><option value="">All districts</option></select><button class="btn" type="submit">Search</button></form><div class="heading"><h2>Latest Government Job Vacancies</h2><button id="reload" class="btn light" type="button">Refresh</button></div><p id="pageStatus" class="small muted" role="status" aria-live="polite">Loading official notices…</p><div id="publicJobs" class="cards" aria-live="polite"></div></section>
-<section id="adminAccessPanel" class="manage admin-access" hidden aria-labelledby="adminAccessHeading">
- <h2 id="adminAccessHeading">Government Jobs — Admin Sign In</h2>
- <p class="small muted">Only authorised Clean Lanka admins may publish, edit or upload government vacancy notices.</p>
- <form id="adminAccessForm" class="form" autocomplete="on">
-  <label>Email address<input name="email" type="email" autocomplete="username" placeholder="Admin email" required></label>
-  <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
-  <div class="wide" style="display:flex;flex-wrap:wrap;gap:8px">
-   <button type="submit" id="adminAccessSubmit" class="btn">Sign In &amp; Open Upload</button>
-   <button type="button" id="cancelAdminLogin" class="btn light">Cancel</button>
-  </div>
- </form>
- <p id="adminAccessStatus" role="status" aria-live="polite" class="small"></p>
-</section>
 <section class="manage" id="manageSection" hidden><div class="heading"><div><h2>Government Jobs — Admin</h2><p class="small muted">Publish official vacancy information only after verifying the original government source.</p></div></div><p id="adminStatus" role="status" aria-live="polite"></p>
 <form id="jobForm" class="form" autocomplete="off"><label>Job title *<input name="title" required maxlength="180" minlength="3"></label><label>Government department *<input name="department" required maxlength="180"></label>
 <label>District *<select name="district" id="formDistrict" required><option value="All Sri Lanka">All Sri Lanka</option></select></label><label>Age limit <input name="age_limit" maxlength="200" placeholder="As stated in the official notice"></label>
@@ -104,22 +91,11 @@ if(previous){const old=[pdf1&&previous.gazette_pdf_path,pdf2&&previous.applicati
 finally{btn.disabled=false;}
 }
 async function removeJob(job){if(!canDelete||!confirm('Permanently delete this government job and its PDF files?'))return;setMsg('adminStatus','Deleting…');const d=await sb.from('government_jobs').delete().eq('id',job.id);if(d.error){setMsg('adminStatus',d.error.message,true);return;}const paths=[...new Set([job.gazette_pdf_path,job.application_pdf_path].filter(Boolean))];if(paths.length){const p=await sb.storage.from(bucket).remove(paths);if(p.error)setMsg('adminStatus','Record deleted; PDF cleanup needs administrator attention.',true);}await load();if(!el('adminStatus').style.color)setMsg('adminStatus','Job deleted.');}
-function showAdminLogin(message=''){
-  el('adminAccessPanel').hidden=false;
-  el('adminAccessButton').setAttribute('aria-expanded','true');
-  setMsg('adminAccessStatus',message,!!message);
-}
-function hideAdminLogin(){
-  el('adminAccessPanel').hidden=true;
-  el('adminAccessButton').setAttribute('aria-expanded','false');
-  setMsg('adminAccessStatus','');
-}
-async function detectAdmin(openManager=false){
+async function detectAdmin(){
   canCreate=false;canEdit=false;canDelete=false;viewer=null;
-  let authProblem='';
   try{
     const identity=await sb.auth.getUser();
-    if(identity.error)authProblem='Login session needs verification. Please sign in again.';
+    if(identity.error)throw identity.error;
     viewer=identity.data.user;
     if(viewer){
       const result=await sb.from('admins').select('role,is_active,permissions').eq('user_id',viewer.id).maybeSingle();
@@ -131,28 +107,28 @@ async function detectAdmin(openManager=false){
       canDelete=full;
     }
   }catch(error){
-    authProblem=error?.message||'Admin session check failed.';
+    console.warn('Government jobs admin permission check:',error?.message||error);
   }
-  const authorized=canCreate||canEdit;
-  el('manageToggle').hidden=!authorized;
-  el('backAdmin').hidden=!authorized;
-  el('homeLink').hidden=authorized;
-  el('adminAccessButton').hidden=authorized;
-  if(authorized){
-    hideAdminLogin();
+  // Public Government Jobs displays vacancies only. Enter management through
+  // the existing Admin Dashboard's Government Jobs link (?manage=1).
+  const managerRequested=new URLSearchParams(location.search).get('manage')==='1';
+  const showManager=managerRequested&&(canCreate||canEdit);
+  el('manageToggle').hidden=!showManager;
+  el('backAdmin').hidden=!showManager;
+  el('homeLink').hidden=showManager;
+  el('manageSection').hidden=!showManager;
+  if(showManager){
     el('jobForm').hidden=!canCreate;
-    el('manageSection').hidden=!openManager;
-    el('manageToggle').textContent=openManager?'View Vacancies':'Manage Jobs';
+    el('manageToggle').textContent='View Vacancies';
     if(!canCreate)setMsg('adminStatus','Your account can edit existing notices but cannot create new ones.');
-  }else{
-    el('manageSection').hidden=true;
-    if(openManager){
-      showAdminLogin(authProblem||'Please sign in with an authorised Admin or Sub-Admin account to upload and publish PDF notices.');
-    }
+  }
+  if(managerRequested&&!showManager){
+    // Sign-in and session recovery are handled by Clean Lanka's /admin page.
+    location.replace('/admin');
+    return false;
   }
   await load();
-  // Opening this page always shows public vacancies first. Admin controls follow below.
-  return authorized;
+  return showManager;
 }
 async function setup(){
   for(const d of districts){const o=new Option(d,d);el('filterDistrict').appendChild(o);el('formDistrict').appendChild(o.cloneNode(true));}
@@ -169,28 +145,7 @@ async function setup(){
     const destination=showManager?'manageSection':'vacancies';
     el(destination).scrollIntoView({block:'start',behavior:'smooth'});
   });
-  el('adminAccessButton').addEventListener('click',()=>{
-    if(!el('adminAccessPanel').hidden)hideAdminLogin();
-    else{showAdminLogin();el('adminAccessPanel').scrollIntoView({block:'start',behavior:'smooth'});}
-  });
-  el('cancelAdminLogin').addEventListener('click',hideAdminLogin);
-  el('adminAccessForm').addEventListener('submit',async(event)=>{
-    event.preventDefault();
-    const form=event.currentTarget;
-    const email=form.elements.namedItem('email').value.trim();
-    const password=form.elements.namedItem('password').value;
-    const button=el('adminAccessSubmit');
-    button.disabled=true;setMsg('adminAccessStatus','Signing in and checking permissions…');
-    try{
-      const signIn=await sb.auth.signInWithPassword({email,password});
-      if(signIn.error)throw signIn.error;
-      const ok=await detectAdmin(true);
-      if(!ok)setMsg('adminAccessStatus','This account does not have Government Jobs management permission.',true);
-      else form.reset();
-    }catch(error){setMsg('adminAccessStatus',error?.message||'Could not sign in.',true);}
-    finally{button.disabled=false;}
-  });
-  await detectAdmin(new URLSearchParams(location.search).get('manage')==='1');
+  await detectAdmin();
 }
 setup();
 })();
