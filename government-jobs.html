@@ -11,7 +11,7 @@
 </style>
 </head>
 <body>
-<header class="top"><div class="shell"><a class="brand" href="/">CLEAN <span>LANKA</span></a><nav class="topnav" aria-label="Government jobs navigation"><a href="/">⌂ Home</a><a href="#vacancies">Government Vacancies</a><a id="backAdmin" href="/admin" hidden>Admin Dashboard</a><button type="button" id="manageToggle" hidden>Manage Jobs</button><button type="button" id="adminAccessButton" aria-expanded="false" aria-controls="adminAccessPanel">Admin Sign In</button></nav></div></header>
+<header class="top"><div class="shell"><a class="brand" href="/">CLEAN <span>LANKA</span></a><nav class="topnav" aria-label="Government jobs navigation"><a id="homeLink" href="/">⌂ Home</a><a id="backAdmin" href="/admin" hidden>← Admin Dashboard</a><button type="button" id="manageToggle" hidden>Manage Jobs</button><button type="button" id="adminAccessButton" aria-expanded="false" aria-controls="adminAccessPanel">Admin Sign In</button></nav></div></header>
 <section class="hero"><div class="shell"><div class="eyebrow">Sri Lanka • Government Vacancies</div><h1>Government Jobs</h1><p>Browse Sri Lankan public-sector vacancies and find closing dates, official notices, and application forms in one place.</p><div class="sub">அரச வேலைவாய்ப்புகள் &nbsp;•&nbsp; රජයේ රැකියා &nbsp;•&nbsp; All 25 districts</div></div></section>
 <main class="shell content">
 <section id="adminAccessPanel" class="manage admin-access" hidden aria-labelledby="adminAccessHeading">
@@ -136,11 +136,13 @@ async function detectAdmin(openManager=false){
   const authorized=canCreate||canEdit;
   el('manageToggle').hidden=!authorized;
   el('backAdmin').hidden=!authorized;
+  el('homeLink').hidden=authorized;
   el('adminAccessButton').hidden=authorized;
   if(authorized){
     hideAdminLogin();
     el('jobForm').hidden=!canCreate;
     el('manageSection').hidden=!openManager;
+    el('manageToggle').textContent=openManager?'View Vacancies':'Manage Jobs';
     if(!canCreate)setMsg('adminStatus','Your account can edit existing notices but cannot create new ones.');
   }else{
     el('manageSection').hidden=true;
@@ -162,8 +164,11 @@ async function setup(){
   el('resetJob').addEventListener('click',resetForm);
   form.addEventListener('submit',save);
   el('manageToggle').addEventListener('click',()=>{
-    el('manageSection').hidden=!el('manageSection').hidden;
-    if(!el('manageSection').hidden)el('manageSection').scrollIntoView({block:'start',behavior:'smooth'});
+    const showManager=el('manageSection').hidden;
+    el('manageSection').hidden=!showManager;
+    el('manageToggle').textContent=showManager?'View Vacancies':'Manage Jobs';
+    const destination=showManager?'manageSection':'vacancies';
+    el(destination).scrollIntoView({block:'start',behavior:'smooth'});
   });
   el('adminAccessButton').addEventListener('click',()=>{
     if(!el('adminAccessPanel').hidden)hideAdminLogin();
