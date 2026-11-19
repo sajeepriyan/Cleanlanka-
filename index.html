@@ -10118,7 +10118,7 @@ document.addEventListener('DOMContentLoaded',function(){
  }
  root._clGoAdminPage=go;
  const targets={'#adminOverview':'overview','#adminWorkersHeading':'workers','#adminCustomersHeading':'customers','#adminBookingsHeading':'bookings','#adminChatsHeading':'chats','#adminOfficialJobsMount':'officialjobs','#clOfficialJobChats':'officialchats','#adminNotificationsHeading':'notifications','#adminSubAdminsHeading':'subadmins','#clAdminPublicPreview':'website'};
- nav.querySelectorAll('a').forEach(a=>{a.dataset.clAdminTarget=targets[a.getAttribute('href')]||'overview';a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.clAdminTarget);});});
+ nav.querySelectorAll('a').forEach(a=>{if(a.getAttribute('href')==='/government-jobs.html?manage=1')return; a.dataset.clAdminTarget=targets[a.getAttribute('href')]||'overview';a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.clAdminTarget);});});
  back.addEventListener('click',()=>go(current==='customerprofile'?'customers':'overview'));
  const list=document.getElementById('adminCustomerList');
  list?.addEventListener('click',e=>{if(e.target.closest('button')&&e.target.closest('article'))setTimeout(()=>go('customerprofile'),80);});
