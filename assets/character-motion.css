@@ -20,3 +20,13 @@
 @media (prefers-reduced-motion:reduce) {
   #services-section .cl-cartoon-frame::before { animation:none!important; transform:none; }
 }
+
+
+/* 2026-11-20: HD characters must be painted on ONE layer only.
+   The inline service-category stylesheet adds a stationary sprite to the tile
+   while ::before animates the same sprite, making hats/hair look detached.
+   This higher-specificity rule wins over later inline !important rules
+   (including 1600px+ TV styles) without changing motion or page layout. */
+html body #services-section.cl-cartoon-services .cl-cartoon-frame {
+  background-image: none !important;
+}
