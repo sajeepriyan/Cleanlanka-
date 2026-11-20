@@ -8801,7 +8801,7 @@ body #homeMarketplace #homeWorkerResults .cl-worker-profile-button{
  if(!homeButton||!dashboard||!login)return;
  if(oldButton)oldButton.remove();
  let visited=false;
- async function detectAdminSession(){try{const client=window.supabaseClient;if(!client)return;const {data}=await client.auth.getUser();if(!data?.user)return;const {data:row}=await client.from('admins').select('role,is_active').eq('user_id',data.user.id).maybeSingle();if(row?.is_active&&['main_admin','admin','sub_admin'].includes(row.role)){visited=true;update();}}catch(e){console.warn('Admin return session check unavailable',e);}}
+ async function detectAdminSession(){try{const client=window.supabaseClient;if(!client)return;const {data}=await client.auth.getUser();if(!data?.user)return;const {data:row}=await client.from('admins').select('role,is_active').eq('user_id',data.user.id).maybeSingle();if(row?.is_active&&['main_admin','admin','sub_admin'].includes(row.role)&&document.body.classList.contains('admin-dashboard-mode')){visited=true;update();}}catch(e){console.warn('Admin return session check unavailable',e);}}
  const isHome=()=>!['admin-dashboard-mode','admin-login-mode','worker-dashboard-mode','customer-dashboard-mode','registration-mode','login-page-mode','password-recovery-mode'].some(c=>document.body.classList.contains(c));
  function update(){
    if(document.body.classList.contains('admin-dashboard-mode'))visited=true;
