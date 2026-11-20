@@ -11898,3 +11898,37 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 
 
 
+
+
+<!-- Clean Lanka 2026-11-20: Large-screen-only character clarity fix.
+     Uses the existing inline vector worker illustrations on TV/large displays.
+     Does not touch business logic, auth, chat, navigation, or mobile styles. -->
+<style id="cl-large-screen-character-clarity-20261120">
+@media screen and (min-width: 1600px) {
+  #services-section.cl-cartoon-services .cl-home-cats {
+    max-width: min(92vw, 1980px) !important;
+    gap: clamp(16px, 1.3vw, 28px) !important;
+  }
+  #services-section.cl-cartoon-services .cl-cartoon-frame {
+    background-image: none !important;
+    background-color: #fbfcff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: clamp(6px, .7vw, 14px) !important;
+  }
+  #services-section.cl-cartoon-services .cl-cartoon-frame > svg {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    flex: 1 1 auto !important;
+    shape-rendering: geometricPrecision;
+  }
+  #services-section.cl-cartoon-services .cl-cartoon-name {
+    font-size: clamp(17px, 1.25vw, 24px) !important;
+    line-height: 1.25 !important;
+    font-weight: 700 !important;
+  }
+}
+</style>
