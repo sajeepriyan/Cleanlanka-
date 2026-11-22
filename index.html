@@ -119,6 +119,49 @@
 
 </script>
 
+<!-- Keep the final homepage design from flashing between unfinished CSS states.
+     Scope only to ordinary public-home navigations: auth, recovery and admin routes are untouched. -->
+<script id="cl-home-first-paint-20261122">
+(function () {
+  const path=location.pathname;
+  const query=new URLSearchParams(location.search);
+  const hash=new URLSearchParams(location.hash.slice(1));
+  if(!/^\/(?:index\.html)?$/.test(path) ||
+     query.has('cl_recovery') || query.has('cl_subadmin_invite') ||
+     query.get('type')==='recovery' || query.has('code') ||
+     hash.get('type')==='recovery') return;
+  const root=document.documentElement;
+  root.classList.add('cl-home-first-paint');
+  let finished=false;
+  function reveal(){
+    if(finished) return;
+    finished=true;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>root.classList.remove('cl-home-first-paint')));
+  }
+  function loaded(){
+    // Let Tailwind's runtime styles and the first font pass settle before painting.
+    if(document.fonts && document.fonts.ready){
+      Promise.race([document.fonts.ready,new Promise(resolve=>setTimeout(resolve,600))]).then(reveal,reveal);
+    }else reveal();
+  }
+  window.addEventListener('load',loaded,{once:true});
+  if(document.readyState==='complete') loaded();
+  // Never leave the homepage hidden if a third-party asset stalls or fails.
+  setTimeout(reveal,4000);
+})();
+</script>
+<style id="cl-home-first-paint-style-20261122">
+html.cl-home-first-paint {background:#f3faf5}
+html.cl-home-first-paint body {opacity:0!important}
+html.cl-home-first-paint::after {
+  content:"Clean Lanka"; position:fixed;inset:0;z-index:2147483646;
+  display:grid;place-items:center;pointer-events:none;
+  background:#f3faf5;color:#0f5132;
+  font:900 clamp(23px,3vw,33px)/1.2 system-ui,sans-serif;
+  letter-spacing:-.02em;
+}
+</style>
+
 <!-- Detect reset links before external libraries can delay the recovery screen. -->
 <script id="cl-recovery-first-paint-20261113">
 (function () {
