@@ -9931,6 +9931,15 @@ document.addEventListener('DOMContentLoaded',function(){
    if(my!==seq)return;
    if(!error&&data){profileName=String(data.full_name||data.name||'').trim();avatar=data.avatar_url||data.profile_photo_url||data.profile_image_url||data.photo_url||'';}
   }catch(e){console.warn('Profile header:',e);}
+  // On the signed-in customer's Home header, read only their own private avatar.
+  // This does not make customer photos public and never exposes worker verification files.
+  if(r==='customer'&&!avatar){
+   try{
+    const {data:photo,error:photoError}=await sb.storage.from('customer-profile-photos').createSignedUrl(u.id+'/avatar',3600);
+    if(my!==seq)return;
+    if(!photoError&&photo?.signedUrl)avatar=photo.signedUrl;
+   }catch(e){console.warn('Home account photo unavailable:',e);}
+  }
   if(!avatar)avatar=u.user_metadata?.avatar_url||u.user_metadata?.picture||u.user_metadata?.profile_photo_url||'';
   draw();
  }
