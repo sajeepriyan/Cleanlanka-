@@ -4430,6 +4430,31 @@ body #homeMarketplace #homeWorkerResults .cl-worker-profile-button{
  }
 }
 </style>
+
+<style id="cl-admin-unified-ui-scroll-20261122">
+/* Admin-only layout and scroll repair. Existing auth, permissions, data and handlers remain. */
+body.admin-dashboard-mode #adminDashboard{height:100dvh!important;max-height:100dvh!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:auto!important;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}
+#adminDashboard .cl-admin-workspace{align-items:start!important;min-height:0!important}
+#adminDashboard .cl-admin-main{width:100%!important;min-width:0!important;min-height:0!important;overflow:visible!important}
+#adminDashboard .cl-admin-workspace>.admin-nav{position:static!important;top:auto!important;max-height:none!important;overflow:visible!important;background:linear-gradient(165deg,#064e3b,#087a45)!important}
+#adminDashboard .admin-topbar{background:linear-gradient(115deg,#064e3b,#087a45 58%,#16a34a)!important;display:flex!important;align-items:center!important;gap:12px!important;flex-wrap:wrap}
+#adminDashboard .admin-brand{min-width:0!important;flex:1 1 240px;gap:12px!important}
+#adminDashboard .admin-brand-mark{display:grid!important;place-items:center!important;flex:none!important;width:64px!important;height:64px!important;padding:4px!important;border-radius:17px!important;background:#fff!important;border:1px solid #ccebd7!important;overflow:hidden!important;font-size:0!important}
+#adminDashboard .admin-brand-mark img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important}
+#adminDashboard .cl-admin-side-icon{display:grid!important;place-items:center!important;width:48px!important;height:48px!important;flex:none;padding:4px!important;background:#fff!important;border-radius:12px!important}
+#adminDashboard .cl-admin-side-icon img{width:100%;height:100%;object-fit:contain}
+#adminDashboard .cl-admin-header-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;position:relative;z-index:2}
+#adminDashboard #clAdminHeaderHomeButton{min-height:43px;border:1px solid #ffffff80;border-radius:12px;padding:9px 16px;background:#fff;color:#075b38;font-size:14px;font-weight:900}
+body.admin-dashboard-mode #clDashboardHomeButton{display:none!important}
+#adminDashboard #clAdminPageHeader{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:11px;background:linear-gradient(110deg,#f0fcf4,#fff);border:1px solid #cce9d6;border-left:5px solid #087a45;border-radius:17px;padding:16px 20px;margin:0 0 18px;box-shadow:0 5px 15px #064e3b0b}
+#adminDashboard #clAdminPageTitle{margin:0!important;color:#0f5132!important;line-height:1.25;font-size:clamp(20px,2.4vw,29px)!important;font-weight:950!important}
+#adminDashboard #clAdminPageBack{margin:0!important;min-height:43px;border-radius:11px!important;padding:10px 15px!important;border:1px solid #bad9c7!important;background:#fff!important;color:#075b38!important;font-size:14px!important;font-weight:850!important}
+#adminDashboard .cl-admin-workspace>.admin-nav>a.cl-admin-nav-selected{background:#fff!important;color:#064e3b!important;border-color:#d5eddf!important}
+#adminDashboard.cl-admin-pages-active #adminOverview.cl-admin-page-current{display:grid!important}
+#adminDashboard.cl-admin-pages-active [data-cl-admin-page="true"].cl-admin-page-current{max-height:none!important}
+#adminDashboard .cl-admin-main>section,#adminDashboard .cl-admin-main>div{scroll-margin-top:12px}
+@media(max-width:760px){#adminDashboard #clAdminPageHeader{padding:13px 14px}#adminDashboard .admin-brand-mark{width:52px!important;height:52px!important}#adminDashboard .admin-topbar{gap:9px!important}#adminDashboard .cl-admin-header-actions{width:100%;justify-content:flex-end}#adminDashboard .cl-admin-workspace>.admin-nav{max-width:100%!important}}
+</style>
 </head>
 <body translate="no" class="notranslate" class="bg-white text-on-surface antialiased font-sans">
 <!-- TOP EMERGENCY NOTIFICATION BAR -->
@@ -5214,9 +5239,9 @@ body #homeMarketplace #homeWorkerResults .cl-worker-profile-button{
 </section>
 <section id="adminDashboard" class="hidden">
  <div class="max-w-7xl mx-auto">
-  <div class="admin-topbar"><div class="admin-brand"><div class="admin-brand-mark" aria-hidden="true">🏡</div><div><p class="text-xs font-black tracking-widest">CLEAN LANKA • CONTROL CENTRE</p><h1 id="clAdminDashboardTitle">Admin Dashboard</h1><p id="clAdminDashboardEmailName" class="text-sm font-bold mt-1"></p><p id="adminDashboardEmail" class="text-sm mt-1"></p></div></div><button id="adminDashboardLogoutButton" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold" type="button">Sign Out</button></div>
+  <div class="admin-topbar"><div class="admin-brand"><div class="admin-brand-mark" aria-hidden="true"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSh7GcRie2m5v1OiH4IUu5lxi4Qmpn6h_Pep3G-39-hWm7AbRMjRiSaW8SsexcB7a_7tX9SAvOol6H691xnReL6mdZRfnbYcd-7BNMTw7Gg4htwndima_BEOAvVMt9HiksX1Ri23atqe1GVO1CKI16GOVKspLITaWrltY2U16g_mM9bw1hqxe2nZo7REvfttd1v1-sltMDGf-rk3tCAAVbMLB9FiHnjPpY0SBgHgnSEQYH5v3C8xoNg" alt="" loading="eager" decoding="async"></div><div><p class="text-xs font-black tracking-widest">CLEAN LANKA • CONTROL CENTRE</p><h1 id="clAdminDashboardTitle">Admin Dashboard</h1><p id="clAdminDashboardEmailName" class="text-sm font-bold mt-1"></p><p id="adminDashboardEmail" class="text-sm mt-1"></p></div></div><div class="cl-admin-header-actions"><button type="button" id="clAdminHeaderHomeButton" aria-label="Go to Clean Lanka homepage">⌂ Home</button><button id="adminDashboardLogoutButton" class="rounded-xl bg-rose-600 text-white px-5 py-3 font-bold" type="button">Sign Out</button></div></div>
   <section id="clGrantedPermissions" class="hidden rounded-2xl bg-white border border-blue-200 p-4 my-4" aria-label="Granted permissions"><h2 class="font-black text-blue-900 text-lg">My Granted Permissions</h2><p class="text-sm text-slate-600">Only the Main Admin can change these permissions.</p><div id="clGrantedPermissionsList" class="grid sm:grid-cols-2 gap-2 mt-3"></div></section><div class="cl-admin-welcome-strip"><div><span class="cl-admin-eyebrow">YOUR COMMAND CENTRE</span><h2>Manage Clean Lanka in one place</h2><p>Customers, workers, jobs, bookings, verification and public website preview.</p></div><a href="#clAdminPublicPreview" class="cl-admin-preview-link">🌐 View Homepage Preview</a></div>
-  <div class="cl-admin-workspace"><nav class="admin-nav" aria-label="Admin dashboard navigation"><div class="cl-admin-side-heading"><span class="cl-admin-side-icon">✦</span><span>CLEAN LANKA<br><small>ADMIN WORKSPACE</small></span></div><a href="#adminOverview">▦ Overview</a><a href="#adminWorkersHeading">♙ Workers</a><a href="#adminCustomersHeading">♧ Customers</a><a href="#adminBookingsHeading">▤ Bookings</a><a href="#adminChatsHeading" id="clAdminChatsNav" style="display:none">💬 All Chats</a><a href="#adminOfficialJobsMount" id="clOfficialJobsNav" style="display:none">▤ Official Job Posting</a><a href="/government-jobs.html?manage=1">🏛 Government Jobs</a><a href="#clOfficialJobChats" id="clOfficialJobChatsNav" style="display:none">💬 Official Job Messages</a><a href="#adminNotificationsHeading">♢ Notifications</a><a href="#adminSubAdminsHeading">⚙ Sub Admins</a><a href="#clAdminPublicPreview">🌐 Website Preview</a></nav><main class="cl-admin-main">
+  <div class="cl-admin-workspace"><nav class="admin-nav" aria-label="Admin dashboard navigation"><div class="cl-admin-side-heading"><span class="cl-admin-side-icon"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSh7GcRie2m5v1OiH4IUu5lxi4Qmpn6h_Pep3G-39-hWm7AbRMjRiSaW8SsexcB7a_7tX9SAvOol6H691xnReL6mdZRfnbYcd-7BNMTw7Gg4htwndima_BEOAvVMt9HiksX1Ri23atqe1GVO1CKI16GOVKspLITaWrltY2U16g_mM9bw1hqxe2nZo7REvfttd1v1-sltMDGf-rk3tCAAVbMLB9FiHnjPpY0SBgHgnSEQYH5v3C8xoNg" alt="" loading="lazy" decoding="async"></span><span>CLEAN LANKA<br><small>ADMIN WORKSPACE</small></span></div><a href="#adminOverview">▦ Overview</a><a href="#adminWorkersHeading">♙ Workers</a><a href="#adminCustomersHeading">♧ Customers</a><a href="#adminBookingsHeading">▤ Bookings</a><a href="#adminChatsHeading" id="clAdminChatsNav" style="display:none">💬 All Chats</a><a href="#adminOfficialJobsMount" id="clOfficialJobsNav" style="display:none">▤ Official Job Posting</a><a href="/government-jobs.html?manage=1">🏛 Government Jobs</a><a href="#clOfficialJobChats" id="clOfficialJobChatsNav" style="display:none">💬 Official Job Messages</a><a href="#adminNotificationsHeading">♢ Notifications</a><a href="#adminSubAdminsHeading">⚙ Sub Admins</a><a href="#clAdminPublicPreview">🌐 Website Preview</a></nav><main class="cl-admin-main">
   <section id="clAdminPublicPreview" class="cl-admin-preview-section" aria-labelledby="clAdminPreviewHeading">
 <div class="cl-admin-preview-heading"><div><span class="cl-admin-eyebrow">LIVE PUBLIC VIEW</span><h2 id="clAdminPreviewHeading">🌐 Clean Lanka Homepage Preview</h2><p>See the same public website visitors see, including job opportunities, service categories and approved worker listings. Admin tools remain above.</p></div><div class="cl-admin-preview-actions"><a href="/" target="_blank" rel="noopener">Open Homepage ↗</a><button type="button" id="clAdminPreviewRefresh">↻ Refresh Preview</button></div></div>
 <iframe id="clAdminHomepageFrame" title="Clean Lanka public homepage preview" loading="lazy" src="/" referrerpolicy="same-origin"></iframe>
@@ -10138,9 +10163,12 @@ document.addEventListener('DOMContentLoaded',function(){
  const pages={officialjobs:document.getElementById('adminOfficialJobsMount'),officialchats:document.getElementById('clOfficialJobChats'),chats:document.getElementById('adminChatsSection'),overview:document.getElementById('adminOverview'),workers:document.getElementById('adminWorkersHeading')?.closest('section'),customers:document.getElementById('adminCustomersSection'),bookings:document.getElementById('adminBookingsSection'),notifications:document.getElementById('adminNotificationsSection'),subadmins:document.getElementById('adminSubAdminsSection'),website:document.getElementById('clAdminPublicPreview')};
  const labels={officialjobs:'Official Job Posting',members:'All Members',access:'Admin Access',officialchats:'Official Job Messages',chats:'All Customer–Worker Chats',overview:'Overview',workers:'Worker Management',customers:'Customer Management',bookings:'Booking Management',notifications:'Notifications',subadmins:'Sub Admin Permissions',website:'Website Preview',customerprofile:'Customer Profile'};
  const sections=Object.values(pages).filter(Boolean);sections.forEach(el=>el.dataset.clAdminPage='true');
+ // Keep the page heading inside the main content, not in separate grid columns.
  const title=document.createElement('h2');title.id='clAdminPageTitle';
- const back=document.createElement('button');back.type='button';back.id='clAdminPageBack';nav.after(back,title);
- const customerPage=document.createElement('section');customerPage.id='clAdminCustomerPage';customerPage.dataset.clAdminPage='true';title.after(customerPage);
+ const back=document.createElement('button');back.type='button';back.id='clAdminPageBack';
+ const pageHeader=document.createElement('div');pageHeader.id='clAdminPageHeader';pageHeader.append(title,back);
+ const main=root.querySelector('.cl-admin-main');if(!main)return;main.prepend(pageHeader);
+ const customerPage=document.createElement('section');customerPage.id='clAdminCustomerPage';customerPage.dataset.clAdminPage='true';pageHeader.after(customerPage);
  const detail=document.getElementById('adminCustomerDetail');const originalParent=detail?.parentElement;
  let current='overview';
  function allowed(page){
@@ -10163,7 +10191,7 @@ document.addEventListener('DOMContentLoaded',function(){
   if(root.dataset.adminRole==='sub_admin')pages.subadmins?.classList.add('hidden');
   if(page==='officialchats')window.clRefreshOfficialJobChats?.();
   title.textContent=labels[page];back.style.display=page==='overview'?'none':'inline-flex';
-  back.textContent=page==='customerprofile'?'← Back to Customers':'← Back to Admin Dashboard';
+  back.textContent=page==='customerprofile'?'← Customers':'← Overview';
   if(page==='customerprofile'&&detail){customerPage.appendChild(detail);detail.classList.remove('hidden');}
   nav.querySelectorAll('a').forEach(a=>a.classList.toggle('cl-admin-nav-selected',a.dataset.clAdminTarget===page));
   root.scrollTop=0;
@@ -10172,6 +10200,7 @@ document.addEventListener('DOMContentLoaded',function(){
  const targets={'#adminOverview':'overview','#adminWorkersHeading':'workers','#adminCustomersHeading':'customers','#adminBookingsHeading':'bookings','#adminChatsHeading':'chats','#adminOfficialJobsMount':'officialjobs','#clOfficialJobChats':'officialchats','#adminNotificationsHeading':'notifications','#adminSubAdminsHeading':'subadmins','#clAdminPublicPreview':'website'};
  nav.querySelectorAll('a').forEach(a=>{if(a.getAttribute('href')==='/government-jobs.html?manage=1')return; a.dataset.clAdminTarget=targets[a.getAttribute('href')]||'overview';a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.clAdminTarget);});});
  back.addEventListener('click',()=>go(current==='customerprofile'?'customers':'overview'));
+ document.getElementById('clAdminHeaderHomeButton')?.addEventListener('click',()=>document.getElementById('clDashboardHomeButton')?.click());
  const list=document.getElementById('adminCustomerList');
  list?.addEventListener('click',e=>{if(e.target.closest('button')&&e.target.closest('article'))setTimeout(()=>go('customerprofile'),80);});
  const observer=new MutationObserver(()=>{list?.querySelectorAll('article h3').forEach(h=>{if(h.querySelector('button'))return;const card=h.closest('article');const open=card?.querySelector('button');if(!open)return;const name=h.textContent;h.textContent='';const btn=document.createElement('button');btn.type='button';btn.textContent=name;btn.addEventListener('click',()=>open.click());h.appendChild(btn);});});
